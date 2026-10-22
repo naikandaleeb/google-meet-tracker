@@ -916,6 +916,29 @@
       participants: {}
     };
 
+    // Reset all participants in current session to clean 0
+    Object.values(session.participants || {}).forEach(p => {
+      p.firstSeen = now;
+      p.joinTime = now;
+      p.leaveTime = null;
+      p.lastSeen = now;
+      p.totalPresentMs = 0;
+      p.cameraOnMs = 0;
+      p.cameraOffMs = 0;
+      p.validStudyMs = 0;
+      p.totalDuration = 0;
+      p.duration = 0;
+      p.timeInCall = 0;
+      p.durationSeconds = 0;
+      p.durationMinutes = 0;
+      p.studyDuration = 0;
+      p.consecutiveCamOffMs = 0;
+      p.cameraOffCurrentStart = (autoStart && p.cameraStatus === 'off') ? now : null;
+      p.cameraOffIntervals = [];
+      p.cameraIntervals = autoStart ? [{ start: now, end: null, state: p.cameraStatus }] : [];
+      cleanSession.participants[p.id] = p;
+    });
+
     session = cleanSession;
     lastTickTime = now;
 
@@ -961,11 +984,41 @@
       });
       session.currentPauseStart = null;
       lastTickTime = now;
+
+      // When resuming, restart cameraOffCurrentStart for participants whose camera is still off
+      Object.values(session.participants || {}).forEach(p => {
+        if (p.cameraStatus === 'off' && p.currentStatus === 'present') {
+          p.cameraOffCurrentStart = now;
+        } else {
+          p.cameraOffCurrentStart = null;
+        }
+      });
+
       console.log('[Cockroach Tracker] ▶️ Resumed. Study timer active.');
     } else {
       // PAUSING TRACKING
       session.isPaused = true;
       session.currentPauseStart = now;
+
+      // Freeze & close any ongoing camera OFF intervals so break time is NEVER deducted as camera off!
+      Object.values(session.participants || {}).forEach(p => {
+        if (p.cameraOffCurrentStart) {
+          const offDur = Math.max(0, now - p.cameraOffCurrentStart);
+          if (offDur >= 1000) {
+            if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
+            p.cameraOffIntervals.push({
+              start: p.cameraOffCurrentStart,
+              end: now,
+              durationMs: offDur,
+              fromTime: formatTimeOnly(p.cameraOffCurrentStart),
+              toTime: formatTimeOnly(now),
+              durationFormatted: formatHms(offDur)
+            });
+          }
+          p.cameraOffCurrentStart = null;
+        }
+      });
+
       console.log('[Cockroach Tracker] ⏸️ Paused. Study timer frozen.');
     }
 
@@ -1037,8 +1090,8 @@
     const video = tile.querySelector('video');
     if (!video) return 'off';
 
-    // If video is explicitly hidden via CSS
-    if (video.style.display === 'none' || video.style.visibility === 'hidden') return 'off';
+    // If video is explicitly hidden via CSS or paused
+    if (video.style.display === 'none' || video.style.visibility === 'hidden' || video.paused || video.ended) return 'off';
 
     // 3. Avatar overlay check:
     // When camera is off in Meet, a prominent avatar or initials circle is shown instead of video
@@ -1050,19 +1103,17 @@
       'div[class*="g3q0qc"]'
     );
 
-    if (avatar && avatar.offsetParent !== null && avatar.offsetWidth > 40 && avatar.offsetHeight > 40) {
-      if (video.videoWidth === 0 || video.readyState === 0) {
-        return 'off';
-      }
+    if (avatar && avatar.offsetParent !== null && avatar.offsetWidth >= 30 && avatar.offsetHeight >= 30) {
+      return 'off';
     }
 
-    // 4. If video has valid dimensions or readyState, camera is ON!
-    if (video.videoWidth > 0 || video.readyState >= 2 || video.currentTime > 0) {
+    // 4. If video has valid dimensions and active streaming, camera is ON!
+    if (video.videoWidth > 0 && video.readyState >= 2 && !video.paused) {
       return 'on';
     }
 
     // If video element has rendered layout size in the DOM
-    if (video.offsetWidth > 50 && video.offsetHeight > 50) {
+    if (video.offsetWidth > 50 && video.offsetHeight > 50 && video.readyState >= 2 && !video.paused) {
       return 'on';
     }
 
@@ -1339,69 +1390,50 @@
         if (!p.joinTime) p.joinTime = p.firstSeen || now;
         if (!p.firstSeen) p.firstSeen = p.joinTime || now;
 
-        // ANTI-GLITCH DEBOUNCE FILTER:
-        // Transient 1-second hiccups, frame drops, or grid re-renders should NOT flip camera state!
+        // IMMEDIATE ZERO-DELAY CAMERA TRANSITION: Every second matters!
         if (rawStatus !== p.cameraStatus) {
-          if (p.pendingStatus === rawStatus) {
-            p.pendingTicks = (p.pendingTicks || 0) + 1;
-          } else {
-            p.pendingStatus = rawStatus;
-            p.pendingTicks = 1;
-          }
-
-          // Threshold:
-          // Turning OFF requires 2 consecutive ticks (2 seconds) of confirmed OFF.
-          // Turning ON is immediate (1 tick) when verified active video is back.
-          const requiredTicks = (rawStatus === 'off') ? 2 : 1;
-
-          if (p.pendingTicks >= requiredTicks) {
-            p.cameraStatus = rawStatus;
-            p.pendingStatus = null;
-            p.pendingTicks = 0;
-
-            // Close last interval
-            const lastInterval = p.cameraIntervals && p.cameraIntervals[p.cameraIntervals.length - 1];
-            if (lastInterval && !lastInterval.end) {
-              lastInterval.end = now;
-            }
-            if (!p.cameraIntervals) p.cameraIntervals = [];
-            p.cameraIntervals.push({ start: now, end: null, state: rawStatus });
-
-            // Transition: ON -> OFF
-            if (rawStatus === 'off') {
-              if (session.isTracking && !session.isPaused) {
-                p.cameraOffCurrentStart = now;
-              } else {
-                p.cameraOffCurrentStart = null;
-              }
-              p.consecutiveCamOffMs = 0;
-              console.log(`[Cockroach Tracker] 🔴 [${p.name}] Camera turned OFF at ${formatTimeOnly(now)}`);
-            }
-            // Transition: OFF -> ON
-            else if (rawStatus === 'on') {
-              if (session.isTracking && !session.isPaused && p.cameraOffCurrentStart) {
-                const offDur = Math.max(0, now - p.cameraOffCurrentStart);
-                if (offDur >= 1000) {
-                  if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
-                  p.cameraOffIntervals.push({
-                    start: p.cameraOffCurrentStart,
-                    end: now,
-                    durationMs: offDur,
-                    fromTime: formatTimeOnly(p.cameraOffCurrentStart),
-                    toTime: formatTimeOnly(now),
-                    durationFormatted: formatHms(offDur)
-                  });
-                }
-              }
-              p.cameraOffCurrentStart = null;
-              p.consecutiveCamOffMs = 0;
-              console.log(`[Cockroach Tracker] 🟢 [${p.name}] Camera turned ON at ${formatTimeOnly(now)}`);
-            }
-          }
-        } else {
-          // Raw matches confirmed status -> reset pending debounce
+          p.cameraStatus = rawStatus;
           p.pendingStatus = null;
           p.pendingTicks = 0;
+
+          // Close last interval
+          const lastInterval = p.cameraIntervals && p.cameraIntervals[p.cameraIntervals.length - 1];
+          if (lastInterval && !lastInterval.end) {
+            lastInterval.end = now;
+          }
+          if (!p.cameraIntervals) p.cameraIntervals = [];
+          p.cameraIntervals.push({ start: now, end: null, state: rawStatus });
+
+          // Transition: ON -> OFF
+          if (rawStatus === 'off') {
+            if (session.isTracking && !session.isPaused) {
+              p.cameraOffCurrentStart = now;
+            } else {
+              p.cameraOffCurrentStart = null;
+            }
+            p.consecutiveCamOffMs = 0;
+            console.log(`[Cockroach Tracker] 🔴 [${p.name}] Camera turned OFF at ${formatTimeOnly(now)}`);
+          }
+          // Transition: OFF -> ON
+          else if (rawStatus === 'on') {
+            if (session.isTracking && !session.isPaused && p.cameraOffCurrentStart) {
+              const offDur = Math.max(0, now - p.cameraOffCurrentStart);
+              if (offDur >= 1000) {
+                if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
+                p.cameraOffIntervals.push({
+                  start: p.cameraOffCurrentStart,
+                  end: now,
+                  durationMs: offDur,
+                  fromTime: formatTimeOnly(p.cameraOffCurrentStart),
+                  toTime: formatTimeOnly(now),
+                  durationFormatted: formatHms(offDur)
+                });
+              }
+            }
+            p.cameraOffCurrentStart = null;
+            p.consecutiveCamOffMs = 0;
+            console.log(`[Cockroach Tracker] 🟢 [${p.name}] Camera turned ON at ${formatTimeOnly(now)}`);
+          }
         }
 
         // ACCURATE TIME ACCUMULATION:
@@ -1561,7 +1593,8 @@
         defListEl.innerHTML = '<div class="cm-no-defaulters">⏸️ Attendance Paused (Break Time)</div>';
       }
     } else {
-      const defaulters = presentList.filter(p => p.cameraStatus === 'off');
+      // EXEMPT HOST from Defaulters Watch!
+      const defaulters = presentList.filter(p => !p.isLocal && p.id !== 'local_host' && !(p.name && p.name.toLowerCase().includes('host')) && p.cameraStatus === 'off');
       if (defCountEl) defCountEl.innerText = `${defaulters.length}`;
       if (defListEl) {
         if (defaulters.length === 0) {

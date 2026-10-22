@@ -147,15 +147,20 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
     }
   }
 
-  let camOn = (p.cameraOnMs !== undefined ? p.cameraOnMs : (p.validStudyMs || 0)) + openIntervalOnMs;
-  let camOff = (p.cameraOffMs !== undefined ? p.cameraOffMs : 0) + openIntervalOffMs;
+  let camOn = p.cameraOnMs !== undefined ? p.cameraOnMs : (p.validStudyMs || 0);
+  let camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : 0;
 
-  // If both camOn and camOff are 0, but participant was in call
-  if (camOn === 0 && camOff === 0 && totalInCallMs > 0) {
-    if (p.cameraStatus === 'on') {
-      camOn = totalInCallMs;
-    } else {
-      camOff = totalInCallMs;
+  // Fallback: If both camOn and camOff are 0, populate from open intervals or totalInCallMs
+  if (camOn === 0 && camOff === 0) {
+    if (openIntervalOnMs > 0 || openIntervalOffMs > 0) {
+      camOn = openIntervalOnMs;
+      camOff = openIntervalOffMs;
+    } else if (totalInCallMs > 0) {
+      if (p.cameraStatus === 'on') {
+        camOn = totalInCallMs;
+      } else {
+        camOff = totalInCallMs;
+      }
     }
   }
 
@@ -174,7 +179,7 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
   p.totalPresentMs = totMeet;
   p.validStudyMs = validStudy;
 
-  // Standardization aliases across all systems (Root Cause 5)
+  // Standardization aliases across all systems
   p.totalDuration = totMeet;
   p.duration = validStudy;
   p.timeInCall = totMeet;
@@ -190,7 +195,7 @@ function cleanAllSessionParticipants(sess) {
   const now = Date.now();
   const cleaned = {};
   for (const [k, p] of Object.entries(sess.participants)) {
-    const isLocal = p.isLocal || k === 'local_host';
+    const isLocal = p.isLocal || k === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
     const validName = cleanParticipantName(p.name, isLocal);
     if (validName) {
       const stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
@@ -199,7 +204,9 @@ function cleanAllSessionParticipants(sess) {
         ...p,
         id: stableKey,
         name: validName,
-        isLocal: isLocal
+        isLocal: isLocal,
+        isHost: isLocal,
+        isExempt: isLocal
       };
       
       finalizeParticipant(candidate, sess, now);
@@ -293,8 +300,11 @@ app.post('/api/session/sync', (req, res) => {
   const data = req.body;
   if (!data) return res.status(400).json({ error: 'No data provided' });
 
-  // Update session identity if server was in clean/idle state
+  // If server was recently reset, inform the extension to adopt the clean zeroed session!
   if (data.sessionId && data.sessionId !== currentSession.sessionId) {
+    if (currentSession.lastResetAt && (Date.now() - currentSession.lastResetAt < 600000)) {
+      return res.json({ success: true, serverReset: true, session: currentSession });
+    }
     if (currentSession.startedAt === null && !currentSession.isTracking && Object.keys(currentSession.participants || {}).length === 0) {
       currentSession.sessionId = data.sessionId;
     }
@@ -391,6 +401,7 @@ app.post('/api/session/action', (req, res) => {
     currentSession.isTracking = true;
     currentSession.isPaused = false;
     currentSession.currentPauseStart = null;
+    currentSession.lastResetAt = null;
     currentSession.lastUpdated = now;
 
     // Reset participant camera tracking counters so they start cleanly with attendance
@@ -453,6 +464,26 @@ app.post('/api/session/action', (req, res) => {
     if (currentSession.isTracking && !currentSession.isPaused) {
       currentSession.isPaused = true;
       currentSession.currentPauseStart = now;
+
+      // Close open camera OFF intervals so break time is NOT counted as camera off
+      Object.values(currentSession.participants || {}).forEach(p => {
+        if (p.cameraOffCurrentStart) {
+          const offDur = Math.max(0, now - p.cameraOffCurrentStart);
+          if (offDur >= 1000) {
+            if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
+            p.cameraOffIntervals.push({
+              start: p.cameraOffCurrentStart,
+              end: now,
+              durationMs: offDur,
+              fromTime: new Date(p.cameraOffCurrentStart).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+              toTime: new Date(now).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+              durationFormatted: formatHmsStr(offDur)
+            });
+          }
+          p.cameraOffCurrentStart = null;
+        }
+      });
+
       persistCurrentSession();
       broadcast({ type: 'ACTION_PAUSE', timestamp: now, session: currentSession });
       console.log('[Server] Attendance PAUSED for break at', new Date(now).toLocaleTimeString());
@@ -472,6 +503,16 @@ app.post('/api/session/action', (req, res) => {
         durationMs: pauseDuration
       });
       currentSession.currentPauseStart = null;
+
+      // Restart cameraOffCurrentStart for participants whose camera is still off
+      Object.values(currentSession.participants || {}).forEach(p => {
+        if (p.cameraStatus === 'off' && p.currentStatus === 'present') {
+          p.cameraOffCurrentStart = now;
+        } else {
+          p.cameraOffCurrentStart = null;
+        }
+      });
+
       persistCurrentSession();
       broadcast({ type: 'ACTION_RESUME', timestamp: now, session: currentSession });
       console.log('[Server] Attendance RESUMED at', new Date(now).toLocaleTimeString());
@@ -491,6 +532,7 @@ app.post('/api/session/action', (req, res) => {
       startedAt: null,
       stoppedAt: null,
       lastUpdated: now,
+      lastResetAt: now,
       isTracking: false,
       isPaused: false,
       totalPausedMs: 0,
@@ -603,8 +645,11 @@ function buildCsvContent(sess) {
       return `${from} - ${to} (${dur})`;
     }).join('; ');
 
+    const isHost = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
+    const rankLabel = isHost ? 'EXEMPT [HOST]' : (`#${p.rank}${p.rank === 1 ? ' [👑 RANK 1]' : ''}`);
+
     rows.push([
-      `#${p.rank}${p.rank === 1 ? ' [👑 RANK 1]' : ''}`,
+      rankLabel,
       `"${(p.name || 'Unknown').replace(/"/g, '""')}"`,
       p.currentStatus || 'present',
       (p.cameraStatus || 'off').toUpperCase(),

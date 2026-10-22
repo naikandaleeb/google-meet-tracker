@@ -184,6 +184,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (popBtnReset) {
     popBtnReset.addEventListener('click', () => {
       if (confirm('Archive current session and RESET all attendance timers to 00:00:00 for a fresh 12-hour marathon?')) {
+        popDuration.innerText = '00:00:00';
+        popStatusBadge.innerText = 'ATTENDANCE OFF ⏹️';
+        popStatusBadge.className = 'info-badge off';
+        popAttendees.innerText = '0';
+        popCamsOn.innerText = '0';
+        popCamsOff.innerText = '0';
+
         if (activeTabId) {
           chrome.tabs.sendMessage(activeTabId, { type: 'RESET_SESSION' }, () => {
             const _clearErr = chrome.runtime.lastError;

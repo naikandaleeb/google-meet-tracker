@@ -438,8 +438,8 @@ function renderUI() {
     sessionStartedLabel.innerText = 'Ready to start';
   }
 
-  // Defaulters Alert
-  const presentStudents = participants.filter(p => p.currentStatus === 'present');
+  // Defaulters Alert: EXEMPT HOST completely!
+  const presentStudents = participants.filter(p => p.currentStatus === 'present' && !p.isLocal && p.id !== 'local_host' && !(p.name && p.name.toLowerCase().includes('host')));
   const defaulters = presentStudents.filter(p => {
     const totMeet = p.totalPresentMs || 0;
     const camOn = p.cameraOnMs || 0;
@@ -504,6 +504,7 @@ function renderStudentsTable() {
     if (currentFilter === 'cam-off') return p.cameraStatus === 'off';
     if (currentFilter === 'present') return p.currentStatus === 'present';
     if (currentFilter === 'defaulters') {
+      if (p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'))) return false;
       const tot = p.totalPresentMs || 0;
       const on = p.cameraOnMs || 0;
       const comp = tot > 0 ? (on / tot) * 100 : 100;
@@ -522,19 +523,27 @@ function renderStudentsTable() {
   });
 
   // ASSIGN DENSE RANK: Equal study durations share the exact same rank!
+  // HOST IS 100% EXEMPT FROM COMPETING IN STUDENT RANKS!
   let currentRank = 1;
-  for (let i = 0; i < filtered.length; i++) {
+  const nonHostStudents = filtered.filter(p => !p.isLocal && p.id !== 'local_host' && !(p.name && p.name.toLowerCase().includes('host')));
+  
+  for (let i = 0; i < nonHostStudents.length; i++) {
     if (i > 0) {
-      const prevTime = filtered[i - 1].validStudyMs !== undefined ? filtered[i - 1].validStudyMs : (filtered[i - 1].cameraOnMs || 0);
-      const currTime = filtered[i].validStudyMs !== undefined ? filtered[i].validStudyMs : (filtered[i].cameraOnMs || 0);
+      const prevTime = nonHostStudents[i - 1].validStudyMs !== undefined ? nonHostStudents[i - 1].validStudyMs : (nonHostStudents[i - 1].cameraOnMs || 0);
+      const currTime = nonHostStudents[i].validStudyMs !== undefined ? nonHostStudents[i].validStudyMs : (nonHostStudents[i].cameraOnMs || 0);
       const prevSec = Math.floor(prevTime / 1000);
       const currSec = Math.floor(currTime / 1000);
       if (currSec < prevSec) {
         currentRank++;
       }
     }
-    filtered[i].rank = currentRank;
+    nonHostStudents[i].rank = currentRank;
   }
+
+  filtered.forEach(p => {
+    const isHost = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
+    if (isHost) p.rank = 'HOST';
+  });
 
   if (filtered.length === 0) {
     studentsTbody.innerHTML = `
@@ -552,6 +561,7 @@ function renderStudentsTable() {
   }
 
   studentsTbody.innerHTML = filtered.map(p => {
+    const isHost = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
     const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
     const totMeet = Math.max(p.totalPresentMs || 0, camOn);
     const camOff = p.cameraOffMs || Math.max(0, totMeet - camOn);
@@ -559,9 +569,11 @@ function renderStudentsTable() {
     const isCamOn = p.cameraStatus === 'on';
     const isPresent = p.currentStatus === 'present';
 
-    // Rank Badges: All students sharing Rank 1 get the Crown!
+    // Rank Badges: All students sharing Rank 1 get the Crown! Host is marked EXEMPT!
     let rankBadge = `<span class="td-rank">#${p.rank}</span>`;
-    if (p.rank === 1 && camOn > 0) {
+    if (isHost) {
+      rankBadge = `<span class="badge-exempt-host" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 800;">EXEMPT [HOST]</span>`;
+    } else if (p.rank === 1 && camOn > 0) {
       rankBadge = `<span class="rank-crown" title="RANK 1 - Shared Top Valid Study Time!">👑 #1</span>`;
     } else if (p.rank === 2 && camOn > 0) {
       rankBadge = `<span class="rank-medal silver">🥈 #2</span>`;
@@ -616,8 +628,8 @@ function renderStudentsTable() {
             <div class="student-avatar">${initials}</div>
             <div>
               <span class="student-name-text">${escapeHtml(p.name)}</span>
-              ${p.isLocal ? '<span class="student-local-tag">HOST</span>' : ''}
-              ${p.rank === 1 && camOn > 0 ? '<span class="badge-champ">CHAMPION</span>' : ''}
+              ${isHost ? '<span class="student-local-tag" style="background:#10b981; color:#fff;">HOST (EXEMPT)</span>' : ''}
+              ${!isHost && p.rank === 1 && camOn > 0 ? '<span class="badge-champ">CHAMPION</span>' : ''}
             </div>
           </div>
         </td>

@@ -68,14 +68,20 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
     }
   }
 
-  let camOn = (p.cameraOnMs !== undefined ? p.cameraOnMs : (p.validStudyMs !== undefined ? p.validStudyMs : (p.duration || 0))) + openIntervalOnMs;
-  let camOff = (p.cameraOffMs !== undefined ? p.cameraOffMs : 0) + openIntervalOffMs;
+  let camOn = p.cameraOnMs !== undefined ? p.cameraOnMs : (p.validStudyMs !== undefined ? p.validStudyMs : (p.duration || 0));
+  let camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : 0;
 
-  if (camOn === 0 && camOff === 0 && totalInCallMs > 0) {
-    if (p.cameraStatus === 'on') {
-      camOn = totalInCallMs;
-    } else {
-      camOff = totalInCallMs;
+  // Fallback only if both are 0
+  if (camOn === 0 && camOff === 0) {
+    if (openIntervalOnMs > 0 || openIntervalOffMs > 0) {
+      camOn = openIntervalOnMs;
+      camOff = openIntervalOffMs;
+    } else if (totalInCallMs > 0) {
+      if (p.cameraStatus === 'on') {
+        camOn = totalInCallMs;
+      } else {
+        camOff = totalInCallMs;
+      }
     }
   }
 
@@ -107,10 +113,20 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
 function generatePainThemeHtml(session) {
   const now = Date.now();
   const rawParticipants = Object.values(session.participants || {});
+  
+  // Identify Host
+  const hostParticipant = rawParticipants.find(p => p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host')));
+  if (hostParticipant) {
+    finalizeParticipant(hostParticipant, session, now);
+    hostParticipant.isExempt = true;
+  }
+
+  // Filter students (Host is exempt from rankings & defaulter lists)
   const participants = rawParticipants.filter(p => {
     if (!p || !p.name) return false;
     const lower = p.name.toLowerCase();
     if (lower.includes('keep_outline') || lower.includes('turn off') || lower === 'host' || lower === 'pin' || lower === 'unpin') return false;
+    if (p.isLocal || p.id === 'local_host' || lower === 'host' || lower === 'host (you)') return false;
     return true;
   });
 
