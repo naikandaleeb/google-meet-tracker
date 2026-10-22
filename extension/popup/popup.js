@@ -66,20 +66,30 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   }
 
+  function toEpochMs(ts) {
+    if (ts === null || ts === undefined || ts === '') return null;
+    if (typeof ts === 'number') return isNaN(ts) ? null : ts;
+    const parsed = new Date(ts).getTime();
+    return isNaN(parsed) ? null : parsed;
+  }
+
   // Pure & Robust Math for Active Study Time (No Jumps, No Back-Counting)
   function calculateActiveStudyMs(sess, now = Date.now()) {
-    if (!sess || !sess.startedAt) return 0;
-    if (sess.stoppedAt) {
-      const elapsed = Math.max(0, sess.stoppedAt - sess.startedAt);
+    if (!sess) return 0;
+    const startedAt = toEpochMs(sess.startedAt);
+    if (!startedAt) return 0;
+    const stoppedAt = toEpochMs(sess.stoppedAt);
+    if (stoppedAt) {
+      const elapsed = Math.max(0, stoppedAt - startedAt);
       return Math.max(0, elapsed - (sess.totalPausedMs || 0));
     }
     if (sess.isPaused) {
       // PAUSED: Study clock stays completely FROZEN at the moment pause was clicked!
-      const pauseStart = sess.currentPauseStart || now;
-      const elapsedUpToPause = Math.max(0, pauseStart - sess.startedAt);
+      const pauseStart = toEpochMs(sess.currentPauseStart) || now;
+      const elapsedUpToPause = Math.max(0, pauseStart - startedAt);
       return Math.max(0, elapsedUpToPause - (sess.totalPausedMs || 0));
     }
-    const elapsed = Math.max(0, now - sess.startedAt);
+    const elapsed = Math.max(0, now - startedAt);
     return Math.max(0, elapsed - (sess.totalPausedMs || 0));
   }
 

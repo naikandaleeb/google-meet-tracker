@@ -78,30 +78,132 @@ let currentSession = {
   notes: ''
 };
 
+function formatHmsStr(ms = 0) {
+  const totalSec = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+function toEpochMs(ts) {
+  if (ts === null || ts === undefined || ts === '') return null;
+  if (typeof ts === 'number') return isNaN(ts) ? null : ts;
+  const parsed = new Date(ts).getTime();
+  return isNaN(parsed) ? null : parsed;
+}
+
+function finalizeParticipant(p, sess = {}, now = Date.now()) {
+  if (!p) return;
+
+  const joinTs = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sess.startedAt) || now;
+  const leaveTs = toEpochMs(p.leaveTime) || (p.currentStatus === 'left' ? toEpochMs(p.lastSeen) : null);
+  const sessionStopTs = toEpochMs(sess.stoppedAt);
+  
+  // Effective end time: if participant left, use leaveTime; else if session stopped, use stoppedAt; else now
+  const effectiveEndTime = leaveTs || sessionStopTs || now;
+  const totalInCallMs = Math.max(0, effectiveEndTime - joinTs);
+
+  p.joinTime = joinTs;
+  p.firstSeen = joinTs;
+  p.leaveTime = leaveTs;
+  p.lastSeen = toEpochMs(p.lastSeen) || effectiveEndTime;
+
+  // Open camera interval check
+  let openIntervalOnMs = 0;
+  let openIntervalOffMs = 0;
+  if (Array.isArray(p.cameraIntervals) && p.cameraIntervals.length > 0) {
+    const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+    if (last && !last.end) {
+      const intStart = toEpochMs(last.start) || effectiveEndTime;
+      const openDur = Math.max(0, effectiveEndTime - intStart);
+      if (last.state === 'on') {
+        openIntervalOnMs = openDur;
+      } else {
+        openIntervalOffMs = openDur;
+      }
+    }
+  }
+
+  // Open cameraOffCurrentStart check
+  if (p.cameraOffCurrentStart && (!sess.isPaused || !sess.stoppedAt)) {
+    const offStart = toEpochMs(p.cameraOffCurrentStart);
+    if (offStart) {
+      const liveCutMs = Math.max(0, effectiveEndTime - offStart);
+      if (liveCutMs >= 1000) {
+        if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
+        const exists = p.cameraOffIntervals.some(int => Math.abs(toEpochMs(int.start) - offStart) < 2000);
+        if (!exists) {
+          p.cameraOffIntervals.push({
+            start: offStart,
+            end: effectiveEndTime,
+            durationMs: liveCutMs,
+            fromTime: new Date(offStart).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+            toTime: new Date(effectiveEndTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+            durationFormatted: formatHmsStr(liveCutMs)
+          });
+        }
+      }
+    }
+  }
+
+  let camOn = (p.cameraOnMs !== undefined ? p.cameraOnMs : (p.validStudyMs || 0)) + openIntervalOnMs;
+  let camOff = (p.cameraOffMs !== undefined ? p.cameraOffMs : 0) + openIntervalOffMs;
+
+  // If both camOn and camOff are 0, but participant was in call
+  if (camOn === 0 && camOff === 0 && totalInCallMs > 0) {
+    if (p.cameraStatus === 'on') {
+      camOn = totalInCallMs;
+    } else {
+      camOff = totalInCallMs;
+    }
+  }
+
+  const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff)
+    ? p.totalPresentMs
+    : Math.max(totalInCallMs, camOn + camOff);
+
+  if (camOff === 0 && totMeet > camOn) {
+    camOff = totMeet - camOn;
+  }
+
+  const validStudy = camOn; // Camera ON time = Valid Study Time
+
+  p.cameraOnMs = camOn;
+  p.cameraOffMs = camOff;
+  p.totalPresentMs = totMeet;
+  p.validStudyMs = validStudy;
+
+  // Standardization aliases across all systems (Root Cause 5)
+  p.totalDuration = totMeet;
+  p.duration = validStudy;
+  p.timeInCall = totMeet;
+  p.durationSeconds = Math.floor(validStudy / 1000);
+  p.durationMinutes = Math.floor(validStudy / 60000);
+  p.studyDuration = validStudy;
+
+  return p;
+}
+
 function cleanAllSessionParticipants(sess) {
   if (!sess || !sess.participants) return;
+  const now = Date.now();
   const cleaned = {};
   for (const [k, p] of Object.entries(sess.participants)) {
     const isLocal = p.isLocal || k === 'local_host';
     const validName = cleanParticipantName(p.name, isLocal);
     if (validName) {
       const stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
-      const camOn = p.cameraOnMs || 0;
-      const camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : Math.max(0, (p.totalPresentMs || 0) - camOn);
-      const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
-
-      cleaned[stableKey] = {
+      
+      const candidate = {
         ...p,
         id: stableKey,
         name: validName,
-        isLocal: isLocal,
-        totalPresentMs: totMeet,
-        cameraOnMs: camOn,
-        cameraOffMs: camOff,
-        validStudyMs: camOn, // Strictly: Camera ON time = Valid Study Time
-        cameraOffIntervals: p.cameraOffIntervals || [],
-        cameraIntervals: p.cameraIntervals || []
+        isLocal: isLocal
       };
+      
+      finalizeParticipant(candidate, sess, now);
+      cleaned[stableKey] = candidate;
     }
   }
   sess.participants = cleaned;
@@ -182,6 +284,7 @@ app.get('/api/status', (req, res) => {
 });
 
 app.get('/api/session/current', (req, res) => {
+  cleanAllSessionParticipants(currentSession);
   res.json(currentSession);
 });
 
@@ -431,6 +534,7 @@ app.get('/api/sessions', (req, res) => {
 // Primary Report: By default serves the Ranked Attendance Report matching user's sample PDF
 // Pass ?theme=pain to view the Akatsuki theme
 app.get('/report', (req, res) => {
+  cleanAllSessionParticipants(currentSession);
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   const theme = (req.query.theme || '').toLowerCase();
   if (theme === 'pain') {
@@ -441,6 +545,7 @@ app.get('/report', (req, res) => {
 });
 
 app.get('/api/session/export/pdf', (req, res) => {
+  cleanAllSessionParticipants(currentSession);
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   const theme = (req.query.theme || '').toLowerCase();
   if (theme === 'pain') {
@@ -452,17 +557,10 @@ app.get('/api/session/export/pdf', (req, res) => {
 
 // Helper: Build Dense-Ranked CSV content for any session (Current or Archived)
 function buildCsvContent(sess) {
+  cleanAllSessionParticipants(sess);
   const participants = Object.values(sess.participants || {}).filter(p => {
     return p.name && !p.name.toLowerCase().includes('keep_outline');
   });
-
-  const formatHmsStr = (ms = 0) => {
-    const sec = Math.floor(ms / 1000);
-    const h = Math.floor(sec / 3600);
-    const m = Math.floor((sec % 3600) / 60);
-    const s = sec % 60;
-    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-  };
 
   const formatDate = (ts) => ts ? new Date(ts).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : 'N/A';
 
@@ -617,6 +715,7 @@ app.get('/api/session/export/csv', (req, res) => {
 
 // JSON Export
 app.get('/api/session/export/json', (req, res) => {
+  cleanAllSessionParticipants(currentSession);
   const filename = `cockroach_attendance_${currentSession.meetingCode}_${Date.now()}.json`;
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);

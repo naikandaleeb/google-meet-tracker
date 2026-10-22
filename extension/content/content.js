@@ -172,21 +172,31 @@
     })[m]);
   }
 
+  function toEpochMs(ts) {
+    if (ts === null || ts === undefined || ts === '') return null;
+    if (typeof ts === 'number') return isNaN(ts) ? null : ts;
+    const parsed = new Date(ts).getTime();
+    return isNaN(parsed) ? null : parsed;
+  }
+
   // Pure & Robust Math for Active Study Time (No Jumps, No Back-Counting)
   function calculateActiveStudyMs(sess, now = Date.now()) {
-    if (!sess || !sess.startedAt) return 0;
-    if (sess.stoppedAt) {
-      const elapsed = Math.max(0, sess.stoppedAt - sess.startedAt);
+    if (!sess) return 0;
+    const startedAt = toEpochMs(sess.startedAt);
+    if (!startedAt) return 0;
+    const stoppedAt = toEpochMs(sess.stoppedAt);
+    if (stoppedAt) {
+      const elapsed = Math.max(0, stoppedAt - startedAt);
       return Math.max(0, elapsed - (sess.totalPausedMs || 0));
     }
     if (sess.isPaused) {
       // PAUSED: Study clock stays completely FROZEN at the exact moment pause was pressed!
-      const pauseStart = sess.currentPauseStart || now;
-      const elapsedUpToPause = Math.max(0, pauseStart - sess.startedAt);
+      const pauseStart = toEpochMs(sess.currentPauseStart) || now;
+      const elapsedUpToPause = Math.max(0, pauseStart - startedAt);
       return Math.max(0, elapsedUpToPause - (sess.totalPausedMs || 0));
     }
     // RUNNING: Elapsed time minus all completed pauses
-    const elapsed = Math.max(0, now - sess.startedAt);
+    const elapsed = Math.max(0, now - startedAt);
     return Math.max(0, elapsed - (sess.totalPausedMs || 0));
   }
 
@@ -838,6 +848,10 @@
 
     // Close any open camera OFF intervals for participants whose camera was off
     Object.values(session.participants || {}).forEach(p => {
+      if (p.cameraIntervals && p.cameraIntervals.length > 0) {
+        const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+        if (last && !last.end) last.end = now;
+      }
       if (p.cameraOffCurrentStart) {
         const dur = now - p.cameraOffCurrentStart;
         if (dur >= 2000) {
@@ -853,6 +867,12 @@
         }
         p.cameraOffCurrentStart = null;
       }
+      p.totalDuration = p.totalPresentMs || 0;
+      p.duration = p.validStudyMs || 0;
+      p.timeInCall = p.totalPresentMs || 0;
+      p.durationSeconds = Math.floor((p.validStudyMs || 0) / 1000);
+      p.durationMinutes = Math.floor((p.validStudyMs || 0) / 60000);
+      p.studyDuration = p.validStudyMs || 0;
     });
 
     console.log('[Cockroach Tracker] ⏹️ Attendance Turned OFF (Finalized).');
@@ -1290,11 +1310,19 @@
           pendingStatus: null,
           pendingTicks: 0,
           firstSeen: now,
+          joinTime: now,
+          leaveTime: null,
           lastSeen: now,
           totalPresentMs: 0,
           cameraOnMs: 0,
           cameraOffMs: 0,
           validStudyMs: 0,
+          totalDuration: 0,
+          duration: 0,
+          timeInCall: 0,
+          durationSeconds: 0,
+          durationMinutes: 0,
+          studyDuration: 0,
           consecutiveCamOffMs: 0,
           cameraOffCurrentStart: (session.isTracking && !session.isPaused && rawStatus === 'off') ? now : null,
           cameraOffIntervals: [],
@@ -1306,7 +1334,10 @@
       } else {
         p.name = scanned.name || p.name;
         p.currentStatus = 'present';
+        p.leaveTime = null;
         p.lastSeen = now;
+        if (!p.joinTime) p.joinTime = p.firstSeen || now;
+        if (!p.firstSeen) p.firstSeen = p.joinTime || now;
 
         // ANTI-GLITCH DEBOUNCE FILTER:
         // Transient 1-second hiccups, frame drops, or grid re-renders should NOT flip camera state!
@@ -1387,9 +1418,15 @@
             }
           }
 
-          // Strict Mathematical Invariants:
+          // Strict Mathematical Invariants & Property Aliases:
           p.validStudyMs = p.cameraOnMs;
           p.totalPresentMs = (p.cameraOnMs || 0) + (p.cameraOffMs || 0);
+          p.totalDuration = p.totalPresentMs;
+          p.duration = p.validStudyMs;
+          p.timeInCall = p.totalPresentMs;
+          p.durationSeconds = Math.floor(p.validStudyMs / 1000);
+          p.durationMinutes = Math.floor(p.validStudyMs / 60000);
+          p.studyDuration = p.validStudyMs;
         } else if (session.isTracking && session.isPaused) {
           // Attendance PAUSED: All counters stay completely FROZEN!
         } else if (session.stoppedAt) {
@@ -1398,13 +1435,17 @@
           p.cameraOffCurrentStart = null;
         } else {
           // Attendance OFF / Idle before Start Attendance:
-          p.totalPresentMs = 0;
-          p.cameraOnMs = 0;
-          p.cameraOffMs = 0;
-          p.validStudyMs = 0;
+          if (!p.cameraOnMs && !p.cameraOffMs && !p.totalPresentMs) {
+            p.totalPresentMs = 0;
+            p.cameraOnMs = 0;
+            p.cameraOffMs = 0;
+            p.validStudyMs = 0;
+            p.totalDuration = 0;
+            p.duration = 0;
+            p.timeInCall = 0;
+          }
           p.consecutiveCamOffMs = 0;
           p.cameraOffCurrentStart = null;
-          p.cameraOffIntervals = [];
         }
       }
     });
@@ -1415,6 +1456,7 @@
         if (now - (p.lastSeen || now) > 45000) {
           if (p.currentStatus === 'present') {
             p.currentStatus = 'left';
+            p.leaveTime = now;
             const lastInterval = p.cameraIntervals && p.cameraIntervals[p.cameraIntervals.length - 1];
             if (lastInterval && !lastInterval.end) {
               lastInterval.end = now;

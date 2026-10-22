@@ -101,20 +101,30 @@ function escapeHtml(str = '') {
   })[m]);
 }
 
+function toEpochMs(ts) {
+  if (ts === null || ts === undefined || ts === '') return null;
+  if (typeof ts === 'number') return isNaN(ts) ? null : ts;
+  const parsed = new Date(ts).getTime();
+  return isNaN(parsed) ? null : parsed;
+}
+
 // Pure & Robust Math for Active Study Time (No Jumps, No Back-Counting)
 function calculateActiveStudyMs(sess, now = Date.now()) {
-  if (!sess || !sess.startedAt) return 0;
-  if (sess.stoppedAt) {
-    const elapsed = Math.max(0, sess.stoppedAt - sess.startedAt);
+  if (!sess) return 0;
+  const startedAt = toEpochMs(sess.startedAt);
+  if (!startedAt) return 0;
+  const stoppedAt = toEpochMs(sess.stoppedAt);
+  if (stoppedAt) {
+    const elapsed = Math.max(0, stoppedAt - startedAt);
     return Math.max(0, elapsed - (sess.totalPausedMs || 0));
   }
   if (sess.isPaused) {
     // PAUSED: Study clock stays completely FROZEN at the moment pause was clicked!
-    const pauseStart = sess.currentPauseStart || now;
-    const elapsedUpToPause = Math.max(0, pauseStart - sess.startedAt);
+    const pauseStart = toEpochMs(sess.currentPauseStart) || now;
+    const elapsedUpToPause = Math.max(0, pauseStart - startedAt);
     return Math.max(0, elapsedUpToPause - (sess.totalPausedMs || 0));
   }
-  const elapsed = Math.max(0, now - sess.startedAt);
+  const elapsed = Math.max(0, now - startedAt);
   return Math.max(0, elapsed - (sess.totalPausedMs || 0));
 }
 
@@ -457,6 +467,34 @@ function renderStudentsTable() {
     return p.name && !p.name.toLowerCase().includes('keep_outline');
   });
 
+  // Calculate dynamic active time for all participants
+  participants.forEach(p => {
+    const joinTs = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(state.startedAt) || now;
+    const leaveTs = toEpochMs(p.leaveTime) || (p.currentStatus === 'left' ? toEpochMs(p.lastSeen) : null);
+    const effectiveEndTime = leaveTs || toEpochMs(state.stoppedAt) || now;
+    const totalInCallMs = Math.max(0, effectiveEndTime - joinTs);
+
+    let camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs !== undefined ? p.cameraOnMs : (p.duration || 0));
+    let camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : 0;
+
+    if (camOn === 0 && camOff === 0 && totalInCallMs > 0) {
+      if (p.cameraStatus === 'on') camOn = totalInCallMs;
+      else camOff = totalInCallMs;
+    }
+
+    const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff)
+      ? p.totalPresentMs
+      : Math.max(totalInCallMs, camOn + camOff);
+
+    p.validStudyMs = camOn;
+    p.cameraOnMs = camOn;
+    p.cameraOffMs = camOff;
+    p.totalPresentMs = totMeet;
+    p.totalDuration = totMeet;
+    p.duration = camOn;
+    p.timeInCall = totMeet;
+  });
+
   let filtered = participants.filter(p => {
     if (currentSearch && !p.name.toLowerCase().includes(currentSearch)) {
       return false;
@@ -475,11 +513,11 @@ function renderStudentsTable() {
 
   // SORT BY VALID STUDY TIME (CAM ON) DESCENDING
   filtered.sort((a, b) => {
-    const timeA = a.validStudyMs !== undefined ? a.validStudyMs : (a.cameraOnMs || 0);
-    const timeB = b.validStudyMs !== undefined ? b.validStudyMs : (b.cameraOnMs || 0);
+    const timeA = a.validStudyMs !== undefined ? a.validStudyMs : (a.cameraOnMs !== undefined ? a.cameraOnMs : (a.duration || 0));
+    const timeB = b.validStudyMs !== undefined ? b.validStudyMs : (b.cameraOnMs !== undefined ? b.cameraOnMs : (b.duration || 0));
     const diff = timeB - timeA;
     if (diff !== 0) return diff;
-    return (b.totalPresentMs || 0) - (a.totalPresentMs || 0);
+    return (b.totalPresentMs || b.totalDuration || 0) - (a.totalPresentMs || a.totalDuration || 0);
   });
 
   // ASSIGN DENSE RANK: Equal study durations share the exact same rank!

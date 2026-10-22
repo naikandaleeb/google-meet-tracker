@@ -72,16 +72,41 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     resolveBaseUrl(msg, (baseUrl) => {
       fetch(`${baseUrl}/api/session/current`)
         .then(r => r.json())
-        .then(session => sendResponse({ success: true, session, baseUrl }))
+        .then(session => {
+          if (session) {
+            chrome.storage.local.set({ lastKnownSession: session });
+          }
+          sendResponse({ success: true, session, baseUrl });
+        })
         .catch(() => {
           if (baseUrl.includes('localhost')) {
             const fallbackUrl = baseUrl.replace('localhost', '127.0.0.1');
             fetch(`${fallbackUrl}/api/session/current`)
               .then(r => r.json())
-              .then(session => sendResponse({ success: true, session, baseUrl: fallbackUrl }))
-              .catch(err => sendResponse({ success: false, error: err.message }));
+              .then(session => {
+                if (session) {
+                  chrome.storage.local.set({ lastKnownSession: session });
+                }
+                sendResponse({ success: true, session, baseUrl: fallbackUrl });
+              })
+              .catch(() => {
+                // Service worker sleep resilience: fallback to locally persisted session
+                chrome.storage.local.get(['lastKnownSession'], (res) => {
+                  if (res?.lastKnownSession) {
+                    sendResponse({ success: true, session: res.lastKnownSession, cached: true, baseUrl });
+                  } else {
+                    sendResponse({ success: false, error: 'Cannot connect to server or load cached session' });
+                  }
+                });
+              });
           } else {
-            sendResponse({ success: false, error: 'Cannot connect to ' + baseUrl });
+            chrome.storage.local.get(['lastKnownSession'], (res) => {
+              if (res?.lastKnownSession) {
+                sendResponse({ success: true, session: res.lastKnownSession, cached: true, baseUrl });
+              } else {
+                sendResponse({ success: false, error: 'Cannot connect to ' + baseUrl });
+              }
+            });
           }
         });
     });
@@ -89,6 +114,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
 
   if (msg.type === 'SYNC_TO_SERVER') {
+    // Persist active session state immediately in chrome.storage.local
+    // so durations and joinTimes survive Manifest V3 service worker terminations!
+    if (msg.session) {
+      chrome.storage.local.set({ lastKnownSession: msg.session });
+    }
+
     resolveBaseUrl(msg, (baseUrl) => {
       fetch(`${baseUrl}/api/session/sync`, {
         method: 'POST',

@@ -7,7 +7,105 @@ function escapeHtml(str = '') {
   })[m]);
 }
 
+function toEpochMs(ts) {
+  if (ts === null || ts === undefined || ts === '') return null;
+  if (typeof ts === 'number') return isNaN(ts) ? null : ts;
+  const parsed = new Date(ts).getTime();
+  return isNaN(parsed) ? null : parsed;
+}
+
+function finalizeParticipant(p, sess = {}, now = Date.now()) {
+  if (!p) return;
+
+  const joinTs = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sess.startedAt) || now;
+  const leaveTs = toEpochMs(p.leaveTime) || (p.currentStatus === 'left' ? toEpochMs(p.lastSeen) : null);
+  const sessionStopTs = toEpochMs(sess.stoppedAt);
+  
+  // Effective end time: if participant left, use leaveTime; else if session stopped, use stoppedAt; else now
+  const effectiveEndTime = leaveTs || sessionStopTs || now;
+  const totalInCallMs = Math.max(0, effectiveEndTime - joinTs);
+
+  p.joinTime = joinTs;
+  p.firstSeen = joinTs;
+  p.leaveTime = leaveTs;
+  p.lastSeen = toEpochMs(p.lastSeen) || effectiveEndTime;
+
+  // Open camera interval check
+  let openIntervalOnMs = 0;
+  let openIntervalOffMs = 0;
+  if (Array.isArray(p.cameraIntervals) && p.cameraIntervals.length > 0) {
+    const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+    if (last && !last.end) {
+      const intStart = toEpochMs(last.start) || effectiveEndTime;
+      const openDur = Math.max(0, effectiveEndTime - intStart);
+      if (last.state === 'on') {
+        openIntervalOnMs = openDur;
+      } else {
+        openIntervalOffMs = openDur;
+      }
+    }
+  }
+
+  // Open cameraOffCurrentStart check
+  if (p.cameraOffCurrentStart && (!sess.isPaused || !sess.stoppedAt)) {
+    const offStart = toEpochMs(p.cameraOffCurrentStart);
+    if (offStart) {
+      const liveCutMs = Math.max(0, effectiveEndTime - offStart);
+      if (liveCutMs >= 1000) {
+        if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
+        const exists = p.cameraOffIntervals.some(int => Math.abs(toEpochMs(int.start) - offStart) < 2000);
+        if (!exists) {
+          p.cameraOffIntervals.push({
+            start: offStart,
+            end: effectiveEndTime,
+            durationMs: liveCutMs,
+            fromTime: new Date(offStart).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+            toTime: new Date(effectiveEndTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+            durationFormatted: `${Math.floor(liveCutMs / 60000)}m ${Math.floor((liveCutMs % 60000) / 1000)}s`
+          });
+        }
+      }
+    }
+  }
+
+  let camOn = (p.cameraOnMs !== undefined ? p.cameraOnMs : (p.validStudyMs !== undefined ? p.validStudyMs : (p.duration || 0))) + openIntervalOnMs;
+  let camOff = (p.cameraOffMs !== undefined ? p.cameraOffMs : 0) + openIntervalOffMs;
+
+  if (camOn === 0 && camOff === 0 && totalInCallMs > 0) {
+    if (p.cameraStatus === 'on') {
+      camOn = totalInCallMs;
+    } else {
+      camOff = totalInCallMs;
+    }
+  }
+
+  const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff)
+    ? p.totalPresentMs
+    : Math.max(totalInCallMs, camOn + camOff);
+
+  if (camOff === 0 && totMeet > camOn) {
+    camOff = totMeet - camOn;
+  }
+
+  const validStudy = camOn;
+
+  p.cameraOnMs = camOn;
+  p.cameraOffMs = camOff;
+  p.totalPresentMs = totMeet;
+  p.validStudyMs = validStudy;
+
+  p.totalDuration = totMeet;
+  p.duration = validStudy;
+  p.timeInCall = totMeet;
+  p.durationSeconds = Math.floor(validStudy / 1000);
+  p.durationMinutes = Math.floor(validStudy / 60000);
+  p.studyDuration = validStudy;
+
+  return p;
+}
+
 function generatePainThemeHtml(session) {
+  const now = Date.now();
   const rawParticipants = Object.values(session.participants || {});
   const participants = rawParticipants.filter(p => {
     if (!p || !p.name) return false;
@@ -15,7 +113,8 @@ function generatePainThemeHtml(session) {
     if (lower.includes('keep_outline') || lower.includes('turn off') || lower === 'host' || lower === 'pin' || lower === 'unpin') return false;
     return true;
   });
-  const now = Date.now();
+
+  participants.forEach(p => finalizeParticipant(p, session, now));
 
   const formatHms = (ms = 0) => {
     const sec = Math.max(0, Math.floor(ms / 1000));
@@ -221,14 +320,16 @@ function generatePainThemeHtml(session) {
   // Gantt Chart Rows
   const targetHours = session.targetDurationHours || 12;
   const sessionTotalWindowMs = targetHours * 3600 * 1000;
-  const sessionStart = session.startedAt || now;
+  const sessionStart = toEpochMs(session.startedAt) || now;
 
   const ganttRowsHtml = sorted.slice(0, 15).map(p => {
     const intervals = p.cameraIntervals || [];
     let segments = '';
     intervals.forEach(int => {
-      const s = Math.max(0, int.start - sessionStart);
-      const e = Math.min(sessionTotalWindowMs, (int.end || now) - sessionStart);
+      const intStartMs = toEpochMs(int.start) || sessionStart;
+      const intEndMs = toEpochMs(int.end) || now;
+      const s = Math.max(0, intStartMs - sessionStart);
+      const e = Math.min(sessionTotalWindowMs, intEndMs - sessionStart);
       if (e > s) {
         const l = ((s / sessionTotalWindowMs) * 100).toFixed(2);
         const w = (((e - s) / sessionTotalWindowMs) * 100).toFixed(2);
