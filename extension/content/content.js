@@ -1072,10 +1072,73 @@
   }
 
   // ================= ULTRA-ACCURATE CAMERA STATUS EVALUATOR =================
+  function isPresentationTile(tile) {
+    if (!tile) return false;
+    if (tile.getAttribute('data-is-presentation') === 'true') return true;
+    if (tile.querySelector('[data-is-presentation="true"]')) return true;
+    const pinBtn = tile.querySelector('button[aria-label*="presentation" i], button[data-tooltip*="presentation" i]');
+    if (pinBtn) return true;
+    const label = (tile.getAttribute('aria-label') || '').toLowerCase();
+    if (label.includes('presentation') || label.includes('presenting')) return true;
+    return false;
+  }
+
+  function isVideoActive(video) {
+    if (!video) return false;
+
+    // Check direct inline styles
+    if (video.style.display === 'none' || video.style.visibility === 'hidden') return false;
+
+    // Check layout dimensions
+    if (video.offsetWidth === 0 && video.offsetHeight === 0) return false;
+
+    // Check computed styles
+    try {
+      const comp = window.getComputedStyle(video);
+      if (comp.display === 'none' || comp.visibility === 'hidden' || comp.opacity === '0') {
+        return false;
+      }
+    } catch (_) {}
+
+    // 1. WebRTC MediaStream check
+    if (video.srcObject && typeof video.srcObject.getVideoTracks === 'function') {
+      const tracks = video.srcObject.getVideoTracks();
+      if (tracks && tracks.length > 0) {
+        // Live enabled track -> Camera is ON
+        const hasLive = tracks.some(t => t.enabled && t.readyState === 'live' && !t.muted);
+        if (hasLive) return true;
+
+        // If all video tracks are disabled or ended -> Camera is OFF
+        const allOff = tracks.every(t => !t.enabled || t.readyState === 'ended');
+        if (allOff) return false;
+      }
+    }
+
+    // 2. Video frame dimensions (actual decoded pixels)
+    if (video.videoWidth > 0 && video.videoHeight > 0) {
+      return true;
+    }
+
+    // 3. ReadyState or playback progression
+    if (video.readyState >= 2 || (typeof video.currentTime === 'number' && video.currentTime > 0)) {
+      return true;
+    }
+
+    // 4. Rendered layout dimensions with loaded metadata
+    if (video.offsetWidth >= 40 && video.offsetHeight >= 40 && video.readyState >= 1) {
+      return true;
+    }
+
+    return false;
+  }
+
   function evaluateTileCamera(tile) {
     if (!tile) return 'off';
 
-    // 1. Explicit camera OFF indicators in Google Meet DOM
+    // 1. Presentation tiles are NOT webcams
+    if (isPresentationTile(tile)) return 'off';
+
+    // 2. Explicit camera OFF indicators in Google Meet DOM
     const camOffAttr = tile.querySelector(
       '[data-camera-off="true"], ' +
       '[data-is-muted="true"][aria-label*="camera" i], ' +
@@ -1086,35 +1149,19 @@
     );
     if (camOffAttr) return 'off';
 
-    // 2. Video element checks
+    // 3. Video element check
     const video = tile.querySelector('video');
     if (!video) return 'off';
 
-    // If video is explicitly hidden via CSS or paused
-    if (video.style.display === 'none' || video.style.visibility === 'hidden' || video.paused || video.ended) return 'off';
+    // If video is actively streaming frames, camera is definitely ON!
+    if (isVideoActive(video)) {
+      return 'on';
+    }
 
-    // 3. Avatar overlay check:
-    // When camera is off in Meet, a prominent avatar or initials circle is shown instead of video
-    const avatar = tile.querySelector(
-      'img[src*="googleusercontent"], ' +
-      'div[role="img"], ' +
-      'div[data-avatar-container], ' +
-      'div[class*="M9Bg4d"], ' +
-      'div[class*="g3q0qc"]'
-    );
-
-    if (avatar && avatar.offsetParent !== null && avatar.offsetWidth >= 30 && avatar.offsetHeight >= 30) {
+    // 4. Center avatar overlay check when video is inactive
+    const centerAvatar = tile.querySelector('div[data-avatar-container], div[class*="avatar"], img[class*="avatar"]');
+    if (centerAvatar && centerAvatar.offsetWidth >= 60 && centerAvatar.offsetHeight >= 60) {
       return 'off';
-    }
-
-    // 4. If video has valid dimensions and active streaming, camera is ON!
-    if (video.videoWidth > 0 && video.readyState >= 2 && !video.paused) {
-      return 'on';
-    }
-
-    // If video element has rendered layout size in the DOM
-    if (video.offsetWidth > 50 && video.offsetHeight > 50 && video.readyState >= 2 && !video.paused) {
-      return 'on';
     }
 
     return 'off';
@@ -1157,18 +1204,10 @@
     }
 
     // 2. Check local self video tile in DOM
-    const selfTiles = document.querySelectorAll('div[data-self-name], div[data-participant-id*="self"]');
+    const selfTiles = document.querySelectorAll('div[data-self-name], div[data-participant-id*="self"], div[jscontroller][data-self-name]');
     for (const tile of selfTiles) {
-      const status = evaluateTileCamera(tile);
-      if (status) return status;
-    }
-
-    // 3. Fallback: Check any video with active stream
-    const videos = document.querySelectorAll('video');
-    for (const v of videos) {
-      if (v.videoWidth > 0 || v.readyState >= 2) {
-        return 'on';
-      }
+      const v = tile.querySelector('video');
+      if (v && isVideoActive(v)) return 'on';
     }
 
     return 'off';
@@ -1188,7 +1227,7 @@
     const accountEl = document.querySelector('a[aria-label*="Google Account" i], a[aria-label*="Google खाता" i], button[aria-label*="Google Account" i]');
     if (accountEl) {
       const label = accountEl.getAttribute('aria-label') || '';
-      const m = label.match(/Google (?:Account|खाता):\s*([^\n\r(]+)/i);
+      const m = label.match(/Google (?:Account|खाata):\s*([^\n\r(]+)/i);
       if (m && m[1].trim()) {
         localName = m[1].trim();
       }
@@ -1204,7 +1243,47 @@
       rawCameraStatus: localCamState
     });
 
-    // 2. Video Tiles in DOM
+    // 2. DIRECT ACTIVE VIDEO MAPPING:
+    // Any video element actively rendering frames in DOM is definitive proof of an active camera!
+    const activeVideoStudents = new Set();
+    document.querySelectorAll('video').forEach(v => {
+      if (!isVideoActive(v)) return;
+
+      // Find participant name by walking up to enclosing tile container
+      let container = v.parentElement;
+      let depth = 0;
+      let foundName = null;
+      while (container && depth < 8 && container !== document.body) {
+        if (!isPresentationTile(container)) {
+          const name = extractTileParticipantName(container);
+          if (name) {
+            foundName = name;
+            break;
+          }
+        }
+        container = container.parentElement;
+        depth++;
+      }
+
+      if (foundName) {
+        const isSelf = container?.hasAttribute('data-self-name') ||
+                       foundName.toLowerCase() === 'you' ||
+                       foundName.toLowerCase() === 'host (you)' ||
+                       (cleanHostName && foundName.toLowerCase() === cleanHostName.toLowerCase());
+        if (isSelf) {
+          activeVideoStudents.add('local_host');
+          if (detected.has('local_host')) {
+            detected.get('local_host').cameraStatus = 'on';
+            detected.get('local_host').rawCameraStatus = 'on';
+          }
+        } else {
+          const pKey = 'p_' + foundName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+          activeVideoStudents.add(pKey);
+        }
+      }
+    });
+
+    // 3. Video Tiles in DOM (Grid and Layout Containers)
     const tileSelectors = [
       'div[data-participant-id]',
       'div[data-requested-participant-id]',
@@ -1230,38 +1309,47 @@
     const tiles = Array.from(tileSet);
 
     tiles.forEach(tile => {
+      if (isPresentationTile(tile)) return;
+
       const name = extractTileParticipantName(tile);
       if (!name) return;
 
       const participantKey = 'p_' + name.toLowerCase().replace(/[^a-z0-9]/g, '_');
 
-      // If tile belongs to local user, sync local_host camera status
+      // If tile belongs to local user, sync local_host
       if (tile.hasAttribute('data-self-name') ||
           (cleanHostName && name.toLowerCase() === cleanHostName.toLowerCase()) ||
           name.toLowerCase() === 'host (you)' ||
           name.toLowerCase() === 'you') {
-        if (detected.has('local_host')) {
-          detected.get('local_host').cameraStatus = localCamState;
-          detected.get('local_host').rawCameraStatus = localCamState;
-        }
         return;
       }
 
       if (participantKey === 'p_host__you_' || participantKey === 'p_you' || participantKey === 'local_host') return;
 
-      const cameraStatus = evaluateTileCamera(tile);
+      // Determine camera status: activeVideoStudents has priority, otherwise evaluateTileCamera
+      let cameraStatus = activeVideoStudents.has(participantKey) ? 'on' : evaluateTileCamera(tile);
 
-      detected.set(participantKey, {
-        id: participantKey,
-        name: name,
-        isLocal: false,
-        hasVisibleTile: true,
-        cameraStatus: cameraStatus,
-        rawCameraStatus: cameraStatus
-      });
+      if (detected.has(participantKey)) {
+        const existing = detected.get(participantKey);
+        // If either previously detected or newly detected as 'on', KEEP 'on'!
+        if (cameraStatus === 'on') {
+          existing.cameraStatus = 'on';
+          existing.rawCameraStatus = 'on';
+          existing.hasVisibleTile = true;
+        }
+      } else {
+        detected.set(participantKey, {
+          id: participantKey,
+          name: name,
+          isLocal: false,
+          hasVisibleTile: true,
+          cameraStatus: cameraStatus,
+          rawCameraStatus: cameraStatus
+        });
+      }
     });
 
-    // 3. People Panel (Roster)
+    // 4. People Panel (Roster)
     const peopleListItems = document.querySelectorAll('div[role="listitem"]');
     peopleListItems.forEach(item => {
       const spans = item.querySelectorAll('span');
@@ -1283,34 +1371,27 @@
           foundName.toLowerCase() === 'you') return;
       if (participantKey === 'p_host__you_' || participantKey === 'p_you') return;
 
-      // Check if item has explicit camera off icon
-      const itemCamOff = item.querySelector('[aria-label*="camera is off" i], [aria-label*="camera off" i], [data-tooltip*="camera is off" i]');
-
+      // If already detected in grid tiles:
       if (detected.has(participantKey)) {
-        // Tile was already detected! If people item shows explicit camera off, respect it
-        const existing = detected.get(participantKey);
-        if (itemCamOff) {
-          existing.cameraStatus = 'off';
-          existing.rawCameraStatus = 'off';
-        }
-      } else {
-        // Tile is not rendered in DOM (paginated or grid minimized)
-        // PRESERVE their last verified status
-        let inheritedStatus = 'off';
-        if (session.participants && session.participants[participantKey]) {
-          inheritedStatus = session.participants[participantKey].cameraStatus || 'off';
-        }
-        if (itemCamOff) inheritedStatus = 'off';
-
-        detected.set(participantKey, {
-          id: participantKey,
-          name: foundName,
-          isLocal: false,
-          hasVisibleTile: false,
-          cameraStatus: inheritedStatus,
-          rawCameraStatus: inheritedStatus
-        });
+        // Participant is already verified in DOM grid! Keep their tile status.
+        return;
       }
+
+      // Participant is only in People panel (not on current grid page):
+      // Inherit their last verified status if activeVideoStudents didn't find them
+      let inheritedStatus = activeVideoStudents.has(participantKey) ? 'on' : 'off';
+      if (!activeVideoStudents.has(participantKey) && session.participants && session.participants[participantKey]) {
+        inheritedStatus = session.participants[participantKey].cameraStatus || 'off';
+      }
+
+      detected.set(participantKey, {
+        id: participantKey,
+        name: foundName,
+        isLocal: false,
+        hasVisibleTile: false,
+        cameraStatus: inheritedStatus,
+        rawCameraStatus: inheritedStatus
+      });
     });
 
     return detected;
