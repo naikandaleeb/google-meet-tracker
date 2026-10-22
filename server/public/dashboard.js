@@ -439,6 +439,7 @@ function renderUI() {
   }
 
   // Defaulters Alert
+  const presentStudents = participants.filter(p => p.currentStatus === 'present');
   const defaulters = presentStudents.filter(p => {
     const totMeet = p.totalPresentMs || 0;
     const camOn = p.cameraOnMs || 0;
