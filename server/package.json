@@ -1,0 +1,15 @@
+{
+  "name": "cockroach-library-tracker-server",
+  "version": "1.0.0",
+  "description": "Dedicated Localhost Attendance & Camera Tracker Server for Cockroach Library 12-Hour Study Sessions",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  }
+}

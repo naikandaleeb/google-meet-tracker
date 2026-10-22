@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "Cockroach Library - Meet Attendance & Cam Tracker",
+  "version": "1.0.2",
+  "description": "Ultra-accurate 12-Hour Google Meet attendance, Camera ON/OFF tracking, pause/resume breaks, and dedicated localhost dashboard sync.",
+  "permissions": [
+    "storage",
+    "alarms",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://meet.google.com/*",
+    "http://localhost:*/*",
+    "http://127.0.0.1:*/*",
+    "https://*/*",
+    "http://*/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Cockroach Library Tracker"
+  },
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["content/content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content/overlay.css",
+        "icons/icon16.png",
+        "icons/icon48.png",
+        "icons/icon128.png"
+      ],
+      "matches": ["https://meet.google.com/*"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

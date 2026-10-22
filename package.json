@@ -1,0 +1,19 @@
+{
+  "name": "cockroach-meet-tracker",
+  "version": "1.0.0",
+  "description": "Cockroach Library 12-Hour Study Marathon Attendance & Camera Tracker",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js",
+    "share": "npx cloudflared tunnel --url http://localhost:4200"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

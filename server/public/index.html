@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cockroach Library - 12H Meet & Camera Tracker</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+  <!-- Akatsuki / Void Ambient Glows -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <div class="app-layout">
+    <!-- Top Header Navigation -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-emblem">
+          <span class="emblem-glyph">🪳</span>
+          <span class="emblem-ring"></span>
+        </div>
+        <div>
+          <div class="brand-title">
+            <span>COCKROACH</span> LIBRARY
+            <span class="brand-badge">MEET TRACKER</span>
+          </div>
+          <div class="brand-sub">12-HOUR VIRTUAL STUDY MARATHON &bull; ATTENDANCE &bull; CAMERA COMPLIANCE</div>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="live-pill" id="ws-status">
+          <span class="status-dot"></span>
+          <span class="status-label">CONNECTING...</span>
+        </div>
+        <div class="meeting-code-pill" id="meeting-pill">
+          <span class="pill-label">MEETING:</span>
+          <span class="pill-val" id="display-meeting-code">Waiting for Meet...</span>
+        </div>
+        <div class="port-indicator">
+          <span class="port-tag">PORT 4200</span>
+          <span class="port-note">Isolated from Study Tracker</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn btn-pain-pdf" id="btn-export-pdf" title="Generate Mint-Green Ranked Attendance PDF Report matching 7+ Hours Sample">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          📄 Ranked PDF
+        </button>
+        <button class="btn btn-action" id="btn-export-pain" title="Generate Akatsuki / Pain Themed PDF Report">
+          🩸 Pain Theme
+        </button>
+        <button class="btn btn-action" id="btn-export-csv" title="Download Excel-compatible Attendance & Camera CSV">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export CSV
+        </button>
+        <button class="btn btn-action" id="btn-export-json" title="Export full JSON telemetry">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          JSON
+        </button>
+        <button class="btn btn-danger-outline" id="btn-reset-session" title="Archive & Start New Session">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          Reset / New
+        </button>
+      </div>
+    </header>
+
+    <!-- Paused Alert Banner (When Paused) -->
+    <div class="paused-banner" id="paused-banner" style="display: none;">
+      <div class="banner-content">
+        <div class="banner-icon">⏸️</div>
+        <div class="banner-text">
+          <div class="banner-title">STUDY SESSION IS CURRENTLY PAUSED</div>
+          <div class="banner-desc">Attendance and camera timers are on hold during this break. Click Resume to continue tracking.</div>
+        </div>
+        <div class="banner-timer" id="current-break-timer">Break: 00:00:00</div>
+        <button class="btn btn-resume-banner" id="btn-resume-banner">
+          ▶️ RESUME TRACKING
+        </button>
+      </div>
+    </div>
+
+    <!-- Defaulters Watch Alert Banner -->
+    <div class="defaulter-alert" id="defaulter-alert" style="display: none;">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-body">
+        <strong id="defaulter-count">0 Students</strong> currently have their camera OFF for more than 5 minutes!
+        <span class="defaulter-names" id="defaulter-names"></span>
+      </div>
+      <button class="btn btn-sm btn-outline" id="btn-filter-defaulters">View Defaulters</button>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+      <!-- 12-Hour Session KPI Hero Bar -->
+      <section class="kpi-grid">
+        <!-- Card 1: 12-Hour Marathon Timer -->
+        <div class="kpi-card timer-card">
+          <div class="card-head">
+            <span class="card-tag">12-HOUR STUDY SESSION</span>
+            <span class="card-status-badge" id="card-status-badge">ACTIVE</span>
+          </div>
+          <div class="timer-display" id="session-study-clock">00:00:00</div>
+          <div class="progress-wrap">
+            <div class="progress-bar">
+              <div class="progress-fill" id="session-progress-fill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-labels">
+              <span id="session-progress-text">0.0% of 12h goal</span>
+              <span id="session-target-text">Target: 12h 00m</span>
+            </div>
+          </div>
+          <div class="target-presets">
+            <span class="preset-label">Goal:</span>
+            <button class="btn-preset" data-hours="6">6h</button>
+            <button class="btn-preset" data-hours="8">8h</button>
+            <button class="btn-preset" data-hours="10">10h</button>
+            <button class="btn-preset active" data-hours="12">12h</button>
+            <button class="btn-preset" data-hours="14">14h</button>
+          </div>
+        </div>
+
+        <!-- Card 2: Master Controls: Start / Pause / Off / Reset Attendance -->
+        <div class="kpi-card control-card">
+          <div class="card-head">
+            <span class="card-tag">ATTENDANCE CONTROLS</span>
+            <span class="card-status-badge" id="dash-attendance-badge">OFF</span>
+          </div>
+          <div class="control-body">
+            <!-- If OFF / Finalized: Show Start / Resume & Reset Buttons -->
+            <div class="master-off-group" id="master-off-group">
+              <button class="btn-master-start" id="btn-master-start">
+                <span class="toggle-icon">▶️</span>
+                <span class="toggle-text">
+                  <span class="toggle-main">START / RESUME ATTENDANCE</span>
+                  <span class="toggle-sub">Begin tracking student hours & camera</span>
+                </span>
+              </button>
+              <button class="btn-master-reset-dash" id="btn-master-reset-dash" title="Archive & Start Clean 00:00:00 Session">
+                <span class="toggle-icon">🔄</span>
+                <span class="toggle-text">
+                  <span class="toggle-main">RESET TO ZERO</span>
+                  <span class="toggle-sub">Archive & start fresh session</span>
+                </span>
+              </button>
+            </div>
+
+            <!-- If RUNNING: Show Pause & Off & Reset Buttons -->
+            <div class="master-running-group" id="master-running-group" style="display: none;">
+              <button class="btn-master-toggle" id="btn-master-pause">
+                <span class="toggle-icon" id="master-toggle-icon">⏸️</span>
+                <span class="toggle-text">
+                  <span class="toggle-main" id="master-toggle-label">PAUSE BREAK</span>
+                  <span class="toggle-sub" id="master-toggle-sub">Halt timers</span>
+                </span>
+              </button>
+              <button class="btn-master-stop" id="btn-master-stop" title="Turn Off Attendance & Freeze Times">
+                <span class="toggle-icon">⏹️</span>
+                <span class="toggle-text">
+                  <span class="toggle-main">OFF</span>
+                  <span class="toggle-sub">Freeze / Finalize</span>
+                </span>
+              </button>
+              <button class="btn-master-reset-sm" id="btn-master-reset-sm" title="Archive & Reset to 0">
+                <span class="toggle-icon">🔄</span>
+              </button>
+            </div>
+
+            <div class="break-stats">
+              <div class="break-stat-item">
+                <span class="label">Total Breaks:</span>
+                <span class="val" id="total-breaks-count">0</span>
+              </div>
+              <div class="break-stat-item">
+                <span class="label">Paused Time:</span>
+                <span class="val" id="total-paused-duration">00:00:00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Camera Compliance Gauge -->
+        <div class="kpi-card camera-card">
+          <div class="card-head">
+            <span class="card-tag">LIVE CAMERA COMPLIANCE</span>
+            <span class="cam-live-indicator" id="cam-active-dot">🟢</span>
+          </div>
+          <div class="cam-stat-row">
+            <div class="cam-stat-val" id="cam-active-count">0 / 0</div>
+            <div class="cam-stat-percent" id="cam-compliance-percent">0.0%</div>
+          </div>
+          <div class="cam-bar-wrap">
+            <div class="cam-bar-fill" id="cam-compliance-bar" style="width: 0%;"></div>
+          </div>
+          <div class="cam-card-foot">
+            <span class="cam-subtext" id="cam-defaulter-summary">All cameras monitored</span>
+            <span class="cam-rule">Requirement: ≥ 90%</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Attendance Overview -->
+        <div class="kpi-card attendees-card">
+          <div class="card-head">
+            <span class="card-tag">STUDENT ATTENDANCE</span>
+            <span class="users-glyph">👥</span>
+          </div>
+          <div class="users-stat-row">
+            <div class="stat-group">
+              <div class="stat-number" id="attendees-present-count">0</div>
+              <div class="stat-caption">Present Now</div>
+            </div>
+            <div class="stat-group">
+              <div class="stat-number" id="attendees-total-count">0</div>
+              <div class="stat-caption">Total Joined</div>
+            </div>
+            <div class="stat-group">
+              <div class="stat-number" id="attendees-left-count">0</div>
+              <div class="stat-caption">Left / Away</div>
+            </div>
+          </div>
+          <div class="session-started-label" id="session-started-label">Started: --:--</div>
+        </div>
+      </section>
+
+      <!-- Dashboard Tabs & Controls -->
+      <section class="table-section">
+        <div class="section-toolbar">
+          <div class="tab-pills">
+            <button class="tab-pill active" data-tab="tab-attendees">
+              <span>👥 Student Matrix</span>
+              <span class="tab-badge" id="tab-count-attendees">0</span>
+            </button>
+            <button class="tab-pill" data-tab="tab-timeline">
+              <span>📊 12H Visual Timeline</span>
+            </button>
+            <button class="tab-pill" data-tab="tab-breaks">
+              <span>⏸️ Break History</span>
+              <span class="tab-badge" id="tab-count-breaks">0</span>
+            </button>
+            <button class="tab-pill" data-tab="tab-archives">
+              <span>📁 Past Sessions</span>
+            </button>
+          </div>
+
+          <div class="table-filters">
+            <div class="search-box">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="student-search-input" placeholder="Search student name...">
+            </div>
+            <div class="filter-dropdown">
+              <select id="status-filter">
+                <option value="all">All Students</option>
+                <option value="cam-on">🟢 Camera ON</option>
+                <option value="cam-off">🔴 Camera OFF</option>
+                <option value="defaulters">⚠️ Defaulters (&lt;85%)</option>
+                <option value="present">Active Present</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 1: Student Attendees Table -->
+        <div class="tab-content active" id="tab-attendees">
+          <div class="table-container">
+            <table class="cockroach-table" id="students-table">
+              <thead>
+                <tr>
+                  <th class="th-rank">Rank</th>
+                  <th class="th-student">Student Name</th>
+                  <th class="th-valid-time" style="color: var(--accent-emerald);">Net Valid Study Time (Cam ON)</th>
+                  <th class="th-deducted-time" style="color: var(--accent-crimson);">Cut Time (Cam OFF)</th>
+                  <th class="th-total-time">Total In Meet</th>
+                  <th class="th-cam-compliance">Compliance</th>
+                  <th class="th-cam-intervals">Camera OFF Breakdown</th>
+                  <th class="th-status">Live Status</th>
+                  <th class="th-actions">Details</th>
+                </tr>
+              </thead>
+              <tbody id="students-tbody">
+                <tr class="empty-row">
+                  <td colspan="10">
+                    <div class="empty-state">
+                      <div class="empty-glyph">🪳</div>
+                      <div class="empty-title">Waiting for Google Meet Connection...</div>
+                      <div class="empty-desc">Open Google Meet with the Cockroach Library Tracker extension enabled to start live tracking.</div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2: Visual 12-Hour Timeline (Gantt) -->
+        <div class="tab-content" id="tab-timeline">
+          <div class="timeline-container">
+            <div class="timeline-header">
+              <div class="timeline-legend">
+                <span class="legend-item"><span class="legend-color legend-cam-on"></span> Camera ON</span>
+                <span class="legend-item"><span class="legend-color legend-cam-off"></span> Camera OFF</span>
+                <span class="legend-item"><span class="legend-color legend-break"></span> Break / Paused</span>
+                <span class="legend-item"><span class="legend-color legend-absent"></span> Not in Meet</span>
+              </div>
+              <div class="timeline-time-axis" id="timeline-time-axis">
+                <!-- Dynamically generated 12-hour hour markers (0h, 1h, 2h ... 12h) -->
+              </div>
+            </div>
+            <div class="timeline-rows" id="timeline-rows">
+              <div class="empty-state">
+                <div class="empty-glyph">📊</div>
+                <div class="empty-title">Timeline will populate as participants join</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: Break & Pause History -->
+        <div class="tab-content" id="tab-breaks">
+          <div class="breaks-container">
+            <div class="breaks-summary-banner">
+              <div>
+                <h3>Official Pause & Break History</h3>
+                <p>Every pause halts study and camera duration accumulation across the entire session.</p>
+              </div>
+              <div class="total-breaks-badge" id="breaks-badge-summary">0 Breaks &bull; 00:00:00</div>
+            </div>
+            <table class="cockroach-table" id="breaks-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Paused At</th>
+                  <th>Resumed At</th>
+                  <th>Duration</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="breaks-tbody">
+                <tr class="empty-row">
+                  <td colspan="5">No pauses or breaks recorded yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 4: Session Archives -->
+        <div class="tab-content" id="tab-archives">
+          <div class="archives-container">
+            <div class="archives-header">
+              <h3>Archived 12-Hour Study Sessions</h3>
+              <p>Historical logs saved automatically from previous study marathons.</p>
+            </div>
+            <div class="archives-list" id="archives-list">
+              <div class="empty-state">
+                <div class="empty-glyph">📁</div>
+                <div class="empty-title">No past sessions archived yet</div>
+                <div class="empty-desc">Completed sessions will appear here after clicking "Reset / New".</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Student Detail Modal -->
+    <div class="modal-backdrop" id="student-modal" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-student-name" id="modal-name">Student Name</h3>
+            <div class="modal-student-id" id="modal-id">ID: --</div>
+          </div>
+          <button class="btn-close-modal" id="btn-close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-stats-grid">
+            <div class="mstat">
+              <div class="mstat-label">Total Attendance</div>
+              <div class="mstat-val" id="modal-total-time">00:00:00</div>
+            </div>
+            <div class="mstat">
+              <div class="mstat-label">Camera ON Time</div>
+              <div class="mstat-val val-green" id="modal-cam-on">00:00:00</div>
+            </div>
+            <div class="mstat">
+              <div class="mstat-label">Camera OFF Time</div>
+              <div class="mstat-val val-red" id="modal-cam-off">00:00:00</div>
+            </div>
+            <div class="mstat">
+              <div class="mstat-label">Compliance Score</div>
+              <div class="mstat-val" id="modal-compliance">0%</div>
+            </div>
+          </div>
+
+          <h4 class="section-subhead">Camera State Transition Log</h4>
+          <div class="log-container" id="modal-transitions-log">
+            <!-- Dynamic logs -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Archive Detail Modal -->
+    <div class="modal-backdrop" id="archive-modal" style="display: none;">
+      <div class="modal-card modal-card-large">
+        <div class="modal-header">
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <h3 class="modal-student-name" id="archive-modal-code">Past Session</h3>
+              <span class="card-status-badge paused" id="archive-modal-badge">ARCHIVED</span>
+            </div>
+            <div class="modal-student-id" id="archive-modal-id">Session ID: --</div>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button class="btn btn-sm btn-pain-pdf" id="archive-modal-btn-pdf" title="Generate Ranked PDF Report">📄 Ranked PDF</button>
+            <button class="btn btn-sm btn-action" id="archive-modal-btn-csv" title="Export CSV">📥 CSV</button>
+            <button class="btn btn-sm btn-outline" id="archive-modal-btn-restore" title="Load into live dashboard">🔄 Load</button>
+            <button class="btn-close-modal" id="btn-close-archive-modal">&times;</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="modal-stats-grid">
+            <div class="mstat">
+              <div class="mstat-label">Total Duration</div>
+              <div class="mstat-val" id="archive-modal-duration">00:00:00</div>
+            </div>
+            <div class="mstat">
+              <div class="mstat-label">Participants Tracked</div>
+              <div class="mstat-val val-green" id="archive-modal-participants">0</div>
+            </div>
+            <div class="mstat">
+              <div class="mstat-label">Total Breaks</div>
+              <div class="mstat-val val-amber" id="archive-modal-breaks">0</div>
+            </div>
+            <div class="mstat">
+              <div class="mstat-label">Date & Time</div>
+              <div class="mstat-val font-mono" id="archive-modal-timing" style="font-size: 13px;">--</div>
+            </div>
+          </div>
+
+          <h4 class="section-subhead" style="margin-top: 16px;">Ranked Participants Leaderboard</h4>
+          <div class="table-container" style="max-height: 380px; overflow-y: auto;">
+            <table class="cockroach-table">
+              <thead>
+                <tr>
+                  <th class="th-rank">Rank</th>
+                  <th class="th-student">Student Name</th>
+                  <th style="color: var(--accent-emerald);">Valid Study Time (Cam ON)</th>
+                  <th style="color: var(--accent-crimson);">Cut Time (Cam OFF)</th>
+                  <th>Total Meet</th>
+                  <th>Compliance</th>
+                  <th>Cam OFF Intervals</th>
+                </tr>
+              </thead>
+              <tbody id="archive-modal-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-notification" id="toast-notify" style="display: none;"></div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

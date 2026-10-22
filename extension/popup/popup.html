@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cockroach Tracker</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-head">
+      <div class="brand">
+        <span class="glyph">🪳</span>
+        <div>
+          <div class="brand-name">COCKROACH TRACKER</div>
+          <div class="brand-tag">12H STUDY & CAMERA ENGINE</div>
+        </div>
+      </div>
+      <div class="status-indicator" id="ext-status-pill">
+        <span class="status-dot"></span>
+        <span class="status-text" id="status-text">OFFLINE</span>
+      </div>
+    </header>
+
+    <!-- Main Card -->
+    <main class="popup-body">
+      <!-- Force Inject Button -->
+      <button class="btn btn-inject" id="btn-force-inject">
+        <span>⚡ Re-inject / Show HUD in Meet</span>
+      </button>
+
+      <!-- Meeting Info Box -->
+      <div class="meeting-info-box">
+        <div class="info-row">
+          <span class="info-label">Room Code:</span>
+          <span class="info-val" id="pop-meeting-code">Checking tabs...</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Attendance State:</span>
+          <span class="info-badge off" id="pop-status-badge">ATTENDANCE OFF</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Study Duration:</span>
+          <span class="info-val font-mono" id="pop-duration">00:00:00</span>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="pop-stats-grid">
+        <div class="pop-stat">
+          <div class="pop-stat-num" id="pop-attendees">0</div>
+          <div class="pop-stat-lbl">Students</div>
+        </div>
+        <div class="pop-stat">
+          <div class="pop-stat-num green" id="pop-cams-on">0</div>
+          <div class="pop-stat-lbl">Cam ON</div>
+        </div>
+        <div class="pop-stat">
+          <div class="pop-stat-num red" id="pop-cams-off">0</div>
+          <div class="pop-stat-lbl">Cam OFF</div>
+        </div>
+      </div>
+
+      <!-- Attendance Controls: Start / Pause / Off / Reset -->
+      <div class="popup-actions">
+        <!-- Start / Resume Attendance -->
+        <button class="btn btn-start" id="pop-btn-start">
+          <span>▶️ START ATTENDANCE</span>
+        </button>
+
+        <!-- Reset Button when Off -->
+        <button class="btn btn-reset" id="pop-btn-reset">
+          <span>🔄 RESET TO 00:00:00</span>
+        </button>
+
+        <!-- Controls when Tracking is Running -->
+        <div class="btn-group-row" id="pop-running-controls" style="display: none;">
+          <!-- Pause Break -->
+          <button class="btn btn-pause" id="pop-btn-pause">
+            <span id="pop-pause-icon">⏸️</span>
+            <span id="pop-pause-text">Pause Break</span>
+          </button>
+
+          <!-- Off Attendance -->
+          <button class="btn btn-stop" id="pop-btn-stop" title="Turn Off Attendance & Freeze Times">
+            <span>⏹️ Off Attendance</span>
+          </button>
+        </div>
+
+        <!-- Pain PDF Report Button -->
+        <button class="btn btn-pdf" id="pop-btn-pdf">
+          <span>📄 Download Pain PDF Report</span>
+        </button>
+
+        <!-- Open Localhost 4200 Dashboard -->
+        <button class="btn btn-primary" id="pop-btn-dashboard">
+          <span>🌐 Open Live Dashboard</span>
+        </button>
+      </div>
+
+      <!-- Settings Dropdown / Config -->
+      <div class="settings-drawer">
+        <div class="settings-row">
+          <label for="input-server-url">Server / Cloud URL:</label>
+          <div class="port-input-wrap">
+            <input type="text" id="input-server-url" placeholder="http://localhost:4200 or https://..." style="width: 170px; font-size: 11px;">
+            <button class="btn-save-port" id="btn-save-url">Save</button>
+          </div>
+        </div>
+        <div class="port-subtext">Supports 100% Free Cloud URLs (Render, Cloudflare, etc.) so anyone can use it without localhost!</div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="popup-foot">
+      <span>Cockroach Library &bull; Akatsuki Edition</span>
+      <a href="#" id="link-export-csv">Export CSV</a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
