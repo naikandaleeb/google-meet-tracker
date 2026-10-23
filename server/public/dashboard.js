@@ -168,6 +168,8 @@ function mergeSessionState(incoming) {
         const maxOn = Math.max(existing.cameraOnMs || 0, inc.cameraOnMs || 0);
         const maxOff = Math.max(existing.cameraOffMs || 0, inc.cameraOffMs || 0);
         const tot = maxOn + maxOff;
+        const maxTotalMeet = Math.max(existing.totalInMeetMs || 0, inc.totalInMeetMs || 0, tot);
+        const rejoinCnt = Math.max(existing.rejoinCount || 0, inc.rejoinCount || 0);
 
         state.participants[id] = {
           ...existing,
@@ -180,7 +182,12 @@ function mergeSessionState(incoming) {
           totalPresentMs: tot,
           totalDuration: tot,
           duration: maxOn,
-          timeInCall: tot,
+          timeInCall: maxTotalMeet,
+          totalInMeetMs: maxTotalMeet,
+          rejoinCount: rejoinCnt,
+          rejoinedAt: inc.rejoinedAt || existing.rejoinedAt || null,
+          presenceIntervals: inc.presenceIntervals || existing.presenceIntervals || [],
+          joinLeaveHistory: inc.joinLeaveHistory || existing.joinLeaveHistory || [],
           cameraOffCurrentStart: inc.cameraOffCurrentStart !== undefined ? inc.cameraOffCurrentStart : existing.cameraOffCurrentStart,
           cameraOffIntervals: inc.cameraOffIntervals || existing.cameraOffIntervals || []
         };
@@ -629,6 +636,7 @@ function renderStudentsTable() {
       const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
       const camOff = p.cameraOffMs || 0;
       const totMeet = camOn + camOff;
+      const totalInMeet = p.totalInMeetMs || totMeet;
       const compliance = totMeet > 0 ? Math.min(100, (camOn / totMeet) * 100) : (camOn > 0 ? 100 : 0);
       const isCamOn = p.cameraStatus === 'on';
       const isPresent = p.currentStatus === 'present';
@@ -643,7 +651,7 @@ function renderStudentsTable() {
 
       // Update total meet time
       const totCell = tr.querySelector('.td-tot-time .time-mono');
-      if (totCell) totCell.innerText = formatHms(totMeet);
+      if (totCell) totCell.innerText = formatHms(totalInMeet);
 
       // Update compliance meter
       let barColor = 'var(--accent-emerald)';
@@ -665,7 +673,12 @@ function renderStudentsTable() {
       const statusBadge = tr.querySelector('.td-status-badge');
       if (statusBadge) {
         statusBadge.className = `badge td-status-badge ${isPresent ? (isCamOn ? 'badge-cam-on' : 'badge-cam-off') : 'badge-left'}`;
-        statusBadge.innerText = isPresent ? (isCamOn ? '📹 ON' : '📷 OFF') : '⚪ Left';
+        if (isPresent) {
+          statusBadge.innerText = isCamOn ? '📹 ON' : '📷 OFF';
+        } else {
+          const leftStr = p.leaveTime ? formatTimeOnly(p.leaveTime) : (p.lastSeen ? formatTimeOnly(p.lastSeen) : '');
+          statusBadge.innerText = leftStr ? `⚪ Left (${leftStr})` : '⚪ Left';
+        }
       }
 
       // Update ongoing cut if cam is off
@@ -686,6 +699,7 @@ function renderStudentsTable() {
     const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
     const camOff = p.cameraOffMs || 0;
     const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
+    const totalInMeet = p.totalInMeetMs || totMeet;
     const compliance = totMeet > 0 ? Math.min(100, (camOn / totMeet) * 100) : (camOn > 0 ? 100 : 0);
     const isCamOn = p.cameraStatus === 'on';
     const isPresent = p.currentStatus === 'present';
@@ -740,6 +754,9 @@ function renderStudentsTable() {
     else if (compliance < 85) barColor = 'var(--accent-amber)';
 
     const initials = (p.name || 'U').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+    const rejoinBadge = (p.rejoinCount && p.rejoinCount > 0)
+      ? `<span class="badge-rejoin" style="background: rgba(167, 139, 250, 0.18); color: #c4b5fd; border: 1px solid rgba(167, 139, 250, 0.4); font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 700; margin-left: 6px;" title="Left and rejoined call ${p.rejoinCount} time(s)">🔄 ${p.rejoinCount} Rejoin${p.rejoinCount > 1 ? 's' : ''}</span>`
+      : '';
 
     return `
       <tr id="student-row-${escapeHtml(p.id)}" data-student-id="${escapeHtml(p.id)}" class="${p.rank === 1 && camOn > 0 ? 'tr-rank-1' : ''}">
@@ -751,6 +768,7 @@ function renderStudentsTable() {
               <span class="student-name-text">${escapeHtml(p.name)}</span>
               ${isHost ? '<span class="student-local-tag" style="background:#10b981; color:#fff;">HOST (EXEMPT)</span>' : ''}
               ${!isHost && p.rank === 1 && camOn > 0 ? '<span class="badge-champ">CHAMPION</span>' : ''}
+              ${rejoinBadge}
             </div>
           </div>
         </td>
@@ -766,7 +784,10 @@ function renderStudentsTable() {
             <span class="text-dim text-xs">CUT FROM TIME</span>
           </div>
         </td>
-        <td class="td-tot-time"><span class="time-mono text-white">${formatHms(totMeet)}</span></td>
+        <td class="td-tot-time">
+          <span class="time-mono text-white">${formatHms(totalInMeet)}</span>
+          <div class="text-dim text-xs" style="font-size: 9px; opacity: 0.7;">TOTAL IN MEET</div>
+        </td>
         <td>
           <div class="compliance-meter">
             <div class="compliance-bar-bg">
@@ -778,7 +799,7 @@ function renderStudentsTable() {
         <td><div class="intervals-col">${offBreakdownHtml}</div></td>
         <td>
           <span class="badge td-status-badge ${isPresent ? (isCamOn ? 'badge-cam-on' : 'badge-cam-off') : 'badge-left'}">
-            ${isPresent ? (isCamOn ? '📹 ON' : '📷 OFF') : '⚪ Left'}
+            ${isPresent ? (isCamOn ? '📹 ON' : '📷 OFF') : `⚪ Left ${p.leaveTime ? `(${formatTimeOnly(p.leaveTime)})` : ''}`}
           </span>
         </td>
         <td>
@@ -789,7 +810,7 @@ function renderStudentsTable() {
   }).join('');
 }
 
-// Student Details Modal (Showing Exact Camera OFF Times)
+// Student Details Modal (Showing Exact Camera OFF Times & Join/Left History)
 window.openStudentModal = function(id) {
   const p = state.participants?.[id];
   if (!p) return;
@@ -797,14 +818,97 @@ window.openStudentModal = function(id) {
   const camOn = p.cameraOnMs || 0;
   const camOff = p.cameraOffMs || 0;
   const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
+  const totalInMeet = p.totalInMeetMs || totMeet;
   const compliance = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : (camOn > 0 ? '100.0%' : '0.0%');
 
-  document.getElementById('modal-name').innerText = p.name;
-  document.getElementById('modal-id').innerText = `ID: ${p.id} • Rank: #${p.rank || '-'} • First Joined: ${formatIstTime(p.firstSeen)}`;
-  document.getElementById('modal-total-time').innerText = formatHms(totMeet);
-  document.getElementById('modal-cam-on').innerText = formatHms(camOn);
-  document.getElementById('modal-cam-off').innerText = `-${formatHms(camOff)}`;
-  document.getElementById('modal-compliance').innerText = compliance;
+  const nameEl = document.getElementById('modal-name');
+  if (nameEl) nameEl.innerText = p.name;
+
+  const idEl = document.getElementById('modal-id');
+  if (idEl) {
+    const isHost = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
+    idEl.innerText = `ID: ${p.id} • Rank: ${isHost ? 'EXEMPT [HOST]' : `#${p.rank || '-'}`} • First Joined: ${formatIstTime(p.firstSeen || p.joinTime)}`;
+  }
+
+  const meetEl = document.getElementById('modal-total-meet') || document.getElementById('modal-total-time');
+  if (meetEl) meetEl.innerText = formatHms(totalInMeet);
+
+  const camOnEl = document.getElementById('modal-cam-on');
+  if (camOnEl) camOnEl.innerText = formatHms(camOn);
+
+  const camOffEl = document.getElementById('modal-cam-off');
+  if (camOffEl) camOffEl.innerText = `-${formatHms(camOff)}`;
+
+  const compEl = document.getElementById('modal-compliance');
+  if (compEl) compEl.innerText = compliance;
+
+  const rejoinCountEl = document.getElementById('modal-rejoins-count');
+  if (rejoinCountEl) rejoinCountEl.innerText = String(p.rejoinCount || 0);
+
+  // Render Meeting Join, Left & Rejoin Log
+  const presenceLogContainer = document.getElementById('modal-presence-log');
+  if (presenceLogContainer) {
+    const history = p.joinLeaveHistory || [];
+    const intervals = p.presenceIntervals || [];
+    let pLogHtml = '';
+
+    if (history.length > 0) {
+      pLogHtml += '<div style="font-weight: 700; color: #60a5fa; margin-bottom: 6px;">🚪 Join, Left & Rejoin Events:</div>';
+      history.forEach((ev, idx) => {
+        const timeStr = formatIstTime(ev.time);
+        if (ev.event === 'joined') {
+          pLogHtml += `
+            <div class="log-entry cam-on" style="background: rgba(16, 185, 129, 0.08); border-left: 3px solid #10b981; margin-bottom: 4px;">
+              <span><strong>#${idx + 1}. First Joined Google Meet</strong></span>
+              <span>🟢 Joined at ${timeStr}</span>
+            </div>
+          `;
+        } else if (ev.event === 'left') {
+          pLogHtml += `
+            <div class="log-entry cam-off" style="background: rgba(239, 68, 68, 0.08); border-left: 3px solid #ef4444; margin-bottom: 4px;">
+              <span><strong>#${idx + 1}. Left Google Meet</strong></span>
+              <span>⚪ Left at ${timeStr}</span>
+            </div>
+          `;
+        } else if (ev.event === 'rejoined') {
+          const awayStr = ev.awayFormatted ? ` (away for ${ev.awayFormatted})` : '';
+          pLogHtml += `
+            <div class="log-entry" style="background: rgba(167, 139, 250, 0.1); border-left: 3px solid #a78bfa; margin-bottom: 4px; display: flex; justify-content: space-between; padding: 6px 10px; font-size: 12px;">
+              <span style="color: #c4b5fd;"><strong>#${idx + 1}. 🔄 REJOINED Google Meet</strong></span>
+              <span style="color: #c4b5fd;">Rejoined at ${timeStr}${awayStr}</span>
+            </div>
+          `;
+        }
+      });
+    }
+
+    if (intervals.length > 0) {
+      pLogHtml += '<div style="font-weight: 700; color: #a78bfa; margin: 10px 0 6px;">⏱️ Presence Sessions Inside Meet:</div>';
+      intervals.forEach((int, idx) => {
+        const startStr = formatIstTime(int.joinTime);
+        const endStr = int.leaveTime ? formatIstTime(int.leaveTime) : (p.currentStatus === 'present' ? 'Currently Present' : formatIstTime(p.lastSeen));
+        const dur = int.durationMs || (int.leaveTime ? Math.max(0, int.leaveTime - int.joinTime) : Math.max(0, Date.now() - int.joinTime));
+        pLogHtml += `
+          <div class="log-entry" style="background: rgba(255, 255, 255, 0.03); border-left: 3px solid #60a5fa; margin-bottom: 4px; display: flex; justify-content: space-between; padding: 6px 10px; font-size: 12px;">
+            <span>Session #${idx + 1}</span>
+            <span>${startStr} → ${endStr} <strong>(${formatHms(dur)})</strong></span>
+          </div>
+        `;
+      });
+    }
+
+    if (!pLogHtml) {
+      const firstStr = p.firstSeen ? formatIstTime(p.firstSeen) : 'N/A';
+      const lastStr = p.lastSeen ? formatIstTime(p.lastSeen) : 'N/A';
+      pLogHtml = `
+        <div class="log-entry" style="padding: 8px 12px; font-size: 12px; color: var(--text-dim);">
+          Joined at ${firstStr} • Status: ${p.currentStatus === 'present' ? '🟢 Present' : `⚪ Left (${lastStr})`} • Total In Meet: ${formatHms(totalInMeet)}
+        </div>
+      `;
+    }
+
+    presenceLogContainer.innerHTML = pLogHtml;
+  }
 
   const logContainer = document.getElementById('modal-transitions-log');
   const offIntervals = p.cameraOffIntervals || [];
@@ -843,7 +947,7 @@ window.openStudentModal = function(id) {
     html = '<div style="color: var(--text-dim); text-align: center; padding: 12px;">No camera state transitions recorded yet.</div>';
   }
 
-  logContainer.innerHTML = html;
+  if (logContainer) logContainer.innerHTML = html;
   studentModal.style.display = 'flex';
 };
 
@@ -1206,6 +1310,7 @@ window.addEventListener('DOMContentLoaded', () => {
               p.consecutiveCamOffMs = (p.consecutiveCamOffMs || 0) + 1000;
             }
             p.totalPresentMs = (p.cameraOnMs || 0) + (p.cameraOffMs || 0);
+            p.totalInMeetMs = (p.totalInMeetMs || p.totalPresentMs || 0) + 1000;
           }
         });
         if (hasPresent) {

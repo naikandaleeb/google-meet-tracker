@@ -377,23 +377,32 @@
           <button class="btn-close-modal" id="btn-close-modal">&times;</button>
         </div>
         <div class="modal-body">
-          <div class="modal-stats-grid">
+          <div class="modal-stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
             <div class="mstat">
-              <div class="mstat-label">Total Attendance</div>
-              <div class="mstat-val" id="modal-total-time">00:00:00</div>
+              <div class="mstat-label">Total In Meet</div>
+              <div class="mstat-val" id="modal-total-meet" style="color: #60a5fa;">00:00:00</div>
             </div>
             <div class="mstat">
-              <div class="mstat-label">Camera ON Time</div>
+              <div class="mstat-label">Counted Study (Cam ON)</div>
               <div class="mstat-val val-green" id="modal-cam-on">00:00:00</div>
             </div>
             <div class="mstat">
-              <div class="mstat-label">Camera OFF Time</div>
+              <div class="mstat-label">Deducted (Cam OFF)</div>
               <div class="mstat-val val-red" id="modal-cam-off">00:00:00</div>
             </div>
             <div class="mstat">
               <div class="mstat-label">Compliance Score</div>
               <div class="mstat-val" id="modal-compliance">0%</div>
             </div>
+            <div class="mstat">
+              <div class="mstat-label">Rejoins Count</div>
+              <div class="mstat-val" id="modal-rejoins-count" style="color: #a78bfa;">0</div>
+            </div>
+          </div>
+
+          <h4 class="section-subhead">🚪 Meeting Join, Left & Rejoin History</h4>
+          <div class="log-container" id="modal-presence-log" style="margin-bottom: 16px;">
+            <!-- Dynamic join/left/rejoin records -->
           </div>
 
           <h4 class="section-subhead">Camera State Transition Log</h4>

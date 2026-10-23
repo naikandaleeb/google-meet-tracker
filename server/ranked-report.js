@@ -22,6 +22,25 @@ function toEpochMs(ts) {
   return isNaN(parsed) ? null : parsed;
 }
 
+function calculateTotalInMeetMs(p, now = Date.now()) {
+  if (!p) return 0;
+  if (Array.isArray(p.presenceIntervals) && p.presenceIntervals.length > 0) {
+    let sum = 0;
+    p.presenceIntervals.forEach(int => {
+      const s = toEpochMs(int.joinTime);
+      if (s) {
+        const e = toEpochMs(int.leaveTime) || (p.currentStatus === 'present' ? now : toEpochMs(p.lastSeen) || now);
+        sum += Math.max(0, e - s);
+      }
+    });
+    return sum;
+  }
+  const s = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen);
+  if (!s) return 0;
+  const e = toEpochMs(p.leaveTime) || (p.currentStatus === 'present' ? now : toEpochMs(p.lastSeen) || now);
+  return Math.max(0, e - s);
+}
+
 function finalizeParticipant(p, sess = {}, now = Date.now()) {
   if (!p) return;
 
@@ -92,15 +111,17 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
     : (camOn + camOff);
 
   const validStudy = camOn;
+  const totalInMeet = calculateTotalInMeetMs(p, now);
 
   p.cameraOnMs = camOn;
   p.cameraOffMs = camOff;
   p.totalPresentMs = totMeet;
   p.validStudyMs = validStudy;
+  p.totalInMeetMs = totalInMeet;
 
   p.totalDuration = totMeet;
   p.duration = validStudy;
-  p.timeInCall = totMeet;
+  p.timeInCall = totalInMeet;
   p.durationSeconds = Math.floor(validStudy / 1000);
   p.durationMinutes = Math.floor(validStudy / 60000);
   p.studyDuration = validStudy;

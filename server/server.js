@@ -93,6 +93,25 @@ function toEpochMs(ts) {
   return isNaN(parsed) ? null : parsed;
 }
 
+function calculateTotalInMeetMs(p, now = Date.now()) {
+  if (!p) return 0;
+  if (Array.isArray(p.presenceIntervals) && p.presenceIntervals.length > 0) {
+    let sum = 0;
+    p.presenceIntervals.forEach(int => {
+      const s = toEpochMs(int.joinTime);
+      if (s) {
+        const e = toEpochMs(int.leaveTime) || (p.currentStatus === 'present' ? now : toEpochMs(p.lastSeen) || now);
+        sum += Math.max(0, e - s);
+      }
+    });
+    return sum;
+  }
+  const s = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen);
+  if (!s) return 0;
+  const e = toEpochMs(p.leaveTime) || (p.currentStatus === 'present' ? now : toEpochMs(p.lastSeen) || now);
+  return Math.max(0, e - s);
+}
+
 function finalizeParticipant(p, sess = {}, now = Date.now()) {
   if (!p) return;
 
@@ -163,16 +182,18 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
     : (camOn + camOff);
 
   const validStudy = camOn; // Camera ON time = Valid Study Time
+  const totalInMeetMs = calculateTotalInMeetMs(p, now);
 
   p.cameraOnMs = camOn;
   p.cameraOffMs = camOff;
   p.totalPresentMs = totMeet;
   p.validStudyMs = validStudy;
+  p.totalInMeetMs = totalInMeetMs;
 
   // Standardization aliases across all systems
   p.totalDuration = totMeet;
   p.duration = validStudy;
-  p.timeInCall = totMeet;
+  p.timeInCall = totalInMeetMs;
   p.durationSeconds = Math.floor(validStudy / 1000);
   p.durationMinutes = Math.floor(validStudy / 60000);
   p.studyDuration = validStudy;
@@ -331,22 +352,62 @@ app.post('/api/session/sync', (req, res) => {
         const combinedOffIntervals = [...(existing.cameraOffIntervals || [])];
         if (p.cameraOffIntervals && Array.isArray(p.cameraOffIntervals)) {
           p.cameraOffIntervals.forEach(newInt => {
-            if (!combinedOffIntervals.some(ex => Math.abs(ex.start - newInt.start) < 2000)) {
+            if (!combinedOffIntervals.some(ex => Math.abs((ex.start || 0) - (newInt.start || 0)) < 2000)) {
               combinedOffIntervals.push(newInt);
             }
           });
         }
 
-        currentSession.participants[stableKey] = {
+        // Merge presenceIntervals safely
+        const combinedPresenceIntervals = [...(existing.presenceIntervals || [])];
+        if (p.presenceIntervals && Array.isArray(p.presenceIntervals)) {
+          p.presenceIntervals.forEach(newInt => {
+            const newJoin = toEpochMs(newInt.joinTime) || 0;
+            if (!combinedPresenceIntervals.some(ex => Math.abs((toEpochMs(ex.joinTime) || 0) - newJoin) < 2000)) {
+              combinedPresenceIntervals.push(newInt);
+            }
+          });
+        }
+
+        // Merge joinLeaveHistory safely
+        const combinedJoinLeaveHistory = [...(existing.joinLeaveHistory || [])];
+        if (p.joinLeaveHistory && Array.isArray(p.joinLeaveHistory)) {
+          p.joinLeaveHistory.forEach(newEv => {
+            const newTime = toEpochMs(newEv.time) || 0;
+            if (!combinedJoinLeaveHistory.some(ex => ex.event === newEv.event && Math.abs((toEpochMs(ex.time) || 0) - newTime) < 2000)) {
+              combinedJoinLeaveHistory.push(newEv);
+            }
+          });
+        }
+
+        const rejoinCount = Math.max(p.rejoinCount || 0, existing.rejoinCount || 0);
+        const rejoinedAt = p.rejoinedAt || existing.rejoinedAt || null;
+
+        const mergedParticipantObj = {
           ...existing,
           ...p,
           id: stableKey,
           name: validName,
           isLocal: isLocal,
+          presenceIntervals: combinedPresenceIntervals.length > 0 ? combinedPresenceIntervals : (p.presenceIntervals || existing.presenceIntervals || []),
+          currentStatus: p.currentStatus || existing.currentStatus || 'present',
+          lastSeen: p.lastSeen || Date.now()
+        };
+
+        const totalInMeetMs = calculateTotalInMeetMs(mergedParticipantObj, Date.now());
+
+        currentSession.participants[stableKey] = {
+          ...mergedParticipantObj,
           totalPresentMs: totMeet,
           cameraOnMs: camOn,
           cameraOffMs: camOff,
           validStudyMs: camOn, // Strictly: Camera ON time = Valid Study Time
+          totalInMeetMs: totalInMeetMs,
+          timeInCall: totalInMeetMs,
+          rejoinCount: rejoinCount,
+          rejoinedAt: rejoinedAt,
+          presenceIntervals: combinedPresenceIntervals.length > 0 ? combinedPresenceIntervals : (p.presenceIntervals || existing.presenceIntervals || []),
+          joinLeaveHistory: combinedJoinLeaveHistory.length > 0 ? combinedJoinLeaveHistory : (p.joinLeaveHistory || existing.joinLeaveHistory || []),
           cameraOffIntervals: combinedOffIntervals,
           cameraIntervals: p.cameraIntervals || existing.cameraIntervals || [],
           lastSeen: p.lastSeen || Date.now()
@@ -617,6 +678,8 @@ function buildCsvContent(sess) {
     'Deducted / Cut Time (Cam OFF)',
     'Total In Meet Duration',
     'Camera Compliance %',
+    'Rejoin Count',
+    'Join/Leave & Rejoin Timeline',
     'Camera OFF Intervals (Exact Breakdown)',
     'First Joined (IST)',
     'Last Seen (IST)'
@@ -626,6 +689,7 @@ function buildCsvContent(sess) {
     const totMeet = p.totalPresentMs || 0;
     const camOn = p.cameraOnMs || 0;
     const camOff = p.cameraOffMs || 0;
+    const totalInMeet = p.totalInMeetMs || totMeet;
     const camPercent = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : '0.0%';
 
     const offList = (p.cameraOffIntervals || []).map(int => {
@@ -633,6 +697,12 @@ function buildCsvContent(sess) {
       const to = int.toTime || (int.end ? new Date(int.end).toLocaleTimeString('en-IN') : 'Present');
       const dur = int.durationFormatted || formatHmsStr(int.durationMs || 0);
       return `${from} - ${to} (${dur})`;
+    }).join('; ');
+
+    const joinLeaveLog = (p.joinLeaveHistory || []).map(ev => {
+      const timeStr = ev.formatted || (ev.time ? new Date(ev.time).toLocaleTimeString('en-IN') : '');
+      const awayStr = ev.awayFormatted ? ` (away ${ev.awayFormatted})` : '';
+      return `${(ev.event || '').toUpperCase()} at ${timeStr}${awayStr}`;
     }).join('; ');
 
     const isHost = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
@@ -645,8 +715,10 @@ function buildCsvContent(sess) {
       (p.cameraStatus || 'off').toUpperCase(),
       formatHmsStr(camOn),
       `-${formatHmsStr(camOff)}`,
-      formatHmsStr(totMeet),
+      formatHmsStr(totalInMeet),
       camPercent,
+      p.rejoinCount || 0,
+      `"${joinLeaveLog.replace(/"/g, '""')}"`,
       `"${offList.replace(/"/g, '""')}"`,
       formatDate(p.firstSeen),
       formatDate(p.lastSeen)

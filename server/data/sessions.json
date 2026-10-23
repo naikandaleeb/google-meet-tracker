@@ -1,5 +1,412 @@
 [
   {
+    "sessionId": "session_1792711221088",
+    "meetingCode": "cockroach-test",
+    "meetingTitle": "Test Study Session",
+    "startedAt": 1792716194549,
+    "stoppedAt": 1792717125278,
+    "lastUpdated": 1792717125278,
+    "lastResetAt": null,
+    "isTracking": false,
+    "isPaused": false,
+    "totalPausedMs": 2,
+    "currentPauseStart": null,
+    "pauseHistory": [
+      {
+        "pausedAt": 1792716194668,
+        "resumedAt": 1792716194673,
+        "durationMs": 5
+      },
+      {
+        "pausedAt": 1792717060241,
+        "resumedAt": 1792717060244,
+        "durationMs": 3
+      },
+      {
+        "pausedAt": 1792717125274,
+        "resumedAt": 1792717125276,
+        "durationMs": 2
+      }
+    ],
+    "targetDurationHours": 12,
+    "participants": {
+      "local_host": {
+        "id": "local_host",
+        "name": "Host (You)",
+        "isLocal": true,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "cameraOnMs": 60000,
+        "cameraOffMs": 0,
+        "totalPresentMs": 60000,
+        "presenceIntervals": [
+          {
+            "joinTime": 1792717061347,
+            "leaveTime": null
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1792717061347
+          }
+        ],
+        "joinTime": 1792717061347,
+        "firstSeen": 1792717061347,
+        "leaveTime": null,
+        "lastSeen": 1792717121347,
+        "validStudyMs": 60000,
+        "totalInMeetMs": 63937,
+        "totalDuration": 60000,
+        "duration": 60000,
+        "timeInCall": 63937,
+        "durationSeconds": 60,
+        "durationMinutes": 1,
+        "studyDuration": 60000,
+        "rank": 1,
+        "isExempt": true,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [],
+        "isHost": true,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null
+      },
+      "p_student_alpha": {
+        "id": "p_student_alpha",
+        "name": "Student Alpha",
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "cameraOnMs": 45000,
+        "cameraOffMs": 0,
+        "totalPresentMs": 45000,
+        "rejoinCount": 1,
+        "rejoinedAt": 1792717096347,
+        "presenceIntervals": [
+          {
+            "joinTime": 1792717061347,
+            "leaveTime": 1792717081347,
+            "durationMs": 20000
+          },
+          {
+            "joinTime": 1792717096347,
+            "leaveTime": null
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1792717061347,
+            "formatted": "06:00:00 AM"
+          },
+          {
+            "event": "left",
+            "time": 1792717081347,
+            "formatted": "06:00:20 AM"
+          },
+          {
+            "event": "rejoined",
+            "time": 1792717096347,
+            "formatted": "06:00:35 AM",
+            "awayMs": 15000,
+            "awayFormatted": "00:00:15"
+          }
+        ],
+        "joinTime": 1792717061347,
+        "firstSeen": 1792717061347,
+        "leaveTime": null,
+        "lastSeen": 1792717121348,
+        "validStudyMs": 45000,
+        "totalInMeetMs": 48937,
+        "totalDuration": 45000,
+        "duration": 45000,
+        "timeInCall": 48937,
+        "durationSeconds": 45,
+        "durationMinutes": 0,
+        "studyDuration": 45000,
+        "rank": 2,
+        "isLocal": false,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [],
+        "isHost": false,
+        "isExempt": false,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null
+      },
+      "p_student_beta": {
+        "id": "p_student_beta",
+        "name": "Student Beta",
+        "currentStatus": "left",
+        "leaveTime": 1792717081347,
+        "lastSeen": 1792717081347,
+        "cameraStatus": "off",
+        "cameraOnMs": 10000,
+        "cameraOffMs": 10000,
+        "totalPresentMs": 20000,
+        "rejoinCount": 0,
+        "presenceIntervals": [
+          {
+            "joinTime": 1792717061347,
+            "leaveTime": 1792717081347,
+            "durationMs": 20000
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1792717061347,
+            "formatted": "06:00:00 AM"
+          },
+          {
+            "event": "left",
+            "time": 1792717081347,
+            "formatted": "06:00:20 AM"
+          }
+        ],
+        "joinTime": 1792717061347,
+        "firstSeen": 1792717061347,
+        "validStudyMs": 10000,
+        "totalInMeetMs": 20000,
+        "totalDuration": 20000,
+        "duration": 10000,
+        "timeInCall": 20000,
+        "durationSeconds": 10,
+        "durationMinutes": 0,
+        "studyDuration": 10000,
+        "rank": 3,
+        "isLocal": false,
+        "rejoinedAt": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [],
+        "isHost": false,
+        "isExempt": false,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null
+      }
+    },
+    "notes": "",
+    "archivedAt": 1792717131112
+  },
+  {
+    "sessionId": "session_1792711221088",
+    "meetingCode": "cockroach-test",
+    "meetingTitle": "Test Study Session",
+    "startedAt": 1792716194549,
+    "stoppedAt": 1792717125278,
+    "lastUpdated": 1792717125278,
+    "lastResetAt": null,
+    "isTracking": false,
+    "isPaused": false,
+    "totalPausedMs": 2,
+    "currentPauseStart": null,
+    "pauseHistory": [
+      {
+        "pausedAt": 1792716194668,
+        "resumedAt": 1792716194673,
+        "durationMs": 5
+      },
+      {
+        "pausedAt": 1792717060241,
+        "resumedAt": 1792717060244,
+        "durationMs": 3
+      },
+      {
+        "pausedAt": 1792717125274,
+        "resumedAt": 1792717125276,
+        "durationMs": 2
+      }
+    ],
+    "targetDurationHours": 12,
+    "participants": {
+      "local_host": {
+        "id": "local_host",
+        "name": "Host (You)",
+        "isLocal": true,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "cameraOnMs": 60000,
+        "cameraOffMs": 0,
+        "totalPresentMs": 60000,
+        "presenceIntervals": [
+          {
+            "joinTime": 1792717061347,
+            "leaveTime": null
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1792717061347
+          }
+        ],
+        "joinTime": 1792717061347,
+        "firstSeen": 1792717061347,
+        "leaveTime": null,
+        "lastSeen": 1792717121347,
+        "validStudyMs": 60000,
+        "totalInMeetMs": 60078,
+        "totalDuration": 60000,
+        "duration": 60000,
+        "timeInCall": 60078,
+        "durationSeconds": 60,
+        "durationMinutes": 1,
+        "studyDuration": 60000,
+        "rank": 1,
+        "isExempt": true,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [],
+        "isHost": true,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null
+      },
+      "p_student_alpha": {
+        "id": "p_student_alpha",
+        "name": "Student Alpha",
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "cameraOnMs": 45000,
+        "cameraOffMs": 0,
+        "totalPresentMs": 45000,
+        "rejoinCount": 1,
+        "rejoinedAt": 1792717096347,
+        "presenceIntervals": [
+          {
+            "joinTime": 1792717061347,
+            "leaveTime": 1792717081347,
+            "durationMs": 20000
+          },
+          {
+            "joinTime": 1792717096347,
+            "leaveTime": null
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1792717061347,
+            "formatted": "06:00:00 AM"
+          },
+          {
+            "event": "left",
+            "time": 1792717081347,
+            "formatted": "06:00:20 AM"
+          },
+          {
+            "event": "rejoined",
+            "time": 1792717096347,
+            "formatted": "06:00:35 AM",
+            "awayMs": 15000,
+            "awayFormatted": "00:00:15"
+          }
+        ],
+        "joinTime": 1792717061347,
+        "firstSeen": 1792717061347,
+        "leaveTime": null,
+        "lastSeen": 1792717121348,
+        "validStudyMs": 45000,
+        "totalInMeetMs": 45078,
+        "totalDuration": 45000,
+        "duration": 45000,
+        "timeInCall": 45078,
+        "durationSeconds": 45,
+        "durationMinutes": 0,
+        "studyDuration": 45000,
+        "rank": 2,
+        "isLocal": false,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [],
+        "isHost": false,
+        "isExempt": false,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null
+      },
+      "p_student_beta": {
+        "id": "p_student_beta",
+        "name": "Student Beta",
+        "currentStatus": "left",
+        "leaveTime": 1792717081347,
+        "lastSeen": 1792717081347,
+        "cameraStatus": "off",
+        "cameraOnMs": 10000,
+        "cameraOffMs": 10000,
+        "totalPresentMs": 20000,
+        "rejoinCount": 0,
+        "presenceIntervals": [
+          {
+            "joinTime": 1792717061347,
+            "leaveTime": 1792717081347,
+            "durationMs": 20000
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1792717061347,
+            "formatted": "06:00:00 AM"
+          },
+          {
+            "event": "left",
+            "time": 1792717081347,
+            "formatted": "06:00:20 AM"
+          }
+        ],
+        "joinTime": 1792717061347,
+        "firstSeen": 1792717061347,
+        "validStudyMs": 10000,
+        "totalInMeetMs": 20000,
+        "totalDuration": 20000,
+        "duration": 10000,
+        "timeInCall": 20000,
+        "durationSeconds": 10,
+        "durationMinutes": 0,
+        "studyDuration": 10000,
+        "rank": 3,
+        "isLocal": false,
+        "rejoinedAt": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [],
+        "isHost": false,
+        "isExempt": false,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null
+      }
+    },
+    "notes": "",
+    "archivedAt": 1792717125281
+  },
+  {
+    "sessionId": "session_1792711221088",
+    "meetingCode": "ofi-spvf-bge",
+    "meetingTitle": "Cockroach Library 12-Hour Study Marathon",
+    "startedAt": 1792716194549,
+    "stoppedAt": 1792717060246,
+    "lastUpdated": 1792717060246,
+    "lastResetAt": null,
+    "isTracking": false,
+    "isPaused": false,
+    "totalPausedMs": 8,
+    "currentPauseStart": null,
+    "pauseHistory": [
+      {
+        "pausedAt": 1792716194668,
+        "resumedAt": 1792716194673,
+        "durationMs": 5
+      },
+      {
+        "pausedAt": 1792717060241,
+        "resumedAt": 1792717060244,
+        "durationMs": 3
+      }
+    ],
+    "targetDurationHours": 12,
+    "participants": {},
+    "notes": "",
+    "archivedAt": 1792717060249
+  },
+  {
     "sessionId": "session_1792708089955",
     "meetingCode": "ofi-spvf-bge",
     "meetingTitle": "Cockroach Library 12-Hour Study Marathon",

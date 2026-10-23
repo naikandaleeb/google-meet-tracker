@@ -922,6 +922,11 @@
       p.joinTime = now;
       p.leaveTime = null;
       p.lastSeen = now;
+      p.rejoinCount = 0;
+      p.rejoinedAt = null;
+      p.presenceIntervals = [{ joinTime: now, leaveTime: null, durationMs: 0 }];
+      p.joinLeaveHistory = [{ event: 'joined', time: now, formatted: formatTimeOnly(now) }];
+      p.totalInMeetMs = 0;
       p.totalPresentMs = 0;
       p.cameraOnMs = 0;
       p.cameraOffMs = 0;
@@ -1397,6 +1402,26 @@
     return detected;
   }
 
+  // ================= TOTAL TIME IN MEET CALCULATOR =================
+  function calculateTotalInMeetMs(p, now = Date.now()) {
+    if (!p) return 0;
+    if (Array.isArray(p.presenceIntervals) && p.presenceIntervals.length > 0) {
+      let sum = 0;
+      p.presenceIntervals.forEach(int => {
+        const s = toEpochMs(int.joinTime);
+        if (s) {
+          const e = toEpochMs(int.leaveTime) || (p.currentStatus === 'present' ? now : toEpochMs(p.lastSeen) || now);
+          sum += Math.max(0, e - s);
+        }
+      });
+      return sum;
+    }
+    const s = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen);
+    if (!s) return 0;
+    const e = toEpochMs(p.leaveTime) || (p.currentStatus === 'present' ? now : toEpochMs(p.lastSeen) || now);
+    return Math.max(0, e - s);
+  }
+
   // ================= TICK ENGINE =================
   function onTimerTick() {
     const now = Date.now();
@@ -1445,6 +1470,15 @@
           joinTime: now,
           leaveTime: null,
           lastSeen: now,
+          rejoinCount: 0,
+          rejoinedAt: null,
+          presenceIntervals: [
+            { joinTime: now, leaveTime: null, durationMs: 0 }
+          ],
+          joinLeaveHistory: [
+            { event: 'joined', time: now, formatted: formatTimeOnly(now) }
+          ],
+          totalInMeetMs: 0,
           totalPresentMs: 0,
           cameraOnMs: 0,
           cameraOffMs: 0,
@@ -1465,8 +1499,36 @@
         session.participants[key] = p;
       } else {
         p.name = scanned.name || p.name;
-        p.currentStatus = 'present';
-        p.leaveTime = null;
+        
+        // CHECK FOR REJOIN: Did this participant previously leave the call?
+        if (p.currentStatus === 'left') {
+          const awayDur = p.leaveTime ? Math.max(0, now - p.leaveTime) : 0;
+          p.currentStatus = 'present';
+          p.leaveTime = null;
+          p.rejoinedAt = now;
+          p.rejoinCount = (p.rejoinCount || 0) + 1;
+
+          if (!p.presenceIntervals) p.presenceIntervals = [];
+          p.presenceIntervals.push({
+            joinTime: now,
+            leaveTime: null,
+            durationMs: 0
+          });
+
+          if (!p.joinLeaveHistory) p.joinLeaveHistory = [];
+          p.joinLeaveHistory.push({
+            event: 'rejoined',
+            time: now,
+            formatted: formatTimeOnly(now),
+            awayMs: awayDur,
+            awayFormatted: formatHms(awayDur)
+          });
+
+          console.log(`[Cockroach Tracker] 🔄 [${p.name}] REJOINED Google Meet at ${formatTimeOnly(now)} (Rejoin #${p.rejoinCount}, away for ${formatHms(awayDur)})`);
+        } else {
+          p.currentStatus = 'present';
+        }
+
         p.lastSeen = now;
         if (!p.joinTime) p.joinTime = p.firstSeen || now;
         if (!p.firstSeen) p.firstSeen = p.joinTime || now;
@@ -1566,32 +1628,58 @@
     // Mark left participants
     Object.values(session.participants).forEach(p => {
       if (!activeDetected.has(p.id)) {
-        if (now - (p.lastSeen || now) > 45000) {
+        if (now - (p.lastSeen || now) > 25000) {
           if (p.currentStatus === 'present') {
+            const leftAt = p.lastSeen || now;
             p.currentStatus = 'left';
-            p.leaveTime = now;
+            p.leaveTime = leftAt;
+
+            // Close active presence interval
+            if (p.presenceIntervals && p.presenceIntervals.length > 0) {
+              const activePres = p.presenceIntervals[p.presenceIntervals.length - 1];
+              if (activePres && !activePres.leaveTime) {
+                activePres.leaveTime = leftAt;
+                activePres.durationMs = Math.max(0, leftAt - activePres.joinTime);
+                activePres.durationFormatted = formatHms(activePres.durationMs);
+                activePres.leaveFormatted = formatTimeOnly(leftAt);
+              }
+            }
+
+            if (!p.joinLeaveHistory) p.joinLeaveHistory = [];
+            p.joinLeaveHistory.push({
+              event: 'left',
+              time: leftAt,
+              formatted: formatIstTime(leftAt)
+            });
+
             const lastInterval = p.cameraIntervals && p.cameraIntervals[p.cameraIntervals.length - 1];
             if (lastInterval && !lastInterval.end) {
-              lastInterval.end = now;
+              lastInterval.end = leftAt;
             }
             if (p.cameraOffCurrentStart) {
-              const dur = now - p.cameraOffCurrentStart;
-              if (dur >= 2000) {
+              const dur = Math.max(0, leftAt - p.cameraOffCurrentStart);
+              if (dur >= 1000) {
                 if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
                 p.cameraOffIntervals.push({
                   start: p.cameraOffCurrentStart,
-                  end: now,
+                  end: leftAt,
                   durationMs: dur,
                   fromTime: formatTimeOnly(p.cameraOffCurrentStart),
-                  toTime: formatTimeOnly(now),
+                  toTime: formatTimeOnly(leftAt),
                   durationFormatted: formatHms(dur)
                 });
               }
               p.cameraOffCurrentStart = null;
             }
+
+            console.log(`[Cockroach Tracker] 🚪 [${p.name}] LEFT Google Meet at ${formatTimeOnly(leftAt)}`);
           }
         }
       }
+
+      // Always update exact total time spent in meet
+      p.totalInMeetMs = calculateTotalInMeetMs(p, now);
+      p.timeInCall = p.totalInMeetMs;
     });
 
     session.lastUpdated = now;
