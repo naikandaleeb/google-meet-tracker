@@ -1123,20 +1123,47 @@ function generatePainThemeHtml(session) {
 
     /* Print Styles */
     @media print {
-      body {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      html, body {
         background: #090a0f !important;
+        color: #f0f2fa !important;
         padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
       }
       .no-print-bar { display: none !important; }
       .report-dossier {
         border: none !important;
         box-shadow: none !important;
-        padding: 10mm !important;
+        padding: 6mm 8mm !important;
         max-width: 100% !important;
+        background: #090a0f !important;
+      }
+      .dossier-table {
+        page-break-inside: auto;
+      }
+      .dossier-table thead {
+        display: table-header-group !important;
+      }
+      .dossier-table tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .dossier-table th {
+        background: #181a26 !important;
+        color: #f0f2fa !important;
+        border-color: #3d4263 !important;
+      }
+      .dossier-table td {
+        border-color: #26293d !important;
       }
       @page {
         size: A4 landscape;
-        margin: 8mm;
+        margin: 6mm 8mm;
       }
     }
   </style>

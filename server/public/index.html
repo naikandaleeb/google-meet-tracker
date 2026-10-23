@@ -353,9 +353,23 @@
         <!-- TAB 4: Session Archives -->
         <div class="tab-content" id="tab-archives">
           <div class="archives-container">
-            <div class="archives-header">
-              <h3>Archived 12-Hour Study Sessions</h3>
-              <p>Historical logs saved automatically from previous study marathons.</p>
+            <div class="archives-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h3>Archived 12-Hour Study Sessions</h3>
+                <p>Historical logs saved automatically from previous study marathons.</p>
+              </div>
+              <div class="archives-batch-toolbar" id="archives-batch-toolbar" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; color: var(--text-muted); font-weight: 500;">
+                  <input type="checkbox" id="archive-select-all" style="cursor: pointer; width: 16px; height: 16px; accent-color: var(--accent-emerald);">
+                  <span>Select All</span>
+                </label>
+                <button class="btn btn-sm" id="btn-delete-selected-archives" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); opacity: 0.5; pointer-events: none;" title="Delete selected archived sessions">
+                  🗑️ Delete Selected (<span id="archive-selected-count">0</span>)
+                </button>
+                <button class="btn btn-sm" id="btn-delete-all-archives" style="background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25);" title="Delete all past archived sessions">
+                  ⚠️ Clear All History
+                </button>
+              </div>
             </div>
             <div class="archives-list" id="archives-list">
               <div class="empty-state">
@@ -457,8 +471,9 @@
             </div>
             <div class="modal-student-id" id="archive-modal-id">Session ID: --</div>
           </div>
-          <div style="display: flex; gap: 8px; align-items: center;">
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <button class="btn btn-sm btn-pain-pdf" id="archive-modal-btn-pdf" title="Generate Ranked PDF Report">📄 Ranked PDF</button>
+            <button class="btn btn-sm btn-action" id="archive-modal-btn-pain" style="background: rgba(124, 92, 255, 0.2); color: #c4b5fd; border: 1px solid rgba(124, 92, 255, 0.4);" title="Generate Full Detailed Pain Dossier">🩸 Pain Theme</button>
             <button class="btn btn-sm btn-action" id="archive-modal-btn-csv" title="Export CSV">📥 CSV</button>
             <button class="btn btn-sm btn-outline" id="archive-modal-btn-restore" title="Load into live dashboard">🔄 Load</button>
             <button class="btn-close-modal" id="btn-close-archive-modal">&times;</button>

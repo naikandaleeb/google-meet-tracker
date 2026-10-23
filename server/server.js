@@ -223,12 +223,13 @@ function cleanAllSessionParticipants(sess) {
     if (existing) {
       // DUAL DEVICE MERGE: Consolidate multiple devices into ONE canonical participant!
       // The device with Camera ON ALWAYS takes precedence!
-      const isCamOn = (p.cameraStatus === 'on' || existing.cameraStatus === 'on');
+      const isPres = (p.currentStatus === 'present' || (existing.currentStatus === 'present' && p.currentStatus !== 'left'));
+      const isCamOn = isPres && (p.cameraStatus === 'on' || existing.cameraStatus === 'on');
       const maxOn = Math.max(p.cameraOnMs || 0, existing.cameraOnMs || 0, p.validStudyMs || 0, existing.validStudyMs || 0);
       const maxOff = Math.max(p.cameraOffMs || 0, existing.cameraOffMs || 0);
-      const isPres = (p.currentStatus === 'present' || existing.currentStatus === 'present');
       const joinTs = Math.min(toEpochMs(p.joinTime) || now, toEpochMs(existing.joinTime) || now, toEpochMs(p.firstSeen) || now, toEpochMs(existing.firstSeen) || now);
       const lastSeen = Math.max(toEpochMs(p.lastSeen) || now, toEpochMs(existing.lastSeen) || now);
+      const leaveTime = isPres ? null : (p.leaveTime || existing.leaveTime || lastSeen);
 
       // Safe merge of cameraOffIntervals
       const combinedOffIntervals = [...(existing.cameraOffIntervals || [])];
@@ -338,12 +339,18 @@ function archiveCurrentSession() {
     if (fs.existsSync(SESSIONS_FILE)) {
       archives = JSON.parse(fs.readFileSync(SESSIONS_FILE, 'utf-8') || '[]');
     }
-    // Only archive if there was actual session data
-    if (currentSession.startedAt || Object.keys(currentSession.participants || {}).length > 0) {
-      archives.unshift({ ...currentSession, archivedAt: Date.now() });
+    // Only archive if there was actual session data with participants
+    const pCount = Object.keys(currentSession.participants || {}).length;
+    if (pCount > 0) {
+      const now = Date.now();
+      let targetId = currentSession.sessionId || ('session_' + now);
+      if (archives.some(s => s.sessionId === targetId)) {
+        targetId = `${targetId}_${now}`;
+      }
+      archives.unshift({ ...currentSession, sessionId: targetId, archivedAt: now });
       if (archives.length > 50) archives = archives.slice(0, 50);
       fs.writeFileSync(SESSIONS_FILE, JSON.stringify(archives, null, 2), 'utf-8');
-      console.log('[Server] Successfully archived completed session:', currentSession.sessionId);
+      console.log('[Server] Successfully archived completed session:', targetId);
     }
   } catch (e) {
     console.error('[Server] Failed to archive session:', e.message);
@@ -440,9 +447,12 @@ app.post('/api/session/sync', (req, res) => {
         const camOn = Math.max(p.cameraOnMs !== undefined ? p.cameraOnMs : 0, existing.cameraOnMs || 0, p.validStudyMs || 0, existing.validStudyMs || 0);
         const camOff = Math.max(p.cameraOffMs !== undefined ? p.cameraOffMs : 0, existing.cameraOffMs || 0);
         const totMeet = Math.max(p.totalPresentMs || 0, existing.totalPresentMs || 0, camOn + camOff);
-        const isCamOn = (p.cameraStatus === 'on' || existing.cameraStatus === 'on');
-        const isPres = (p.currentStatus === 'present' || existing.currentStatus === 'present');
+        
+        // Accurate Presence & Left Status Transition
+        const isPres = p.currentStatus ? (p.currentStatus === 'present') : (existing.currentStatus === 'present');
+        const isCamOn = isPres && (p.cameraStatus === 'on' || (existing.cameraStatus === 'on' && p.cameraStatus !== 'off'));
         const joinTs = Math.min(toEpochMs(p.joinTime) || Date.now(), toEpochMs(existing.joinTime) || Date.now(), toEpochMs(p.firstSeen) || Date.now(), toEpochMs(existing.firstSeen) || Date.now());
+        const leaveTime = isPres ? null : (p.leaveTime || existing.leaveTime || p.lastSeen || Date.now());
 
         // Merge cameraOffIntervals safely
         const combinedOffIntervals = [...(existing.cameraOffIntervals || [])];
@@ -486,9 +496,10 @@ app.post('/api/session/sync', (req, res) => {
           name: validName,
           isLocal: isLocal,
           presenceIntervals: combinedPresenceIntervals.length > 0 ? combinedPresenceIntervals : (p.presenceIntervals || existing.presenceIntervals || []),
-          currentStatus: isPres ? 'present' : (p.currentStatus || existing.currentStatus || 'left'),
+          currentStatus: isPres ? 'present' : 'left',
           cameraStatus: isCamOn ? 'on' : 'off',
           rawCameraStatus: isCamOn ? 'on' : 'off',
+          leaveTime: leaveTime,
           videoDetectionMode: isCamOn ? (p.cameraStatus === 'on' ? (p.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off',
           lastSeen: Math.max(toEpochMs(p.lastSeen) || Date.now(), toEpochMs(existing.lastSeen) || Date.now())
         };
@@ -510,6 +521,7 @@ app.post('/api/session/sync', (req, res) => {
           durationMinutes: Math.floor(camOn / 60000),
           firstSeen: joinTs,
           joinTime: joinTs,
+          leaveTime: leaveTime,
           rejoinCount: rejoinCount,
           rejoinedAt: rejoinedAt,
           presenceIntervals: combinedPresenceIntervals.length > 0 ? combinedPresenceIntervals : (p.presenceIntervals || existing.presenceIntervals || []),
@@ -837,19 +849,44 @@ function buildCsvContent(sess) {
 
 // Helper to look up an archived session
 function findArchivedSession(id) {
-  if (currentSession && currentSession.sessionId === id) {
-    return currentSession;
-  }
   try {
     if (fs.existsSync(SESSIONS_FILE)) {
       const archives = JSON.parse(fs.readFileSync(SESSIONS_FILE, 'utf-8') || '[]');
-      return archives.find(s => s.sessionId === id) || null;
+      const found = archives.find(s => s.sessionId === id);
+      if (found) return found;
     }
   } catch (err) {
     console.error('[Server] Error reading archives:', err.message);
   }
+  if (currentSession && currentSession.sessionId === id) {
+    return currentSession;
+  }
   return null;
 }
+
+// Bulk Delete Archived Sessions
+app.post('/api/sessions/bulk-delete', (req, res) => {
+  try {
+    const { sessionIds, deleteAll } = req.body || {};
+    let archives = [];
+    if (fs.existsSync(SESSIONS_FILE)) {
+      archives = JSON.parse(fs.readFileSync(SESSIONS_FILE, 'utf-8') || '[]');
+    }
+    const beforeCount = archives.length;
+    if (deleteAll) {
+      archives = [];
+    } else if (Array.isArray(sessionIds)) {
+      const idSet = new Set(sessionIds);
+      archives = archives.filter(s => !idSet.has(s.sessionId));
+    }
+    fs.writeFileSync(SESSIONS_FILE, JSON.stringify(archives, null, 2), 'utf-8');
+    const deletedCount = beforeCount - archives.length;
+    console.log(`[Server] 🗑️ Bulk deleted ${deletedCount} archived sessions. Remaining: ${archives.length}`);
+    res.json({ success: true, count: deletedCount, remaining: archives.length });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // Delete an archived session
 app.delete('/api/session/:id', (req, res) => {
@@ -965,3 +1002,12 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log(`🛡️ Separate from any existing study tracker port`);
   console.log(`===============================================================\n`);
 });
+
+module.exports = {
+  app,
+  server,
+  cleanParticipantName,
+  findArchivedSession,
+  formatHmsStr,
+  toEpochMs
+};

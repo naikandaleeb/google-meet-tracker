@@ -299,39 +299,28 @@ function generateRankedAttendanceHtml(session, options = {}) {
   const rank2Time = rank2Students.length > 0 ? formatHms(rank2Students[0].validStudyMs || rank2Students[0].cameraOnMs) : '--:--:--';
   const rank3Time = rank3Students.length > 0 ? formatHms(rank3Students[0].validStudyMs || rank3Students[0].cameraOnMs) : '--:--:--';
 
-  // Group by rank for Page 1 Top 10 table
-  const ranksMap = new Map();
-  rankedList.forEach(p => {
-    if (!ranksMap.has(p.rank)) ranksMap.set(p.rank, []);
-    ranksMap.get(p.rank).push(p);
-  });
-
-  const top10RankNumbers = Array.from(ranksMap.keys()).slice(0, 10);
-  const top10RowsHtml = top10RankNumbers.map(rNum => {
-    const studentsInRank = ranksMap.get(rNum);
-    const combinedNames = studentsInRank.map(s => escapeHtml(s.name.toUpperCase())).join(', ');
-    const firstP = studentsInRank[0];
-    const camOn = firstP.validStudyMs !== undefined ? firstP.validStudyMs : (firstP.cameraOnMs || 0);
-    const camOff = firstP.cameraOffMs !== undefined ? firstP.cameraOffMs : 0;
-    const totMeet = (firstP.totalPresentMs && firstP.totalPresentMs >= camOn + camOff) ? firstP.totalPresentMs : (camOn + camOff);
-    const totalInMeet = firstP.totalInMeetMs || totMeet;
+  // All Ranked Rows HTML (Neat, Short, and strictly necessary details ONLY)
+  const allRankedRowsHtml = rankedList.map((p, idx) => {
+    const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
+    const camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : 0;
+    const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
+    const totalInMeet = p.totalInMeetMs || totMeet;
     const compScore = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : (camOn > 0 ? '100.0%' : '0.0%');
-    const isPresent = firstP.currentStatus === 'present';
-    const totalRejoins = studentsInRank.reduce((sum, s) => sum + (s.rejoinCount || 0), 0);
+    const isPresent = p.currentStatus === 'present';
+    const rejoins = p.rejoinCount || 0;
 
     let badgeClass = 'badge-other';
-    if (rNum === 1) badgeClass = 'badge-gold';
-    else if (rNum === 2) badgeClass = 'badge-silver';
-    else if (rNum === 3) badgeClass = 'badge-bronze';
+    if (p.rank === 1) badgeClass = 'badge-gold';
+    else if (p.rank === 2) badgeClass = 'badge-silver';
+    else if (p.rank === 3) badgeClass = 'badge-bronze';
 
     return `
-      <tr>
+      <tr class="${idx % 2 === 1 ? 'row-alt' : ''}">
         <td class="col-rank text-center">
-          <span class="rank-circle ${badgeClass}">${rNum}</span>
+          <span class="rank-circle ${badgeClass}">${p.rank}</span>
         </td>
         <td class="col-name font-bold text-dark">
-          ${combinedNames}
-          ${totalRejoins > 0 ? `<span class="badge-rejoin-mini">🔄 ${totalRejoins} Rejoin${totalRejoins > 1 ? 's' : ''}</span>` : ''}
+          ${escapeHtml(p.name.toUpperCase())}
         </td>
         <td class="col-status text-center">
           <span class="badge-pill-sm ${isPresent ? 'badge-present' : 'badge-left'}">${isPresent ? '🟢 Present' : '⚪ Left'}</span>
@@ -342,61 +331,8 @@ function generateRankedAttendanceHtml(session, options = {}) {
         <td class="col-comp font-mono font-bold text-center">
           <span class="comp-badge ${parseFloat(compScore) >= 80 ? 'comp-high' : (parseFloat(compScore) >= 50 ? 'comp-mid' : 'comp-low')}">${compScore}</span>
         </td>
-      </tr>
-    `;
-  }).join('');
-
-  // Page 2: Complete Ranked Analytics with Every Single Detail (Clean Landscape Matrix)
-  const completeRowsHtml = rankedList.map((p, idx) => {
-    const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
-    const camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : 0;
-    const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
-    const totalInMeet = p.totalInMeetMs || totMeet;
-    const compScore = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : (camOn > 0 ? '100.0%' : '0.0%');
-    const isPresent = p.currentStatus === 'present';
-
-    const firstJoinedStr = p.firstSeen ? new Date(p.firstSeen).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }) : '--';
-    const lastSeenStr = p.lastSeen ? new Date(p.lastSeen).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }) : '--';
-
-    // Presence & Rejoin events summary
-    const presenceLogs = (p.joinLeaveHistory || []).map(ev => {
-      const t = ev.formatted || (ev.time ? new Date(ev.time).toLocaleTimeString('en-IN') : '');
-      const away = ev.awayFormatted ? ` (away ${ev.awayFormatted})` : '';
-      return `${(ev.event || '').toUpperCase()} at ${t}${away}`;
-    }).join(' • ');
-
-    // Camera cut intervals summary
-    const offLogs = (p.cameraOffIntervals || []).map(int => {
-      const from = int.fromTime || (int.start ? new Date(int.start).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : '');
-      const to = int.toTime || (int.end ? new Date(int.end).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : 'Now');
-      const dur = int.durationFormatted || formatHms(int.durationMs || 0);
-      return `${from} - ${to} (-${dur})`;
-    }).join('; ');
-
-    const timelineAndCuts = [
-      presenceLogs ? `<div class="sub-log-presence"><strong>🚪 Presence:</strong> ${presenceLogs}</div>` : '',
-      offLogs ? `<div class="sub-log-cut"><strong>⚠️ Cam Cuts:</strong> ${offLogs}</div>` : (camOff === 0 ? '<div class="sub-log-good">🟢 100% Cam ON (Zero cuts)</div>' : '')
-    ].filter(Boolean).join('');
-
-    return `
-      <tr class="${idx % 2 === 1 ? 'row-alt' : ''}">
-        <td class="col-rank text-center font-bold text-gray">#${p.rank}</td>
-        <td class="col-name">
-          <div class="font-bold text-dark text-base-clean">${escapeHtml(p.name.toUpperCase())}</div>
-          <div class="text-xs text-muted">First: ${firstJoinedStr} | Last: ${lastSeenStr}</div>
-        </td>
-        <td class="col-status text-center">
-          <span class="badge-pill-sm ${isPresent ? 'badge-present' : 'badge-left'}">${isPresent ? '🟢 Present' : `⚪ Left`}</span>
-          ${(p.rejoinCount || 0) > 0 ? `<div class="badge-rejoin-mini">🔄 ${p.rejoinCount} Rejoin${p.rejoinCount > 1 ? 's' : ''}</div>` : ''}
-        </td>
-        <td class="col-time font-mono text-emerald font-bold text-right">${formatHms(camOn)}</td>
-        <td class="col-time font-mono text-crimson font-bold text-right">-${formatHms(camOff)}</td>
-        <td class="col-time font-mono text-blue font-bold text-right">${formatHms(totalInMeet)}</td>
-        <td class="col-comp font-mono font-bold text-center">
-          <span class="comp-badge ${parseFloat(compScore) >= 80 ? 'comp-high' : (parseFloat(compScore) >= 50 ? 'comp-mid' : 'comp-low')}">${compScore}</span>
-        </td>
-        <td class="col-details">
-          ${timelineAndCuts || '<span class="text-muted text-xs">Standard session (No cuts)</span>'}
+        <td class="col-rejoins text-center">
+          ${rejoins > 0 ? `<span class="badge-rejoin-mini">🔄 ${rejoins} Rejoin${rejoins > 1 ? 's' : ''}</span>` : '<span class="text-muted text-xs">—</span>'}
         </td>
       </tr>
     `;
@@ -772,20 +708,13 @@ function generateRankedAttendanceHtml(session, options = {}) {
       background-color: #f1f5f9;
     }
 
-    /* Page 1 Table Widths */
-    .top10-table .col-rank { width: 55px; }
-    .top10-table .col-name { width: 260px; }
-    .top10-table .col-status { width: 120px; }
-    .top10-table .col-time { width: 130px; }
-    .top10-table .col-comp { width: 110px; }
-
-    /* Page 2 Full Matrix Widths */
-    .full-matrix-table .col-rank { width: 50px; }
-    .full-matrix-table .col-name { width: 230px; }
-    .full-matrix-table .col-status { width: 120px; }
-    .full-matrix-table .col-time { width: 120px; }
-    .full-matrix-table .col-comp { width: 95px; }
-    .full-matrix-table .col-details { width: auto; }
+    /* Single Neat Ranked Table Widths (A4 Landscape) */
+    .ranked-table .col-rank { width: 60px; }
+    .ranked-table .col-name { width: 280px; }
+    .ranked-table .col-status { width: 110px; }
+    .ranked-table .col-time { width: 125px; }
+    .ranked-table .col-comp { width: 100px; }
+    .ranked-table .col-rejoins { width: 100px; }
 
     .text-center { text-align: center; }
     .text-right { text-align: right; }
@@ -1072,13 +1001,13 @@ function generateRankedAttendanceHtml(session, options = {}) {
       </div>
     </div>
 
-    <!-- The Top 10 Rankings Table -->
+    <!-- The Official Student Rankings Table (Neat, Short, Landscape) -->
     <div class="section-head">
       <span class="green-marker"></span>
-      <h2 class="section-title">Top Ranked Students (Equal Durations Share Identical Rank)</h2>
+      <h2 class="section-title">Official Student Rankings (${cutoffBadge})</h2>
     </div>
 
-    <table class="ranked-table top10-table">
+    <table class="ranked-table">
       <thead>
         <tr>
           <th class="col-rank text-center">RANK</th>
@@ -1086,56 +1015,25 @@ function generateRankedAttendanceHtml(session, options = {}) {
           <th class="col-status text-center">STATUS</th>
           <th class="col-time text-right" style="color: #10b981;">STUDY (CAM ON)</th>
           <th class="col-time text-right" style="color: #f43f5e;">CUT (CAM OFF)</th>
-          <th class="col-time text-right" style="color: #60a5fa;">TOTAL IN MEET</th>
+          <th class="col-time text-right" style="color: #2563eb;">TOTAL IN MEET</th>
           <th class="col-comp text-center">COMPLIANCE</th>
+          <th class="col-rejoins text-center">REJOINS</th>
         </tr>
       </thead>
       <tbody>
-        ${top10RowsHtml || '<tr><td colspan="7" style="text-align: center; padding: 14px;">No participants recorded yet.</td></tr>'}
+        ${allRankedRowsHtml || '<tr><td colspan="8" style="text-align: center; padding: 18px; color: #64748b;">No participants recorded yet.</td></tr>'}
       </tbody>
     </table>
 
-    <footer class="report-footer">
-      <span class="footer-left">Cockroach Library &bull; Ranked Attendance Report</span>
-      <span class="footer-right">Page 1 of 2 (Executive Overview)</span>
-    </footer>
-  </div>
-
-  <!-- PAGE 2: Complete Ranked Analytics with Every Single Detail (Clean Landscape) -->
-  <div class="a4-page page-break">
-    <div class="page2-header-strip">
-      <div class="section-head" style="margin-bottom: 0;">
-        <span class="green-marker"></span>
-        <h2 class="section-title">Complete Participant Dossier &amp; Ranked Analytics (${cutoffBadge})</h2>
-      </div>
-      <div class="page2-meta-badge">Total Tracked: ${rankedList.length} Students &bull; Cutoff: ${cutoffLabel}</div>
+    <div class="notice-callout-box" style="margin-top: 14px; padding: 10px 14px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; font-size: 11px; color: #166534; line-height: 1.5;">
+      <strong>Official Ranking Rules:</strong> Students with identical valid study duration share identical rank. Host (local_host) is 100% exempt from student ranks and deductions.
+      <br>
+      <span style="color: #475569;">For full second-by-second camera cut breakdowns, presence logs, and break charts, view the <a href="/report?theme=pain&print=true" style="color: #dc2626; font-weight: 700; text-decoration: underline;">Akatsuki Pain Full Dossier</a>.</span>
     </div>
 
-    <table class="ranked-table full-matrix-table">
-      <thead>
-        <tr>
-          <th class="col-rank text-center">RANK</th>
-          <th class="col-name text-left">STUDENT NAME &amp; TIMESTAMPS</th>
-          <th class="col-status text-center">STATUS</th>
-          <th class="col-time text-right" style="color: #10b981;">STUDY (ON)</th>
-          <th class="col-time text-right" style="color: #f43f5e;">CUT (OFF)</th>
-          <th class="col-time text-right" style="color: #60a5fa;">TOTAL MEET</th>
-          <th class="col-comp text-center">COMPL.</th>
-          <th class="col-details text-left">PRESENCE TIMELINE &amp; CAMERA CUTS BREAKDOWN</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${completeRowsHtml || '<tr><td colspan="8" style="text-align: center; padding: 14px;">No participants recorded yet.</td></tr>'}
-      </tbody>
-    </table>
-
-    <div class="notice-callout-box">
-      Students with identical valid study duration share the exact same rank. Host (local_host) is 100% exempt from student ranks and deductions.
-    </div>
-
-    <footer class="report-footer">
-      <span class="footer-left">Cockroach Library &bull; Ranked Attendance Report</span>
-      <span class="footer-right">Page 2 of 2 (Full Analytics Dossier)</span>
+    <footer class="report-footer" style="margin-top: auto; padding-top: 12px; display: flex; justify-content: space-between; font-size: 10px; color: #64748b; border-top: 1px solid #e2e8f0;">
+      <span class="footer-left">Cockroach Library &bull; Official Ranked Attendance Report (Landscape)</span>
+      <span class="footer-right">Generated: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST</span>
     </footer>
   </div>
 

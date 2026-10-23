@@ -171,14 +171,16 @@ function mergeSessionState(incoming) {
         const maxTotalMeet = Math.max(existing.totalInMeetMs || 0, inc.totalInMeetMs || 0, tot);
         const rejoinCnt = Math.max(existing.rejoinCount || 0, inc.rejoinCount || 0);
 
-        const isCamOn = (inc.cameraStatus === 'on' || existing.cameraStatus === 'on');
-        const isPres = (inc.currentStatus === 'present' || existing.currentStatus === 'present');
+        const incomingStatus = inc.currentStatus || existing.currentStatus || 'present';
+        const isPres = (incomingStatus === 'present');
+        const isCamOn = isPres && (inc.cameraStatus === 'on' || (existing.cameraStatus === 'on' && inc.cameraStatus !== 'off'));
 
         state.participants[id] = {
           ...existing,
           ...inc,
+          currentStatus: incomingStatus,
           cameraStatus: isCamOn ? 'on' : 'off',
-          currentStatus: isPres ? 'present' : (inc.currentStatus || existing.currentStatus || 'left'),
+          leaveTime: !isPres ? (inc.leaveTime || existing.leaveTime || Date.now()) : null,
           cameraOnMs: maxOn,
           cameraOffMs: maxOff,
           validStudyMs: maxOn,
@@ -191,7 +193,7 @@ function mergeSessionState(incoming) {
           rejoinedAt: inc.rejoinedAt || existing.rejoinedAt || null,
           presenceIntervals: inc.presenceIntervals || existing.presenceIntervals || [],
           joinLeaveHistory: inc.joinLeaveHistory || existing.joinLeaveHistory || [],
-          cameraOffCurrentStart: inc.cameraOffCurrentStart !== undefined ? inc.cameraOffCurrentStart : existing.cameraOffCurrentStart,
+          cameraOffCurrentStart: !isPres ? null : (inc.cameraOffCurrentStart !== undefined ? inc.cameraOffCurrentStart : existing.cameraOffCurrentStart),
           cameraOffIntervals: inc.cameraOffIntervals || existing.cameraOffIntervals || [],
           videoDetectionMode: isCamOn ? (inc.cameraStatus === 'on' ? (inc.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off'
         };
@@ -1142,6 +1144,10 @@ async function fetchArchives() {
     if (!res.ok) throw new Error('Failed to fetch archives');
     const archives = await res.json();
 
+    const selectAllCheckbox = document.getElementById('archive-select-all');
+    if (selectAllCheckbox) selectAllCheckbox.checked = false;
+    updateArchiveSelectedState();
+
     if (archives.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
@@ -1166,19 +1172,25 @@ async function fetchArchives() {
 
       return `
         <div class="archive-card" id="archive-card-${escapeHtml(a.sessionId)}">
-          <div class="archive-main-row">
-            <div class="archive-meta">
-              <span class="archive-code font-mono">ROOM: ${escapeHtml(a.meetingCode || 'room')}</span>
-              <span class="card-status-badge paused">ARCHIVED</span>
-              <span class="archive-date">${a.archivedAt ? new Date(a.archivedAt).toLocaleString('en-IN') : (a.startedAt ? new Date(a.startedAt).toLocaleDateString('en-IN') : '')}</span>
+          <div class="archive-main-row" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="checkbox" class="archive-checkbox" data-id="${escapeHtml(a.sessionId)}" onchange="updateArchiveSelectedState()" style="cursor: pointer; width: 18px; height: 18px; accent-color: var(--accent-emerald);">
+              <div class="archive-meta">
+                <span class="archive-code font-mono">ROOM: ${escapeHtml(a.meetingCode || 'room')}</span>
+                <span class="card-status-badge paused">ARCHIVED</span>
+                <span class="archive-date">${a.archivedAt ? new Date(a.archivedAt).toLocaleString('en-IN') : (a.startedAt ? new Date(a.startedAt).toLocaleDateString('en-IN') : '')}</span>
+              </div>
             </div>
 
-            <div class="archive-actions">
+            <div class="archive-actions" style="display: flex; gap: 6px; flex-wrap: wrap;">
               <button class="btn-archive-action btn-archive-view" onclick="viewArchiveSession('${escapeHtml(a.sessionId)}')">
                 👁️ View Details
               </button>
               <button class="btn-archive-action btn-archive-pdf" onclick="window.open('/api/session/${escapeHtml(a.sessionId)}/report?print=true', '_blank')">
                 📄 Ranked PDF
+              </button>
+              <button class="btn-archive-action" onclick="window.open('/api/session/${escapeHtml(a.sessionId)}/report?theme=pain&print=true', '_blank')" style="background: rgba(124, 92, 255, 0.15); color: #c4b5fd; border: 1px solid rgba(124, 92, 255, 0.35);" title="Full Detailed Pain Theme Dossier">
+                🩸 Pain Dossier
               </button>
               <button class="btn-archive-action" onclick="window.location.href='/api/session/${escapeHtml(a.sessionId)}/export/csv'">
                 📥 CSV
@@ -1198,9 +1210,109 @@ async function fetchArchives() {
         </div>
       `;
     }).join('');
+
+    updateArchiveSelectedState();
   } catch (err) {
     container.innerHTML = `<div class="text-crimson">Error loading archives: ${err.message}</div>`;
   }
+}
+
+// Multi-Selection State Management
+window.updateArchiveSelectedState = function() {
+  const checkboxes = document.querySelectorAll('.archive-checkbox');
+  const checked = document.querySelectorAll('.archive-checkbox:checked');
+  const countEl = document.getElementById('archive-selected-count');
+  const deleteBtn = document.getElementById('btn-delete-selected-archives');
+  const selectAll = document.getElementById('archive-select-all');
+
+  if (countEl) countEl.innerText = `${checked.length}`;
+  if (deleteBtn) {
+    if (checked.length > 0) {
+      deleteBtn.style.opacity = '1';
+      deleteBtn.style.pointerEvents = 'auto';
+      deleteBtn.style.cursor = 'pointer';
+      deleteBtn.style.background = 'rgba(239, 68, 68, 0.25)';
+    } else {
+      deleteBtn.style.opacity = '0.5';
+      deleteBtn.style.pointerEvents = 'none';
+      deleteBtn.style.background = 'rgba(239, 68, 68, 0.15)';
+    }
+  }
+
+  if (selectAll && checkboxes.length > 0) {
+    selectAll.checked = (checked.length === checkboxes.length);
+  }
+};
+
+// Wire up Select All and Batch Delete buttons
+const selectAllArchiveCb = document.getElementById('archive-select-all');
+if (selectAllArchiveCb) {
+  selectAllArchiveCb.addEventListener('change', (e) => {
+    const isChecked = e.target.checked;
+    document.querySelectorAll('.archive-checkbox').forEach(cb => {
+      cb.checked = isChecked;
+    });
+    updateArchiveSelectedState();
+  });
+}
+
+const btnDeleteSelectedArchives = document.getElementById('btn-delete-selected-archives');
+if (btnDeleteSelectedArchives) {
+  btnDeleteSelectedArchives.addEventListener('click', async () => {
+    const checked = Array.from(document.querySelectorAll('.archive-checkbox:checked'));
+    if (checked.length === 0) return;
+    const sessionIds = checked.map(cb => cb.getAttribute('data-id')).filter(Boolean);
+
+    if (!confirm(`Are you sure you want to permanently DELETE ${sessionIds.length} selected archived study session(s)?\n\nThis cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/sessions/bulk-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionIds })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(`Successfully deleted ${data.count || sessionIds.length} archived session(s)! 🗑️`);
+        fetchArchives();
+      } else {
+        showToast('Error deleting sessions: ' + (data.error || 'Server error'));
+      }
+    } catch (err) {
+      showToast('Failed to delete selected sessions: ' + err.message);
+    }
+  });
+}
+
+const btnDeleteAllArchives = document.getElementById('btn-delete-all-archives');
+if (btnDeleteAllArchives) {
+  btnDeleteAllArchives.addEventListener('click', async () => {
+    if (!confirm('⚠️ DANGER: Are you sure you want to CLEAR ALL archived study sessions?\n\nThis will permanently delete the entire past marathon history!')) {
+      return;
+    }
+    if (!confirm('Please confirm once more: Permanently erase ALL historical session records?')) {
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/sessions/bulk-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deleteAll: true })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('All past archived sessions have been cleared! 🗑️');
+        fetchArchives();
+      } else {
+        showToast('Error: ' + (data.error || 'Server error'));
+      }
+    } catch (err) {
+      showToast('Failed to clear archives: ' + err.message);
+    }
+  });
 }
 
 // Global handlers for archive card actions
@@ -1276,6 +1388,8 @@ window.viewArchiveSession = async function(sessionId) {
     if (modalTiming) modalTiming.innerText = `${a.startedAt ? formatIstTime(a.startedAt) : '--'} → ${a.stoppedAt ? formatIstTime(a.stoppedAt) : '--'}`;
 
     if (btnPdf) btnPdf.onclick = () => window.open(`/api/session/${a.sessionId}/report?print=true`, '_blank');
+    const btnPain = document.getElementById('archive-modal-btn-pain');
+    if (btnPain) btnPain.onclick = () => window.open(`/api/session/${a.sessionId}/report?theme=pain&print=true`, '_blank');
     if (btnCsv) btnCsv.onclick = () => window.location.href = `/api/session/${a.sessionId}/export/csv`;
     if (btnRestore) {
       btnRestore.onclick = () => restoreArchiveSession(a.sessionId);

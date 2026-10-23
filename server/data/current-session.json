@@ -3,18 +3,23 @@
   "meetingCode": "test-room",
   "meetingTitle": "Test Study Session",
   "startedAt": 1792749893018,
-  "stoppedAt": 1792749894270,
-  "lastUpdated": 1792749894270,
+  "stoppedAt": 1792794698297,
+  "lastUpdated": 1792794698297,
   "lastResetAt": null,
   "isTracking": false,
   "isPaused": false,
-  "totalPausedMs": 5,
+  "totalPausedMs": 9,
   "currentPauseStart": null,
   "pauseHistory": [
     {
       "pausedAt": 1792749893029,
       "resumedAt": 1792749893034,
       "durationMs": 5
+    },
+    {
+      "pausedAt": 1792794677714,
+      "resumedAt": 1792794677718,
+      "durationMs": 4
     }
   ],
   "targetDurationHours": 12,
@@ -32,23 +37,31 @@
         {
           "joinTime": 1792749831123,
           "leaveTime": null
+        },
+        {
+          "joinTime": 1792794633520,
+          "leaveTime": null
         }
       ],
       "joinLeaveHistory": [
         {
           "event": "joined",
           "time": 1792749831123
+        },
+        {
+          "event": "joined",
+          "time": 1792794633520
         }
       ],
-      "lastSeen": 1792749892099,
+      "lastSeen": 1792794693617,
       "validStudyMs": 60000,
-      "totalInMeetMs": 63124,
-      "timeInCall": 63124,
+      "totalInMeetMs": 44931917,
+      "timeInCall": 44931917,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "cameraOffIntervals": [],
       "cameraIntervals": [],
-      "videoDetectionMode": "off",
+      "videoDetectionMode": "webcam",
       "isHost": true,
       "isExempt": true,
       "joinTime": 1792749892119,
@@ -61,7 +74,8 @@
       "studyDuration": 60000,
       "rank": 1,
       "consecutiveCamOffMs": 0,
-      "cameraOffCurrentStart": null
+      "cameraOffCurrentStart": null,
+      "rawCameraStatus": "on"
     },
     "p_student_alpha": {
       "id": "p_student_alpha",
@@ -72,7 +86,7 @@
       "cameraOffMs": 0,
       "totalPresentMs": 45000,
       "rejoinCount": 1,
-      "rejoinedAt": 1792749866123,
+      "rejoinedAt": 1792794668520,
       "presenceIntervals": [
         {
           "joinTime": 1792749831123,
@@ -81,6 +95,15 @@
         },
         {
           "joinTime": 1792749866123,
+          "leaveTime": null
+        },
+        {
+          "joinTime": 1792794633520,
+          "leaveTime": 1792794653520,
+          "durationMs": 20000
+        },
+        {
+          "joinTime": 1792794668520,
           "leaveTime": null
         }
       ],
@@ -101,16 +124,33 @@
           "formatted": "06:00:35 AM",
           "awayMs": 15000,
           "awayFormatted": "00:00:15"
+        },
+        {
+          "event": "joined",
+          "time": 1792794633520,
+          "formatted": "06:00:00 AM"
+        },
+        {
+          "event": "left",
+          "time": 1792794653520,
+          "formatted": "06:00:20 AM"
+        },
+        {
+          "event": "rejoined",
+          "time": 1792794668520,
+          "formatted": "06:00:35 AM",
+          "awayMs": 15000,
+          "awayFormatted": "00:00:15"
         }
       ],
       "isLocal": false,
-      "lastSeen": 1792749892100,
+      "lastSeen": 1792794693617,
       "validStudyMs": 45000,
-      "totalInMeetMs": 48124,
-      "timeInCall": 48124,
+      "totalInMeetMs": 44901917,
+      "timeInCall": 44901917,
       "cameraOffIntervals": [],
       "cameraIntervals": [],
-      "videoDetectionMode": "off",
+      "videoDetectionMode": "webcam",
       "isHost": false,
       "isExempt": false,
       "joinTime": 1792749892119,
@@ -123,14 +163,15 @@
       "studyDuration": 45000,
       "rank": 2,
       "consecutiveCamOffMs": 0,
-      "cameraOffCurrentStart": null
+      "cameraOffCurrentStart": null,
+      "rawCameraStatus": "on"
     },
     "p_student_beta": {
       "id": "p_student_beta",
       "name": "Student Beta",
       "currentStatus": "left",
-      "leaveTime": 1792749851123,
-      "lastSeen": 1792749851123,
+      "leaveTime": 1792794653520,
+      "lastSeen": 1792794653520,
       "cameraStatus": "off",
       "cameraOnMs": 10000,
       "cameraOffMs": 10000,
@@ -140,6 +181,11 @@
         {
           "joinTime": 1792749831123,
           "leaveTime": 1792749851123,
+          "durationMs": 20000
+        },
+        {
+          "joinTime": 1792794633520,
+          "leaveTime": 1792794653520,
           "durationMs": 20000
         }
       ],
@@ -153,12 +199,22 @@
           "event": "left",
           "time": 1792749851123,
           "formatted": "06:00:20 AM"
+        },
+        {
+          "event": "joined",
+          "time": 1792794633520,
+          "formatted": "06:00:00 AM"
+        },
+        {
+          "event": "left",
+          "time": 1792794653520,
+          "formatted": "06:00:20 AM"
         }
       ],
       "isLocal": false,
       "validStudyMs": 10000,
-      "totalInMeetMs": 20000,
-      "timeInCall": 20000,
+      "totalInMeetMs": 40000,
+      "timeInCall": 40000,
       "rejoinedAt": null,
       "cameraOffIntervals": [],
       "cameraIntervals": [],
@@ -174,7 +230,8 @@
       "studyDuration": 10000,
       "rank": 3,
       "consecutiveCamOffMs": 0,
-      "cameraOffCurrentStart": null
+      "cameraOffCurrentStart": null,
+      "rawCameraStatus": "off"
     },
     "p_john_doe": {
       "name": "John Doe",
@@ -185,17 +242,31 @@
       "isLocal": false,
       "presenceIntervals": [],
       "currentStatus": "present",
-      "lastSeen": 1792749894267,
+      "lastSeen": 1792794698295,
       "totalPresentMs": 5000,
       "validStudyMs": 5000,
-      "totalInMeetMs": 0,
-      "timeInCall": 0,
+      "totalInMeetMs": 44805277,
+      "timeInCall": 44805277,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "joinLeaveHistory": [],
       "cameraOffIntervals": [],
       "cameraIntervals": [],
-      "videoDetectionMode": "off"
+      "videoDetectionMode": "webcam",
+      "isHost": false,
+      "isExempt": false,
+      "joinTime": 1792749893018,
+      "firstSeen": 1792749893018,
+      "leaveTime": null,
+      "totalDuration": 5000,
+      "duration": 5000,
+      "durationSeconds": 5,
+      "durationMinutes": 0,
+      "studyDuration": 5000,
+      "consecutiveCamOffMs": 0,
+      "cameraOffCurrentStart": null,
+      "rank": 4,
+      "rawCameraStatus": "on"
     }
   },
   "notes": ""
