@@ -1108,53 +1108,97 @@
     return false;
   }
 
-  function isVideoActive(video) {
-    if (!video) return false;
-
-    // Check direct inline styles
-    if (video.style.display === 'none' || video.style.visibility === 'hidden') return false;
-
-    // Check layout dimensions
-    if (video.offsetWidth === 0 && video.offsetHeight === 0) return false;
-
-    // Check computed styles
+  function isElementVisible(el) {
+    if (!el) return false;
+    if (el.offsetWidth === 0 && el.offsetHeight === 0) return false;
+    if (el.style.display === 'none' || el.style.visibility === 'hidden' || el.style.opacity === '0') return false;
     try {
-      const comp = window.getComputedStyle(video);
-      if (comp.display === 'none' || comp.visibility === 'hidden' || comp.opacity === '0') {
-        return false;
-      }
+      const comp = window.getComputedStyle(el);
+      if (comp.display === 'none' || comp.visibility === 'hidden' || comp.opacity === '0') return false;
     } catch (_) {}
+    return true;
+  }
 
-    // 1. WebRTC MediaStream check
-    if (video.srcObject && typeof video.srcObject.getVideoTracks === 'function') {
-      const tracks = video.srcObject.getVideoTracks();
-      if (tracks && tracks.length > 0) {
-        // Live enabled track -> Camera is ON
-        const hasLive = tracks.some(t => t.enabled && t.readyState === 'live' && !t.muted);
-        if (hasLive) return true;
+  // Detects if Google Meet is showing an avatar (profile picture or initial circle) in the tile
+  // If an avatar is visible in the tile, the participant's camera is 100% OFF!
+  function isTileShowingAvatar(tile) {
+    if (!tile) return false;
 
-        // If all video tracks are disabled or ended -> Camera is OFF
-        const allOff = tracks.every(t => !t.enabled || t.readyState === 'ended');
-        if (allOff) return false;
+    // 1. Google Account Profile Image
+    const profileImgs = tile.querySelectorAll('img[src*="googleusercontent.com"], img[src*="gstatic.com"], img[class*="avatar" i], img[data-image-avatar]');
+    for (const img of profileImgs) {
+      if (isElementVisible(img) && img.offsetWidth >= 22 && img.offsetHeight >= 22) {
+        return true;
       }
     }
 
-    // 2. Video frame dimensions (actual decoded pixels)
-    if (video.videoWidth > 0 && video.videoHeight > 0) {
-      return true;
-    }
-
-    // 3. ReadyState or playback progression
-    if (video.readyState >= 2 || (typeof video.currentTime === 'number' && video.currentTime > 0)) {
-      return true;
-    }
-
-    // 4. Rendered layout dimensions with loaded metadata
-    if (video.offsetWidth >= 40 && video.offsetHeight >= 40 && video.readyState >= 1) {
-      return true;
+    // 2. Center Initial Circle or Avatar Container
+    const avatarContainers = tile.querySelectorAll('div[data-avatar-container], div[class*="avatar" i], div[role="img"], div[aria-label*="avatar" i], span[class*="avatar" i]');
+    for (const el of avatarContainers) {
+      if (isElementVisible(el) && el.offsetWidth >= 22 && el.offsetHeight >= 22) {
+        const lbl = (el.getAttribute('aria-label') || '').toLowerCase();
+        if (!lbl.includes('mic') && !lbl.includes('audio') && !lbl.includes('mute')) {
+          return true;
+        }
+      }
     }
 
     return false;
+  }
+
+  // Explicit camera off icons or attributes in Google Meet
+  function isCameraOffIndicated(tile) {
+    if (!tile) return false;
+    const offEl = tile.querySelector(
+      '[data-camera-off="true"], ' +
+      '[data-is-muted="true"][aria-label*="camera" i], ' +
+      '[data-is-muted="true"][data-tooltip*="camera" i], ' +
+      '[aria-label*="camera is off" i], ' +
+      '[aria-label*="camera off" i], ' +
+      '[aria-label*="video is off" i], ' +
+      '[aria-label*="video off" i], ' +
+      '[data-tooltip*="camera is off" i], ' +
+      '[data-tooltip*="camera off" i], ' +
+      'i[class*="videocam_off" i], ' +
+      'span[class*="videocam_off" i]'
+    );
+    if (offEl && isElementVisible(offEl)) return true;
+    return false;
+  }
+
+  function isVideoActive(video) {
+    if (!video) return false;
+
+    // Check visibility & physical layout dimensions
+    if (!isElementVisible(video)) return false;
+    if (video.offsetWidth < 28 || video.offsetHeight < 28) return false;
+
+    // 1. WebRTC MediaStream track verification
+    if (video.srcObject && typeof video.srcObject.getVideoTracks === 'function') {
+      const tracks = video.srcObject.getVideoTracks();
+      if (tracks && tracks.length > 0) {
+        // If all tracks are disabled, ended, or muted -> camera is OFF
+        const allInactive = tracks.every(t => !t.enabled || t.readyState === 'ended' || t.muted);
+        if (allInactive) return false;
+
+        // Must have at least one active, enabled, unmuted live track
+        const hasLive = tracks.some(t => t.enabled && t.readyState === 'live' && !t.muted);
+        if (!hasLive) return false;
+      }
+    }
+
+    // 2. Playback state
+    if (video.paused && video.readyState < 3) return false;
+
+    // 3. Frame resolution
+    if (!video.videoWidth || !video.videoHeight || video.videoWidth < 20 || video.videoHeight < 20) {
+      return false;
+    }
+
+    // 4. Ready state
+    if (video.readyState < 2) return false;
+
+    return true;
   }
 
   // ================= SMART BLANK / OBS / BREAK POSTER VIDEO ANALYZER =================
@@ -1166,9 +1210,9 @@
       return { isBlank: false, isApprovedPoster: false, mode: 'unready' };
     }
 
-    // Throttle analysis per video element to once every 2500ms to guarantee zero performance overhead / no lag
+    // Throttle analysis per video element to once every 2000ms
     const now = Date.now();
-    if (video._ckLastAnalysis && (now - video._ckLastAnalysis.time < 2500)) {
+    if (video._ckLastAnalysis && (now - video._ckLastAnalysis.time < 2000)) {
       return video._ckLastAnalysis.result;
     }
 
@@ -1185,22 +1229,27 @@
       const data = imgData.data;
       const total = 32 * 32;
 
-      let blackCount = 0;
+      let deepBlackCount = 0; // True solid black pixel
+      let obsBlueCount = 0;
       let navyCount = 0;
       let creamCount = 0;
       let yellowCount = 0;
       let amberCount = 0;
-      let obsBlueCount = 0;
-      let sumR = 0, sumG = 0, sumB = 0;
+      let sumBrightness = 0;
+      let maxPixelVal = 0;
+      let minPixelVal = 255;
 
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i];
         const g = data[i + 1];
         const b = data[i + 2];
-        sumR += r; sumG += g; sumB += b;
+        const br = (r + g + b) / 3;
+        sumBrightness += br;
+        if (br > maxPixelVal) maxPixelVal = br;
+        if (br < minPixelVal) minPixelVal = br;
 
-        // 1. Black/Blank pixel
-        if (r < 25 && g < 25 && b < 25) blackCount++;
+        // 1. True deep black pixel (< 8 in all channels)
+        if (r < 8 && g < 8 && b < 8) deepBlackCount++;
 
         // 2. OBS Idle Blue screen (RGB approx 15-45, 25-60, 55-110)
         if (r >= 15 && r <= 45 && g >= 25 && g <= 60 && b >= 55 && b <= 110 && (b - r) >= 25) obsBlueCount++;
@@ -1218,8 +1267,7 @@
         if (r >= 45 && r <= 135 && g >= 30 && g <= 105 && b <= 55 && r > g && g > b) amberCount++;
       }
 
-      const avgBrightness = (sumR + sumG + sumB) / (3 * total);
-      const blackRatio = blackCount / total;
+      const pixelSpread = maxPixelVal - minPixelVal;
 
       // Approved Break Poster Recognition (3 Official Posters)
       const isPoster1 = (navyCount > 150 && creamCount > 30 && yellowCount > 10);
@@ -1227,8 +1275,13 @@
       const isPoster3 = (creamCount > 90 && yellowCount > 15);
       const isApprovedPoster = isPoster1 || isPoster2 || isPoster3;
 
-      // Blank or Fake OBS Idle Screen
-      const isBlank = !isApprovedPoster && (blackRatio >= 0.90 || avgBrightness < 14 || (obsBlueCount / total) >= 0.85);
+      // Strictly detect True Solid Black or Fake OBS screen:
+      // A real webcam in a dark room has monitor glow (maxPixelVal >= 25, pixelSpread >= 10)
+      // A true solid black feed has deepBlackCount >= 95% AND maxPixelVal < 18 AND pixelSpread < 8
+      const isSolidBlack = (deepBlackCount / total >= 0.95) && (maxPixelVal < 18) && (pixelSpread < 8);
+      const isObsIdle = (obsBlueCount / total >= 0.85);
+
+      const isBlank = !isApprovedPoster && (isSolidBlack || isObsIdle);
 
       let mode = 'webcam';
       if (isApprovedPoster) mode = 'poster';
@@ -1238,7 +1291,6 @@
       video._ckLastAnalysis = { time: now, result };
       return result;
     } catch (err) {
-      // Graceful fallback: never crash or block camera detection if security prevents reading
       return { isBlank: false, isApprovedPoster: false, mode: 'fallback' };
     }
   }
@@ -1250,21 +1302,16 @@
     if (isPresentationTile(tile)) return 'off';
 
     // 2. Explicit camera OFF indicators in Google Meet DOM
-    const camOffAttr = tile.querySelector(
-      '[data-camera-off="true"], ' +
-      '[data-is-muted="true"][aria-label*="camera" i], ' +
-      '[aria-label*="camera is off" i], ' +
-      '[aria-label*="camera off" i], ' +
-      '[data-tooltip*="camera is off" i], ' +
-      '[data-tooltip*="camera off" i]'
-    );
-    if (camOffAttr) return 'off';
+    if (isCameraOffIndicated(tile)) return 'off';
 
-    // 3. Video element check
+    // 3. If tile is showing Google Profile Avatar or initial circle -> Camera is 100% OFF!
+    if (isTileShowingAvatar(tile)) return 'off';
+
+    // 4. Video element check
     const video = tile.querySelector('video');
     if (!video) return 'off';
 
-    // If video is actively streaming frames:
+    // 5. If video is actively streaming frames:
     if (isVideoActive(video)) {
       const analysis = analyzeVideoFrame(video);
       // Blank or fake OBS idle screen -> Camera is OFF (cut attendance!)
@@ -1273,12 +1320,6 @@
       }
       // Approved break poster or normal live webcam -> Camera is ON!
       return 'on';
-    }
-
-    // 4. Center avatar overlay check when video is inactive
-    const centerAvatar = tile.querySelector('div[data-avatar-container], div[class*="avatar"], img[class*="avatar"]');
-    if (centerAvatar && centerAvatar.offsetWidth >= 60 && centerAvatar.offsetHeight >= 60) {
-      return 'off';
     }
 
     return 'off';
@@ -1391,6 +1432,12 @@
       }
 
       if (foundName) {
+        // CRITICAL SAFEGUARD: If the enclosing tile container is showing an avatar or camera off indicator,
+        // this video element is DORMANT / FROZEN from a previous frame! Do NOT mark student as active video!
+        if (container && (isTileShowingAvatar(container) || isCameraOffIndicated(container))) {
+          return;
+        }
+
         const isSelf = container?.hasAttribute('data-self-name') ||
                        foundName.toLowerCase() === 'you' ||
                        foundName.toLowerCase() === 'host (you)' ||
@@ -1454,18 +1501,29 @@
 
       if (participantKey === 'p_host__you_' || participantKey === 'p_you' || participantKey === 'local_host') return;
 
-      // Determine camera status: activeVideoStudents has priority, otherwise evaluateTileCamera
-      let cameraStatus = activeVideoStudents.has(participantKey) ? 'on' : evaluateTileCamera(tile);
+      // Determine camera status:
+      // If tile indicates camera is off or is showing an avatar -> OFF!
+      let cameraStatus = 'off';
+      if (isTileShowingAvatar(tile) || isCameraOffIndicated(tile)) {
+        cameraStatus = 'off';
+      } else if (activeVideoStudents.has(participantKey)) {
+        cameraStatus = 'on';
+      } else {
+        cameraStatus = evaluateTileCamera(tile);
+      }
+
       const detectionMode = videoDetectionModes.get(participantKey) || (cameraStatus === 'on' ? 'webcam' : 'off');
 
       if (detected.has(participantKey)) {
         const existing = detected.get(participantKey);
         existing.videoDetectionMode = detectionMode;
-        // If either previously detected or newly detected as 'on', KEEP 'on'!
+        existing.hasVisibleTile = true;
         if (cameraStatus === 'on') {
           existing.cameraStatus = 'on';
           existing.rawCameraStatus = 'on';
-          existing.hasVisibleTile = true;
+        } else if (!activeVideoStudents.has(participantKey)) {
+          existing.cameraStatus = 'off';
+          existing.rawCameraStatus = 'off';
         }
       } else {
         detected.set(participantKey, {

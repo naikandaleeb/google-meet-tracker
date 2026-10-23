@@ -1,5 +1,5 @@
-// Ranked Attendance Report Generator (Clean Mint Green Consolidated Theme)
-// Exactly matching the user's specification with Leaderboard Podium and Equal Duration Shared Ranks
+// Ranked Attendance Report Generator (Clean Mint Green Landscape Theme)
+// Exactly matching the user's specification with Leaderboard Podium, Landscape A4, and Neat Non-Jumbled Data
 
 function escapeHtml(str = '') {
   return String(str).replace(/[&<>"']/g, m => ({
@@ -194,8 +194,6 @@ function generateRankedAttendanceHtml(session, options = {}) {
   });
 
   // Filter for qualified participants:
-  // If there are participants >= 7h, cutoff is 7 hours.
-  // Otherwise show all participants so report isn't blank on shorter runs.
   const effectiveCutoffMs = hasSevenHourParticipants ? cutoffMs : 0;
   const cutoffLabel = hasSevenHourParticipants ? '07:00:00' : '00:00:00';
   const cutoffBadge = hasSevenHourParticipants ? '7+ HOURS ELITE' : 'ALL QUALIFIED';
@@ -234,7 +232,7 @@ function generateRankedAttendanceHtml(session, options = {}) {
     const combinedNames = studentsInRank.map(s => escapeHtml(s.name.toUpperCase())).join(', ');
     const firstP = studentsInRank[0];
     const camOn = firstP.validStudyMs !== undefined ? firstP.validStudyMs : (firstP.cameraOnMs || 0);
-    const camOff = firstP.cameraOffMs || 0;
+    const camOff = firstP.cameraOffMs !== undefined ? firstP.cameraOffMs : 0;
     const totMeet = (firstP.totalPresentMs && firstP.totalPresentMs >= camOn + camOff) ? firstP.totalPresentMs : (camOn + camOff);
     const totalInMeet = firstP.totalInMeetMs || totMeet;
     const compScore = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : (camOn > 0 ? '100.0%' : '0.0%');
@@ -248,28 +246,30 @@ function generateRankedAttendanceHtml(session, options = {}) {
 
     return `
       <tr>
-        <td class="col-rank">
+        <td class="col-rank text-center">
           <span class="rank-circle ${badgeClass}">${rNum}</span>
         </td>
         <td class="col-name font-bold text-dark">
           ${combinedNames}
           ${totalRejoins > 0 ? `<span class="badge-rejoin-mini">🔄 ${totalRejoins} Rejoin${totalRejoins > 1 ? 's' : ''}</span>` : ''}
         </td>
-        <td class="col-time font-mono text-emerald font-bold">${formatHms(camOn)}</td>
-        <td class="col-time font-mono text-crimson font-bold">-${formatHms(camOff)}</td>
-        <td class="col-time font-mono text-blue font-bold">${formatHms(totalInMeet)}</td>
-        <td class="col-comp font-mono font-bold">${compScore}</td>
-        <td class="col-status">
+        <td class="col-status text-center">
           <span class="badge-pill-sm ${isPresent ? 'badge-present' : 'badge-left'}">${isPresent ? '🟢 Present' : '⚪ Left'}</span>
+        </td>
+        <td class="col-time font-mono text-emerald font-bold text-right">${formatHms(camOn)}</td>
+        <td class="col-time font-mono text-crimson font-bold text-right">-${formatHms(camOff)}</td>
+        <td class="col-time font-mono text-blue font-bold text-right">${formatHms(totalInMeet)}</td>
+        <td class="col-comp font-mono font-bold text-center">
+          <span class="comp-badge ${parseFloat(compScore) >= 80 ? 'comp-high' : (parseFloat(compScore) >= 50 ? 'comp-mid' : 'comp-low')}">${compScore}</span>
         </td>
       </tr>
     `;
   }).join('');
 
-  // Page 2: Complete Ranked Analytics with Every Single Detail
+  // Page 2: Complete Ranked Analytics with Every Single Detail (Clean Landscape Matrix)
   const completeRowsHtml = rankedList.map((p, idx) => {
     const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
-    const camOff = p.cameraOffMs || 0;
+    const camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : 0;
     const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
     const totalInMeet = p.totalInMeetMs || totMeet;
     const compScore = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : (camOn > 0 ? '100.0%' : '0.0%');
@@ -302,19 +302,21 @@ function generateRankedAttendanceHtml(session, options = {}) {
       <tr class="${idx % 2 === 1 ? 'row-alt' : ''}">
         <td class="col-rank text-center font-bold text-gray">#${p.rank}</td>
         <td class="col-name">
-          <div class="font-bold text-dark">${escapeHtml(p.name.toUpperCase())}</div>
+          <div class="font-bold text-dark text-base-clean">${escapeHtml(p.name.toUpperCase())}</div>
           <div class="text-xs text-muted">First: ${firstJoinedStr} | Last: ${lastSeenStr}</div>
         </td>
-        <td class="col-status">
+        <td class="col-status text-center">
           <span class="badge-pill-sm ${isPresent ? 'badge-present' : 'badge-left'}">${isPresent ? '🟢 Present' : `⚪ Left`}</span>
           ${(p.rejoinCount || 0) > 0 ? `<div class="badge-rejoin-mini">🔄 ${p.rejoinCount} Rejoin${p.rejoinCount > 1 ? 's' : ''}</div>` : ''}
         </td>
-        <td class="col-time font-mono text-emerald font-bold">${formatHms(camOn)}</td>
-        <td class="col-time font-mono text-crimson font-bold">-${formatHms(camOff)}</td>
-        <td class="col-time font-mono text-blue font-bold">${formatHms(totalInMeet)}</td>
-        <td class="col-comp font-mono font-bold">${compScore}</td>
+        <td class="col-time font-mono text-emerald font-bold text-right">${formatHms(camOn)}</td>
+        <td class="col-time font-mono text-crimson font-bold text-right">-${formatHms(camOff)}</td>
+        <td class="col-time font-mono text-blue font-bold text-right">${formatHms(totalInMeet)}</td>
+        <td class="col-comp font-mono font-bold text-center">
+          <span class="comp-badge ${parseFloat(compScore) >= 80 ? 'comp-high' : (parseFloat(compScore) >= 50 ? 'comp-mid' : 'comp-low')}">${compScore}</span>
+        </td>
         <td class="col-details">
-          ${timelineAndCuts || '<span class="text-muted text-xs">Standard session</span>'}
+          ${timelineAndCuts || '<span class="text-muted text-xs">Standard session (No cuts)</span>'}
         </td>
       </tr>
     `;
@@ -324,13 +326,13 @@ function generateRankedAttendanceHtml(session, options = {}) {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Ranked Attendance Report</title>
+  <title>Ranked Attendance Report - Landscape</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-page: #f2faf4;
+      --bg-page: #eef7f2;
       --bg-card: #ffffff;
       --border-green: #86efac;
       --border-green-dark: #10b981;
@@ -373,7 +375,7 @@ function generateRankedAttendanceHtml(session, options = {}) {
       z-index: 9999;
       background: #064e3b;
       color: #fff;
-      padding: 12px 24px;
+      padding: 10px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -389,7 +391,7 @@ function generateRankedAttendanceHtml(session, options = {}) {
       background: #10b981;
       color: #ffffff;
       border: none;
-      padding: 9px 20px;
+      padding: 8px 18px;
       border-radius: 8px;
       font-weight: 800;
       font-size: 13px;
@@ -405,13 +407,13 @@ function generateRankedAttendanceHtml(session, options = {}) {
       transform: scale(1.02);
     }
 
-    /* Page Container */
+    /* Page Container: Pure A4 Landscape (297mm x 210mm) */
     .a4-page {
-      width: 210mm;
-      min-height: 297mm;
-      margin: 16px auto;
+      width: 297mm;
+      min-height: 210mm;
+      margin: 18px auto;
       background: #ffffff;
-      padding: 18mm 20mm 14mm;
+      padding: 10mm 15mm 8mm;
       box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
       position: relative;
       display: flex;
@@ -425,73 +427,136 @@ function generateRankedAttendanceHtml(session, options = {}) {
 
     /* Header Block */
     .report-header {
-      text-align: center;
-      margin-bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-logo-badge {
+      font-size: 24px;
+      background: #ecfdf5;
+      border: 1.5px solid #10b981;
+      padding: 4px 8px;
+      border-radius: 8px;
     }
 
     .report-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 32px;
+      font-size: 24px;
       font-weight: 900;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
       color: var(--text-forest);
       text-transform: uppercase;
-      margin-bottom: 8px;
+      line-height: 1.1;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .badge-pill {
       display: inline-block;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       color: var(--coral-text);
       background: var(--coral-bg);
       border: 1.5px solid var(--coral-border);
-      padding: 4px 14px;
+      padding: 4px 12px;
       border-radius: 20px;
       letter-spacing: 0.8px;
-      margin-bottom: 8px;
       text-transform: uppercase;
     }
 
     .report-subtitle {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       color: var(--text-emerald);
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
       text-transform: uppercase;
+      background: #ecfdf5;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid #a7f3d0;
     }
 
-    /* 3 KPI Metric Boxes */
+    /* Session Metadata Strip (6-card landscape grid) */
+    .session-meta-strip {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      font-size: 11px;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .meta-item span {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .meta-item strong {
+      font-size: 11px;
+      color: var(--text-dark);
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 4 KPI Metric Boxes (wide landscape) */
     .kpi-boxes-row {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 28px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
     .kpi-box {
-      border: 2px solid var(--border-green-dark);
-      border-radius: 12px;
-      padding: 14px 10px;
+      border: 1.5px solid var(--border-green-dark);
+      border-radius: 8px;
+      padding: 8px 10px;
       text-align: center;
       background: #ffffff;
-      box-shadow: 0 2px 6px rgba(16, 185, 129, 0.08);
+      box-shadow: 0 2px 5px rgba(16, 185, 129, 0.06);
     }
 
     .kpi-box-num {
       font-family: 'Outfit', sans-serif;
-      font-size: 28px;
+      font-size: 22px;
       font-weight: 900;
       color: var(--text-forest);
       line-height: 1.1;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .kpi-box-label {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
       color: var(--text-forest);
-      letter-spacing: 0.6px;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
     }
 
@@ -499,130 +564,124 @@ function generateRankedAttendanceHtml(session, options = {}) {
     .section-head {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
     .green-marker {
-      width: 7px;
-      height: 22px;
+      width: 5px;
+      height: 18px;
       background: #10b981;
-      border-radius: 4px;
+      border-radius: 3px;
       display: inline-block;
     }
 
     .section-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 18px;
+      font-size: 15px;
       font-weight: 800;
       color: var(--text-forest);
       letter-spacing: 0.5px;
     }
 
-    /* Leaderboard Podium (Olympic Podium) */
+    /* Leaderboard Podium (Clean Compact Landscape Layout) */
     .podium-container {
       display: grid;
-      grid-template-columns: 1fr 1.15fr 1fr;
+      grid-template-columns: 1fr 1.1fr 1fr;
       align-items: flex-end;
       gap: 12px;
-      margin-bottom: 28px;
-      min-height: 155px;
+      margin-bottom: 14px;
     }
 
     .podium-card {
-      border-radius: 10px;
-      padding: 14px 12px;
+      border-radius: 8px;
+      padding: 10px 12px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
     }
 
     .podium-card.rank-2 {
       background: var(--podium-silver-bg);
       border: 1.5px solid var(--podium-silver-border);
-      min-height: 135px;
+      min-height: 85px;
     }
 
     .podium-card.rank-1 {
       background: var(--podium-gold-bg);
       border: 2px solid var(--podium-gold-border);
-      min-height: 165px;
-      transform: translateY(-8px);
-      box-shadow: 0 6px 18px rgba(234, 179, 8, 0.25);
+      min-height: 105px;
+      box-shadow: 0 4px 14px rgba(234, 179, 8, 0.25);
     }
 
     .podium-card.rank-3 {
       background: var(--podium-bronze-bg);
       border: 1.5px solid var(--podium-bronze-border);
-      min-height: 120px;
+      min-height: 75px;
     }
 
     .podium-rank-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 16px;
+      font-size: 13px;
       font-weight: 900;
-      letter-spacing: 1px;
-      margin-bottom: 4px;
+      letter-spacing: 0.8px;
+      margin-bottom: 2px;
       text-transform: uppercase;
     }
     .rank-2 .podium-rank-title { color: var(--podium-silver-text); }
-    .rank-1 .podium-rank-title { color: var(--podium-gold-text); font-size: 19px; }
+    .rank-1 .podium-rank-title { color: var(--podium-gold-text); font-size: 15px; }
     .rank-3 .podium-rank-title { color: var(--podium-bronze-text); }
 
     .podium-time {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
     .rank-2 .podium-time { color: var(--podium-silver-text); }
-    .rank-1 .podium-time { color: var(--podium-gold-text); font-size: 15px; }
+    .rank-1 .podium-time { color: var(--podium-gold-text); font-size: 14px; }
     .rank-3 .podium-time { color: var(--podium-bronze-text); }
 
     .podium-names {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
-      line-height: 1.35;
+      line-height: 1.3;
       text-transform: uppercase;
     }
     .rank-2 .podium-names { color: var(--podium-silver-text); }
     .rank-1 .podium-names { color: var(--podium-gold-text); }
     .rank-3 .podium-names { color: var(--podium-bronze-text); }
 
-    /* Tables */
+    /* Tables: Crisp Landscape Grid */
     .ranked-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 20px;
-      font-size: 11px;
+      margin-bottom: 12px;
+      font-size: 10.5px;
+      table-layout: fixed;
     }
 
     .ranked-table thead th {
       background: var(--table-header-bg);
       color: #ffffff;
       font-family: 'Outfit', sans-serif;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 800;
       letter-spacing: 0.6px;
       text-transform: uppercase;
-      padding: 8px 10px;
+      padding: 7px 10px;
       border: none;
+      vertical-align: middle;
     }
 
-    .ranked-table thead th.col-rank { width: 55px; text-align: center; }
-    .ranked-table thead th.col-name { text-align: left; }
-    .ranked-table thead th.col-time { width: 105px; text-align: left; }
-    .ranked-table thead th.col-comp { width: 75px; text-align: center; }
-    .ranked-table thead th.col-status { width: 90px; text-align: center; }
-
     .ranked-table tbody td {
-      padding: 7px 10px;
+      padding: 6px 10px;
       border-bottom: 1px solid #e2e8f0;
       vertical-align: middle;
-      font-size: 11px;
+      font-size: 10.5px;
     }
 
     .ranked-table tbody tr.row-alt {
@@ -633,79 +692,101 @@ function generateRankedAttendanceHtml(session, options = {}) {
       background-color: #f1f5f9;
     }
 
-    .session-meta-strip {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 8px 14px;
-      margin-bottom: 18px;
-      font-size: 11px;
-      color: var(--text-gray);
-      gap: 8px;
-    }
-    .session-meta-strip .meta-item strong {
-      color: var(--text-dark);
-      margin-left: 3px;
-    }
+    /* Page 1 Table Widths */
+    .top10-table .col-rank { width: 55px; }
+    .top10-table .col-name { width: 260px; }
+    .top10-table .col-status { width: 120px; }
+    .top10-table .col-time { width: 130px; }
+    .top10-table .col-comp { width: 110px; }
+
+    /* Page 2 Full Matrix Widths */
+    .full-matrix-table .col-rank { width: 50px; }
+    .full-matrix-table .col-name { width: 230px; }
+    .full-matrix-table .col-status { width: 120px; }
+    .full-matrix-table .col-time { width: 120px; }
+    .full-matrix-table .col-comp { width: 95px; }
+    .full-matrix-table .col-details { width: auto; }
+
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    .text-left { text-align: left; }
+    .font-bold { font-weight: 700; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .text-dark { color: #0f172a; }
+    .text-emerald { color: #059669; }
+    .text-crimson { color: #dc2626; }
+    .text-blue { color: #2563eb; }
+    .text-muted { color: #64748b; }
+    .text-xs { font-size: 9px; line-height: 1.2; }
+    .text-base-clean { font-size: 11px; }
+
     .badge-rejoin-mini {
       display: inline-block;
       background: rgba(167, 139, 250, 0.18);
       color: #6d28d9;
       border: 1px solid rgba(167, 139, 250, 0.4);
-      font-size: 9px;
+      font-size: 8.5px;
       font-weight: 800;
       padding: 1px 5px;
       border-radius: 4px;
-      margin-top: 2px;
+      margin-left: 4px;
+      vertical-align: middle;
     }
+
     .badge-pill-sm {
       display: inline-block;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
-      padding: 2px 7px;
+      padding: 2px 8px;
       border-radius: 12px;
     }
     .badge-present { background: #dcfce7; color: #166534; }
     .badge-left { background: #f1f5f9; color: #475569; }
-    .text-emerald { color: #059669; }
-    .text-crimson { color: #dc2626; }
-    .text-blue { color: #2563eb; }
-    .text-muted { color: #64748b; }
+
+    .comp-badge {
+      display: inline-block;
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .comp-high { background: #dcfce7; color: #166534; }
+    .comp-mid { background: #fef9c3; color: #854d0e; }
+    .comp-low { background: #fee2e2; color: #991b1b; }
+
     .sub-log-presence {
-      font-size: 10px;
+      font-size: 9.5px;
       color: #1e40af;
       margin-bottom: 2px;
-      line-height: 1.3;
+      line-height: 1.35;
     }
     .sub-log-cut {
-      font-size: 10px;
+      font-size: 9.5px;
       color: #991b1b;
       margin-bottom: 2px;
-      line-height: 1.3;
+      line-height: 1.35;
     }
     .sub-log-good {
-      font-size: 10px;
+      font-size: 9.5px;
       color: #166534;
       font-weight: 600;
     }
+
     .col-details {
-      max-width: 320px;
       word-break: break-word;
-      font-size: 10px;
+      font-size: 9.5px;
+      line-height: 1.35;
     }
 
-    /* Rank Badges in Top 10 */
+    /* Rank Badges */
     .rank-circle {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 900;
       color: #ffffff;
     }
@@ -721,21 +802,41 @@ function generateRankedAttendanceHtml(session, options = {}) {
       background: #ea580c;
     }
     .rank-circle.badge-other {
-      background: #22c55e;
+      background: #10b981;
     }
 
-    /* Page 2 Callout Notice Box */
+    /* Page 2 Header Strip */
+    .page2-header-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1.5px solid #e2e8f0;
+    }
+
+    .page2-meta-badge {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-forest);
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    /* Notice Box */
     .notice-callout-box {
       border: 1.5px dashed #10b981;
-      border-radius: 8px;
+      border-radius: 6px;
       background: #f0fdf4;
-      padding: 12px 16px;
-      font-size: 11px;
+      padding: 8px 14px;
+      font-size: 10px;
       color: var(--text-forest);
       font-weight: 600;
       text-align: center;
       margin-top: auto;
-      margin-bottom: 16px;
+      margin-bottom: 8px;
     }
 
     /* Footer */
@@ -743,11 +844,11 @@ function generateRankedAttendanceHtml(session, options = {}) {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       color: var(--text-forest);
       border-top: 1px solid #e2e8f0;
-      padding-top: 10px;
+      padding-top: 6px;
       margin-top: auto;
     }
 
@@ -757,10 +858,10 @@ function generateRankedAttendanceHtml(session, options = {}) {
     }
 
     .footer-right {
-      color: #334155;
+      color: #64748b;
     }
 
-    /* Print settings */
+    /* Strict A4 Landscape Print Settings */
     @media print {
       body {
         background: #ffffff !important;
@@ -773,15 +874,22 @@ function generateRankedAttendanceHtml(session, options = {}) {
         width: 100% !important;
         min-height: auto !important;
         height: auto !important;
-        padding: 12mm 15mm 10mm !important;
+        padding: 8mm 10mm !important;
       }
       .page-break {
         page-break-before: always !important;
         break-before: page !important;
       }
+      .ranked-table thead {
+        display: table-header-group !important;
+      }
+      .ranked-table tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
       @page {
-        size: A4 portrait;
-        margin: 0;
+        size: A4 landscape;
+        margin: 8mm 10mm;
       }
     }
   </style>
@@ -791,48 +899,60 @@ function generateRankedAttendanceHtml(session, options = {}) {
   <!-- Screen Top Bar with Print Button -->
   <div class="screen-action-bar">
     <div>
-      <strong>📄 Ranked Attendance Report</strong> &bull; <span style="font-weight: normal; opacity: 0.9;">Equal Durations Share Identical Rank</span>
+      <strong>📄 Ranked Attendance Report</strong> &bull; <span style="font-weight: normal; opacity: 0.9;">A4 Landscape &bull; Equal Durations Share Identical Rank</span>
     </div>
     <div style="display: flex; gap: 12px; align-items: center;">
       <a href="/report?theme=pain&print=true" style="color: #fca5a5;">🩸 Switch to Pain Akatsuki Theme</a>
-      <a href="/">← Dashboard</a>
+      <a href="/">← Live Dashboard</a>
       <button class="btn-print-now" onclick="window.print()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        <span>Print Report (PDF)</span>
+        <span>Print Landscape PDF</span>
       </button>
     </div>
   </div>
 
-  <!-- PAGE 1: Top 10 Consolidated Report with Podium -->
+  <!-- PAGE 1: Top 10 Consolidated Report with Podium (Landscape) -->
   <div class="a4-page">
     <header class="report-header">
-      <h1 class="report-title">RANKED ATTENDANCE</h1>
-      <div><span class="badge-pill">${cutoffBadge}</span></div>
-      <div class="report-subtitle">&#9733; CONSOLIDATED REPORT &#9733;</div>
+      <div class="header-left">
+        <div class="header-logo-badge">🪳</div>
+        <div>
+          <h1 class="report-title">RANKED ATTENDANCE &amp; STUDY REPORT</h1>
+          <div style="font-size: 10px; color: var(--text-muted); font-weight: 600;">COCKROACH LIBRARY &bull; 12-HOUR MARATHON</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="badge-pill">${cutoffBadge}</span>
+        <span class="report-subtitle">&#9733; CONSOLIDATED RANKINGS &#9733;</span>
+      </div>
     </header>
 
-    <!-- Session Metadata Strip -->
+    <!-- Session Metadata Strip (6 Columns across landscape width) -->
     <div class="session-meta-strip">
       <div class="meta-item"><span>Room Code:</span> <strong>${session.meetingCode || 'cockroach-study-room'}</strong></div>
       <div class="meta-item"><span>Target Goal:</span> <strong>${session.targetDurationHours || 12}h Marathon</strong></div>
-      <div class="meta-item"><span>Status:</span> <strong>${session.isTracking ? (session.isPaused ? 'PAUSED ⏸️' : 'ACTIVE 🟢') : 'FINALIZED ⏹️'}</strong></div>
-      <div class="meta-item"><span>Started:</span> <strong>${session.startedAt ? new Date(session.startedAt).toLocaleTimeString('en-IN') : 'N/A'}</strong></div>
+      <div class="meta-item"><span>Session Status:</span> <strong>${session.isTracking ? (session.isPaused ? 'PAUSED ⏸️' : 'ACTIVE 🟢') : 'FINALIZED ⏹️'}</strong></div>
+      <div class="meta-item"><span>Started At:</span> <strong>${session.startedAt ? new Date(session.startedAt).toLocaleTimeString('en-IN') : 'N/A'}</strong></div>
       <div class="meta-item"><span>Total Breaks:</span> <strong>${formatHms(session.totalPausedMs || 0)}</strong></div>
-      <div class="meta-item"><span>Host:</span> <strong style="color: #10b981;">EXEMPT</strong></div>
+      <div class="meta-item"><span>Host Exemption:</span> <strong style="color: #10b981;">100% EXEMPT</strong></div>
     </div>
 
-    <!-- 3 KPI Boxes -->
+    <!-- 4 KPI Metric Cards (Symmetrical landscape row) -->
     <div class="kpi-boxes-row">
       <div class="kpi-box">
         <div class="kpi-box-num">${rankedList.length}</div>
         <div class="kpi-box-label">RANKED PARTICIPANTS</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-box-num">${exemptedCount}</div>
-        <div class="kpi-box-label">EXEMPTED</div>
+        <div class="kpi-box-num" style="color: #10b981;">${rankedList.filter(p => (p.cameraOffMs || 0) === 0).length}</div>
+        <div class="kpi-box-label">100% CAM COMPLIANT</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-box-num">${belowCutoffCount}</div>
+        <div class="kpi-box-num" style="color: #2563eb;">${exemptedCount}</div>
+        <div class="kpi-box-label">EXEMPTED (HOST)</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-box-num" style="color: #dc2626;">${belowCutoffCount}</div>
         <div class="kpi-box-label">BELOW ${cutoffLabel} CUTOFF</div>
       </div>
     </div>
@@ -840,34 +960,34 @@ function generateRankedAttendanceHtml(session, options = {}) {
     <!-- Leaderboard Podium -->
     <div class="section-head">
       <span class="green-marker"></span>
-      <h2 class="section-title">Leaderboard Podium</h2>
+      <h2 class="section-title">Leaderboard Podium (Olympic Top 3)</h2>
     </div>
 
     <div class="podium-container">
       <!-- Rank 2 (Silver) -->
       <div class="podium-card rank-2">
-        <div class="podium-rank-title">RANK 2</div>
+        <div class="podium-rank-title">🥈 RANK 2</div>
         <div class="podium-time">${rank2Time}</div>
         <div class="podium-names">
-          ${rank2Students.length > 0 ? rank2Students.map(s => escapeHtml(s.name.toUpperCase())).join('<br>') : '—'}
+          ${rank2Students.length > 0 ? rank2Students.map(s => escapeHtml(s.name.toUpperCase())).join(', ') : '—'}
         </div>
       </div>
 
       <!-- Rank 1 (Gold - Elevated in Center) -->
       <div class="podium-card rank-1">
-        <div class="podium-rank-title">RANK 1</div>
+        <div class="podium-rank-title">👑 RANK 1 (GOLD)</div>
         <div class="podium-time">${rank1Time}</div>
         <div class="podium-names">
-          ${rank1Students.length > 0 ? rank1Students.map(s => escapeHtml(s.name.toUpperCase())).join('<br>') : '—'}
+          ${rank1Students.length > 0 ? rank1Students.map(s => escapeHtml(s.name.toUpperCase())).join(', ') : '—'}
         </div>
       </div>
 
       <!-- Rank 3 (Bronze) -->
       <div class="podium-card rank-3">
-        <div class="podium-rank-title">RANK 3</div>
+        <div class="podium-rank-title">🥉 RANK 3</div>
         <div class="podium-time">${rank3Time}</div>
         <div class="podium-names">
-          ${rank3Students.length > 0 ? rank3Students.map(s => escapeHtml(s.name.toUpperCase())).join('<br>') : '—'}
+          ${rank3Students.length > 0 ? rank3Students.map(s => escapeHtml(s.name.toUpperCase())).join(', ') : '—'}
         </div>
       </div>
     </div>
@@ -875,64 +995,67 @@ function generateRankedAttendanceHtml(session, options = {}) {
     <!-- The Top 10 Rankings Table -->
     <div class="section-head">
       <span class="green-marker"></span>
-      <h2 class="section-title">The Top 10 Rankings</h2>
+      <h2 class="section-title">Top Ranked Students (Equal Durations Share Identical Rank)</h2>
     </div>
 
-    <table class="ranked-table">
+    <table class="ranked-table top10-table">
       <thead>
         <tr>
-          <th class="col-rank">RANK</th>
-          <th class="col-name">PARTICIPANT NAME</th>
-          <th class="col-time" style="color: #10b981;">STUDY (CAM ON)</th>
-          <th class="col-time" style="color: #f43f5e;">CUT (CAM OFF)</th>
-          <th class="col-time" style="color: #60a5fa;">TOTAL IN MEET</th>
-          <th class="col-comp">COMPLIANCE</th>
-          <th class="col-status">STATUS</th>
+          <th class="col-rank text-center">RANK</th>
+          <th class="col-name text-left">PARTICIPANT NAME</th>
+          <th class="col-status text-center">STATUS</th>
+          <th class="col-time text-right" style="color: #10b981;">STUDY (CAM ON)</th>
+          <th class="col-time text-right" style="color: #f43f5e;">CUT (CAM OFF)</th>
+          <th class="col-time text-right" style="color: #60a5fa;">TOTAL IN MEET</th>
+          <th class="col-comp text-center">COMPLIANCE</th>
         </tr>
       </thead>
       <tbody>
-        ${top10RowsHtml || '<tr><td colspan="7" style="text-align: center; padding: 18px;">No participants recorded.</td></tr>'}
+        ${top10RowsHtml || '<tr><td colspan="7" style="text-align: center; padding: 14px;">No participants recorded yet.</td></tr>'}
       </tbody>
     </table>
 
     <footer class="report-footer">
-      <span class="footer-left">Ranked Attendance Report</span>
-      <span class="footer-right">Page 1 of 2</span>
+      <span class="footer-left">Cockroach Library &bull; Ranked Attendance Report</span>
+      <span class="footer-right">Page 1 of 2 (Executive Overview)</span>
     </footer>
   </div>
 
-  <!-- PAGE 2: Complete Ranked Analytics with Every Single Detail -->
+  <!-- PAGE 2: Complete Ranked Analytics with Every Single Detail (Clean Landscape) -->
   <div class="a4-page page-break">
-    <div class="section-head" style="margin-top: 6px;">
-      <span class="green-marker"></span>
-      <h2 class="section-title">Complete Ranked Analytics & Student Dossier (${cutoffBadge})</h2>
+    <div class="page2-header-strip">
+      <div class="section-head" style="margin-bottom: 0;">
+        <span class="green-marker"></span>
+        <h2 class="section-title">Complete Participant Dossier &amp; Ranked Analytics (${cutoffBadge})</h2>
+      </div>
+      <div class="page2-meta-badge">Total Tracked: ${rankedList.length} Students &bull; Cutoff: ${cutoffLabel}</div>
     </div>
 
-    <table class="ranked-table">
+    <table class="ranked-table full-matrix-table">
       <thead>
         <tr>
-          <th class="col-rank">RANK</th>
-          <th class="col-name">STUDENT NAME</th>
-          <th class="col-status">STATUS</th>
-          <th class="col-time" style="color: #10b981;">STUDY (ON)</th>
-          <th class="col-time" style="color: #f43f5e;">CUT (OFF)</th>
-          <th class="col-time" style="color: #60a5fa;">TOTAL MEET</th>
-          <th class="col-comp">COMPL.</th>
-          <th class="col-details">PRESENCE TIMELINE & CAMERA CUTS BREAKDOWN</th>
+          <th class="col-rank text-center">RANK</th>
+          <th class="col-name text-left">STUDENT NAME &amp; TIMESTAMPS</th>
+          <th class="col-status text-center">STATUS</th>
+          <th class="col-time text-right" style="color: #10b981;">STUDY (ON)</th>
+          <th class="col-time text-right" style="color: #f43f5e;">CUT (OFF)</th>
+          <th class="col-time text-right" style="color: #60a5fa;">TOTAL MEET</th>
+          <th class="col-comp text-center">COMPL.</th>
+          <th class="col-details text-left">PRESENCE TIMELINE &amp; CAMERA CUTS BREAKDOWN</th>
         </tr>
       </thead>
       <tbody>
-        ${completeRowsHtml || '<tr><td colspan="8" style="text-align: center; padding: 18px;">No participants recorded.</td></tr>'}
+        ${completeRowsHtml || '<tr><td colspan="8" style="text-align: center; padding: 14px;">No participants recorded yet.</td></tr>'}
       </tbody>
     </table>
 
     <div class="notice-callout-box">
-      Participants with equal attendance share the same rank. Only participants with attendance of ${cutoffLabel} or more are shown; those below the cutoff are excluded.
+      Students with identical valid study duration share the exact same rank. Host (local_host) is 100% exempt from student ranks and deductions.
     </div>
 
     <footer class="report-footer">
-      <span class="footer-left">Ranked Attendance Report</span>
-      <span class="footer-right">Page 2 of 2</span>
+      <span class="footer-left">Cockroach Library &bull; Ranked Attendance Report</span>
+      <span class="footer-right">Page 2 of 2 (Full Analytics Dossier)</span>
     </footer>
   </div>
 
