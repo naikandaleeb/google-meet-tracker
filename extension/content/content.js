@@ -1137,6 +1137,92 @@
     return false;
   }
 
+  // ================= SMART BLANK / OBS / BREAK POSTER VIDEO ANALYZER =================
+  let offscreenCanvas = null;
+  let offscreenCtx = null;
+
+  function analyzeVideoFrame(video) {
+    if (!video || video.readyState < 2 || !video.videoWidth || !video.videoHeight) {
+      return { isBlank: false, isApprovedPoster: false, mode: 'unready' };
+    }
+
+    // Throttle analysis per video element to once every 2500ms to guarantee zero performance overhead / no lag
+    const now = Date.now();
+    if (video._ckLastAnalysis && (now - video._ckLastAnalysis.time < 2500)) {
+      return video._ckLastAnalysis.result;
+    }
+
+    try {
+      if (!offscreenCanvas) {
+        offscreenCanvas = document.createElement('canvas');
+        offscreenCanvas.width = 32;
+        offscreenCanvas.height = 32;
+        offscreenCtx = offscreenCanvas.getContext('2d', { willReadFrequently: true });
+      }
+
+      offscreenCtx.drawImage(video, 0, 0, 32, 32);
+      const imgData = offscreenCtx.getImageData(0, 0, 32, 32);
+      const data = imgData.data;
+      const total = 32 * 32;
+
+      let blackCount = 0;
+      let navyCount = 0;
+      let creamCount = 0;
+      let yellowCount = 0;
+      let amberCount = 0;
+      let obsBlueCount = 0;
+      let sumR = 0, sumG = 0, sumB = 0;
+
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        sumR += r; sumG += g; sumB += b;
+
+        // 1. Black/Blank pixel
+        if (r < 25 && g < 25 && b < 25) blackCount++;
+
+        // 2. OBS Idle Blue screen (RGB approx 15-45, 25-60, 55-110)
+        if (r >= 15 && r <= 45 && g >= 25 && g <= 60 && b >= 55 && b <= 110 && (b - r) >= 25) obsBlueCount++;
+
+        // 3. Navy/Teal (Posters 1 & 3)
+        if (r >= 10 && r <= 65 && g >= 25 && g <= 80 && b >= 40 && b <= 105) navyCount++;
+
+        // 4. Cream ("BRB" text)
+        if (r >= 190 && g >= 180 && b >= 145 && Math.abs(r - g) <= 35) creamCount++;
+
+        // 5. Yellow/Gold ("STEPPING AWAY BRIEFLY", "15 MINUTE BREAK")
+        if (r >= 170 && g >= 125 && b <= 95 && (r - b) >= 60) yellowCount++;
+
+        // 6. Amber (Poster 2 room lighting)
+        if (r >= 45 && r <= 135 && g >= 30 && g <= 105 && b <= 55 && r > g && g > b) amberCount++;
+      }
+
+      const avgBrightness = (sumR + sumG + sumB) / (3 * total);
+      const blackRatio = blackCount / total;
+
+      // Approved Break Poster Recognition (3 Official Posters)
+      const isPoster1 = (navyCount > 150 && creamCount > 30 && yellowCount > 10);
+      const isPoster2 = (yellowCount > 35 && amberCount > 25);
+      const isPoster3 = (creamCount > 90 && yellowCount > 15);
+      const isApprovedPoster = isPoster1 || isPoster2 || isPoster3;
+
+      // Blank or Fake OBS Idle Screen
+      const isBlank = !isApprovedPoster && (blackRatio >= 0.90 || avgBrightness < 14 || (obsBlueCount / total) >= 0.85);
+
+      let mode = 'webcam';
+      if (isApprovedPoster) mode = 'poster';
+      else if (isBlank) mode = 'blank';
+
+      const result = { isBlank, isApprovedPoster, mode };
+      video._ckLastAnalysis = { time: now, result };
+      return result;
+    } catch (err) {
+      // Graceful fallback: never crash or block camera detection if security prevents reading
+      return { isBlank: false, isApprovedPoster: false, mode: 'fallback' };
+    }
+  }
+
   function evaluateTileCamera(tile) {
     if (!tile) return 'off';
 
@@ -1158,8 +1244,14 @@
     const video = tile.querySelector('video');
     if (!video) return 'off';
 
-    // If video is actively streaming frames, camera is definitely ON!
+    // If video is actively streaming frames:
     if (isVideoActive(video)) {
+      const analysis = analyzeVideoFrame(video);
+      // Blank or fake OBS idle screen -> Camera is OFF (cut attendance!)
+      if (analysis.isBlank) {
+        return 'off';
+      }
+      // Approved break poster or normal live webcam -> Camera is ON!
       return 'on';
     }
 
@@ -1249,10 +1341,18 @@
     });
 
     // 2. DIRECT ACTIVE VIDEO MAPPING:
-    // Any video element actively rendering frames in DOM is definitive proof of an active camera!
+    // Analyzes live video frames: catches blank/OBS screens while recognizing the 3 official break posters!
     const activeVideoStudents = new Set();
+    const videoDetectionModes = new Map();
+
     document.querySelectorAll('video').forEach(v => {
       if (!isVideoActive(v)) return;
+
+      const analysis = analyzeVideoFrame(v);
+      if (analysis.isBlank) {
+        // Blank or fake OBS screen -> Camera is OFF (attendance cut)! Do not mark as active video!
+        return;
+      }
 
       // Find participant name by walking up to enclosing tile container
       let container = v.parentElement;
@@ -1277,13 +1377,16 @@
                        (cleanHostName && foundName.toLowerCase() === cleanHostName.toLowerCase());
         if (isSelf) {
           activeVideoStudents.add('local_host');
+          videoDetectionModes.set('local_host', analysis.mode);
           if (detected.has('local_host')) {
             detected.get('local_host').cameraStatus = 'on';
             detected.get('local_host').rawCameraStatus = 'on';
+            detected.get('local_host').videoDetectionMode = analysis.mode;
           }
         } else {
           const pKey = 'p_' + foundName.toLowerCase().replace(/[^a-z0-9]/g, '_');
           activeVideoStudents.add(pKey);
+          videoDetectionModes.set(pKey, analysis.mode);
         }
       }
     });
@@ -1333,9 +1436,11 @@
 
       // Determine camera status: activeVideoStudents has priority, otherwise evaluateTileCamera
       let cameraStatus = activeVideoStudents.has(participantKey) ? 'on' : evaluateTileCamera(tile);
+      const detectionMode = videoDetectionModes.get(participantKey) || (cameraStatus === 'on' ? 'webcam' : 'off');
 
       if (detected.has(participantKey)) {
         const existing = detected.get(participantKey);
+        existing.videoDetectionMode = detectionMode;
         // If either previously detected or newly detected as 'on', KEEP 'on'!
         if (cameraStatus === 'on') {
           existing.cameraStatus = 'on';
@@ -1349,7 +1454,8 @@
           isLocal: false,
           hasVisibleTile: true,
           cameraStatus: cameraStatus,
-          rawCameraStatus: cameraStatus
+          rawCameraStatus: cameraStatus,
+          videoDetectionMode: detectionMode
         });
       }
     });

@@ -189,7 +189,8 @@ function mergeSessionState(incoming) {
           presenceIntervals: inc.presenceIntervals || existing.presenceIntervals || [],
           joinLeaveHistory: inc.joinLeaveHistory || existing.joinLeaveHistory || [],
           cameraOffCurrentStart: inc.cameraOffCurrentStart !== undefined ? inc.cameraOffCurrentStart : existing.cameraOffCurrentStart,
-          cameraOffIntervals: inc.cameraOffIntervals || existing.cameraOffIntervals || []
+          cameraOffIntervals: inc.cameraOffIntervals || existing.cameraOffIntervals || [],
+          videoDetectionMode: inc.videoDetectionMode || existing.videoDetectionMode || 'off'
         };
       }
     }
@@ -201,6 +202,22 @@ function mergeSessionState(incoming) {
     }
   }
 }
+
+let renderRafId = null;
+function scheduleRenderUI() {
+  if (document.hidden) return;
+  if (renderRafId) return;
+  renderRafId = requestAnimationFrame(() => {
+    renderRafId = null;
+    renderUI();
+  });
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    scheduleRenderUI();
+  }
+});
 
 function initWebSocket() {
   const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -219,21 +236,21 @@ function initWebSocket() {
       if (data.type === 'ACTION_RESET') {
         if (data.session) {
           state = data.session;
-          renderUI();
+          scheduleRenderUI();
         }
       } else if (data.type === 'INIT' || data.type === 'SESSION_UPDATE' || data.type === 'ACTION_START' || data.type === 'ACTION_STOP') {
         if (data.session) {
           mergeSessionState(data.session);
-          renderUI();
+          scheduleRenderUI();
         }
       } else if (data.type === 'ACTION_PAUSE') {
         state.isPaused = true;
         state.currentPauseStart = data.timestamp;
-        renderUI();
+        scheduleRenderUI();
       } else if (data.type === 'ACTION_RESUME') {
         state.isPaused = false;
         state.currentPauseStart = null;
-        renderUI();
+        scheduleRenderUI();
       }
     } catch (e) {
       console.error('WebSocket parse error:', e);
@@ -251,8 +268,9 @@ function initWebSocket() {
   };
 }
 
-// Fetch initial state
-async function fetchCurrentSession() {
+// Fetch initial state (skips polling when WebSocket is healthy to prevent lag)
+async function fetchCurrentSession(force = false) {
+  if (!force && ws && ws.readyState === WebSocket.OPEN) return;
   try {
     const res = await fetch('/api/session/current');
     if (res.ok) {
@@ -262,7 +280,7 @@ async function fetchCurrentSession() {
       } else {
         mergeSessionState(incoming);
       }
-      renderUI();
+      scheduleRenderUI();
     }
   } catch (e) {
     console.error('Fetch error:', e);
@@ -622,12 +640,22 @@ function renderStudentsTable() {
     return;
   }
 
-  // Smooth in-place DOM updates when rows and ordering haven't changed:
-  const currentDomIds = Array.from(studentsTbody.querySelectorAll('tr[data-student-id]')).map(tr => tr.getAttribute('data-student-id'));
   const newIds = filtered.map(p => p.id);
-  const isSameList = currentDomIds.length === newIds.length && currentDomIds.every((id, idx) => id === newIds[idx]);
+  // Check if every student in filtered list already has a row in the DOM:
+  const allExist = newIds.length > 0 && newIds.every(id => document.getElementById(`student-row-${id}`));
 
-  if (isSameList && filtered.length > 0) {
+  if (allExist) {
+    // 1. Re-order rows if sort order changed (appendChild moves existing node in O(1) time without rebuilding)
+    const currentDomIds = Array.from(studentsTbody.children).map(tr => tr.getAttribute('data-student-id'));
+    const isExactOrder = currentDomIds.length === newIds.length && currentDomIds.every((id, idx) => id === newIds[idx]);
+    if (!isExactOrder) {
+      filtered.forEach(p => {
+        const tr = document.getElementById(`student-row-${p.id}`);
+        if (tr) studentsTbody.appendChild(tr);
+      });
+    }
+
+    // 2. Fast in-place updates to text nodes (zero layout thrashing)
     filtered.forEach(p => {
       const tr = document.getElementById(`student-row-${p.id}`);
       if (!tr) return;
@@ -641,17 +669,36 @@ function renderStudentsTable() {
       const isCamOn = p.cameraStatus === 'on';
       const isPresent = p.currentStatus === 'present';
 
+      // Update Rank Badge
+      const rankCol = tr.querySelector('.td-rank-col');
+      if (rankCol) {
+        let rankBadge = `<span class="td-rank">#${p.rank}</span>`;
+        if (isHost) {
+          rankBadge = `<span class="badge-exempt-host" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 800;">EXEMPT [HOST]</span>`;
+        } else if (p.rank === 1 && camOn > 0) {
+          rankBadge = `<span class="rank-crown" title="RANK 1 - Shared Top Valid Study Time!">👑 #1</span>`;
+        } else if (p.rank === 2 && camOn > 0) {
+          rankBadge = `<span class="rank-medal silver">🥈 #2</span>`;
+        } else if (p.rank === 3 && camOn > 0) {
+          rankBadge = `<span class="rank-medal bronze">🥉 #3</span>`;
+        }
+        if (rankCol.innerHTML !== rankBadge) rankCol.innerHTML = rankBadge;
+      }
+
       // Update valid time
       const timeCell = tr.querySelector('.valid-time-cell .time-mono');
-      if (timeCell) timeCell.innerText = formatHms(camOn);
+      const timeHms = formatHms(camOn);
+      if (timeCell && timeCell.innerText !== timeHms) timeCell.innerText = timeHms;
 
       // Update deducted time
       const cutCell = tr.querySelector('.deducted-time-cell .time-mono');
-      if (cutCell) cutCell.innerText = `-${formatHms(camOff)}`;
+      const cutHms = `-${formatHms(camOff)}`;
+      if (cutCell && cutCell.innerText !== cutHms) cutCell.innerText = cutHms;
 
       // Update total meet time
       const totCell = tr.querySelector('.td-tot-time .time-mono');
-      if (totCell) totCell.innerText = formatHms(totalInMeet);
+      const totHms = formatHms(totalInMeet);
+      if (totCell && totCell.innerText !== totHms) totCell.innerText = totHms;
 
       // Update compliance meter
       let barColor = 'var(--accent-emerald)';
@@ -660,25 +707,37 @@ function renderStudentsTable() {
 
       const compVal = tr.querySelector('.compliance-bar-val');
       if (compVal) {
-        compVal.style.width = `${compliance.toFixed(0)}%`;
-        compVal.style.background = barColor;
+        const w = `${compliance.toFixed(0)}%`;
+        if (compVal.style.width !== w) {
+          compVal.style.width = w;
+          compVal.style.background = barColor;
+        }
       }
       const compText = tr.querySelector('.compliance-val-text');
       if (compText) {
-        compText.innerText = `${compliance.toFixed(1)}%`;
-        compText.style.color = barColor;
+        const cText = `${compliance.toFixed(1)}%`;
+        if (compText.innerText !== cText) {
+          compText.innerText = cText;
+          compText.style.color = barColor;
+        }
       }
 
       // Update status badge
       const statusBadge = tr.querySelector('.td-status-badge');
       if (statusBadge) {
         statusBadge.className = `badge td-status-badge ${isPresent ? (isCamOn ? 'badge-cam-on' : 'badge-cam-off') : 'badge-left'}`;
+        let statusStr = '';
         if (isPresent) {
-          statusBadge.innerText = isCamOn ? '📹 ON' : '📷 OFF';
+          if (p.videoDetectionMode === 'poster') {
+            statusStr = '☕ Break Poster';
+          } else {
+            statusStr = isCamOn ? '📹 ON' : '📷 OFF';
+          }
         } else {
           const leftStr = p.leaveTime ? formatTimeOnly(p.leaveTime) : (p.lastSeen ? formatTimeOnly(p.lastSeen) : '');
-          statusBadge.innerText = leftStr ? `⚪ Left (${leftStr})` : '⚪ Left';
+          statusStr = leftStr ? `⚪ Left (${leftStr})` : '⚪ Left';
         }
+        if (statusBadge.innerText !== statusStr) statusBadge.innerText = statusStr;
       }
 
       // Update ongoing cut if cam is off
@@ -769,6 +828,8 @@ function renderStudentsTable() {
               ${isHost ? '<span class="student-local-tag" style="background:#10b981; color:#fff;">HOST (EXEMPT)</span>' : ''}
               ${!isHost && p.rank === 1 && camOn > 0 ? '<span class="badge-champ">CHAMPION</span>' : ''}
               ${rejoinBadge}
+              ${p.videoDetectionMode === 'poster' ? '<span class="badge" style="background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); font-size: 10px; padding: 1px 5px; border-radius: 4px; font-weight: 700; margin-left: 5px;" title="Official Break Poster detected (Camera counted ON)">☕ Break Poster</span>' : ''}
+              ${p.videoDetectionMode === 'blank' ? '<span class="badge" style="background: rgba(239, 68, 68, 0.18); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); font-size: 10px; padding: 1px 5px; border-radius: 4px; font-weight: 700; margin-left: 5px;" title="Blank or OBS screen detected - attendance cut!">⚠️ Blank/OBS</span>' : ''}
             </div>
           </div>
         </td>
@@ -798,8 +859,8 @@ function renderStudentsTable() {
         </td>
         <td><div class="intervals-col">${offBreakdownHtml}</div></td>
         <td>
-          <span class="badge td-status-badge ${isPresent ? (isCamOn ? 'badge-cam-on' : 'badge-cam-off') : 'badge-left'}">
-            ${isPresent ? (isCamOn ? '📹 ON' : '📷 OFF') : `⚪ Left ${p.leaveTime ? `(${formatTimeOnly(p.leaveTime)})` : ''}`}
+          <span class="badge td-status-badge ${isPresent ? (isCamOn ? (p.videoDetectionMode === 'poster' ? 'badge-cam-on' : 'badge-cam-on') : 'badge-cam-off') : 'badge-left'}">
+            ${isPresent ? (p.videoDetectionMode === 'poster' ? '☕ Poster ON' : (isCamOn ? '📹 ON' : '📷 OFF')) : `⚪ Left ${p.leaveTime ? `(${formatTimeOnly(p.leaveTime)})` : ''}`}
           </span>
         </td>
         <td>
@@ -1314,8 +1375,7 @@ window.addEventListener('DOMContentLoaded', () => {
           }
         });
         if (hasPresent) {
-          renderStudentsTable();
-          updateMetricsCards();
+          scheduleRenderUI();
         }
       }
     } else {

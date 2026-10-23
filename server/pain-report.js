@@ -290,17 +290,18 @@ function generatePainThemeHtml(session) {
               <span class="student-name">${escapeHtml(p.name)}</span>
               ${p.isLocal ? '<span class="tag-host">HOST</span>' : ''}
               ${idx === 0 && camOn > 0 ? '<span class="tag-champion">AKATSUKI CHAMPION</span>' : ''}
+              ${(p.rejoinCount || 0) > 0 ? `<span class="badge" style="background: rgba(167, 139, 250, 0.2); color: #c4b5fd; border: 1px solid rgba(167, 139, 250, 0.4); font-size: 9px; padding: 1px 4px; border-radius: 4px; margin-left: 4px;">🔄 ${p.rejoinCount} Rejoin${p.rejoinCount > 1 ? 's' : ''}</span>` : ''}
             </div>
           </div>
         </td>
         <td>
           <span class="status-pill ${isPresent ? 'pill-present' : 'pill-left'}">
-            ${isPresent ? '🟢 Present' : '⚪ Left'}
+            ${isPresent ? '🟢 Present' : `⚪ Left ${p.leaveTime ? `(${formatTimeOnly(p.leaveTime)})` : ''}`}
           </span>
         </td>
         <td>
-          <span class="status-pill ${isCamOn ? 'pill-cam-on' : 'pill-cam-off'}">
-            ${isCamOn ? '📹 ON' : '📷 OFF'}
+          <span class="status-pill ${isCamOn ? (p.videoDetectionMode === 'poster' ? 'pill-cam-on' : 'pill-cam-on') : 'pill-cam-off'}">
+            ${p.videoDetectionMode === 'poster' ? '☕ Poster ON' : (isCamOn ? '📹 ON' : '📷 OFF')}
           </span>
         </td>
         <td class="col-valid-time font-mono">
@@ -315,7 +316,7 @@ function generatePainThemeHtml(session) {
             <span class="cut-sub">DEDUCTED</span>
           </div>
         </td>
-        <td class="font-mono text-white text-center font-bold">${formatHms(totMeet)}</td>
+        <td class="font-mono text-white text-center font-bold">${formatHms(p.totalInMeetMs || totMeet)}</td>
         <td>
           <div class="comp-wrap">
             <span class="font-mono font-bold comp-num">${comp}%</span>

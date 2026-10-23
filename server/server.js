@@ -410,6 +410,7 @@ app.post('/api/session/sync', (req, res) => {
           joinLeaveHistory: combinedJoinLeaveHistory.length > 0 ? combinedJoinLeaveHistory : (p.joinLeaveHistory || existing.joinLeaveHistory || []),
           cameraOffIntervals: combinedOffIntervals,
           cameraIntervals: p.cameraIntervals || existing.cameraIntervals || [],
+          videoDetectionMode: p.videoDetectionMode || existing.videoDetectionMode || 'off',
           lastSeen: p.lastSeen || Date.now()
         };
       }

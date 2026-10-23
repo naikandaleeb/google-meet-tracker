@@ -232,7 +232,14 @@ function generateRankedAttendanceHtml(session, options = {}) {
   const top10RowsHtml = top10RankNumbers.map(rNum => {
     const studentsInRank = ranksMap.get(rNum);
     const combinedNames = studentsInRank.map(s => escapeHtml(s.name.toUpperCase())).join(', ');
-    const studyTime = formatHms(studentsInRank[0].validStudyMs || studentsInRank[0].cameraOnMs || 0);
+    const firstP = studentsInRank[0];
+    const camOn = firstP.validStudyMs !== undefined ? firstP.validStudyMs : (firstP.cameraOnMs || 0);
+    const camOff = firstP.cameraOffMs || 0;
+    const totMeet = (firstP.totalPresentMs && firstP.totalPresentMs >= camOn + camOff) ? firstP.totalPresentMs : (camOn + camOff);
+    const totalInMeet = firstP.totalInMeetMs || totMeet;
+    const compScore = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : (camOn > 0 ? '100.0%' : '0.0%');
+    const isPresent = firstP.currentStatus === 'present';
+    const totalRejoins = studentsInRank.reduce((sum, s) => sum + (s.rejoinCount || 0), 0);
 
     let badgeClass = 'badge-other';
     if (rNum === 1) badgeClass = 'badge-gold';
@@ -244,20 +251,71 @@ function generateRankedAttendanceHtml(session, options = {}) {
         <td class="col-rank">
           <span class="rank-circle ${badgeClass}">${rNum}</span>
         </td>
-        <td class="col-name font-bold text-dark">${combinedNames}</td>
-        <td class="col-time font-mono text-dark">${studyTime}</td>
+        <td class="col-name font-bold text-dark">
+          ${combinedNames}
+          ${totalRejoins > 0 ? `<span class="badge-rejoin-mini">🔄 ${totalRejoins} Rejoin${totalRejoins > 1 ? 's' : ''}</span>` : ''}
+        </td>
+        <td class="col-time font-mono text-emerald font-bold">${formatHms(camOn)}</td>
+        <td class="col-time font-mono text-crimson font-bold">-${formatHms(camOff)}</td>
+        <td class="col-time font-mono text-blue font-bold">${formatHms(totalInMeet)}</td>
+        <td class="col-comp font-mono font-bold">${compScore}</td>
+        <td class="col-status">
+          <span class="badge-pill-sm ${isPresent ? 'badge-present' : 'badge-left'}">${isPresent ? '🟢 Present' : '⚪ Left'}</span>
+        </td>
       </tr>
     `;
   }).join('');
 
-  // Page 2: Complete Ranked Analytics (Each student gets individual row with shared rank)
+  // Page 2: Complete Ranked Analytics with Every Single Detail
   const completeRowsHtml = rankedList.map((p, idx) => {
-    const studyTime = formatHms(p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0));
+    const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
+    const camOff = p.cameraOffMs || 0;
+    const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
+    const totalInMeet = p.totalInMeetMs || totMeet;
+    const compScore = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : (camOn > 0 ? '100.0%' : '0.0%');
+    const isPresent = p.currentStatus === 'present';
+
+    const firstJoinedStr = p.firstSeen ? new Date(p.firstSeen).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }) : '--';
+    const lastSeenStr = p.lastSeen ? new Date(p.lastSeen).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }) : '--';
+
+    // Presence & Rejoin events summary
+    const presenceLogs = (p.joinLeaveHistory || []).map(ev => {
+      const t = ev.formatted || (ev.time ? new Date(ev.time).toLocaleTimeString('en-IN') : '');
+      const away = ev.awayFormatted ? ` (away ${ev.awayFormatted})` : '';
+      return `${(ev.event || '').toUpperCase()} at ${t}${away}`;
+    }).join(' • ');
+
+    // Camera cut intervals summary
+    const offLogs = (p.cameraOffIntervals || []).map(int => {
+      const from = int.fromTime || (int.start ? new Date(int.start).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : '');
+      const to = int.toTime || (int.end ? new Date(int.end).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : 'Now');
+      const dur = int.durationFormatted || formatHms(int.durationMs || 0);
+      return `${from} - ${to} (-${dur})`;
+    }).join('; ');
+
+    const timelineAndCuts = [
+      presenceLogs ? `<div class="sub-log-presence"><strong>🚪 Presence:</strong> ${presenceLogs}</div>` : '',
+      offLogs ? `<div class="sub-log-cut"><strong>⚠️ Cam Cuts:</strong> ${offLogs}</div>` : (camOff === 0 ? '<div class="sub-log-good">🟢 100% Cam ON (Zero cuts)</div>' : '')
+    ].filter(Boolean).join('');
+
     return `
       <tr class="${idx % 2 === 1 ? 'row-alt' : ''}">
-        <td class="col-rank text-center font-bold text-gray">${p.rank}</td>
-        <td class="col-name font-bold text-dark">${escapeHtml(p.name.toUpperCase())}</td>
-        <td class="col-time font-mono text-dark">${studyTime}</td>
+        <td class="col-rank text-center font-bold text-gray">#${p.rank}</td>
+        <td class="col-name">
+          <div class="font-bold text-dark">${escapeHtml(p.name.toUpperCase())}</div>
+          <div class="text-xs text-muted">First: ${firstJoinedStr} | Last: ${lastSeenStr}</div>
+        </td>
+        <td class="col-status">
+          <span class="badge-pill-sm ${isPresent ? 'badge-present' : 'badge-left'}">${isPresent ? '🟢 Present' : `⚪ Left`}</span>
+          ${(p.rejoinCount || 0) > 0 ? `<div class="badge-rejoin-mini">🔄 ${p.rejoinCount} Rejoin${p.rejoinCount > 1 ? 's' : ''}</div>` : ''}
+        </td>
+        <td class="col-time font-mono text-emerald font-bold">${formatHms(camOn)}</td>
+        <td class="col-time font-mono text-crimson font-bold">-${formatHms(camOff)}</td>
+        <td class="col-time font-mono text-blue font-bold">${formatHms(totalInMeet)}</td>
+        <td class="col-comp font-mono font-bold">${compScore}</td>
+        <td class="col-details">
+          ${timelineAndCuts || '<span class="text-muted text-xs">Standard session</span>'}
+        </td>
       </tr>
     `;
   }).join('');
@@ -539,30 +597,32 @@ function generateRankedAttendanceHtml(session, options = {}) {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 20px;
-      font-size: 12px;
+      font-size: 11px;
     }
 
     .ranked-table thead th {
       background: var(--table-header-bg);
       color: #ffffff;
       font-family: 'Outfit', sans-serif;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.6px;
       text-transform: uppercase;
-      padding: 10px 14px;
+      padding: 8px 10px;
       border: none;
     }
 
-    .ranked-table thead th.col-rank { width: 70px; text-align: left; }
+    .ranked-table thead th.col-rank { width: 55px; text-align: center; }
     .ranked-table thead th.col-name { text-align: left; }
-    .ranked-table thead th.col-time { width: 160px; text-align: left; }
+    .ranked-table thead th.col-time { width: 105px; text-align: left; }
+    .ranked-table thead th.col-comp { width: 75px; text-align: center; }
+    .ranked-table thead th.col-status { width: 90px; text-align: center; }
 
     .ranked-table tbody td {
-      padding: 8.5px 14px;
+      padding: 7px 10px;
       border-bottom: 1px solid #e2e8f0;
       vertical-align: middle;
-      font-size: 12px;
+      font-size: 11px;
     }
 
     .ranked-table tbody tr.row-alt {
@@ -573,9 +633,69 @@ function generateRankedAttendanceHtml(session, options = {}) {
       background-color: #f1f5f9;
     }
 
-    .col-rank { text-align: left; }
-    .col-name { font-weight: 700; color: #0f172a; }
-    .col-time { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #0f172a; }
+    .session-meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 14px;
+      margin-bottom: 18px;
+      font-size: 11px;
+      color: var(--text-gray);
+      gap: 8px;
+    }
+    .session-meta-strip .meta-item strong {
+      color: var(--text-dark);
+      margin-left: 3px;
+    }
+    .badge-rejoin-mini {
+      display: inline-block;
+      background: rgba(167, 139, 250, 0.18);
+      color: #6d28d9;
+      border: 1px solid rgba(167, 139, 250, 0.4);
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+      margin-top: 2px;
+    }
+    .badge-pill-sm {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 12px;
+    }
+    .badge-present { background: #dcfce7; color: #166534; }
+    .badge-left { background: #f1f5f9; color: #475569; }
+    .text-emerald { color: #059669; }
+    .text-crimson { color: #dc2626; }
+    .text-blue { color: #2563eb; }
+    .text-muted { color: #64748b; }
+    .sub-log-presence {
+      font-size: 10px;
+      color: #1e40af;
+      margin-bottom: 2px;
+      line-height: 1.3;
+    }
+    .sub-log-cut {
+      font-size: 10px;
+      color: #991b1b;
+      margin-bottom: 2px;
+      line-height: 1.3;
+    }
+    .sub-log-good {
+      font-size: 10px;
+      color: #166534;
+      font-weight: 600;
+    }
+    .col-details {
+      max-width: 320px;
+      word-break: break-word;
+      font-size: 10px;
+    }
 
     /* Rank Badges in Top 10 */
     .rank-circle {
@@ -691,6 +811,16 @@ function generateRankedAttendanceHtml(session, options = {}) {
       <div class="report-subtitle">&#9733; CONSOLIDATED REPORT &#9733;</div>
     </header>
 
+    <!-- Session Metadata Strip -->
+    <div class="session-meta-strip">
+      <div class="meta-item"><span>Room Code:</span> <strong>${session.meetingCode || 'cockroach-study-room'}</strong></div>
+      <div class="meta-item"><span>Target Goal:</span> <strong>${session.targetDurationHours || 12}h Marathon</strong></div>
+      <div class="meta-item"><span>Status:</span> <strong>${session.isTracking ? (session.isPaused ? 'PAUSED ⏸️' : 'ACTIVE 🟢') : 'FINALIZED ⏹️'}</strong></div>
+      <div class="meta-item"><span>Started:</span> <strong>${session.startedAt ? new Date(session.startedAt).toLocaleTimeString('en-IN') : 'N/A'}</strong></div>
+      <div class="meta-item"><span>Total Breaks:</span> <strong>${formatHms(session.totalPausedMs || 0)}</strong></div>
+      <div class="meta-item"><span>Host:</span> <strong style="color: #10b981;">EXEMPT</strong></div>
+    </div>
+
     <!-- 3 KPI Boxes -->
     <div class="kpi-boxes-row">
       <div class="kpi-box">
@@ -753,11 +883,15 @@ function generateRankedAttendanceHtml(session, options = {}) {
         <tr>
           <th class="col-rank">RANK</th>
           <th class="col-name">PARTICIPANT NAME</th>
-          <th class="col-time">TOTAL ATTENDANCE</th>
+          <th class="col-time" style="color: #10b981;">STUDY (CAM ON)</th>
+          <th class="col-time" style="color: #f43f5e;">CUT (CAM OFF)</th>
+          <th class="col-time" style="color: #60a5fa;">TOTAL IN MEET</th>
+          <th class="col-comp">COMPLIANCE</th>
+          <th class="col-status">STATUS</th>
         </tr>
       </thead>
       <tbody>
-        ${top10RowsHtml || '<tr><td colspan="3" style="text-align: center; padding: 18px;">No participants recorded.</td></tr>'}
+        ${top10RowsHtml || '<tr><td colspan="7" style="text-align: center; padding: 18px;">No participants recorded.</td></tr>'}
       </tbody>
     </table>
 
@@ -767,23 +901,28 @@ function generateRankedAttendanceHtml(session, options = {}) {
     </footer>
   </div>
 
-  <!-- PAGE 2: Complete Ranked Analytics -->
+  <!-- PAGE 2: Complete Ranked Analytics with Every Single Detail -->
   <div class="a4-page page-break">
     <div class="section-head" style="margin-top: 6px;">
       <span class="green-marker"></span>
-      <h2 class="section-title">Complete Ranked Analytics (${cutoffBadge})</h2>
+      <h2 class="section-title">Complete Ranked Analytics & Student Dossier (${cutoffBadge})</h2>
     </div>
 
     <table class="ranked-table">
       <thead>
         <tr>
           <th class="col-rank">RANK</th>
-          <th class="col-name">PARTICIPANT NAME</th>
-          <th class="col-time">TOTAL ATTENDANCE</th>
+          <th class="col-name">STUDENT NAME</th>
+          <th class="col-status">STATUS</th>
+          <th class="col-time" style="color: #10b981;">STUDY (ON)</th>
+          <th class="col-time" style="color: #f43f5e;">CUT (OFF)</th>
+          <th class="col-time" style="color: #60a5fa;">TOTAL MEET</th>
+          <th class="col-comp">COMPL.</th>
+          <th class="col-details">PRESENCE TIMELINE & CAMERA CUTS BREAKDOWN</th>
         </tr>
       </thead>
       <tbody>
-        ${completeRowsHtml || '<tr><td colspan="3" style="text-align: center; padding: 18px;">No participants recorded.</td></tr>'}
+        ${completeRowsHtml || '<tr><td colspan="8" style="text-align: center; padding: 18px;">No participants recorded.</td></tr>'}
       </tbody>
     </table>
 

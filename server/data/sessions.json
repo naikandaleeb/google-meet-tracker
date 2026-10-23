@@ -1,5 +1,369 @@
 [
   {
+    "sessionId": "test_session_1",
+    "meetingCode": "cockroach-test",
+    "meetingTitle": "Test Study Session",
+    "startedAt": 1792718600493,
+    "stoppedAt": 1792718666470,
+    "lastUpdated": 1792718666470,
+    "lastResetAt": null,
+    "isTracking": false,
+    "isPaused": false,
+    "totalPausedMs": 6,
+    "currentPauseStart": null,
+    "pauseHistory": [
+      {
+        "pausedAt": 1792718666462,
+        "resumedAt": 1792718666468,
+        "durationMs": 6
+      }
+    ],
+    "targetDurationHours": 12,
+    "participants": {
+      "local_host": {
+        "id": "local_host",
+        "name": "Host (You)",
+        "isLocal": true,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "cameraOnMs": 60000,
+        "cameraOffMs": 0,
+        "totalPresentMs": 60000,
+        "presenceIntervals": [
+          {
+            "joinTime": 1792718600493,
+            "leaveTime": null
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1792718600493
+          }
+        ],
+        "joinTime": 1792718600493,
+        "firstSeen": 1792718600493,
+        "leaveTime": null,
+        "lastSeen": 1792718660494,
+        "validStudyMs": 60000,
+        "totalInMeetMs": 65983,
+        "totalDuration": 60000,
+        "duration": 60000,
+        "timeInCall": 65983,
+        "durationSeconds": 60,
+        "durationMinutes": 1,
+        "studyDuration": 60000,
+        "rank": 1,
+        "isExempt": true,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [],
+        "videoDetectionMode": "off",
+        "isHost": true,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null
+      },
+      "p_student_alpha": {
+        "id": "p_student_alpha",
+        "name": "Student Alpha",
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "cameraOnMs": 45000,
+        "cameraOffMs": 0,
+        "totalPresentMs": 45000,
+        "rejoinCount": 1,
+        "rejoinedAt": 1792718635493,
+        "presenceIntervals": [
+          {
+            "joinTime": 1792718600493,
+            "leaveTime": 1792718620493,
+            "durationMs": 20000
+          },
+          {
+            "joinTime": 1792718635493,
+            "leaveTime": null
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1792718600493,
+            "formatted": "06:00:00 AM"
+          },
+          {
+            "event": "left",
+            "time": 1792718620493,
+            "formatted": "06:00:20 AM"
+          },
+          {
+            "event": "rejoined",
+            "time": 1792718635493,
+            "formatted": "06:00:35 AM",
+            "awayMs": 15000,
+            "awayFormatted": "00:00:15"
+          }
+        ],
+        "joinTime": 1792718600493,
+        "firstSeen": 1792718600493,
+        "leaveTime": null,
+        "lastSeen": 1792718660494,
+        "validStudyMs": 45000,
+        "totalInMeetMs": 50983,
+        "totalDuration": 45000,
+        "duration": 45000,
+        "timeInCall": 50983,
+        "durationSeconds": 45,
+        "durationMinutes": 0,
+        "studyDuration": 45000,
+        "rank": 2,
+        "isLocal": false,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null
+      },
+      "p_student_beta": {
+        "id": "p_student_beta",
+        "name": "Student Beta",
+        "currentStatus": "left",
+        "leaveTime": 1792718620493,
+        "lastSeen": 1792718620493,
+        "cameraStatus": "off",
+        "cameraOnMs": 10000,
+        "cameraOffMs": 10000,
+        "totalPresentMs": 20000,
+        "rejoinCount": 0,
+        "presenceIntervals": [
+          {
+            "joinTime": 1792718600493,
+            "leaveTime": 1792718620493,
+            "durationMs": 20000
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1792718600493,
+            "formatted": "06:00:00 AM"
+          },
+          {
+            "event": "left",
+            "time": 1792718620493,
+            "formatted": "06:00:20 AM"
+          }
+        ],
+        "joinTime": 1792718600493,
+        "firstSeen": 1792718600493,
+        "validStudyMs": 10000,
+        "totalInMeetMs": 20000,
+        "totalDuration": 20000,
+        "duration": 10000,
+        "timeInCall": 20000,
+        "durationSeconds": 10,
+        "durationMinutes": 0,
+        "studyDuration": 10000,
+        "rank": 3,
+        "isLocal": false,
+        "rejoinedAt": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null
+      }
+    },
+    "notes": "",
+    "archivedAt": 1792718674064
+  },
+  {
+    "sessionId": "test_session_1",
+    "meetingCode": "cockroach-test",
+    "meetingTitle": "Test Study Session",
+    "startedAt": 1792718600493,
+    "stoppedAt": 1792718666470,
+    "lastUpdated": 1792718666470,
+    "lastResetAt": null,
+    "isTracking": false,
+    "isPaused": false,
+    "totalPausedMs": 6,
+    "currentPauseStart": null,
+    "pauseHistory": [
+      {
+        "pausedAt": 1792718666462,
+        "resumedAt": 1792718666468,
+        "durationMs": 6
+      }
+    ],
+    "targetDurationHours": 12,
+    "participants": {
+      "local_host": {
+        "id": "local_host",
+        "name": "Host (You)",
+        "isLocal": true,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "cameraOnMs": 60000,
+        "cameraOffMs": 0,
+        "totalPresentMs": 60000,
+        "presenceIntervals": [
+          {
+            "joinTime": 1792718600493,
+            "leaveTime": null
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1792718600493
+          }
+        ],
+        "joinTime": 1792718600493,
+        "firstSeen": 1792718600493,
+        "leaveTime": null,
+        "lastSeen": 1792718660494,
+        "validStudyMs": 60000,
+        "totalInMeetMs": 60162,
+        "totalDuration": 60000,
+        "duration": 60000,
+        "timeInCall": 60162,
+        "durationSeconds": 60,
+        "durationMinutes": 1,
+        "studyDuration": 60000,
+        "rank": 1,
+        "isExempt": true,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [],
+        "videoDetectionMode": "off",
+        "isHost": true,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null
+      },
+      "p_student_alpha": {
+        "id": "p_student_alpha",
+        "name": "Student Alpha",
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "cameraOnMs": 45000,
+        "cameraOffMs": 0,
+        "totalPresentMs": 45000,
+        "rejoinCount": 1,
+        "rejoinedAt": 1792718635493,
+        "presenceIntervals": [
+          {
+            "joinTime": 1792718600493,
+            "leaveTime": 1792718620493,
+            "durationMs": 20000
+          },
+          {
+            "joinTime": 1792718635493,
+            "leaveTime": null
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1792718600493,
+            "formatted": "06:00:00 AM"
+          },
+          {
+            "event": "left",
+            "time": 1792718620493,
+            "formatted": "06:00:20 AM"
+          },
+          {
+            "event": "rejoined",
+            "time": 1792718635493,
+            "formatted": "06:00:35 AM",
+            "awayMs": 15000,
+            "awayFormatted": "00:00:15"
+          }
+        ],
+        "joinTime": 1792718600493,
+        "firstSeen": 1792718600493,
+        "leaveTime": null,
+        "lastSeen": 1792718660494,
+        "validStudyMs": 45000,
+        "totalInMeetMs": 45162,
+        "totalDuration": 45000,
+        "duration": 45000,
+        "timeInCall": 45162,
+        "durationSeconds": 45,
+        "durationMinutes": 0,
+        "studyDuration": 45000,
+        "rank": 2,
+        "isLocal": false,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null
+      },
+      "p_student_beta": {
+        "id": "p_student_beta",
+        "name": "Student Beta",
+        "currentStatus": "left",
+        "leaveTime": 1792718620493,
+        "lastSeen": 1792718620493,
+        "cameraStatus": "off",
+        "cameraOnMs": 10000,
+        "cameraOffMs": 10000,
+        "totalPresentMs": 20000,
+        "rejoinCount": 0,
+        "presenceIntervals": [
+          {
+            "joinTime": 1792718600493,
+            "leaveTime": 1792718620493,
+            "durationMs": 20000
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1792718600493,
+            "formatted": "06:00:00 AM"
+          },
+          {
+            "event": "left",
+            "time": 1792718620493,
+            "formatted": "06:00:20 AM"
+          }
+        ],
+        "joinTime": 1792718600493,
+        "firstSeen": 1792718600493,
+        "validStudyMs": 10000,
+        "totalInMeetMs": 20000,
+        "totalDuration": 20000,
+        "duration": 10000,
+        "timeInCall": 20000,
+        "durationSeconds": 10,
+        "durationMinutes": 0,
+        "studyDuration": 10000,
+        "rank": 3,
+        "isLocal": false,
+        "rejoinedAt": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null
+      }
+    },
+    "notes": "",
+    "archivedAt": 1792718666473
+  },
+  {
     "sessionId": "session_1792711221088",
     "meetingCode": "cockroach-test",
     "meetingTitle": "Test Study Session",
