@@ -1707,6 +1707,13 @@
       if (res && res.settings) config = { ...config, ...res.settings };
     });
 
+    chrome.storage.onChanged.addListener((changes, area) => {
+      if (area === 'local' && changes.settings && changes.settings.newValue) {
+        config = { ...config, ...changes.settings.newValue };
+        console.log('[Cockroach Tracker] Live config updated from settings:', config);
+      }
+    });
+
     chrome.runtime.sendMessage({
       type: 'GET_SERVER_SESSION',
       serverUrl: getServerBaseUrl()

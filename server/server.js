@@ -150,27 +150,17 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
   let camOn = p.cameraOnMs !== undefined ? p.cameraOnMs : (p.validStudyMs || 0);
   let camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : 0;
 
-  // Fallback: If both camOn and camOff are 0, populate from open intervals or totalInCallMs
+  // Fallback only if both are 0 and open intervals exist
   if (camOn === 0 && camOff === 0) {
     if (openIntervalOnMs > 0 || openIntervalOffMs > 0) {
       camOn = openIntervalOnMs;
       camOff = openIntervalOffMs;
-    } else if (totalInCallMs > 0) {
-      if (p.cameraStatus === 'on') {
-        camOn = totalInCallMs;
-      } else {
-        camOff = totalInCallMs;
-      }
     }
   }
 
   const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff)
     ? p.totalPresentMs
-    : Math.max(totalInCallMs, camOn + camOff);
-
-  if (camOff === 0 && totMeet > camOn) {
-    camOff = totMeet - camOn;
-  }
+    : (camOn + camOff);
 
   const validStudy = camOn; // Camera ON time = Valid Study Time
 

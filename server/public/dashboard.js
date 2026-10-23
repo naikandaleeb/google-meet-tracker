@@ -139,6 +139,62 @@ function showToast(msg) {
 }
 
 // WebSocket Setup
+function mergeSessionState(incoming) {
+  if (!incoming) return;
+
+  state.sessionId = incoming.sessionId || state.sessionId;
+  state.meetingCode = incoming.meetingCode || state.meetingCode;
+  state.meetingTitle = incoming.meetingTitle || state.meetingTitle;
+  state.startedAt = incoming.startedAt !== undefined ? incoming.startedAt : state.startedAt;
+  state.stoppedAt = incoming.stoppedAt !== undefined ? incoming.stoppedAt : state.stoppedAt;
+  state.isTracking = typeof incoming.isTracking === 'boolean' ? incoming.isTracking : state.isTracking;
+  state.isPaused = typeof incoming.isPaused === 'boolean' ? incoming.isPaused : state.isPaused;
+  state.totalPausedMs = typeof incoming.totalPausedMs === 'number' ? incoming.totalPausedMs : state.totalPausedMs;
+  state.currentPauseStart = incoming.currentPauseStart !== undefined ? incoming.currentPauseStart : state.currentPauseStart;
+  state.pauseHistory = incoming.pauseHistory || state.pauseHistory;
+  state.targetDurationHours = incoming.targetDurationHours || state.targetDurationHours;
+  state.lastUpdated = incoming.lastUpdated || Date.now();
+
+  // Merge participants MONOTONICALLY so timers NEVER jump backwards!
+  if (incoming.participants) {
+    if (!state.participants) state.participants = {};
+
+    for (const [id, inc] of Object.entries(incoming.participants)) {
+      const existing = state.participants[id];
+      if (!existing) {
+        state.participants[id] = { ...inc };
+      } else {
+        // Monotonic progression: Never let network latency cause timers to jerk backwards!
+        const maxOn = Math.max(existing.cameraOnMs || 0, inc.cameraOnMs || 0);
+        const maxOff = Math.max(existing.cameraOffMs || 0, inc.cameraOffMs || 0);
+        const tot = maxOn + maxOff;
+
+        state.participants[id] = {
+          ...existing,
+          ...inc,
+          cameraStatus: inc.cameraStatus || existing.cameraStatus,
+          currentStatus: inc.currentStatus || existing.currentStatus,
+          cameraOnMs: maxOn,
+          cameraOffMs: maxOff,
+          validStudyMs: maxOn,
+          totalPresentMs: tot,
+          totalDuration: tot,
+          duration: maxOn,
+          timeInCall: tot,
+          cameraOffCurrentStart: inc.cameraOffCurrentStart !== undefined ? inc.cameraOffCurrentStart : existing.cameraOffCurrentStart,
+          cameraOffIntervals: inc.cameraOffIntervals || existing.cameraOffIntervals || []
+        };
+      }
+    }
+
+    for (const id of Object.keys(state.participants)) {
+      if (!incoming.participants[id]) {
+        delete state.participants[id];
+      }
+    }
+  }
+}
+
 function initWebSocket() {
   const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
   const wsUrl = `${protocol}//${window.location.host}/ws`;
@@ -153,9 +209,14 @@ function initWebSocket() {
   ws.onmessage = (event) => {
     try {
       const data = JSON.parse(event.data);
-      if (data.type === 'INIT' || data.type === 'SESSION_UPDATE' || data.type === 'ACTION_RESET' || data.type === 'ACTION_START' || data.type === 'ACTION_STOP') {
+      if (data.type === 'ACTION_RESET') {
         if (data.session) {
           state = data.session;
+          renderUI();
+        }
+      } else if (data.type === 'INIT' || data.type === 'SESSION_UPDATE' || data.type === 'ACTION_START' || data.type === 'ACTION_STOP') {
+        if (data.session) {
+          mergeSessionState(data.session);
           renderUI();
         }
       } else if (data.type === 'ACTION_PAUSE') {
@@ -188,7 +249,12 @@ async function fetchCurrentSession() {
   try {
     const res = await fetch('/api/session/current');
     if (res.ok) {
-      state = await res.json();
+      const incoming = await res.json();
+      if (state.sessionId && incoming.sessionId !== state.sessionId) {
+        state = incoming;
+      } else {
+        mergeSessionState(incoming);
+      }
       renderUI();
     }
   } catch (e) {
@@ -470,22 +536,11 @@ function renderStudentsTable() {
 
   // Calculate dynamic active time for all participants
   participants.forEach(p => {
-    const joinTs = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(state.startedAt) || now;
-    const leaveTs = toEpochMs(p.leaveTime) || (p.currentStatus === 'left' ? toEpochMs(p.lastSeen) : null);
-    const effectiveEndTime = leaveTs || toEpochMs(state.stoppedAt) || now;
-    const totalInCallMs = Math.max(0, effectiveEndTime - joinTs);
-
-    let camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs !== undefined ? p.cameraOnMs : (p.duration || 0));
-    let camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : 0;
-
-    if (camOn === 0 && camOff === 0 && totalInCallMs > 0) {
-      if (p.cameraStatus === 'on') camOn = totalInCallMs;
-      else camOff = totalInCallMs;
-    }
-
+    const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs !== undefined ? p.cameraOnMs : (p.duration || 0));
+    const camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : 0;
     const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff)
       ? p.totalPresentMs
-      : Math.max(totalInCallMs, camOn + camOff);
+      : (camOn + camOff);
 
     p.validStudyMs = camOn;
     p.cameraOnMs = camOn;
@@ -560,12 +615,78 @@ function renderStudentsTable() {
     return;
   }
 
+  // Smooth in-place DOM updates when rows and ordering haven't changed:
+  const currentDomIds = Array.from(studentsTbody.querySelectorAll('tr[data-student-id]')).map(tr => tr.getAttribute('data-student-id'));
+  const newIds = filtered.map(p => p.id);
+  const isSameList = currentDomIds.length === newIds.length && currentDomIds.every((id, idx) => id === newIds[idx]);
+
+  if (isSameList && filtered.length > 0) {
+    filtered.forEach(p => {
+      const tr = document.getElementById(`student-row-${p.id}`);
+      if (!tr) return;
+
+      const isHost = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
+      const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
+      const camOff = p.cameraOffMs || 0;
+      const totMeet = camOn + camOff;
+      const compliance = totMeet > 0 ? Math.min(100, (camOn / totMeet) * 100) : (camOn > 0 ? 100 : 0);
+      const isCamOn = p.cameraStatus === 'on';
+      const isPresent = p.currentStatus === 'present';
+
+      // Update valid time
+      const timeCell = tr.querySelector('.valid-time-cell .time-mono');
+      if (timeCell) timeCell.innerText = formatHms(camOn);
+
+      // Update deducted time
+      const cutCell = tr.querySelector('.deducted-time-cell .time-mono');
+      if (cutCell) cutCell.innerText = `-${formatHms(camOff)}`;
+
+      // Update total meet time
+      const totCell = tr.querySelector('.td-tot-time .time-mono');
+      if (totCell) totCell.innerText = formatHms(totMeet);
+
+      // Update compliance meter
+      let barColor = 'var(--accent-emerald)';
+      if (compliance < 70) barColor = 'var(--accent-crimson)';
+      else if (compliance < 85) barColor = 'var(--accent-amber)';
+
+      const compVal = tr.querySelector('.compliance-bar-val');
+      if (compVal) {
+        compVal.style.width = `${compliance.toFixed(0)}%`;
+        compVal.style.background = barColor;
+      }
+      const compText = tr.querySelector('.compliance-val-text');
+      if (compText) {
+        compText.innerText = `${compliance.toFixed(1)}%`;
+        compText.style.color = barColor;
+      }
+
+      // Update status badge
+      const statusBadge = tr.querySelector('.td-status-badge');
+      if (statusBadge) {
+        statusBadge.className = `badge td-status-badge ${isPresent ? (isCamOn ? 'badge-cam-on' : 'badge-cam-off') : 'badge-left'}`;
+        statusBadge.innerText = isPresent ? (isCamOn ? '📹 ON' : '📷 OFF') : '⚪ Left';
+      }
+
+      // Update ongoing cut if cam is off
+      if (p.cameraStatus === 'off' && p.cameraOffCurrentStart) {
+        const liveOffEl = tr.querySelector('.ongoing-off');
+        const liveCutMs = Math.max(0, now - p.cameraOffCurrentStart);
+        const from = formatTimeOnly(p.cameraOffCurrentStart);
+        if (liveOffEl) {
+          liveOffEl.innerText = `🔴 LIVE OFF: ${from} - Now (${formatHms(liveCutMs)} cut)`;
+        }
+      }
+    });
+    return;
+  }
+
   studentsTbody.innerHTML = filtered.map(p => {
     const isHost = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
     const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
-    const totMeet = Math.max(p.totalPresentMs || 0, camOn);
-    const camOff = p.cameraOffMs || Math.max(0, totMeet - camOn);
-    const compliance = totMeet > 0 ? Math.min(100, (camOn / totMeet) * 100) : 0;
+    const camOff = p.cameraOffMs || 0;
+    const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
+    const compliance = totMeet > 0 ? Math.min(100, (camOn / totMeet) * 100) : (camOn > 0 ? 100 : 0);
     const isCamOn = p.cameraStatus === 'on';
     const isPresent = p.currentStatus === 'present';
 
@@ -621,7 +742,7 @@ function renderStudentsTable() {
     const initials = (p.name || 'U').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
 
     return `
-      <tr class="${p.rank === 1 && camOn > 0 ? 'tr-rank-1' : ''}">
+      <tr id="student-row-${escapeHtml(p.id)}" data-student-id="${escapeHtml(p.id)}" class="${p.rank === 1 && camOn > 0 ? 'tr-rank-1' : ''}">
         <td class="td-rank-col">${rankBadge}</td>
         <td>
           <div class="student-name-cell">
@@ -645,7 +766,7 @@ function renderStudentsTable() {
             <span class="text-dim text-xs">CUT FROM TIME</span>
           </div>
         </td>
-        <td><span class="time-mono text-white">${formatHms(totMeet)}</span></td>
+        <td class="td-tot-time"><span class="time-mono text-white">${formatHms(totMeet)}</span></td>
         <td>
           <div class="compliance-meter">
             <div class="compliance-bar-bg">
@@ -656,7 +777,7 @@ function renderStudentsTable() {
         </td>
         <td><div class="intervals-col">${offBreakdownHtml}</div></td>
         <td>
-          <span class="badge ${isPresent ? (isCamOn ? 'badge-cam-on' : 'badge-cam-off') : 'badge-left'}">
+          <span class="badge td-status-badge ${isPresent ? (isCamOn ? 'badge-cam-on' : 'badge-cam-off') : 'badge-left'}">
             ${isPresent ? (isCamOn ? '📹 ON' : '📷 OFF') : '⚪ Left'}
           </span>
         </td>
@@ -674,9 +795,9 @@ window.openStudentModal = function(id) {
   if (!p) return;
 
   const camOn = p.cameraOnMs || 0;
-  const totMeet = Math.max(p.totalPresentMs || 0, camOn);
-  const camOff = p.cameraOffMs || Math.max(0, totMeet - camOn);
-  const compliance = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : '0.0%';
+  const camOff = p.cameraOffMs || 0;
+  const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
+  const compliance = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : (camOn > 0 ? '100.0%' : '0.0%');
 
   document.getElementById('modal-name').innerText = p.name;
   document.getElementById('modal-id').innerText = `ID: ${p.id} • Rank: #${p.rank || '-'} • First Joined: ${formatIstTime(p.firstSeen)}`;
@@ -957,9 +1078,9 @@ window.viewArchiveSession = async function(sessionId) {
       } else {
         modalTbody.innerHTML = participants.map(p => {
           const camOn = p.cameraOnMs || 0;
-          const totMeet = p.totalPresentMs || camOn;
-          const camOff = p.cameraOffMs || Math.max(0, totMeet - camOn);
-          const comp = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : '0.0%';
+          const camOff = p.cameraOffMs || 0;
+          const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
+          const comp = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : (camOn > 0 ? '100.0%' : '0.0%');
 
           const offIntervals = (p.cameraOffIntervals || []).map(int => {
             const from = int.fromTime || (int.start ? formatIstTime(int.start) : '');
