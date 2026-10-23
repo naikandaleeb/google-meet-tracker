@@ -288,6 +288,15 @@ function broadcast(msg) {
   });
 }
 
+wss.on('connection', (client) => {
+  cleanAllSessionParticipants(currentSession);
+  client.send(JSON.stringify({
+    type: 'INIT',
+    timestamp: Date.now(),
+    session: currentSession
+  }));
+});
+
 // REST Endpoints
 app.get('/api/status', (req, res) => {
   res.json({
@@ -323,14 +332,19 @@ app.post('/api/session/sync', (req, res) => {
 
   if (data.meetingCode) currentSession.meetingCode = data.meetingCode;
   if (data.meetingTitle) currentSession.meetingTitle = data.meetingTitle;
-  if (data.startedAt && !currentSession.startedAt) currentSession.startedAt = data.startedAt;
-  if (data.stoppedAt !== undefined) currentSession.stoppedAt = data.stoppedAt;
-  if (typeof data.isTracking === 'boolean') currentSession.isTracking = data.isTracking;
-  if (typeof data.isPaused === 'boolean') currentSession.isPaused = data.isPaused;
-  if (typeof data.totalPausedMs === 'number') currentSession.totalPausedMs = data.totalPausedMs;
-  if (data.pauseHistory) currentSession.pauseHistory = data.pauseHistory;
-  if (data.currentPauseStart !== undefined) currentSession.currentPauseStart = data.currentPauseStart;
   if (data.targetDurationHours) currentSession.targetDurationHours = data.targetDurationHours;
+
+  // Master tracking and pause state can ONLY be modified if explicit action flag is passed
+  // (Prevents background extension telemetry heartbeats from fighting or overriding server controls)
+  if (data.isExplicitAction) {
+    if (typeof data.isTracking === 'boolean') currentSession.isTracking = data.isTracking;
+    if (typeof data.isPaused === 'boolean') currentSession.isPaused = data.isPaused;
+    if (data.startedAt && !currentSession.startedAt) currentSession.startedAt = data.startedAt;
+    if (data.stoppedAt !== undefined) currentSession.stoppedAt = data.stoppedAt;
+    if (typeof data.totalPausedMs === 'number') currentSession.totalPausedMs = data.totalPausedMs;
+    if (data.pauseHistory) currentSession.pauseHistory = data.pauseHistory;
+    if (data.currentPauseStart !== undefined) currentSession.currentPauseStart = data.currentPauseStart;
+  }
 
   currentSession.lastUpdated = Date.now();
 

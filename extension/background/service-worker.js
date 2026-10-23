@@ -7,6 +7,66 @@ const DEFAULT_SETTINGS = {
   targetDurationHours: 12
 };
 
+let extWs = null;
+let extWsReconnectTimer = null;
+
+function connectExtensionWs() {
+  if (typeof WebSocket === 'undefined') return;
+  if (extWs && (extWs.readyState === WebSocket.OPEN || extWs.readyState === WebSocket.CONNECTING)) {
+    return;
+  }
+
+  resolveBaseUrl({}, (baseUrl) => {
+    try {
+      const wsProtocol = baseUrl.startsWith('https:') ? 'wss:' : 'ws:';
+      const hostPart = baseUrl.replace(/^https?:\/\//, '');
+      const wsUrl = `${wsProtocol}//${hostPart}/ws`;
+
+      extWs = new WebSocket(wsUrl);
+
+      extWs.onopen = () => {
+        console.log('[Cockroach Tracker Worker] WebSocket connected to server:', wsUrl);
+      };
+
+      extWs.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data && data.session) {
+            chrome.storage.local.set({ lastKnownSession: data.session });
+          }
+          // Relay server action event to all Google Meet tabs in real-time
+          chrome.tabs.query({ url: 'https://meet.google.com/*' }, (tabs) => {
+            tabs.forEach(tab => {
+              if (tab.id) {
+                chrome.tabs.sendMessage(tab.id, {
+                  type: 'SERVER_WS_EVENT',
+                  payload: data
+                }, () => { const _err = chrome.runtime.lastError; });
+              }
+            });
+          });
+        } catch (e) {
+          // ignore parse error
+        }
+      };
+
+      extWs.onclose = () => {
+        extWs = null;
+        if (extWsReconnectTimer) clearTimeout(extWsReconnectTimer);
+        extWsReconnectTimer = setTimeout(connectExtensionWs, 3000);
+      };
+
+      extWs.onerror = () => {
+        if (extWs) extWs.close();
+      };
+    } catch (e) {
+      extWs = null;
+      if (extWsReconnectTimer) clearTimeout(extWsReconnectTimer);
+      extWsReconnectTimer = setTimeout(connectExtensionWs, 5000);
+    }
+  });
+}
+
 chrome.runtime.onInstalled.addListener(() => {
   console.log('[Cockroach Tracker] Extension installed.');
   chrome.storage.local.get(['settings'], (res) => {
@@ -17,10 +77,12 @@ chrome.runtime.onInstalled.addListener(() => {
 
   // Setup periodic alarm to keep worker responsive and trigger sync check
   chrome.alarms.create('cockroach_keepalive', { periodInMinutes: 1 });
+  connectExtensionWs();
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === 'cockroach_keepalive') {
+    connectExtensionWs();
     // Ping all Google Meet tabs to ensure active tracking
     chrome.tabs.query({ url: 'https://meet.google.com/*' }, (tabs) => {
       tabs.forEach(tab => {
@@ -120,6 +182,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       chrome.storage.local.set({ lastKnownSession: msg.session });
     }
 
+    if (!extWs || extWs.readyState !== WebSocket.OPEN) {
+      connectExtensionWs();
+    }
+
     resolveBaseUrl(msg, (baseUrl) => {
       fetch(`${baseUrl}/api/session/sync`, {
         method: 'POST',
@@ -127,7 +193,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         body: JSON.stringify(msg.session)
       })
       .then(r => r.json())
-      .then(data => sendResponse({ success: true, data, baseUrl }))
+      .then(data => {
+        if (data && data.session) {
+          chrome.storage.local.set({ lastKnownSession: data.session });
+        }
+        sendResponse({ success: true, data, baseUrl });
+      })
       .catch(() => {
         if (baseUrl.includes('localhost')) {
           const fallbackUrl = baseUrl.replace('localhost', '127.0.0.1');
@@ -137,7 +208,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             body: JSON.stringify(msg.session)
           })
           .then(r => r.json())
-          .then(data => sendResponse({ success: true, data, baseUrl: fallbackUrl }))
+          .then(data => {
+            if (data && data.session) {
+              chrome.storage.local.set({ lastKnownSession: data.session });
+            }
+            sendResponse({ success: true, data, baseUrl: fallbackUrl });
+          })
           .catch(err => sendResponse({ success: false, error: err.message }));
         } else {
           sendResponse({ success: false, error: 'Sync failed to ' + baseUrl });
@@ -155,6 +231,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
 
   if (msg.type === 'SERVER_ACTION') {
+    if (!extWs || extWs.readyState !== WebSocket.OPEN) {
+      connectExtensionWs();
+    }
+
     resolveBaseUrl(msg, (baseUrl) => {
       fetch(`${baseUrl}/api/session/action`, {
         method: 'POST',
@@ -162,7 +242,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         body: JSON.stringify({ action: msg.action, payload: msg.payload })
       })
       .then(r => r.json())
-      .then(data => sendResponse({ success: true, data, baseUrl }))
+      .then(data => {
+        if (data && data.session) {
+          chrome.storage.local.set({ lastKnownSession: data.session });
+        }
+        sendResponse({ success: true, data, baseUrl });
+      })
       .catch(() => {
         if (baseUrl.includes('localhost')) {
           const fallbackUrl = baseUrl.replace('localhost', '127.0.0.1');
@@ -172,7 +257,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             body: JSON.stringify({ action: msg.action, payload: msg.payload })
           })
           .then(r => r.json())
-          .then(data => sendResponse({ success: true, data, baseUrl: fallbackUrl }))
+          .then(data => {
+            if (data && data.session) {
+              chrome.storage.local.set({ lastKnownSession: data.session });
+            }
+            sendResponse({ success: true, data, baseUrl: fallbackUrl });
+          })
           .catch(err => sendResponse({ success: false, error: err.message }));
         } else {
           sendResponse({ success: false, error: 'Action failed on ' + baseUrl });

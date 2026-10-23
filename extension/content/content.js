@@ -825,8 +825,16 @@
 
     renderControls();
     saveSession();
-    syncSessionNow();
     updateHudUI();
+
+    chrome.runtime.sendMessage({
+      type: 'SERVER_ACTION',
+      serverUrl: getServerBaseUrl(),
+      action: 'start'
+    }, () => {
+      const _err = chrome.runtime.lastError;
+      syncSessionNow();
+    });
   }
 
   function stopAttendance() {
@@ -1000,6 +1008,12 @@
       });
 
       console.log('[Cockroach Tracker] ▶️ Resumed. Study timer active.');
+
+      chrome.runtime.sendMessage({
+        type: 'SERVER_ACTION',
+        serverUrl: getServerBaseUrl(),
+        action: 'resume'
+      }, () => { const _err = chrome.runtime.lastError; });
     } else {
       // PAUSING TRACKING
       session.isPaused = true;
@@ -1025,6 +1039,12 @@
       });
 
       console.log('[Cockroach Tracker] ⏸️ Paused. Study timer frozen.');
+
+      chrome.runtime.sendMessage({
+        type: 'SERVER_ACTION',
+        serverUrl: getServerBaseUrl(),
+        action: 'pause'
+      }, () => { const _err = chrome.runtime.lastError; });
     }
 
     renderControls();
@@ -1797,6 +1817,63 @@
     chrome.storage.local.set({ [storageKey]: session });
   }
 
+  function adoptServerSession(serverSess) {
+    if (!serverSess) return;
+
+    const controlChanged = session.sessionId !== serverSess.sessionId ||
+                           session.isTracking !== serverSess.isTracking ||
+                           session.isPaused !== serverSess.isPaused ||
+                           session.startedAt !== serverSess.startedAt ||
+                           session.stoppedAt !== serverSess.stoppedAt;
+
+    session.sessionId = serverSess.sessionId || session.sessionId;
+    session.meetingCode = serverSess.meetingCode || session.meetingCode;
+    session.isTracking = !!serverSess.isTracking;
+    session.isPaused = !!serverSess.isPaused;
+    session.startedAt = serverSess.startedAt;
+    session.stoppedAt = serverSess.stoppedAt;
+    session.totalPausedMs = serverSess.totalPausedMs || 0;
+    session.currentPauseStart = serverSess.currentPauseStart;
+    session.pauseHistory = serverSess.pauseHistory || [];
+    session.targetDurationHours = serverSess.targetDurationHours || 12;
+
+    if (controlChanged) {
+      console.log(`[Cockroach Tracker] Master tracking state synced from server: isTracking=${session.isTracking}, isPaused=${session.isPaused}`);
+      renderControls();
+      updateHudUI();
+      saveSession();
+    }
+  }
+
+  function handleServerEvent(event) {
+    if (!event) return;
+    console.log('[Cockroach Tracker] Server Event received:', event.type);
+    if (event.session) {
+      adoptServerSession(event.session);
+    } else if (event.type === 'ACTION_START') {
+      session.isTracking = true;
+      session.isPaused = false;
+      session.currentPauseStart = null;
+      renderControls();
+      updateHudUI();
+    } else if (event.type === 'ACTION_STOP') {
+      session.isTracking = false;
+      session.isPaused = false;
+      renderControls();
+      updateHudUI();
+    } else if (event.type === 'ACTION_PAUSE') {
+      session.isPaused = true;
+      session.currentPauseStart = event.timestamp || Date.now();
+      renderControls();
+      updateHudUI();
+    } else if (event.type === 'ACTION_RESUME') {
+      session.isPaused = false;
+      session.currentPauseStart = null;
+      renderControls();
+      updateHudUI();
+    }
+  }
+
   function syncSessionNow() {
     chrome.runtime.sendMessage({
       type: 'SYNC_TO_SERVER',
@@ -1809,10 +1886,8 @@
       if (syncDot) {
         if (response && response.success) {
           syncDot.className = 'cm-dot cm-dot-green';
-          if (response.data && response.data.serverReset && response.data.session) {
-            session = response.data.session;
-            renderControls();
-            updateHudUI();
+          if (response.data && response.data.session) {
+            adoptServerSession(response.data.session);
           }
         } else {
           syncDot.className = 'cm-dot cm-dot-amber';
@@ -1946,6 +2021,11 @@
 
   // Robust onMessage Listener
   chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
+    if (req.type === 'SERVER_WS_EVENT' && req.payload) {
+      handleServerEvent(req.payload);
+      sendResponse({ ok: true });
+      return true;
+    }
     if (req.type === 'PING_CHECK' || req.type === 'REINJECT') {
       mountHUD();
       onTimerTick();

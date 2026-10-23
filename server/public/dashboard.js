@@ -244,12 +244,20 @@ function initWebSocket() {
           scheduleRenderUI();
         }
       } else if (data.type === 'ACTION_PAUSE') {
-        state.isPaused = true;
-        state.currentPauseStart = data.timestamp;
+        if (data.session) {
+          mergeSessionState(data.session);
+        } else {
+          state.isPaused = true;
+          state.currentPauseStart = data.timestamp;
+        }
         scheduleRenderUI();
       } else if (data.type === 'ACTION_RESUME') {
-        state.isPaused = false;
-        state.currentPauseStart = null;
+        if (data.session) {
+          mergeSessionState(data.session);
+        } else {
+          state.isPaused = false;
+          state.currentPauseStart = null;
+        }
         scheduleRenderUI();
       }
     } catch (e) {
@@ -473,46 +481,67 @@ function renderUI() {
   // Control Buttons & Badges
   if (!state.isTracking) {
     const isFinalized = !!state.stoppedAt;
-    dashAttendanceBadge.innerText = isFinalized ? 'FINALIZED (OFF) ⏹️' : 'READY / OFF ⏹️';
-    dashAttendanceBadge.className = 'card-status-badge paused';
-    cardStatusBadge.innerText = isFinalized ? 'FINALIZED ⏹️' : 'OFF ⏹️';
-    cardStatusBadge.className = 'card-status-badge paused';
+    const badgeText = isFinalized ? 'FINALIZED (OFF) ⏹️' : 'READY / OFF ⏹️';
+    if (dashAttendanceBadge.innerText !== badgeText) {
+      dashAttendanceBadge.innerText = badgeText;
+      dashAttendanceBadge.className = 'card-status-badge paused';
+    }
+    const cardText = isFinalized ? 'FINALIZED ⏹️' : 'OFF ⏹️';
+    if (cardStatusBadge.innerText !== cardText) {
+      cardStatusBadge.innerText = cardText;
+      cardStatusBadge.className = 'card-status-badge paused';
+    }
 
     if (btnMasterStart) {
       const toggleMain = btnMasterStart.querySelector('.toggle-main');
-      if (toggleMain) toggleMain.innerText = isFinalized ? 'RESUME / START ATTENDANCE' : 'START ATTENDANCE';
+      const targetMain = isFinalized ? 'RESUME / START ATTENDANCE' : 'START ATTENDANCE';
+      if (toggleMain && toggleMain.innerText !== targetMain) {
+        toggleMain.innerText = targetMain;
+      }
     }
 
-    if (masterOffGroup) masterOffGroup.style.display = 'flex';
-    if (masterRunningGroup) masterRunningGroup.style.display = 'none';
-    if (pausedBanner) pausedBanner.style.display = 'none';
+    if (masterOffGroup && masterOffGroup.style.display !== 'flex') masterOffGroup.style.display = 'flex';
+    if (masterRunningGroup && masterRunningGroup.style.display !== 'none') masterRunningGroup.style.display = 'none';
+    if (pausedBanner && pausedBanner.style.display !== 'none') pausedBanner.style.display = 'none';
   } else {
-    if (masterOffGroup) masterOffGroup.style.display = 'none';
-    if (masterRunningGroup) masterRunningGroup.style.display = 'flex';
+    if (masterOffGroup && masterOffGroup.style.display !== 'none') masterOffGroup.style.display = 'none';
+    if (masterRunningGroup && masterRunningGroup.style.display !== 'flex') masterRunningGroup.style.display = 'flex';
 
     if (state.isPaused) {
       const curBreakMs = state.currentPauseStart ? Math.max(0, now - state.currentPauseStart) : 0;
-      dashAttendanceBadge.innerText = `PAUSED ⏸️ (${formatHms(curBreakMs)})`;
-      dashAttendanceBadge.className = 'card-status-badge paused';
-      cardStatusBadge.innerText = 'PAUSED ⏸️';
-      cardStatusBadge.className = 'card-status-badge paused';
+      const pauseBadgeText = `PAUSED ⏸️ (${formatHms(curBreakMs)})`;
+      if (dashAttendanceBadge.innerText !== pauseBadgeText) {
+        dashAttendanceBadge.innerText = pauseBadgeText;
+        dashAttendanceBadge.className = 'card-status-badge paused';
+      }
+      if (cardStatusBadge.innerText !== 'PAUSED ⏸️') {
+        cardStatusBadge.innerText = 'PAUSED ⏸️';
+        cardStatusBadge.className = 'card-status-badge paused';
+      }
       btnMasterPause.classList.add('resume-mode');
-      masterToggleIcon.innerText = '▶️';
-      masterToggleLabel.innerText = 'RESUME BREAK';
-      masterToggleSub.innerText = 'Click to continue tracking';
-      pausedBanner.style.display = 'block';
+      if (masterToggleIcon.innerText !== '▶️') masterToggleIcon.innerText = '▶️';
+      if (masterToggleLabel.innerText !== 'RESUME BREAK') masterToggleLabel.innerText = 'RESUME BREAK';
+      if (masterToggleSub.innerText !== 'Click to continue tracking') masterToggleSub.innerText = 'Click to continue tracking';
+      if (pausedBanner.style.display !== 'block') pausedBanner.style.display = 'block';
 
-      if (currentBreakTimer) currentBreakTimer.innerText = `Break: ${formatHms(curBreakMs)}`;
+      if (currentBreakTimer) {
+        const breakText = `Break: ${formatHms(curBreakMs)}`;
+        if (currentBreakTimer.innerText !== breakText) currentBreakTimer.innerText = breakText;
+      }
     } else {
-      dashAttendanceBadge.innerText = 'ACTIVE 🟢';
-      dashAttendanceBadge.className = 'card-status-badge';
-      cardStatusBadge.innerText = 'ACTIVE 🟢';
-      cardStatusBadge.className = 'card-status-badge';
+      if (dashAttendanceBadge.innerText !== 'ACTIVE 🟢') {
+        dashAttendanceBadge.innerText = 'ACTIVE 🟢';
+        dashAttendanceBadge.className = 'card-status-badge';
+      }
+      if (cardStatusBadge.innerText !== 'ACTIVE 🟢') {
+        cardStatusBadge.innerText = 'ACTIVE 🟢';
+        cardStatusBadge.className = 'card-status-badge';
+      }
       btnMasterPause.classList.remove('resume-mode');
-      masterToggleIcon.innerText = '⏸️';
-      masterToggleLabel.innerText = 'PAUSE BREAK';
-      masterToggleSub.innerText = 'Halt timers for break';
-      pausedBanner.style.display = 'none';
+      if (masterToggleIcon.innerText !== '⏸️') masterToggleIcon.innerText = '⏸️';
+      if (masterToggleLabel.innerText !== 'PAUSE BREAK') masterToggleLabel.innerText = 'PAUSE BREAK';
+      if (masterToggleSub.innerText !== 'Halt timers for break') masterToggleSub.innerText = 'Halt timers for break';
+      if (pausedBanner.style.display !== 'none') pausedBanner.style.display = 'none';
     }
   }
 
@@ -626,13 +655,25 @@ function renderStudentsTable() {
   });
 
   if (filtered.length === 0) {
+    const existingEmpty = studentsTbody.querySelector('.empty-row');
+    const titleText = participants.length === 0 ? 'No participants detected yet' : 'No students match current filter';
+    const descText = participants.length === 0 ? 'Join Google Meet with the Cockroach Tracker extension loaded to start tracking.' : 'Try clearing your search or status filter';
+
+    if (existingEmpty) {
+      const titleEl = existingEmpty.querySelector('.empty-title');
+      const descEl = existingEmpty.querySelector('.empty-desc');
+      if (titleEl && titleEl.textContent !== titleText) titleEl.textContent = titleText;
+      if (descEl && descEl.textContent !== descText) descEl.textContent = descText;
+      return;
+    }
+
     studentsTbody.innerHTML = `
       <tr class="empty-row">
         <td colspan="9">
           <div class="empty-state">
             <div class="empty-glyph">🪳</div>
-            <div class="empty-title">${participants.length === 0 ? 'No participants detected yet' : 'No students match current filter'}</div>
-            <div class="empty-desc">${participants.length === 0 ? 'Join Google Meet with the Cockroach Tracker extension loaded to start tracking.' : 'Try clearing your search or status filter'}</div>
+            <div class="empty-title">${titleText}</div>
+            <div class="empty-desc">${descText}</div>
           </div>
         </td>
       </tr>
@@ -1319,17 +1360,34 @@ function updateMetricsCards() {
   const participants = Object.values(state.participants || {});
   const presentStudents = participants.filter(p => p.currentStatus === 'present');
   const leftStudents = participants.filter(p => p.currentStatus !== 'present');
-  if (attendeesPresentCount) attendeesPresentCount.innerText = presentStudents.length;
-  if (attendeesTotalCount) attendeesTotalCount.innerText = participants.length;
-  if (attendeesLeftCount) attendeesLeftCount.innerText = leftStudents.length;
+  if (attendeesPresentCount && attendeesPresentCount.innerText !== String(presentStudents.length)) {
+    attendeesPresentCount.innerText = presentStudents.length;
+  }
+  if (attendeesTotalCount && attendeesTotalCount.innerText !== String(participants.length)) {
+    attendeesTotalCount.innerText = participants.length;
+  }
+  if (attendeesLeftCount && attendeesLeftCount.innerText !== String(leftStudents.length)) {
+    attendeesLeftCount.innerText = leftStudents.length;
+  }
 
   const activeCameras = presentStudents.filter(p => p.cameraStatus === 'on');
   const camPercent = presentStudents.length > 0 ? (activeCameras.length / presentStudents.length) * 100 : 0;
 
-  if (camActiveCount) camActiveCount.innerText = `${activeCameras.length} / ${presentStudents.length}`;
-  if (camCompliancePercent) camCompliancePercent.innerText = `${camPercent.toFixed(1)}%`;
-  if (camComplianceBar) camComplianceBar.style.width = `${camPercent.toFixed(1)}%`;
-  if (camActiveDot) camActiveDot.innerText = camPercent >= 80 ? '🟢' : (camPercent >= 50 ? '🟡' : '🔴');
+  const camCountStr = `${activeCameras.length} / ${presentStudents.length}`;
+  if (camActiveCount && camActiveCount.innerText !== camCountStr) {
+    camActiveCount.innerText = camCountStr;
+  }
+  const compStr = `${camPercent.toFixed(1)}%`;
+  if (camCompliancePercent && camCompliancePercent.innerText !== compStr) {
+    camCompliancePercent.innerText = compStr;
+  }
+  if (camComplianceBar && camComplianceBar.style.width !== compStr) {
+    camComplianceBar.style.width = compStr;
+  }
+  const dot = camPercent >= 80 ? '🟢' : (camPercent >= 50 ? '🟡' : '🔴');
+  if (camActiveDot && camActiveDot.innerText !== dot) {
+    camActiveDot.innerText = dot;
+  }
 }
 
 // ================= INIT =================
@@ -1379,8 +1437,10 @@ window.addEventListener('DOMContentLoaded', () => {
         }
       }
     } else {
-      // When tracking is OFF / Idle, update metrics cards to show currently present participants
-      updateMetricsCards();
+      // When tracking is OFF / Idle, update metrics cards only if participants exist
+      if (state.participants && Object.keys(state.participants).length > 0) {
+        updateMetricsCards();
+      }
     }
   }, 1000);
 });
