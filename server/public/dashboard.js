@@ -171,11 +171,14 @@ function mergeSessionState(incoming) {
         const maxTotalMeet = Math.max(existing.totalInMeetMs || 0, inc.totalInMeetMs || 0, tot);
         const rejoinCnt = Math.max(existing.rejoinCount || 0, inc.rejoinCount || 0);
 
+        const isCamOn = (inc.cameraStatus === 'on' || existing.cameraStatus === 'on');
+        const isPres = (inc.currentStatus === 'present' || existing.currentStatus === 'present');
+
         state.participants[id] = {
           ...existing,
           ...inc,
-          cameraStatus: inc.cameraStatus || existing.cameraStatus,
-          currentStatus: inc.currentStatus || existing.currentStatus,
+          cameraStatus: isCamOn ? 'on' : 'off',
+          currentStatus: isPres ? 'present' : (inc.currentStatus || existing.currentStatus || 'left'),
           cameraOnMs: maxOn,
           cameraOffMs: maxOff,
           validStudyMs: maxOn,
@@ -190,7 +193,7 @@ function mergeSessionState(incoming) {
           joinLeaveHistory: inc.joinLeaveHistory || existing.joinLeaveHistory || [],
           cameraOffCurrentStart: inc.cameraOffCurrentStart !== undefined ? inc.cameraOffCurrentStart : existing.cameraOffCurrentStart,
           cameraOffIntervals: inc.cameraOffIntervals || existing.cameraOffIntervals || [],
-          videoDetectionMode: inc.videoDetectionMode || existing.videoDetectionMode || 'off'
+          videoDetectionMode: isCamOn ? (inc.cameraStatus === 'on' ? (inc.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off'
         };
       }
     }

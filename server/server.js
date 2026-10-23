@@ -24,6 +24,9 @@ function cleanParticipantName(raw, isLocal = false) {
   // Strip Google Meet UI icon ligatures
   s = s.replace(/keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz/gi, '').trim();
 
+  // Strip video prefix/suffix descriptions
+  s = s.replace(/(?:'s\s+video|'s\s+feed|video\s+of\s+|video\s+feed\s+of\s+)/gi, '').trim();
+
   // Match Pin/Unpin actions
   const pinMatch = s.match(/(?:Pin|Unpin)\s+(.+?)\s+(?:to|from)\s+(?:your\s+)?(?:main\s+)?screen/i);
   if (pinMatch) s = pinMatch[1].trim();
@@ -32,8 +35,11 @@ function cleanParticipantName(raw, isLocal = false) {
   // Identify local participant
   const isYou = /\((?:You)\)/i.test(s) || isLocal || s.toLowerCase() === 'you';
 
-  // Strip parenthetical badges
-  s = s.replace(/\s*\((You|Host|Co-host|Presentation|External|Call)\)/gi, '').trim();
+  // Strip multi-device qualifiers and role badges:
+  // Handles dual devices seamlessly: "Rahul Sharma (1)", "Rahul Sharma (Phone)", "Rahul Sharma - 2", "Rahul Sharma [1]", etc.
+  s = s.replace(/\s*[\(\[]\s*(\d+|you|host|co-host|presentation|external|call|phone|mobile|laptop|desktop|tablet|guest|audio|mic|webcam|cam)\s*[\)\]]/gi, '').trim();
+  s = s.replace(/\s*-\s*\d+$/i, '').trim();
+  s = s.replace(/\s*#\s*\d+$/i, '').trim();
 
   if (!s || s.length === 0) {
     return isYou ? 'Host (You)' : null;
@@ -206,11 +212,85 @@ function cleanAllSessionParticipants(sess) {
   const now = Date.now();
   const cleaned = {};
   for (const [k, p] of Object.entries(sess.participants)) {
+    if (!p) continue;
     const isLocal = p.isLocal || k === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
     const validName = cleanParticipantName(p.name, isLocal);
-    if (validName) {
-      const stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
-      
+    if (!validName) continue;
+
+    const stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
+    const existing = cleaned[stableKey];
+
+    if (existing) {
+      // DUAL DEVICE MERGE: Consolidate multiple devices into ONE canonical participant!
+      // The device with Camera ON ALWAYS takes precedence!
+      const isCamOn = (p.cameraStatus === 'on' || existing.cameraStatus === 'on');
+      const maxOn = Math.max(p.cameraOnMs || 0, existing.cameraOnMs || 0, p.validStudyMs || 0, existing.validStudyMs || 0);
+      const maxOff = Math.max(p.cameraOffMs || 0, existing.cameraOffMs || 0);
+      const isPres = (p.currentStatus === 'present' || existing.currentStatus === 'present');
+      const joinTs = Math.min(toEpochMs(p.joinTime) || now, toEpochMs(existing.joinTime) || now, toEpochMs(p.firstSeen) || now, toEpochMs(existing.firstSeen) || now);
+      const lastSeen = Math.max(toEpochMs(p.lastSeen) || now, toEpochMs(existing.lastSeen) || now);
+
+      // Safe merge of cameraOffIntervals
+      const combinedOffIntervals = [...(existing.cameraOffIntervals || [])];
+      if (Array.isArray(p.cameraOffIntervals)) {
+        p.cameraOffIntervals.forEach(newInt => {
+          if (!combinedOffIntervals.some(ex => Math.abs((toEpochMs(ex.start) || 0) - (toEpochMs(newInt.start) || 0)) < 2000)) {
+            combinedOffIntervals.push(newInt);
+          }
+        });
+      }
+
+      // Safe merge of presenceIntervals
+      const combinedPresenceIntervals = [...(existing.presenceIntervals || [])];
+      if (Array.isArray(p.presenceIntervals)) {
+        p.presenceIntervals.forEach(newInt => {
+          const newJoin = toEpochMs(newInt.joinTime) || 0;
+          if (!combinedPresenceIntervals.some(ex => Math.abs((toEpochMs(ex.joinTime) || 0) - newJoin) < 2000)) {
+            combinedPresenceIntervals.push(newInt);
+          }
+        });
+      }
+
+      // Safe merge of joinLeaveHistory
+      const combinedHistory = [...(existing.joinLeaveHistory || [])];
+      if (Array.isArray(p.joinLeaveHistory)) {
+        p.joinLeaveHistory.forEach(newEv => {
+          const newTime = toEpochMs(newEv.time) || 0;
+          if (!combinedHistory.some(ex => ex.event === newEv.event && Math.abs((toEpochMs(ex.time) || 0) - newTime) < 2000)) {
+            combinedHistory.push(newEv);
+          }
+        });
+      }
+
+      const merged = {
+        ...existing,
+        ...p,
+        id: stableKey,
+        name: validName,
+        isLocal: isLocal,
+        isHost: isLocal,
+        isExempt: isLocal,
+        currentStatus: isPres ? 'present' : (p.currentStatus || existing.currentStatus),
+        cameraStatus: isCamOn ? 'on' : 'off',
+        rawCameraStatus: isCamOn ? 'on' : 'off',
+        videoDetectionMode: isCamOn ? (p.cameraStatus === 'on' ? (p.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off',
+        cameraOnMs: maxOn,
+        cameraOffMs: maxOff,
+        validStudyMs: maxOn,
+        totalPresentMs: Math.max(existing.totalPresentMs || 0, p.totalPresentMs || 0, maxOn + maxOff),
+        firstSeen: joinTs,
+        joinTime: joinTs,
+        lastSeen: lastSeen,
+        rejoinCount: Math.max(p.rejoinCount || 0, existing.rejoinCount || 0),
+        rejoinedAt: p.rejoinedAt || existing.rejoinedAt || null,
+        cameraOffIntervals: combinedOffIntervals,
+        presenceIntervals: combinedPresenceIntervals,
+        joinLeaveHistory: combinedHistory
+      };
+
+      finalizeParticipant(merged, sess, now);
+      cleaned[stableKey] = merged;
+    } else {
       const candidate = {
         ...p,
         id: stableKey,
@@ -219,7 +299,6 @@ function cleanAllSessionParticipants(sess) {
         isHost: isLocal,
         isExempt: isLocal
       };
-      
       finalizeParticipant(candidate, sess, now);
       cleaned[stableKey] = candidate;
     }
@@ -358,15 +437,18 @@ app.post('/api/session/sync', (req, res) => {
         const stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
         const existing = currentSession.participants[stableKey] || {};
         
-        const camOn = p.cameraOnMs !== undefined ? p.cameraOnMs : (existing.cameraOnMs || 0);
-        const camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : (existing.cameraOffMs || 0);
-        const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
+        const camOn = Math.max(p.cameraOnMs !== undefined ? p.cameraOnMs : 0, existing.cameraOnMs || 0, p.validStudyMs || 0, existing.validStudyMs || 0);
+        const camOff = Math.max(p.cameraOffMs !== undefined ? p.cameraOffMs : 0, existing.cameraOffMs || 0);
+        const totMeet = Math.max(p.totalPresentMs || 0, existing.totalPresentMs || 0, camOn + camOff);
+        const isCamOn = (p.cameraStatus === 'on' || existing.cameraStatus === 'on');
+        const isPres = (p.currentStatus === 'present' || existing.currentStatus === 'present');
+        const joinTs = Math.min(toEpochMs(p.joinTime) || Date.now(), toEpochMs(existing.joinTime) || Date.now(), toEpochMs(p.firstSeen) || Date.now(), toEpochMs(existing.firstSeen) || Date.now());
 
         // Merge cameraOffIntervals safely
         const combinedOffIntervals = [...(existing.cameraOffIntervals || [])];
         if (p.cameraOffIntervals && Array.isArray(p.cameraOffIntervals)) {
           p.cameraOffIntervals.forEach(newInt => {
-            if (!combinedOffIntervals.some(ex => Math.abs((ex.start || 0) - (newInt.start || 0)) < 2000)) {
+            if (!combinedOffIntervals.some(ex => Math.abs((toEpochMs(ex.start) || 0) - (toEpochMs(newInt.start) || 0)) < 2000)) {
               combinedOffIntervals.push(newInt);
             }
           });
@@ -404,8 +486,11 @@ app.post('/api/session/sync', (req, res) => {
           name: validName,
           isLocal: isLocal,
           presenceIntervals: combinedPresenceIntervals.length > 0 ? combinedPresenceIntervals : (p.presenceIntervals || existing.presenceIntervals || []),
-          currentStatus: p.currentStatus || existing.currentStatus || 'present',
-          lastSeen: p.lastSeen || Date.now()
+          currentStatus: isPres ? 'present' : (p.currentStatus || existing.currentStatus || 'left'),
+          cameraStatus: isCamOn ? 'on' : 'off',
+          rawCameraStatus: isCamOn ? 'on' : 'off',
+          videoDetectionMode: isCamOn ? (p.cameraStatus === 'on' ? (p.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off',
+          lastSeen: Math.max(toEpochMs(p.lastSeen) || Date.now(), toEpochMs(existing.lastSeen) || Date.now())
         };
 
         const totalInMeetMs = calculateTotalInMeetMs(mergedParticipantObj, Date.now());
@@ -418,14 +503,21 @@ app.post('/api/session/sync', (req, res) => {
           validStudyMs: camOn, // Strictly: Camera ON time = Valid Study Time
           totalInMeetMs: totalInMeetMs,
           timeInCall: totalInMeetMs,
+          totalDuration: totMeet,
+          duration: camOn,
+          studyDuration: camOn,
+          durationSeconds: Math.floor(camOn / 1000),
+          durationMinutes: Math.floor(camOn / 60000),
+          firstSeen: joinTs,
+          joinTime: joinTs,
           rejoinCount: rejoinCount,
           rejoinedAt: rejoinedAt,
           presenceIntervals: combinedPresenceIntervals.length > 0 ? combinedPresenceIntervals : (p.presenceIntervals || existing.presenceIntervals || []),
           joinLeaveHistory: combinedJoinLeaveHistory.length > 0 ? combinedJoinLeaveHistory : (p.joinLeaveHistory || existing.joinLeaveHistory || []),
           cameraOffIntervals: combinedOffIntervals,
           cameraIntervals: p.cameraIntervals || existing.cameraIntervals || [],
-          videoDetectionMode: p.videoDetectionMode || existing.videoDetectionMode || 'off',
-          lastSeen: p.lastSeen || Date.now()
+          videoDetectionMode: isCamOn ? (p.cameraStatus === 'on' ? (p.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off',
+          lastSeen: Math.max(toEpochMs(p.lastSeen) || Date.now(), toEpochMs(existing.lastSeen) || Date.now())
         };
       }
     }

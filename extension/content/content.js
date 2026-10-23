@@ -76,6 +76,9 @@
 
     clean = clean.replace(/keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz/gi, '').trim();
 
+    // Strip video prefix/suffix descriptions commonly present on Meet tile labels
+    clean = clean.replace(/(?:'s\s+video|'s\s+feed|video\s+of\s+|video\s+feed\s+of\s+)/gi, '').trim();
+
     const pinMatch = clean.match(/(?:Pin|Unpin)\s+(.+?)\s+(?:to|from)\s+(?:your\s+)?(?:main\s+)?screen/i);
     if (pinMatch) {
       clean = pinMatch[1].trim();
@@ -85,7 +88,12 @@
     }
 
     const isYou = /\((?:You)\)/i.test(clean) || isLocal || clean.toLowerCase() === 'you';
-    clean = clean.replace(/\s*\((You|Host|Co-host|Presentation|External|Call)\)/gi, '').trim();
+
+    // Strip multi-device qualifiers and role badges:
+    // Handles dual devices seamlessly: "Rahul Sharma (1)", "Rahul Sharma (Phone)", "Rahul Sharma - 2", "Rahul Sharma [1]", etc.
+    clean = clean.replace(/\s*[\(\[]\s*(\d+|you|host|co-host|presentation|external|call|phone|mobile|laptop|desktop|tablet|guest|audio|mic|webcam|cam)\s*[\)\]]/gi, '').trim();
+    clean = clean.replace(/\s*-\s*\d+$/i, '').trim();
+    clean = clean.replace(/\s*#\s*\d+$/i, '').trim();
 
     if (!clean || clean.length === 0) {
       return isYou ? 'Host (You)' : null;
@@ -1057,12 +1065,21 @@
   function extractTileParticipantName(tile) {
     if (!tile) return null;
 
+    // 1. Direct Google Meet data attributes
     const attrName = tile.getAttribute('data-self-name') || tile.getAttribute('data-participant-name');
     if (attrName) {
       const s = sanitizeStudentName(attrName);
       if (s) return s;
     }
 
+    // 2. Tile root aria-label (Commonly present on late joiner video tiles in Google Meet)
+    const tileAria = tile.getAttribute('aria-label');
+    if (tileAria) {
+      const s = sanitizeStudentName(tileAria);
+      if (s) return s;
+    }
+
+    // 3. Pin / Unpin button label or tooltip
     const pinBtn = tile.querySelector('button[aria-label*="Pin " i], button[aria-label*="Unpin " i], button[data-tooltip*="Pin " i], button[data-tooltip*="Unpin " i]');
     if (pinBtn) {
       const pinText = pinBtn.getAttribute('aria-label') || pinBtn.getAttribute('data-tooltip') || pinBtn.innerText;
@@ -1070,6 +1087,7 @@
       if (s) return s;
     }
 
+    // 4. Avatar profile image alt text
     const avatarImgs = tile.querySelectorAll('img[alt]');
     for (const img of avatarImgs) {
       const alt = img.getAttribute('alt');
@@ -1079,18 +1097,44 @@
       }
     }
 
-    const notranslateElements = tile.querySelectorAll('.notranslate, [data-self-name], span.zWGUib');
+    // 5. Standard notranslate and participant name elements
+    const notranslateElements = tile.querySelectorAll('.notranslate, [data-self-name], [data-participant-name], span.zWGUib');
     for (const el of notranslateElements) {
       if (el.closest('button, [role="button"], [role="tooltip"], svg')) continue;
       const s = sanitizeStudentName(el.innerText || el.getAttribute('data-self-name'));
       if (s) return s;
     }
 
+    // 6. Child elements with aria-label (avatar containers, participant labels)
+    const ariaElements = tile.querySelectorAll('[aria-label]');
+    for (const el of ariaElements) {
+      if (el.closest('button, [role="button"], [role="tooltip"], svg')) continue;
+      const lbl = el.getAttribute('aria-label');
+      if (lbl) {
+        const s = sanitizeStudentName(lbl);
+        if (s) return s;
+      }
+    }
+
+    // 7. Known Google Meet name badge containers
     const nameBadges = tile.querySelectorAll('div[class*="z373Mb"], div[class*="jT57Ub"], div[class*="XE8e1e"], div[class*="A37uZe"], div[class*="dwFTHd"]');
     for (const badge of nameBadges) {
       if (badge.closest('button, [role="button"], [role="tooltip"]')) continue;
       const s = sanitizeStudentName(badge.innerText);
       if (s) return s;
+    }
+
+    // 8. General text discovery in tile spans/divs (fallback for late joiners and obfuscated layout containers)
+    const textNodes = tile.querySelectorAll('span, div');
+    for (const node of textNodes) {
+      if (node.closest('button, [role="button"], [role="tooltip"], svg, style, script')) continue;
+      if (node.children.length === 0 && node.innerText) {
+        const txt = node.innerText.trim();
+        if (txt.length >= 2 && txt.length <= 40) {
+          const s = sanitizeStudentName(txt);
+          if (s) return s;
+        }
+      }
     }
 
     return null;
@@ -1501,29 +1545,35 @@
 
       if (participantKey === 'p_host__you_' || participantKey === 'p_you' || participantKey === 'local_host') return;
 
-      // Determine camera status:
-      // If tile indicates camera is off or is showing an avatar -> OFF!
-      let cameraStatus = 'off';
-      if (isTileShowingAvatar(tile) || isCameraOffIndicated(tile)) {
-        cameraStatus = 'off';
-      } else if (activeVideoStudents.has(participantKey)) {
-        cameraStatus = 'on';
+      // Determine camera status for this specific tile:
+      // Priority 1: If student has active live video (or approved break poster), camera is ON
+      let tileCamOn = false;
+      let detectionMode = 'off';
+
+      if (activeVideoStudents.has(participantKey)) {
+        tileCamOn = true;
+        detectionMode = videoDetectionModes.get(participantKey) || 'webcam';
+      } else if (isTileShowingAvatar(tile) || isCameraOffIndicated(tile)) {
+        tileCamOn = false;
+        detectionMode = 'off';
       } else {
-        cameraStatus = evaluateTileCamera(tile);
+        const evalStatus = evaluateTileCamera(tile);
+        tileCamOn = (evalStatus === 'on');
+        detectionMode = tileCamOn ? (videoDetectionModes.get(participantKey) || 'webcam') : 'off';
       }
 
-      const detectionMode = videoDetectionModes.get(participantKey) || (cameraStatus === 'on' ? 'webcam' : 'off');
-
+      // DUAL DEVICE CONSOLIDATION & CAMERA-ON PRIORITY:
+      // If student was already detected on another device/tile (e.g. Phone + Laptop):
+      // THE DEVICE WITH CAMERA ON ALWAYS TAKES PRECEDENCE!
       if (detected.has(participantKey)) {
         const existing = detected.get(participantKey);
-        existing.videoDetectionMode = detectionMode;
         existing.hasVisibleTile = true;
-        if (cameraStatus === 'on') {
+        existing.deviceCount = (existing.deviceCount || 1) + 1;
+
+        if (tileCamOn || existing.cameraStatus === 'on') {
           existing.cameraStatus = 'on';
           existing.rawCameraStatus = 'on';
-        } else if (!activeVideoStudents.has(participantKey)) {
-          existing.cameraStatus = 'off';
-          existing.rawCameraStatus = 'off';
+          existing.videoDetectionMode = tileCamOn ? detectionMode : (existing.videoDetectionMode || 'webcam');
         }
       } else {
         detected.set(participantKey, {
@@ -1531,8 +1581,9 @@
           name: name,
           isLocal: false,
           hasVisibleTile: true,
-          cameraStatus: cameraStatus,
-          rawCameraStatus: cameraStatus,
+          deviceCount: 1,
+          cameraStatus: tileCamOn ? 'on' : 'off',
+          rawCameraStatus: tileCamOn ? 'on' : 'off',
           videoDetectionMode: detectionMode
         });
       }
@@ -1640,8 +1691,10 @@
     activeDetected.forEach((scanned, key) => {
       let p = session.participants[key];
       const rawStatus = scanned.cameraStatus || scanned.rawCameraStatus || 'off';
+      const isNewParticipant = !p;
 
-      if (!p) {
+      if (isNewParticipant) {
+        const isCamOn = (rawStatus === 'on');
         p = {
           id: key,
           name: scanned.name,
@@ -1674,13 +1727,15 @@
           durationMinutes: 0,
           studyDuration: 0,
           consecutiveCamOffMs: 0,
-          cameraOffCurrentStart: (session.isTracking && !session.isPaused && rawStatus === 'off') ? now : null,
+          cameraOffCurrentStart: (session.isTracking && !session.isPaused && !isCamOn) ? now : null,
           cameraOffIntervals: [],
           cameraIntervals: session.isTracking ? [
             { start: now, end: null, state: rawStatus }
-          ] : []
+          ] : [],
+          videoDetectionMode: scanned.videoDetectionMode || 'off'
         };
         session.participants[key] = p;
+        console.log(`[Cockroach Tracker] 👤 Late Joiner Initiated: [${p.name}] at ${formatTimeOnly(now)} (Camera: ${rawStatus.toUpperCase()})`);
       } else {
         p.name = scanned.name || p.name;
         
@@ -1762,51 +1817,54 @@
             console.log(`[Cockroach Tracker] 🟢 [${p.name}] Camera turned ON at ${formatTimeOnly(now)}`);
           }
         }
-
-        // ACCURATE TIME ACCUMULATION:
-        // Accumulate only while tracking is active and not paused!
-        if (session.isTracking && !session.isPaused) {
-          if (p.cameraStatus === 'on') {
-            p.cameraOnMs = (p.cameraOnMs || 0) + deltaMs;
-            p.consecutiveCamOffMs = 0;
-          } else {
-            p.cameraOffMs = (p.cameraOffMs || 0) + deltaMs;
-            p.consecutiveCamOffMs = (p.consecutiveCamOffMs || 0) + deltaMs;
-            if (!p.cameraOffCurrentStart) {
-              p.cameraOffCurrentStart = now;
-            }
-          }
-
-          // Strict Mathematical Invariants & Property Aliases:
-          p.validStudyMs = p.cameraOnMs;
-          p.totalPresentMs = (p.cameraOnMs || 0) + (p.cameraOffMs || 0);
-          p.totalDuration = p.totalPresentMs;
-          p.duration = p.validStudyMs;
-          p.timeInCall = p.totalPresentMs;
-          p.durationSeconds = Math.floor(p.validStudyMs / 1000);
-          p.durationMinutes = Math.floor(p.validStudyMs / 60000);
-          p.studyDuration = p.validStudyMs;
-        } else if (session.isTracking && session.isPaused) {
-          // Attendance PAUSED: All counters stay completely FROZEN!
-        } else if (session.stoppedAt) {
-          // Attendance FINALIZED (OFF): Keep all accumulated times FROZEN & INTACT!
-          p.consecutiveCamOffMs = 0;
-          p.cameraOffCurrentStart = null;
-        } else {
-          // Attendance OFF / Idle before Start Attendance:
-          if (!p.cameraOnMs && !p.cameraOffMs && !p.totalPresentMs) {
-            p.totalPresentMs = 0;
-            p.cameraOnMs = 0;
-            p.cameraOffMs = 0;
-            p.validStudyMs = 0;
-            p.totalDuration = 0;
-            p.duration = 0;
-            p.timeInCall = 0;
-          }
-          p.consecutiveCamOffMs = 0;
-          p.cameraOffCurrentStart = null;
-        }
       }
+
+      // TIME ACCUMULATION FOR ALL ACTIVE PARTICIPANTS (INCLUDING LATE JOINERS ON THEIR VERY FIRST TICK!):
+      // Accumulate only while tracking is active and not paused!
+      if (session.isTracking && !session.isPaused) {
+        if (p.cameraStatus === 'on') {
+          p.cameraOnMs = (p.cameraOnMs || 0) + deltaMs;
+          p.consecutiveCamOffMs = 0;
+        } else {
+          p.cameraOffMs = (p.cameraOffMs || 0) + deltaMs;
+          p.consecutiveCamOffMs = (p.consecutiveCamOffMs || 0) + deltaMs;
+          if (!p.cameraOffCurrentStart) {
+            p.cameraOffCurrentStart = now;
+          }
+        }
+
+        // Strict Mathematical Invariants & Property Aliases:
+        p.validStudyMs = p.cameraOnMs;
+        p.totalPresentMs = (p.cameraOnMs || 0) + (p.cameraOffMs || 0);
+        p.totalDuration = p.totalPresentMs;
+        p.duration = p.validStudyMs;
+        p.timeInCall = p.totalPresentMs;
+        p.durationSeconds = Math.floor(p.validStudyMs / 1000);
+        p.durationMinutes = Math.floor(p.validStudyMs / 60000);
+        p.studyDuration = p.validStudyMs;
+      } else if (session.isTracking && session.isPaused) {
+        // Attendance PAUSED: All counters stay completely FROZEN!
+      } else if (session.stoppedAt) {
+        // Attendance FINALIZED (OFF): Keep all accumulated times FROZEN & INTACT!
+        p.consecutiveCamOffMs = 0;
+        p.cameraOffCurrentStart = null;
+      } else {
+        // Attendance OFF / Idle before Start Attendance:
+        if (!p.cameraOnMs && !p.cameraOffMs && !p.totalPresentMs) {
+          p.totalPresentMs = 0;
+          p.cameraOnMs = 0;
+          p.cameraOffMs = 0;
+          p.validStudyMs = 0;
+          p.totalDuration = 0;
+          p.duration = 0;
+          p.timeInCall = 0;
+        }
+        p.consecutiveCamOffMs = 0;
+        p.cameraOffCurrentStart = null;
+      }
+
+      p.totalInMeetMs = calculateTotalInMeetMs(p, now);
+      p.lastSeen = now;
     });
 
     // Mark left participants

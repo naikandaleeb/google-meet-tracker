@@ -159,8 +159,88 @@ function computeDenseRanks(participants, session = {}) {
   return participants;
 }
 
+function cleanParticipantName(raw, isLocal = false) {
+  if (!raw) return isLocal ? 'Host (You)' : null;
+  let s = String(raw).trim();
+  s = s.replace(/keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz/gi, '').trim();
+  s = s.replace(/(?:'s\s+video|'s\s+feed|video\s+of\s+|video\s+feed\s+of\s+)/gi, '').trim();
+  const pinMatch = s.match(/(?:Pin|Unpin)\s+(.+?)\s+(?:to|from)\s+(?:your\s+)?(?:main\s+)?screen/i);
+  if (pinMatch) s = pinMatch[1].trim();
+  s = s.replace(/^(?:Pin|Unpin)\s+/i, '').trim();
+  const isYou = /\((?:You)\)/i.test(s) || isLocal || s.toLowerCase() === 'you';
+  s = s.replace(/\s*[\(\[]\s*(\d+|you|host|co-host|presentation|external|call|phone|mobile|laptop|desktop|tablet|guest|audio|mic|webcam|cam)\s*[\)\]]/gi, '').trim();
+  s = s.replace(/\s*-\s*\d+$/i, '').trim();
+  s = s.replace(/\s*#\s*\d+$/i, '').trim();
+  if (!s || s.length === 0) return isYou ? 'Host (You)' : null;
+  if (/^\d+$/.test(s) || /^\d{1,2}:\d{2}/.test(s) || /^\d+%/.test(s)) return null;
+  const lower = s.toLowerCase();
+  const UI_ACTIONS = ['turn off', 'turn on', 'visual effects', 'leave call', 'for everyone', 'click to', 'more options', 'microphone', 'pin to screen', 'dont turn off'];
+  for (const act of UI_ACTIONS) { if (lower.includes(act)) return null; }
+  if (lower === 'pin' || lower === 'unpin') return null;
+  if (lower === 'host' || lower === 'you') return isYou ? 'Host (You)' : 'Host';
+  return s;
+}
+
+function consolidateParticipantsForReport(rawList, session = {}) {
+  const now = Date.now();
+  const map = new Map();
+  rawList.forEach(p => {
+    if (!p || !p.name) return;
+    const isLocal = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
+    const validName = cleanParticipantName(p.name, isLocal);
+    if (!validName) return;
+
+    const stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
+    const existing = map.get(stableKey);
+
+    if (existing) {
+      // DUAL DEVICE MERGE: Consolidate into single row with Camera ON taking precedence!
+      const isCamOn = (p.cameraStatus === 'on' || existing.cameraStatus === 'on');
+      const maxOn = Math.max(p.cameraOnMs || 0, existing.cameraOnMs || 0, p.validStudyMs || 0, existing.validStudyMs || 0);
+      const maxOff = Math.max(p.cameraOffMs || 0, existing.cameraOffMs || 0);
+      const isPres = (p.currentStatus === 'present' || existing.currentStatus === 'present');
+      const joinTs = Math.min(toEpochMs(p.joinTime) || now, toEpochMs(existing.joinTime) || now, toEpochMs(p.firstSeen) || now, toEpochMs(existing.firstSeen) || now);
+
+      map.set(stableKey, {
+        ...existing,
+        ...p,
+        id: stableKey,
+        name: validName,
+        isLocal: isLocal,
+        isHost: isLocal,
+        isExempt: isLocal,
+        currentStatus: isPres ? 'present' : (p.currentStatus || existing.currentStatus),
+        cameraStatus: isCamOn ? 'on' : 'off',
+        rawCameraStatus: isCamOn ? 'on' : 'off',
+        cameraOnMs: maxOn,
+        cameraOffMs: maxOff,
+        validStudyMs: maxOn,
+        totalPresentMs: Math.max(existing.totalPresentMs || 0, p.totalPresentMs || 0, maxOn + maxOff),
+        firstSeen: joinTs,
+        joinTime: joinTs,
+        lastSeen: Math.max(toEpochMs(p.lastSeen) || now, toEpochMs(existing.lastSeen) || now),
+        rejoinCount: Math.max(p.rejoinCount || 0, existing.rejoinCount || 0),
+        cameraOffIntervals: [...(existing.cameraOffIntervals || []), ...(p.cameraOffIntervals || [])],
+        presenceIntervals: [...(existing.presenceIntervals || []), ...(p.presenceIntervals || [])],
+        joinLeaveHistory: [...(existing.joinLeaveHistory || []), ...(p.joinLeaveHistory || [])]
+      });
+    } else {
+      map.set(stableKey, {
+        ...p,
+        id: stableKey,
+        name: validName,
+        isLocal: isLocal,
+        isHost: isLocal,
+        isExempt: isLocal
+      });
+    }
+  });
+  return Array.from(map.values());
+}
+
 function generateRankedAttendanceHtml(session, options = {}) {
-  const rawParticipants = Object.values(session.participants || {});
+  const consolidated = consolidateParticipantsForReport(Object.values(session.participants || {}), session);
+  const rawParticipants = consolidated;
   
   // HOST IS 100% EXEMPT FROM STUDENT RANKING COMPETITION & PODIUM!
   const hostParticipant = rawParticipants.find(p => p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host')));
