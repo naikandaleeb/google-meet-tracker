@@ -406,14 +406,28 @@ app.post('/api/session/sync', (req, res) => {
   const data = req.body;
   if (!data) return res.status(400).json({ error: 'No data provided' });
 
-  // If server was recently reset, inform the extension to adopt the clean zeroed session!
+  // Adopt incoming session ID if server currently has no active tracking or participants
   if (data.sessionId && data.sessionId !== currentSession.sessionId) {
-    if (currentSession.lastResetAt && (Date.now() - currentSession.lastResetAt < 600000)) {
-      return res.json({ success: true, serverReset: true, session: currentSession });
-    }
-    if (currentSession.startedAt === null && !currentSession.isTracking && Object.keys(currentSession.participants || {}).length === 0) {
+    if (!currentSession.isTracking && Object.keys(currentSession.participants || {}).length === 0) {
       currentSession.sessionId = data.sessionId;
     }
+  }
+
+  // If incoming sync indicates tracking started, adopt it immediately
+  if (data.isTracking === true && !currentSession.isTracking) {
+    currentSession.isTracking = true;
+    currentSession.isPaused = false;
+    currentSession.stoppedAt = null;
+    if (data.startedAt && !currentSession.startedAt) {
+      currentSession.startedAt = data.startedAt;
+    }
+  }
+
+  // If incoming sync indicates attendance stopped, adopt it
+  if (data.isTracking === false && data.stoppedAt && currentSession.isTracking) {
+    currentSession.isTracking = false;
+    currentSession.isPaused = false;
+    currentSession.stoppedAt = data.stoppedAt;
   }
 
   if (data.meetingCode) currentSession.meetingCode = data.meetingCode;
