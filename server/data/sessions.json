@@ -274,7 +274,7 @@
     "archivedAt": 1792794698301
   },
   {
-    "sessionId": "test_session_1",
+    "sessionId": "test_session_1_2",
     "meetingCode": "test-room",
     "meetingTitle": "Test Study Session",
     "startedAt": 1792749893018,
@@ -494,7 +494,7 @@
     "archivedAt": 1792794677726
   },
   {
-    "sessionId": "test_session_1",
+    "sessionId": "test_session_1_3",
     "meetingCode": "test-room",
     "meetingTitle": "Test Study Session",
     "startedAt": 1792749893018,
