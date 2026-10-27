@@ -686,7 +686,7 @@ function renderStudentsTable() {
 
     studentsTbody.innerHTML = `
       <tr class="empty-row">
-        <td colspan="9">
+        <td colspan="8">
           <div class="empty-state">
             <div class="empty-glyph">🪳</div>
             <div class="empty-title">${titleText}</div>
@@ -753,10 +753,6 @@ function renderStudentsTable() {
       const cutHms = `-${formatHms(camOff)}`;
       if (cutCell && cutCell.innerText !== cutHms) cutCell.innerText = cutHms;
 
-      // Update total meet time
-      const totCell = tr.querySelector('.td-tot-time .time-mono');
-      const totHms = formatHms(totalInMeet);
-      if (totCell && totCell.innerText !== totHms) totCell.innerText = totHms;
 
       // Update compliance meter
       let barColor = 'var(--accent-emerald)';
@@ -914,10 +910,6 @@ function renderStudentsTable() {
             <span class="time-mono font-bold text-crimson">-${formatHms(camOff)}</span>
             <span class="text-dim text-xs">CUT FROM TIME</span>
           </div>
-        </td>
-        <td class="td-tot-time">
-          <span class="time-mono text-white">${formatHms(totalInMeet)}</span>
-          <div class="text-dim text-xs" style="font-size: 9px; opacity: 0.7;">TOTAL IN MEET</div>
         </td>
         <td>
           <div class="compliance-meter">

@@ -122,24 +122,111 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
 }
 
 function cleanParticipantName(raw, isLocal = false) {
-  if (!raw) return isLocal ? 'Host (You)' : null;
-  let s = String(raw).trim();
-  s = s.replace(/keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz/gi, '').trim();
-  s = s.replace(/(?:'s\s+video|'s\s+feed|video\s+of\s+|video\s+feed\s+of\s+)/gi, '').trim();
-  const pinMatch = s.match(/(?:Pin|Unpin)\s+(.+?)\s+(?:to|from)\s+(?:your\s+)?(?:main\s+)?screen/i);
-  if (pinMatch) s = pinMatch[1].trim();
+  if (!raw || typeof raw !== 'string') return isLocal ? 'Host (You)' : null;
+  let s = String(raw).replace(/[\r\n\t]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
+  if (!s) return isLocal ? 'Host (You)' : null;
+
+  // 1. Strip Google Meet Material Icon ligatures
+  s = s.replace(/\b(?:keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz|videocam_off|screen_share|closed_caption|hand_raise|call_end)\b/gi, '').trim();
+
+  // 2. Extract clean name from Pin/Unpin action strings (English & Hindi)
+  const pinMatchEn = s.match(/(?:Pin|Unpin)\s+(.+?)\s+(?:to|from)\s+(?:your\s+)?(?:main\s+)?screen/i);
+  if (pinMatchEn) s = pinMatchEn[1].trim();
+  const pinMatchHi = s.match(/(.+?)\s+को\s+(?:अपनी\s+)?(?:मुख्य\s+)?स्क्रीन\s+पर\s+(?:पिन|अनपिन)\s+करें/i);
+  if (pinMatchHi) s = pinMatchHi[1].trim();
   s = s.replace(/^(?:Pin|Unpin)\s+/i, '').trim();
-  const isYou = /\((?:You)\)/i.test(s) || isLocal || s.toLowerCase() === 'you';
-  s = s.replace(/\s*[\(\[]\s*(\d+|you|host|co-host|presentation|external|call|phone|mobile|laptop|desktop|tablet|guest|audio|mic|webcam|cam)\s*[\)\]]/gi, '').trim();
+
+  // 3. Strip Video/Feed descriptions commonly found in Google Meet tile aria-labels
+  s = s.replace(/^(?:video\s+feed\s+from|video\s+feed\s+of|video\s+from|video\s+of|video\s+for|feed\s+from)\s+/gi, '').trim();
+  s = s.replace(/\s*(?:'s\s+video\s+feed|'s\s+video|'s\s+feed|video\s+feed|video)\s*$/gi, '').trim();
+  s = s.replace(/'s\s*$/i, '').trim();
+
+  // 4. Strip status suffixes (common in tile aria-labels and People panel)
+  s = s.replace(/,\s*(?:speaking|microphone\s+is\s+muted|microphone\s+muted|mic\s+off|mic\s+on|muted|unmuted|video\s+off|video\s+on|camera\s+off|camera\s+on|meeting\s+host|meeting\s+co-host|host|co-host|you)\s*$/gi, '').trim();
+  s = s.replace(/\s*\((?:speaking|muted|unmuted|mic\s+off|mic\s+on|video\s+off|video\s+on|camera\s+off|camera\s+on)\)\s*$/gi, '').trim();
+
+  // 5. Check if local user
+  const isYou = /\((?:You)\)/i.test(s) || isLocal || s.toLowerCase() === 'you' || s.toLowerCase() === 'host (you)';
+
+  // 6. Strip multi-device qualifiers and duplicate numbers:
+  s = s.replace(/\s*[\(\[]\s*(?:\d+|you|host|meeting\s+host|meeting\s+co-host|co-host|presentation|external|call|phone|mobile|laptop|desktop|tablet|guest|audio|mic|webcam|cam|secondary|device\s*\d*)\s*[\)\]]/gi, '').trim();
   s = s.replace(/\s*-\s*\d+$/i, '').trim();
   s = s.replace(/\s*#\s*\d+$/i, '').trim();
+  s = s.replace(/\s+\d+$/i, '').trim();
+
+  // 7. Strip presentation suffixes
+  s = s.replace(/\s+is\s+presenting$/i, '').trim();
+  s = s.replace(/^presentation\s*(?:from|of|by)?\s*[:\-]?\s*/i, '').trim();
+  s = s.replace(/'s\s+presentation$/i, '').trim();
+
+  // 8. Strip unclosed opening parentheses/brackets at the end
+  s = s.replace(/\s*[\(\[\{][^\)\]\}]*$/g, '').trim();
+
+  // 9. Strip trailing ellipsis / dots (Google Meet truncation: e.g. "Mohammad Rizwan…" or "Mohammad Rizwan...")
+  s = s.replace(/[\u2026\.]+\s*$/, '').trim();
+
+  // 10. Strip leading/trailing punctuation and symbols
+  s = s.replace(/^[\s\-_,\.:;•|\(\)\[\]]+|[\s\-_,\.:;•|\(\)\[\]]+$/g, '').trim();
+
   if (!s || s.length === 0) return isYou ? 'Host (You)' : null;
-  if (/^\d+$/.test(s) || /^\d{1,2}:\d{2}/.test(s) || /^\d+%/.test(s)) return null;
+
+  // Filter pure numbers, timestamps, percentages
+  if (/^\d+$/.test(s) || /^\d{1,2}:\d{2}(?::\d{2})?(?:\s*[ap]m)?$/i.test(s) || /^\d+%/i.test(s)) return null;
+
+  // Length check: Must have at least 2 chars, max 45 chars
+  if (s.length < 2 || s.length > 45) return isYou ? 'Host (You)' : null;
+
+  // Must contain at least one letter
+  if (!/\p{L}/u.test(s)) return null;
+
   const lower = s.toLowerCase();
-  const UI_ACTIONS = ['turn off', 'turn on', 'visual effects', 'leave call', 'for everyone', 'click to', 'more options', 'microphone', 'pin to screen', 'dont turn off'];
-  for (const act of UI_ACTIONS) { if (lower.includes(act)) return null; }
-  if (lower === 'pin' || lower === 'unpin') return null;
-  if (lower === 'host' || lower === 'you') return isYou ? 'Host (You)' : 'Host';
+
+  const BLACKLIST = [
+    'pin', 'unpin', 'mute', 'unmute', 'camera', 'microphone', 'more options',
+    'turn off', 'turn on', 'visual effects', 'presentation', 'audio', 'video',
+    'chat', 'people', 'raise hand', 'lower hand', 'reactions', 'send reaction',
+    'call details', 'meeting details', 'in-call messages', 'leave call',
+    'end call', 'apply visual effects', 'turn off microphone', 'pin to screen',
+    'dont turn off', 'remove from call', 'full screen', 'grid view',
+    'speaker view', 'captions', 'turn on captions', 'settings', 'background',
+    'device settings', 'troubleshooting', 'report',
+    'share screen', 'stop sharing', 'your presentation', 'auto', 'hd', 'standard',
+    'switch camera', 'minimize', 'maximize', 'expand', 'collapse', 'close',
+    'show everyone', 'add people', 'host controls', 'activities', 'info',
+    'turn on microphone', 'turn off camera', 'turn on camera', 'reconnecting',
+    'waiting', 'audio only', 'companion mode', 'whiteboard', 'jamboard',
+    'lock meeting', 'mute all', 'copy joining info', 'stop presenting',
+    'problem with microphone', 'camera is off', 'camera is on',
+    'microphone is off', 'microphone is on', 'microphone is muted',
+    'microphone unmuted', 'speaking', 'silent', 'contributor', 'someone is presenting',
+    'others will see your video', 'no one else is here', 'joining info',
+    'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection'
+  ];
+
+  for (const bad of BLACKLIST) {
+    if (lower === bad || lower.startsWith(bad + ' ') || lower.endsWith(' ' + bad)) {
+      return null;
+    }
+  }
+
+  if (lower.includes('for everyone') || lower.includes('click to') ||
+      lower.includes('microphone') || lower.includes('turn off') ||
+      lower.includes('turn on') || lower.includes('more options') ||
+      lower.includes('visual effects')) {
+    return null;
+  }
+
+  if (lower === 'host' || lower === 'you' || lower === 'host (you)') {
+    return isYou ? 'Host (You)' : 'Host';
+  }
+
+  // 11. Format to clean Title Case
+  const isAllUpper = (s === s.toUpperCase());
+  const isAllLower = (s === s.toLowerCase());
+  if (isAllUpper || isAllLower) {
+    s = s.split(' ').map(w => w ? (w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()) : '').join(' ').trim();
+  }
+
   return s;
 }
 
@@ -396,7 +483,7 @@ function generatePainThemeHtml(session) {
             <span class="cut-sub">DEDUCTED</span>
           </div>
         </td>
-        <td class="font-mono text-white text-center font-bold">${formatHms(p.totalInMeetMs || totMeet)}</td>
+        
         <td>
           <div class="comp-wrap">
             <span class="font-mono font-bold comp-num">${comp}%</span>
@@ -807,14 +894,13 @@ function generatePainThemeHtml(session) {
     }
 
     .col-th-rank { width: 5%; }
-    .col-th-name { width: 16%; }
+    .col-th-name { width: 21%; }
     .col-th-pres { width: 8%; }
     .col-th-cam { width: 7%; }
-    .col-th-valid { width: 12%; }
-    .col-th-cut { width: 10%; }
-    .col-th-meet { width: 9%; }
+    .col-th-valid { width: 14%; }
+    .col-th-cut { width: 11%; }
     .col-th-comp { width: 9%; }
-    .col-th-breakdown { width: 16%; }
+    .col-th-breakdown { width: 18%; }
     .col-th-tier { width: 8%; }
 
     table.dossier-table thead th {
@@ -1402,14 +1488,13 @@ function generatePainThemeHtml(session) {
             <th class="col-th-cam">Camera</th>
             <th class="col-th-valid" style="color: var(--accent-emerald);">Net Valid Study Time (Cam ON)</th>
             <th class="col-th-cut" style="color: var(--accent-crimson);">Cut Time (Cam OFF)</th>
-            <th class="col-th-meet">Total In Meet</th>
             <th class="col-th-comp">Compliance</th>
             <th class="col-th-breakdown">Camera OFF Breakdown (Exact Intervals Deducted)</th>
             <th class="col-th-tier">Focus Tier</th>
           </tr>
         </thead>
         <tbody>
-          ${rowsHtml || '<tr><td colspan="10" style="text-align: center; padding: 24px;">No participants recorded.</td></tr>'}
+          ${rowsHtml || '<tr><td colspan="9" style="text-align: center; padding: 24px;">No participants recorded.</td></tr>'}
         </tbody>
       </table>
     </div>

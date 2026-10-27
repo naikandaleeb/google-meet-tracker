@@ -1,22 +1,16 @@
 {
-  "sessionId": "session_1793094187199",
+  "sessionId": "session_1793141078059",
   "meetingCode": "jkf-vajh-ejo",
   "meetingTitle": "Cockroach Library 12-Hour Study Marathon",
   "startedAt": null,
   "stoppedAt": null,
-  "lastUpdated": 1793140598758,
-  "lastResetAt": 1793139435913,
-  "isTracking": true,
+  "lastUpdated": 1793141500768,
+  "lastResetAt": 1793141078073,
+  "isTracking": false,
   "isPaused": false,
-  "totalPausedMs": 37,
+  "totalPausedMs": 0,
   "currentPauseStart": null,
-  "pauseHistory": [
-    {
-      "pausedAt": 1793140477752,
-      "resumedAt": 1793140477789,
-      "durationMs": 37
-    }
-  ],
+  "pauseHistory": [],
   "targetDurationHours": 12,
   "participants": {
     "local_host": {
@@ -27,15 +21,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
       "leaveTime": null,
-      "lastSeen": 1793140598737,
+      "lastSeen": 1793141500734,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -43,40 +37,25 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 1427092,
-      "totalPresentMs": 834795,
+      "totalInMeetMs": 422709,
+      "totalPresentMs": 0,
       "cameraOnMs": 0,
-      "cameraOffMs": 834795,
+      "cameraOffMs": 0,
       "validStudyMs": 0,
-      "totalDuration": 834795,
+      "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 1427092,
+      "timeInCall": 422709,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
-      "consecutiveCamOffMs": 119998,
-      "cameraOffCurrentStart": 1793140479734,
-      "cameraOffIntervals": [
-        {
-          "start": 1793140479734,
-          "end": 1793140563933,
-          "durationMs": 84199,
-          "fromTime": "04:04 am",
-          "toTime": "04:06 am",
-          "durationFormatted": "00:01:24"
-        }
-      ],
-      "cameraIntervals": [
-        {
-          "start": 1793139637166,
-          "end": null,
-          "state": "off"
-        }
-      ],
+      "consecutiveCamOffMs": 0,
+      "cameraOffCurrentStart": null,
+      "cameraOffIntervals": [],
+      "cameraIntervals": [],
       "videoDetectionMode": "off",
       "rawCameraStatus": "off",
       "isHost": true,
@@ -87,19 +66,19 @@
       "id": "p_sahil_hussain",
       "name": "Sahil Hussain",
       "isLocal": false,
-      "currentStatus": "present",
+      "currentStatus": "left",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": null,
-      "lastSeen": 1793140598737,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141165590,
+      "lastSeen": 1793141165590,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -107,50 +86,25 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 1427092,
-      "totalPresentMs": 671974,
+      "totalInMeetMs": 87531,
+      "totalPresentMs": 0,
       "cameraOnMs": 0,
-      "cameraOffMs": 671974,
+      "cameraOffMs": 0,
       "validStudyMs": 0,
-      "totalDuration": 671974,
+      "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 1427092,
+      "timeInCall": 87531,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
-      "consecutiveCamOffMs": 119998,
-      "cameraOffCurrentStart": 1793140479734,
-      "cameraOffIntervals": [
-        {
-          "start": 1793140479734,
-          "end": 1793140563933,
-          "durationMs": 84199,
-          "fromTime": "04:04 am",
-          "toTime": "04:06 am",
-          "durationFormatted": "00:01:24"
-        }
-      ],
-      "cameraIntervals": [
-        {
-          "start": 1793139795735,
-          "end": 1793139797734,
-          "state": "off"
-        },
-        {
-          "start": 1793139797734,
-          "end": 1793139799987,
-          "state": "on"
-        },
-        {
-          "start": 1793139799987,
-          "end": null,
-          "state": "off"
-        }
-      ],
+      "consecutiveCamOffMs": 0,
+      "cameraOffCurrentStart": null,
+      "cameraOffIntervals": [],
+      "cameraIntervals": [],
       "videoDetectionMode": "off",
       "rawCameraStatus": "off",
       "isHost": false,
@@ -165,15 +119,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
       "leaveTime": null,
-      "lastSeen": 1793140598737,
+      "lastSeen": 1793141500734,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -181,60 +135,25 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 1427092,
-      "totalPresentMs": 835791,
+      "totalInMeetMs": 422709,
+      "totalPresentMs": 0,
       "cameraOnMs": 0,
-      "cameraOffMs": 835791,
+      "cameraOffMs": 0,
       "validStudyMs": 0,
-      "totalDuration": 835791,
+      "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 1427092,
+      "timeInCall": 422709,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
-      "consecutiveCamOffMs": 119998,
-      "cameraOffCurrentStart": 1793140479734,
-      "cameraOffIntervals": [
-        {
-          "start": 1793140479734,
-          "end": 1793140563933,
-          "durationMs": 84199,
-          "fromTime": "04:04 am",
-          "toTime": "04:06 am",
-          "durationFormatted": "00:01:24"
-        }
-      ],
-      "cameraIntervals": [
-        {
-          "start": 1793139432734,
-          "end": 1793139447170,
-          "state": "off"
-        },
-        {
-          "start": 1793139447170,
-          "end": 1793139454740,
-          "state": "on"
-        },
-        {
-          "start": 1793139454740,
-          "end": 1793139627170,
-          "state": "off"
-        },
-        {
-          "start": 1793139627170,
-          "end": 1793139636170,
-          "state": "on"
-        },
-        {
-          "start": 1793139636170,
-          "end": null,
-          "state": "off"
-        }
-      ],
+      "consecutiveCamOffMs": 0,
+      "cameraOffCurrentStart": null,
+      "cameraOffIntervals": [],
+      "cameraIntervals": [],
       "videoDetectionMode": "off",
       "rawCameraStatus": "off",
       "isHost": false,
@@ -249,15 +168,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442029,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -265,18 +184,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270363,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270363,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -298,15 +217,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442029,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -314,18 +233,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270363,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270363,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -347,15 +266,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442029,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -363,18 +282,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270363,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270363,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -390,21 +309,21 @@
     },
     "p_yadav_adesh_yadav": {
       "id": "p_yadav_adesh_yadav",
-      "name": "YADAV ADESH YADAV",
+      "name": "Yadav Adesh Yadav",
       "isLocal": false,
       "currentStatus": "present",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
       "leaveTime": null,
-      "lastSeen": 1793140598737,
+      "lastSeen": 1793141500734,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -412,326 +331,92 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 1427092,
-      "totalPresentMs": 194219,
+      "totalInMeetMs": 422709,
+      "totalPresentMs": 19769,
       "cameraOnMs": 0,
-      "cameraOffMs": 194219,
+      "cameraOffMs": 19769,
       "validStudyMs": 0,
-      "totalDuration": 194219,
+      "totalDuration": 19769,
       "duration": 0,
-      "timeInCall": 1427092,
+      "timeInCall": 422709,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
-      "consecutiveCamOffMs": 119998,
-      "cameraOffCurrentStart": 1793140479734,
-      "cameraOffIntervals": [
-        {
-          "start": 1793140479734,
-          "end": 1793140563933,
-          "durationMs": 84199,
-          "fromTime": "04:04 am",
-          "toTime": "04:06 am",
-          "durationFormatted": "00:01:24"
-        }
-      ],
+      "consecutiveCamOffMs": 0,
+      "cameraOffCurrentStart": null,
+      "cameraOffIntervals": [],
       "cameraIntervals": [
         {
-          "start": 1793139252170,
-          "end": 1793139254161,
-          "state": "off"
-        },
-        {
-          "start": 1793139254161,
-          "end": 1793139262166,
+          "start": 1793141078104,
+          "end": 1793141082734,
           "state": "on"
         },
         {
-          "start": 1793139262166,
-          "end": 1793139264169,
+          "start": 1793141082734,
+          "end": 1793141140736,
           "state": "off"
         },
         {
-          "start": 1793139264169,
-          "end": 1793139278170,
+          "start": 1793141140736,
+          "end": 1793141146733,
           "state": "on"
         },
         {
-          "start": 1793139278170,
-          "end": 1793139280216,
+          "start": 1793141146733,
+          "end": 1793141292738,
           "state": "off"
         },
         {
-          "start": 1793139280216,
-          "end": 1793139318170,
+          "start": 1793141292738,
+          "end": 1793141296735,
           "state": "on"
         },
         {
-          "start": 1793139318170,
-          "end": 1793139326162,
+          "start": 1793141296735,
+          "end": 1793141306736,
           "state": "off"
         },
         {
-          "start": 1793139326162,
-          "end": 1793139653737,
+          "start": 1793141306736,
+          "end": 1793141310735,
           "state": "on"
         },
         {
-          "start": 1793139653737,
-          "end": 1793139657735,
+          "start": 1793141310735,
+          "end": 1793141322735,
           "state": "off"
         },
         {
-          "start": 1793139657735,
-          "end": 1793139661735,
+          "start": 1793141322735,
+          "end": 1793141328734,
           "state": "on"
         },
         {
-          "start": 1793139661735,
-          "end": 1793139663737,
+          "start": 1793141328734,
+          "end": 1793141392735,
           "state": "off"
         },
         {
-          "start": 1793139663737,
-          "end": 1793139675745,
+          "start": 1793141392735,
+          "end": 1793141396734,
           "state": "on"
         },
         {
-          "start": 1793139675745,
-          "end": 1793139681735,
+          "start": 1793141396734,
+          "end": 1793141414736,
           "state": "off"
         },
         {
-          "start": 1793139681735,
-          "end": 1793139695737,
+          "start": 1793141414736,
+          "end": 1793141418737,
           "state": "on"
         },
         {
-          "start": 1793139695737,
-          "end": 1793139697737,
-          "state": "off"
-        },
-        {
-          "start": 1793139697737,
-          "end": 1793139703737,
-          "state": "on"
-        },
-        {
-          "start": 1793139703737,
-          "end": 1793139715737,
-          "state": "off"
-        },
-        {
-          "start": 1793139715737,
-          "end": 1793139719736,
-          "state": "on"
-        },
-        {
-          "start": 1793139719736,
-          "end": 1793139721739,
-          "state": "off"
-        },
-        {
-          "start": 1793139721739,
-          "end": 1793139733734,
-          "state": "on"
-        },
-        {
-          "start": 1793139733734,
-          "end": 1793139737740,
-          "state": "off"
-        },
-        {
-          "start": 1793139737740,
-          "end": 1793139743736,
-          "state": "on"
-        },
-        {
-          "start": 1793139743736,
-          "end": 1793139747738,
-          "state": "off"
-        },
-        {
-          "start": 1793139747738,
-          "end": 1793139753739,
-          "state": "on"
-        },
-        {
-          "start": 1793139753739,
-          "end": 1793139755737,
-          "state": "off"
-        },
-        {
-          "start": 1793139755737,
-          "end": 1793139769735,
-          "state": "on"
-        },
-        {
-          "start": 1793139769735,
-          "end": 1793139783739,
-          "state": "off"
-        },
-        {
-          "start": 1793139783739,
-          "end": 1793139791739,
-          "state": "on"
-        },
-        {
-          "start": 1793139791739,
-          "end": 1793139799737,
-          "state": "off"
-        },
-        {
-          "start": 1793139799737,
-          "end": 1793139803734,
-          "state": "on"
-        },
-        {
-          "start": 1793139803734,
-          "end": 1793139811734,
-          "state": "off"
-        },
-        {
-          "start": 1793139811734,
-          "end": 1793139815738,
-          "state": "on"
-        },
-        {
-          "start": 1793139815738,
-          "end": 1793139823738,
-          "state": "off"
-        },
-        {
-          "start": 1793139823738,
-          "end": 1793139835743,
-          "state": "on"
-        },
-        {
-          "start": 1793139835743,
-          "end": 1793139845738,
-          "state": "off"
-        },
-        {
-          "start": 1793139845738,
-          "end": 1793139855738,
-          "state": "on"
-        },
-        {
-          "start": 1793139855738,
-          "end": 1793139857737,
-          "state": "off"
-        },
-        {
-          "start": 1793139857737,
-          "end": 1793139871739,
-          "state": "on"
-        },
-        {
-          "start": 1793139871739,
-          "end": 1793139885739,
-          "state": "off"
-        },
-        {
-          "start": 1793139885739,
-          "end": 1793139899735,
-          "state": "on"
-        },
-        {
-          "start": 1793139899735,
-          "end": 1793139901740,
-          "state": "off"
-        },
-        {
-          "start": 1793139901740,
-          "end": 1793139919752,
-          "state": "on"
-        },
-        {
-          "start": 1793139919752,
-          "end": 1793139925744,
-          "state": "off"
-        },
-        {
-          "start": 1793139925744,
-          "end": 1793139941738,
-          "state": "on"
-        },
-        {
-          "start": 1793139941738,
-          "end": 1793139943734,
-          "state": "off"
-        },
-        {
-          "start": 1793139943734,
-          "end": 1793139971740,
-          "state": "on"
-        },
-        {
-          "start": 1793139971740,
-          "end": 1793139975738,
-          "state": "off"
-        },
-        {
-          "start": 1793139975738,
-          "end": 1793139979737,
-          "state": "on"
-        },
-        {
-          "start": 1793139979737,
-          "end": 1793139981738,
-          "state": "off"
-        },
-        {
-          "start": 1793139981738,
-          "end": 1793139987737,
-          "state": "on"
-        },
-        {
-          "start": 1793139987737,
-          "end": 1793140083737,
-          "state": "off"
-        },
-        {
-          "start": 1793140083737,
-          "end": 1793140113736,
-          "state": "on"
-        },
-        {
-          "start": 1793140113736,
-          "end": 1793140131743,
-          "state": "off"
-        },
-        {
-          "start": 1793140131743,
-          "end": 1793140135736,
-          "state": "on"
-        },
-        {
-          "start": 1793140135736,
-          "end": 1793140137737,
-          "state": "off"
-        },
-        {
-          "start": 1793140137737,
-          "end": 1793140141735,
-          "state": "on"
-        },
-        {
-          "start": 1793140141735,
-          "end": 1793140271742,
-          "state": "off"
-        },
-        {
-          "start": 1793140271742,
-          "end": 1793140277742,
-          "state": "on"
-        },
-        {
-          "start": 1793140277742,
+          "start": 1793141418737,
           "end": null,
           "state": "off"
         }
@@ -750,15 +435,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
       "leaveTime": null,
-      "lastSeen": 1793140598737,
+      "lastSeen": 1793141500734,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -766,34 +451,111 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 1427092,
-      "totalPresentMs": 119998,
+      "totalInMeetMs": 422709,
+      "totalPresentMs": 131764,
       "cameraOnMs": 0,
-      "cameraOffMs": 119998,
+      "cameraOffMs": 131764,
       "validStudyMs": 0,
-      "totalDuration": 119998,
+      "totalDuration": 131764,
       "duration": 0,
-      "timeInCall": 1427092,
+      "timeInCall": 422709,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
-      "consecutiveCamOffMs": 119998,
-      "cameraOffCurrentStart": 1793140479734,
-      "cameraOffIntervals": [
+      "consecutiveCamOffMs": 0,
+      "cameraOffCurrentStart": null,
+      "cameraOffIntervals": [],
+      "cameraIntervals": [
         {
-          "start": 1793140479734,
-          "end": 1793140563933,
-          "durationMs": 84199,
-          "fromTime": "04:04 am",
-          "toTime": "04:06 am",
-          "durationFormatted": "00:01:24"
+          "start": 1793141078104,
+          "end": 1793141084735,
+          "state": "off"
+        },
+        {
+          "start": 1793141084735,
+          "end": 1793141088740,
+          "state": "on"
+        },
+        {
+          "start": 1793141088740,
+          "end": 1793141090738,
+          "state": "off"
+        },
+        {
+          "start": 1793141090738,
+          "end": 1793141098736,
+          "state": "on"
+        },
+        {
+          "start": 1793141098736,
+          "end": 1793141100735,
+          "state": "off"
+        },
+        {
+          "start": 1793141100735,
+          "end": 1793141104739,
+          "state": "on"
+        },
+        {
+          "start": 1793141104739,
+          "end": 1793141106735,
+          "state": "off"
+        },
+        {
+          "start": 1793141106735,
+          "end": 1793141116735,
+          "state": "on"
+        },
+        {
+          "start": 1793141116735,
+          "end": 1793141118734,
+          "state": "off"
+        },
+        {
+          "start": 1793141118734,
+          "end": 1793141122736,
+          "state": "on"
+        },
+        {
+          "start": 1793141122736,
+          "end": 1793141124735,
+          "state": "off"
+        },
+        {
+          "start": 1793141124735,
+          "end": 1793141130736,
+          "state": "on"
+        },
+        {
+          "start": 1793141130736,
+          "end": 1793141134738,
+          "state": "off"
+        },
+        {
+          "start": 1793141134738,
+          "end": 1793141207162,
+          "state": "on"
+        },
+        {
+          "start": 1793141207162,
+          "end": 1793141211170,
+          "state": "off"
+        },
+        {
+          "start": 1793141211170,
+          "end": 1793141284739,
+          "state": "on"
+        },
+        {
+          "start": 1793141284739,
+          "end": null,
+          "state": "off"
         }
       ],
-      "cameraIntervals": [],
       "videoDetectionMode": "off",
       "rawCameraStatus": "off",
       "isHost": false,
@@ -808,15 +570,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442029,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -824,18 +586,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270363,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270363,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -851,21 +613,21 @@
     },
     "p_anurag_yadav": {
       "id": "p_anurag_yadav",
-      "name": "ANURAG YADAV",
+      "name": "Anurag Yadav",
       "isLocal": false,
       "currentStatus": "left",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442029,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -873,18 +635,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270363,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270363,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -906,15 +668,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442029,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -922,18 +684,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270363,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270363,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -955,15 +717,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -971,18 +733,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270364,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270364,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -1004,15 +766,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
       "leaveTime": null,
-      "lastSeen": 1793140598737,
+      "lastSeen": 1793141500734,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1020,160 +782,25 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 1427092,
-      "totalPresentMs": 754224,
+      "totalInMeetMs": 422709,
+      "totalPresentMs": 0,
       "cameraOnMs": 0,
-      "cameraOffMs": 754224,
+      "cameraOffMs": 0,
       "validStudyMs": 0,
-      "totalDuration": 754224,
+      "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 1427092,
+      "timeInCall": 422709,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
-      "consecutiveCamOffMs": 119998,
-      "cameraOffCurrentStart": 1793140479734,
-      "cameraOffIntervals": [
-        {
-          "start": 1793140479734,
-          "end": 1793140563933,
-          "durationMs": 84199,
-          "fromTime": "04:04 am",
-          "toTime": "04:06 am",
-          "durationFormatted": "00:01:24"
-        }
-      ],
-      "cameraIntervals": [
-        {
-          "start": 1793139412165,
-          "end": 1793139414174,
-          "state": "off"
-        },
-        {
-          "start": 1793139414174,
-          "end": 1793139454740,
-          "state": "on"
-        },
-        {
-          "start": 1793139454740,
-          "end": 1793139460740,
-          "state": "off"
-        },
-        {
-          "start": 1793139460740,
-          "end": 1793139472747,
-          "state": "on"
-        },
-        {
-          "start": 1793139472747,
-          "end": 1793139474744,
-          "state": "off"
-        },
-        {
-          "start": 1793139474744,
-          "end": 1793139518734,
-          "state": "on"
-        },
-        {
-          "start": 1793139518734,
-          "end": 1793139522738,
-          "state": "off"
-        },
-        {
-          "start": 1793139522738,
-          "end": 1793139528734,
-          "state": "on"
-        },
-        {
-          "start": 1793139528734,
-          "end": 1793139538743,
-          "state": "off"
-        },
-        {
-          "start": 1793139538743,
-          "end": 1793139560739,
-          "state": "on"
-        },
-        {
-          "start": 1793139560739,
-          "end": 1793139566737,
-          "state": "off"
-        },
-        {
-          "start": 1793139566737,
-          "end": 1793139572735,
-          "state": "on"
-        },
-        {
-          "start": 1793139572735,
-          "end": 1793139592738,
-          "state": "off"
-        },
-        {
-          "start": 1793139592738,
-          "end": 1793139598737,
-          "state": "on"
-        },
-        {
-          "start": 1793139598737,
-          "end": 1793139606737,
-          "state": "off"
-        },
-        {
-          "start": 1793139606737,
-          "end": 1793139612735,
-          "state": "on"
-        },
-        {
-          "start": 1793139612735,
-          "end": 1793139627170,
-          "state": "off"
-        },
-        {
-          "start": 1793139627170,
-          "end": 1793139631165,
-          "state": "on"
-        },
-        {
-          "start": 1793139631165,
-          "end": 1793139633169,
-          "state": "off"
-        },
-        {
-          "start": 1793139633169,
-          "end": 1793139667737,
-          "state": "on"
-        },
-        {
-          "start": 1793139667737,
-          "end": 1793139669737,
-          "state": "off"
-        },
-        {
-          "start": 1793139669737,
-          "end": 1793139683736,
-          "state": "on"
-        },
-        {
-          "start": 1793139683736,
-          "end": 1793139687738,
-          "state": "off"
-        },
-        {
-          "start": 1793139687738,
-          "end": 1793139717737,
-          "state": "on"
-        },
-        {
-          "start": 1793139717737,
-          "end": null,
-          "state": "off"
-        }
-      ],
+      "consecutiveCamOffMs": 0,
+      "cameraOffCurrentStart": null,
+      "cameraOffIntervals": [],
+      "cameraIntervals": [],
       "videoDetectionMode": "off",
       "rawCameraStatus": "off",
       "isHost": false,
@@ -1182,42 +809,40 @@
     },
     "p_admin": {
       "id": "p_admin",
-      "name": "ADMIN",
+      "name": "Admin",
       "isLocal": false,
       "currentStatus": "left",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
-          "leaveTime": 1793139171666,
-          "durationMs": 0,
-          "durationFormatted": "00:00:00",
-          "leaveFormatted": "03:42 am"
+          "joinTime": 1793141078059,
+          "leaveTime": null,
+          "durationMs": 0
         }
       ],
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 0,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 0,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -1233,21 +858,21 @@
     },
     "p_aditya_raj_singh": {
       "id": "p_aditya_raj_singh",
-      "name": "ADITYA RAJ SINGH",
+      "name": "Aditya Raj Singh",
       "isLocal": false,
       "currentStatus": "left",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1255,18 +880,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270364,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270364,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -1288,15 +913,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1304,18 +929,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270364,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270364,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -1337,15 +962,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1353,18 +978,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270364,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270364,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -1380,21 +1005,21 @@
     },
     "p_message": {
       "id": "p_message",
-      "name": "message",
+      "name": "Message",
       "isLocal": false,
       "currentStatus": "left",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1402,18 +1027,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270364,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270364,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -1429,21 +1054,21 @@
     },
     "p_anuk_suryavamshi": {
       "id": "p_anuk_suryavamshi",
-      "name": "anuk suryavamshi",
+      "name": "Anuk Suryavamshi",
       "isLocal": false,
       "currentStatus": "left",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1451,18 +1076,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270364,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270364,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -1481,18 +1106,18 @@
       "name": "Prachi Tiwari",
       "isLocal": false,
       "currentStatus": "present",
-      "cameraStatus": "off",
+      "cameraStatus": "on",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
       "leaveTime": null,
-      "lastSeen": 1793140598737,
+      "lastSeen": 1793141500734,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1500,82 +1125,27 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 1427092,
-      "totalPresentMs": 951220,
+      "totalInMeetMs": 422709,
+      "totalPresentMs": 0,
       "cameraOnMs": 0,
-      "cameraOffMs": 951220,
+      "cameraOffMs": 0,
       "validStudyMs": 0,
-      "totalDuration": 951220,
+      "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 1427092,
+      "timeInCall": 422709,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
-      "consecutiveCamOffMs": 119998,
-      "cameraOffCurrentStart": 1793140479734,
-      "cameraOffIntervals": [
-        {
-          "start": 1793140479734,
-          "end": 1793140563933,
-          "durationMs": 84199,
-          "fromTime": "04:04 am",
-          "toTime": "04:06 am",
-          "durationFormatted": "00:01:24"
-        }
-      ],
-      "cameraIntervals": [
-        {
-          "start": 1793139224161,
-          "end": 1793139236162,
-          "state": "off"
-        },
-        {
-          "start": 1793139236162,
-          "end": 1793139282238,
-          "state": "on"
-        },
-        {
-          "start": 1793139282238,
-          "end": 1793139284163,
-          "state": "off"
-        },
-        {
-          "start": 1793139284163,
-          "end": 1793139290162,
-          "state": "on"
-        },
-        {
-          "start": 1793139290162,
-          "end": 1793139292170,
-          "state": "off"
-        },
-        {
-          "start": 1793139292170,
-          "end": 1793139338162,
-          "state": "on"
-        },
-        {
-          "start": 1793139338162,
-          "end": 1793139352166,
-          "state": "off"
-        },
-        {
-          "start": 1793139352166,
-          "end": 1793139520741,
-          "state": "on"
-        },
-        {
-          "start": 1793139520741,
-          "end": null,
-          "state": "off"
-        }
-      ],
+      "consecutiveCamOffMs": 0,
+      "cameraOffCurrentStart": null,
+      "cameraOffIntervals": [],
+      "cameraIntervals": [],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "off",
+      "rawCameraStatus": "on",
       "isHost": false,
       "isExempt": false,
       "manualCamOverride": false
@@ -1588,15 +1158,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1604,18 +1174,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270364,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270364,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -1637,15 +1207,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1653,18 +1223,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270364,
+      "totalInMeetMs": 236,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270364,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -1682,19 +1252,19 @@
       "id": "p____",
       "name": "मगध",
       "isLocal": false,
-      "currentStatus": "present",
+      "currentStatus": "left",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": null,
-      "lastSeen": 1793140598737,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078295,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1702,40 +1272,25 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 1427092,
-      "totalPresentMs": 252223,
+      "totalInMeetMs": 236,
+      "totalPresentMs": 0,
       "cameraOnMs": 0,
-      "cameraOffMs": 252223,
+      "cameraOffMs": 0,
       "validStudyMs": 0,
-      "totalDuration": 252223,
+      "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 1427092,
+      "timeInCall": 236,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
-      "consecutiveCamOffMs": 119998,
-      "cameraOffCurrentStart": 1793140479734,
-      "cameraOffIntervals": [
-        {
-          "start": 1793140479734,
-          "end": 1793140563933,
-          "durationMs": 84199,
-          "fromTime": "04:04 am",
-          "toTime": "04:06 am",
-          "durationFormatted": "00:01:24"
-        }
-      ],
-      "cameraIntervals": [
-        {
-          "start": 1793140219738,
-          "end": null,
-          "state": "off"
-        }
-      ],
+      "consecutiveCamOffMs": 0,
+      "cameraOffCurrentStart": null,
+      "cameraOffIntervals": [],
+      "cameraIntervals": [],
       "videoDetectionMode": "off",
       "rawCameraStatus": "off",
       "isHost": false,
@@ -1750,15 +1305,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1766,18 +1321,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270364,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270364,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -1799,15 +1354,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1815,18 +1370,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270364,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270364,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -1842,21 +1397,21 @@
     },
     "p_nitish_singh_rajput": {
       "id": "p_nitish_singh_rajput",
-      "name": "NITISH SINGH RAJPUT",
+      "name": "Nitish Singh Rajput",
       "isLocal": false,
       "currentStatus": "left",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1864,18 +1419,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270364,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270364,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -1897,15 +1452,15 @@
       "cameraStatus": "on",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
       "leaveTime": null,
-      "lastSeen": 1793140598737,
+      "lastSeen": 1793141500734,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -1913,172 +1468,32 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 1427092,
-      "totalPresentMs": 119998,
-      "cameraOnMs": 119998,
+      "totalInMeetMs": 422709,
+      "totalPresentMs": 321768,
+      "cameraOnMs": 321768,
       "cameraOffMs": 0,
-      "validStudyMs": 119998,
-      "totalDuration": 119998,
-      "duration": 119998,
-      "timeInCall": 1427092,
-      "durationSeconds": 119,
-      "durationMinutes": 1,
-      "studyDuration": 119998,
+      "validStudyMs": 321768,
+      "totalDuration": 321768,
+      "duration": 321768,
+      "timeInCall": 422709,
+      "durationSeconds": 321,
+      "durationMinutes": 5,
+      "studyDuration": 321768,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [],
       "cameraIntervals": [
         {
-          "start": 1793139639169,
-          "end": 1793139655737,
+          "start": 1793141090738,
+          "end": 1793141094735,
           "state": "off"
         },
         {
-          "start": 1793139655737,
-          "end": 1793139665736,
-          "state": "on"
-        },
-        {
-          "start": 1793139665736,
-          "end": 1793139673734,
-          "state": "off"
-        },
-        {
-          "start": 1793139673734,
-          "end": 1793139709736,
-          "state": "on"
-        },
-        {
-          "start": 1793139709736,
-          "end": 1793139715737,
-          "state": "off"
-        },
-        {
-          "start": 1793139715737,
-          "end": 1793139721739,
-          "state": "on"
-        },
-        {
-          "start": 1793139721739,
-          "end": 1793139741735,
-          "state": "off"
-        },
-        {
-          "start": 1793139741735,
-          "end": 1793139747738,
-          "state": "on"
-        },
-        {
-          "start": 1793139747738,
-          "end": 1793139763738,
-          "state": "off"
-        },
-        {
-          "start": 1793139763738,
-          "end": 1793139769735,
-          "state": "on"
-        },
-        {
-          "start": 1793139769735,
-          "end": 1793139775738,
-          "state": "off"
-        },
-        {
-          "start": 1793139775738,
-          "end": 1793139885739,
-          "state": "on"
-        },
-        {
-          "start": 1793139885739,
-          "end": 1793139889736,
-          "state": "off"
-        },
-        {
-          "start": 1793139889736,
-          "end": 1793139929737,
-          "state": "on"
-        },
-        {
-          "start": 1793139929737,
-          "end": 1793139933735,
-          "state": "off"
-        },
-        {
-          "start": 1793139933735,
-          "end": 1793139953735,
-          "state": "on"
-        },
-        {
-          "start": 1793139953735,
-          "end": 1793139955738,
-          "state": "off"
-        },
-        {
-          "start": 1793139955738,
-          "end": 1793139977735,
-          "state": "on"
-        },
-        {
-          "start": 1793139977735,
-          "end": 1793139979737,
-          "state": "off"
-        },
-        {
-          "start": 1793139979737,
-          "end": 1793140059742,
-          "state": "on"
-        },
-        {
-          "start": 1793140059742,
-          "end": 1793140063738,
-          "state": "off"
-        },
-        {
-          "start": 1793140063738,
-          "end": 1793140091734,
-          "state": "on"
-        },
-        {
-          "start": 1793140091734,
-          "end": 1793140111745,
-          "state": "off"
-        },
-        {
-          "start": 1793140111745,
-          "end": 1793140333738,
-          "state": "on"
-        },
-        {
-          "start": 1793140333738,
-          "end": 1793140335737,
-          "state": "off"
-        },
-        {
-          "start": 1793140335737,
-          "end": 1793140339737,
-          "state": "on"
-        },
-        {
-          "start": 1793140339737,
-          "end": 1793140341735,
-          "state": "off"
-        },
-        {
-          "start": 1793140341735,
-          "end": 1793140367738,
-          "state": "on"
-        },
-        {
-          "start": 1793140367738,
-          "end": 1793140375735,
-          "state": "off"
-        },
-        {
-          "start": 1793140375735,
+          "start": 1793141094735,
           "end": null,
           "state": "on"
         }
@@ -2097,15 +1512,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442030,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2113,18 +1528,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270364,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270364,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2146,15 +1561,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2162,18 +1577,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2195,15 +1610,15 @@
       "cameraStatus": "on",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
       "leaveTime": null,
-      "lastSeen": 1793140598737,
+      "lastSeen": 1793141500734,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2211,21 +1626,21 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 1427092,
-      "totalPresentMs": 119998,
-      "cameraOnMs": 119998,
+      "totalInMeetMs": 422710,
+      "totalPresentMs": 0,
+      "cameraOnMs": 0,
       "cameraOffMs": 0,
-      "validStudyMs": 119998,
-      "totalDuration": 119998,
-      "duration": 119998,
-      "timeInCall": 1427092,
-      "durationSeconds": 119,
-      "durationMinutes": 1,
-      "studyDuration": 119998,
+      "validStudyMs": 0,
+      "totalDuration": 0,
+      "duration": 0,
+      "timeInCall": 422710,
+      "durationSeconds": 0,
+      "durationMinutes": 0,
+      "studyDuration": 0,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [],
@@ -2244,15 +1659,20 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
-      "rejoinCount": 0,
-      "rejoinedAt": null,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141198162,
+      "lastSeen": 1793141198162,
+      "rejoinCount": 1,
+      "rejoinedAt": 1793141166193,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
+          "leaveTime": null,
+          "durationMs": 0
+        },
+        {
+          "joinTime": 1793141166193,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2260,18 +1680,25 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
+        },
+        {
+          "event": "rejoined",
+          "time": 1793141166193,
+          "formatted": "04:16 am",
+          "awayMs": 0,
+          "awayFormatted": "00:00:00"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 152072,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 152072,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2293,15 +1720,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2309,18 +1736,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2342,15 +1769,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2358,18 +1785,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2391,15 +1818,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2407,18 +1834,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2440,15 +1867,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2456,18 +1883,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2486,23 +1913,18 @@
       "name": "Aradhya G",
       "isLocal": false,
       "currentStatus": "present",
-      "cameraStatus": "off",
+      "cameraStatus": "on",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
       "leaveTime": null,
-      "lastSeen": 1793140598737,
-      "rejoinCount": 1,
-      "rejoinedAt": 1793139626174,
+      "lastSeen": 1793141500734,
+      "rejoinCount": 0,
+      "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
-          "leaveTime": null,
-          "durationMs": 0
-        },
-        {
-          "joinTime": 1793139626174,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2510,43 +1932,27 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
-        },
-        {
-          "event": "rejoined",
-          "time": 1793139626174,
-          "formatted": "03:50 am",
-          "awayMs": 0,
-          "awayFormatted": "00:00:00"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 2399678,
-      "totalPresentMs": 119998,
+      "totalInMeetMs": 422710,
+      "totalPresentMs": 0,
       "cameraOnMs": 0,
-      "cameraOffMs": 119998,
+      "cameraOffMs": 0,
       "validStudyMs": 0,
-      "totalDuration": 119998,
+      "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 2399678,
+      "timeInCall": 422710,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
-      "consecutiveCamOffMs": 119998,
-      "cameraOffCurrentStart": 1793140479734,
-      "cameraOffIntervals": [
-        {
-          "start": 1793140479734,
-          "end": 1793140563933,
-          "durationMs": 84199,
-          "fromTime": "04:04 am",
-          "toTime": "04:06 am",
-          "durationFormatted": "00:01:24"
-        }
-      ],
+      "consecutiveCamOffMs": 0,
+      "cameraOffCurrentStart": null,
+      "cameraOffIntervals": [],
       "cameraIntervals": [],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "off",
+      "rawCameraStatus": "on",
       "isHost": false,
       "isExempt": false,
       "manualCamOverride": false
@@ -2559,15 +1965,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2575,18 +1981,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2608,15 +2014,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2624,18 +2030,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2657,15 +2063,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2673,18 +2079,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2706,15 +2112,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2722,18 +2128,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2755,15 +2161,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2771,18 +2177,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2804,15 +2210,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2820,18 +2226,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2853,15 +2259,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2869,18 +2275,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2902,15 +2308,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -2918,18 +2324,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -2951,48 +2357,34 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139388166,
-      "lastSeen": 1793139442031,
-      "rejoinCount": 1,
-      "rejoinedAt": 1793139380206,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
+      "rejoinCount": 0,
+      "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
-        },
-        {
-          "joinTime": 1793139380206,
-          "leaveTime": 1793139388166,
-          "durationMs": 7960,
-          "durationFormatted": "00:00:07",
-          "leaveFormatted": "03:46 am"
         }
       ],
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
-        },
-        {
-          "event": "rejoined",
-          "time": 1793139380206,
-          "formatted": "03:46 am",
-          "awayMs": 0,
-          "awayFormatted": "00:00:00"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 278325,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 278325,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3014,15 +2406,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3030,18 +2422,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3063,15 +2455,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3079,18 +2471,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3112,15 +2504,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3128,18 +2520,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3161,15 +2553,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3177,18 +2569,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3210,15 +2602,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141165590,
+      "lastSeen": 1793141165590,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3226,18 +2618,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 87531,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 87531,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3259,15 +2651,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3275,18 +2667,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3308,15 +2700,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3324,18 +2716,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3357,15 +2749,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3373,18 +2765,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3406,15 +2798,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3422,18 +2814,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3455,15 +2847,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3471,18 +2863,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3504,15 +2896,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3520,18 +2912,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3553,15 +2945,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3569,18 +2961,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3602,15 +2994,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078296,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3618,18 +3010,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 237,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 237,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3651,15 +3043,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3667,18 +3059,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3700,15 +3092,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3716,18 +3108,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3749,15 +3141,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442031,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3765,18 +3157,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270365,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270365,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3798,15 +3190,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3814,18 +3206,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3843,19 +3235,19 @@
       "id": "p_aaria_k",
       "name": "Aaria K",
       "isLocal": false,
-      "currentStatus": "present",
+      "currentStatus": "left",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": null,
-      "lastSeen": 1793140598737,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3863,50 +3255,25 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 1427093,
-      "totalPresentMs": 860225,
+      "totalInMeetMs": 238,
+      "totalPresentMs": 0,
       "cameraOnMs": 0,
-      "cameraOffMs": 860225,
+      "cameraOffMs": 0,
       "validStudyMs": 0,
-      "totalDuration": 860225,
+      "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 1427093,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
-      "consecutiveCamOffMs": 119998,
-      "cameraOffCurrentStart": 1793140479734,
-      "cameraOffIntervals": [
-        {
-          "start": 1793140479734,
-          "end": 1793140563933,
-          "durationMs": 84199,
-          "fromTime": "04:04 am",
-          "toTime": "04:06 am",
-          "durationFormatted": "00:01:24"
-        }
-      ],
-      "cameraIntervals": [
-        {
-          "start": 1793139278170,
-          "end": 1793139283166,
-          "state": "off"
-        },
-        {
-          "start": 1793139283166,
-          "end": 1793139611736,
-          "state": "on"
-        },
-        {
-          "start": 1793139611736,
-          "end": null,
-          "state": "off"
-        }
-      ],
+      "consecutiveCamOffMs": 0,
+      "cameraOffCurrentStart": null,
+      "cameraOffIntervals": [],
+      "cameraIntervals": [],
       "videoDetectionMode": "off",
       "rawCameraStatus": "off",
       "isHost": false,
@@ -3921,15 +3288,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3937,18 +3304,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -3970,15 +3337,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -3986,18 +3353,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4019,15 +3386,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -4035,18 +3402,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4068,15 +3435,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -4084,18 +3451,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4117,15 +3484,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -4133,18 +3500,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4166,15 +3533,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -4182,18 +3549,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4215,15 +3582,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -4231,18 +3598,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4264,15 +3631,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -4280,18 +3647,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4313,15 +3680,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -4329,18 +3696,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4362,48 +3729,34 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139286166,
-      "lastSeen": 1793139442032,
-      "rejoinCount": 1,
-      "rejoinedAt": 1793139276257,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
+      "rejoinCount": 0,
+      "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
-        },
-        {
-          "joinTime": 1793139276257,
-          "leaveTime": 1793139286166,
-          "durationMs": 9909,
-          "durationFormatted": "00:00:09",
-          "leaveFormatted": "03:44 am"
         }
       ],
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
-        },
-        {
-          "event": "rejoined",
-          "time": 1793139276257,
-          "formatted": "03:44 am",
-          "awayMs": 0,
-          "awayFormatted": "00:00:00"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 280275,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 280275,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4425,15 +3778,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -4441,18 +3794,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4474,15 +3827,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -4490,18 +3843,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4517,21 +3870,21 @@
     },
     "p_ankush": {
       "id": "p_ankush",
-      "name": "ANKUSH",
+      "name": "Ankush",
       "isLocal": false,
       "currentStatus": "left",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -4539,18 +3892,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4572,15 +3925,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -4588,18 +3941,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4621,15 +3974,15 @@
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
-      "firstSeen": 1793139171666,
-      "joinTime": 1793139171666,
-      "leaveTime": 1793139171666,
-      "lastSeen": 1793139442032,
+      "firstSeen": 1793141078059,
+      "joinTime": 1793141078059,
+      "leaveTime": 1793141078059,
+      "lastSeen": 1793141078297,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
         {
-          "joinTime": 1793139171666,
+          "joinTime": 1793141078059,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -4637,18 +3990,18 @@
       "joinLeaveHistory": [
         {
           "event": "joined",
-          "time": 1793139171666,
-          "formatted": "03:42 am"
+          "time": 1793141078059,
+          "formatted": "04:14 am"
         }
       ],
-      "totalInMeetMs": 270366,
+      "totalInMeetMs": 238,
       "totalPresentMs": 0,
       "cameraOnMs": 0,
       "cameraOffMs": 0,
       "validStudyMs": 0,
       "totalDuration": 0,
       "duration": 0,
-      "timeInCall": 270366,
+      "timeInCall": 238,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -4661,41 +4014,6 @@
       "isHost": false,
       "isExempt": false,
       "manualCamOverride": false
-    },
-    "p_rahul_test": {
-      "id": "p_rahul_test",
-      "name": "Rahul Test",
-      "currentStatus": "present",
-      "cameraStatus": "on",
-      "cameraOnMs": 10000,
-      "cameraOffMs": 5000,
-      "isLocal": false,
-      "presenceIntervals": [],
-      "rawCameraStatus": "on",
-      "manualCamOverride": false,
-      "leaveTime": null,
-      "videoDetectionMode": "off",
-      "lastSeen": 1793140477728,
-      "totalPresentMs": 15000,
-      "validStudyMs": 10000,
-      "totalInMeetMs": 113445,
-      "timeInCall": 113445,
-      "totalDuration": 15000,
-      "duration": 10000,
-      "studyDuration": 10000,
-      "durationSeconds": 10,
-      "durationMinutes": 0,
-      "firstSeen": 1793140477728,
-      "joinTime": 1793140477728,
-      "rejoinCount": 0,
-      "rejoinedAt": null,
-      "joinLeaveHistory": [],
-      "cameraOffIntervals": [],
-      "cameraIntervals": [],
-      "cameraOffCurrentStart": null,
-      "consecutiveCamOffMs": 0,
-      "isHost": false,
-      "isExempt": false
     }
   },
   "notes": ""

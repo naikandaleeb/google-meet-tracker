@@ -72,39 +72,87 @@
 
   function sanitizeStudentName(raw, isLocal = false) {
     if (!raw || typeof raw !== 'string') return isLocal ? 'Host (You)' : null;
-    let clean = raw.trim();
+    let s = String(raw).replace(/[\r\n\t]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
+    if (!s) return isLocal ? 'Host (You)' : null;
 
-    clean = clean.replace(/keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz/gi, '').trim();
+    // 1. Strip Google Meet Material Icon ligatures
+    s = s.replace(/\b(?:keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz|videocam_off|screen_share|closed_caption|hand_raise|call_end)\b/gi, '').trim();
 
-    // Strip video prefix/suffix descriptions commonly present on Meet tile labels
-    clean = clean.replace(/(?:'s\s+video|'s\s+feed|video\s+of\s+|video\s+feed\s+of\s+)/gi, '').trim();
+    // 2. Extract clean name from Pin/Unpin action strings (English & Hindi)
+    const pinMatchEn = s.match(/(?:Pin|Unpin)\s+(.+?)\s+(?:to|from)\s+(?:your\s+)?(?:main\s+)?screen/i);
+    if (pinMatchEn) s = pinMatchEn[1].trim();
+    const pinMatchHi = s.match(/(.+?)\s+को\s+(?:अपनी\s+)?(?:मुख्य\s+)?स्क्रीन\s+पर\s+(?:पिन|अनपिन)\s+करें/i);
+    if (pinMatchHi) s = pinMatchHi[1].trim();
+    s = s.replace(/^(?:Pin|Unpin)\s+/i, '').trim();
 
-    const pinMatch = clean.match(/(?:Pin|Unpin)\s+(.+?)\s+(?:to|from)\s+(?:your\s+)?(?:main\s+)?screen/i);
-    if (pinMatch) {
-      clean = pinMatch[1].trim();
-    } else {
-      const simplePin = clean.match(/^(?:Pin|Unpin)\s+([A-Za-z0-9_\s]{2,30})$/i);
-      if (simplePin) clean = simplePin[1].trim();
-    }
+    // 3. Strip Video/Feed descriptions commonly found in Google Meet tile aria-labels
+    s = s.replace(/^(?:video\s+feed\s+from|video\s+feed\s+of|video\s+from|video\s+of|video\s+for|feed\s+from)\s+/gi, '').trim();
+    s = s.replace(/\s*(?:'s\s+video\s+feed|'s\s+video|'s\s+feed|video\s+feed|video)\s*$/gi, '').trim();
+    s = s.replace(/'s\s*$/i, '').trim();
 
-    const isYou = /\((?:You)\)/i.test(clean) || isLocal || clean.toLowerCase() === 'you';
+    // 4. Strip status suffixes (common in tile aria-labels and People panel)
+    s = s.replace(/,\s*(?:speaking|microphone\s+is\s+muted|microphone\s+muted|mic\s+off|mic\s+on|muted|unmuted|video\s+off|video\s+on|camera\s+off|camera\s+on|meeting\s+host|meeting\s+co-host|host|co-host|you)\s*$/gi, '').trim();
+    s = s.replace(/\s*\((?:speaking|muted|unmuted|mic\s+off|mic\s+on|video\s+off|video\s+on|camera\s+off|camera\s+on)\)\s*$/gi, '').trim();
 
-    // Strip multi-device qualifiers and role badges:
-    // Handles dual devices seamlessly: "Rahul Sharma (1)", "Rahul Sharma (Phone)", "Rahul Sharma - 2", "Rahul Sharma [1]", etc.
-    clean = clean.replace(/\s*[\(\[]\s*(\d+|you|host|co-host|presentation|external|call|phone|mobile|laptop|desktop|tablet|guest|audio|mic|webcam|cam)\s*[\)\]]/gi, '').trim();
-    clean = clean.replace(/\s*-\s*\d+$/i, '').trim();
-    clean = clean.replace(/\s*#\s*\d+$/i, '').trim();
+    // 5. Check if local user
+    const isYou = /\((?:You)\)/i.test(s) || isLocal || s.toLowerCase() === 'you' || s.toLowerCase() === 'host (you)';
 
-    if (!clean || clean.length === 0) {
-      return isYou ? 'Host (You)' : null;
-    }
+    // 6. Strip multi-device qualifiers and duplicate numbers:
+    s = s.replace(/\s*[\(\[]\s*(?:\d+|you|host|meeting\s+host|meeting\s+co-host|co-host|presentation|external|call|phone|mobile|laptop|desktop|tablet|guest|audio|mic|webcam|cam|secondary|device\s*\d*)\s*[\)\]]/gi, '').trim();
+    s = s.replace(/\s*-\s*\d+$/i, '').trim();
+    s = s.replace(/\s*#\s*\d+$/i, '').trim();
+    s = s.replace(/\s+\d+$/i, '').trim();
 
-    if (clean.length < 2 || clean.length > 40) return isYou ? 'Host (You)' : null;
-    if (/^\d+$/.test(clean) || /^\d{1,2}:\d{2}/.test(clean) || /^\d+%/i.test(clean)) return null;
+    // 7. Strip presentation suffixes
+    s = s.replace(/\s+is\s+presenting$/i, '').trim();
+    s = s.replace(/^presentation\s*(?:from|of|by)?\s*[:\-]?\s*/i, '').trim();
+    s = s.replace(/'s\s+presentation$/i, '').trim();
 
-    const lower = clean.toLowerCase();
+    // 8. Strip unclosed opening parentheses/brackets at the end
+    s = s.replace(/\s*[\(\[\{][^\)\]\}]*$/g, '').trim();
 
-    for (const bad of UI_BLACKLIST) {
+    // 9. Strip trailing ellipsis / dots (Google Meet truncation: e.g. "Mohammad Rizwan…" or "Mohammad Rizwan...")
+    s = s.replace(/[\u2026\.]+\s*$/, '').trim();
+
+    // 10. Strip leading/trailing punctuation and symbols
+    s = s.replace(/^[\s\-_,\.:;•|\(\)\[\]]+|[\s\-_,\.:;•|\(\)\[\]]+$/g, '').trim();
+
+    if (!s || s.length === 0) return isYou ? 'Host (You)' : null;
+
+    // Filter pure numbers, timestamps, percentages
+    if (/^\d+$/.test(s) || /^\d{1,2}:\d{2}(?::\d{2})?(?:\s*[ap]m)?$/i.test(s) || /^\d+%/i.test(s)) return null;
+
+    // Length check: Must have at least 2 chars, max 45 chars
+    if (s.length < 2 || s.length > 45) return isYou ? 'Host (You)' : null;
+
+    // Must contain at least one letter
+    if (!/\p{L}/u.test(s)) return null;
+
+    const lower = s.toLowerCase();
+
+    const BLACKLIST = [
+      'pin', 'unpin', 'mute', 'unmute', 'camera', 'microphone', 'more options',
+      'turn off', 'turn on', 'visual effects', 'presentation', 'audio', 'video',
+      'chat', 'people', 'raise hand', 'lower hand', 'reactions', 'send reaction',
+      'call details', 'meeting details', 'in-call messages', 'leave call',
+      'end call', 'apply visual effects', 'turn off microphone', 'pin to screen',
+      'dont turn off', 'remove from call', 'full screen', 'grid view',
+      'speaker view', 'captions', 'turn on captions', 'settings', 'background',
+      'device settings', 'troubleshooting', 'report',
+      'share screen', 'stop sharing', 'your presentation', 'auto', 'hd', 'standard',
+      'switch camera', 'minimize', 'maximize', 'expand', 'collapse', 'close',
+      'show everyone', 'add people', 'host controls', 'activities', 'info',
+      'turn on microphone', 'turn off camera', 'turn on camera', 'reconnecting',
+      'waiting', 'audio only', 'companion mode', 'whiteboard', 'jamboard',
+      'lock meeting', 'mute all', 'copy joining info', 'stop presenting',
+      'problem with microphone', 'camera is off', 'camera is on',
+      'microphone is off', 'microphone is on', 'microphone is muted',
+      'microphone unmuted', 'speaking', 'silent', 'contributor', 'someone is presenting',
+      'others will see your video', 'no one else is here', 'joining info',
+      'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection'
+    ];
+
+    for (const bad of BLACKLIST) {
       if (lower === bad || lower.startsWith(bad + ' ') || lower.endsWith(' ' + bad)) {
         return null;
       }
@@ -117,11 +165,18 @@
       return null;
     }
 
-    if (lower === 'host' || lower === 'you') {
+    if (lower === 'host' || lower === 'you' || lower === 'host (you)') {
       return isYou ? 'Host (You)' : 'Host';
     }
 
-    return clean;
+    // 11. Format to clean Title Case
+    const isAllUpper = (s === s.toUpperCase());
+    const isAllLower = (s === s.toLowerCase());
+    if (isAllUpper || isAllLower) {
+      s = s.split(' ').map(w => w ? (w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()) : '').join(' ').trim();
+    }
+
+    return s;
   }
 
   function extractMeetingCode() {
@@ -1090,21 +1145,27 @@
   function extractTileParticipantName(tile) {
     if (!tile) return null;
 
-    // 1. Direct Google Meet data attributes
+    // Priority 1: Direct Google Meet data attributes
     const attrName = tile.getAttribute('data-self-name') || tile.getAttribute('data-participant-name');
     if (attrName) {
       const s = sanitizeStudentName(attrName);
       if (s) return s;
     }
 
-    // 2. Tile root aria-label (Commonly present on late joiner video tiles in Google Meet)
-    const tileAria = tile.getAttribute('aria-label');
-    if (tileAria) {
-      const s = sanitizeStudentName(tileAria);
+    // Priority 2: Google Meet canonical participant name badge elements (zWGUib, notranslate, layout classes)
+    const canonicalNameEl = tile.querySelector('span.zWGUib, div.zWGUib, span[class*="zWGUib"], div[class*="zWGUib"], div[class*="jT57Ub"], div[class*="XE8e1e"], div[class*="z373Mb"], div[class*="A37uZe"], div[class*="dwFTHd"]');
+    if (canonicalNameEl && !canonicalNameEl.closest('button, [role="button"], [role="tooltip"], svg')) {
+      const s = sanitizeStudentName(canonicalNameEl.innerText);
       if (s) return s;
     }
 
-    // 3. Pin / Unpin button label or tooltip
+    const notranslateEl = tile.querySelector('.notranslate');
+    if (notranslateEl && !notranslateEl.closest('button, [role="button"], [role="tooltip"], svg')) {
+      const s = sanitizeStudentName(notranslateEl.innerText);
+      if (s) return s;
+    }
+
+    // Priority 3: Google Meet Pin / Unpin button label or tooltip (Very clean participant name source)
     const pinBtn = tile.querySelector('button[aria-label*="Pin " i], button[aria-label*="Unpin " i], button[data-tooltip*="Pin " i], button[data-tooltip*="Unpin " i]');
     if (pinBtn) {
       const pinText = pinBtn.getAttribute('aria-label') || pinBtn.getAttribute('data-tooltip') || pinBtn.innerText;
@@ -1112,50 +1173,31 @@
       if (s) return s;
     }
 
-    // 4. Avatar profile image alt text
+    // Priority 4: Avatar profile image alt text (when not generic)
     const avatarImgs = tile.querySelectorAll('img[alt]');
     for (const img of avatarImgs) {
       const alt = img.getAttribute('alt');
-      if (alt && !alt.toLowerCase().includes('avatar') && !alt.toLowerCase().includes('icon')) {
+      if (alt && !alt.toLowerCase().includes('avatar') && !alt.toLowerCase().includes('icon') && !alt.toLowerCase().includes('profile')) {
         const s = sanitizeStudentName(alt);
         if (s) return s;
       }
     }
 
-    // 5. Standard notranslate and participant name elements
-    const notranslateElements = tile.querySelectorAll('.notranslate, [data-self-name], [data-participant-name], span.zWGUib');
-    for (const el of notranslateElements) {
-      if (el.closest('button, [role="button"], [role="tooltip"], svg')) continue;
-      const s = sanitizeStudentName(el.innerText || el.getAttribute('data-self-name'));
+    // Priority 5: Tile root aria-label (e.g. "Rahul Sharma's video feed", "Rahul Sharma, speaking")
+    const tileAria = tile.getAttribute('aria-label');
+    if (tileAria) {
+      const s = sanitizeStudentName(tileAria);
       if (s) return s;
     }
 
-    // 6. Child elements with aria-label (avatar containers, participant labels)
-    const ariaElements = tile.querySelectorAll('[aria-label]');
-    for (const el of ariaElements) {
-      if (el.closest('button, [role="button"], [role="tooltip"], svg')) continue;
-      const lbl = el.getAttribute('aria-label');
-      if (lbl) {
-        const s = sanitizeStudentName(lbl);
-        if (s) return s;
-      }
-    }
-
-    // 7. Known Google Meet name badge containers
-    const nameBadges = tile.querySelectorAll('div[class*="z373Mb"], div[class*="jT57Ub"], div[class*="XE8e1e"], div[class*="A37uZe"], div[class*="dwFTHd"]');
-    for (const badge of nameBadges) {
-      if (badge.closest('button, [role="button"], [role="tooltip"]')) continue;
-      const s = sanitizeStudentName(badge.innerText);
-      if (s) return s;
-    }
-
-    // 8. General text discovery in tile spans/divs (fallback for late joiners and obfuscated layout containers)
+    // Priority 6: Text node fallback (STRICTLY EXCLUDING avatar initials, buttons, tooltips)
     const textNodes = tile.querySelectorAll('span, div');
     for (const node of textNodes) {
-      if (node.closest('button, [role="button"], [role="tooltip"], svg, style, script')) continue;
+      if (node.closest('button, [role="button"], [role="tooltip"], svg, style, script, [data-avatar-container], [class*="avatar" i], [role="img"]')) continue;
       if (node.children.length === 0 && node.innerText) {
         const txt = node.innerText.trim();
-        if (txt.length >= 2 && txt.length <= 40) {
+        // Skip short 1 or 2 letter avatar initials
+        if (txt.length >= 3 && txt.length <= 45) {
           const s = sanitizeStudentName(txt);
           if (s) return s;
         }
@@ -1647,14 +1689,38 @@
     // 4. People Panel (Roster)
     const peopleListItems = document.querySelectorAll('div[role="listitem"]');
     peopleListItems.forEach(item => {
-      const spans = item.querySelectorAll('span');
       let foundName = null;
-      for (const s of spans) {
-        if (s.closest('button, [role="button"], [role="tooltip"]')) continue;
-        const c = sanitizeStudentName(s.innerText);
-        if (c) {
-          foundName = c;
-          break;
+
+      // Check canonical name element in People roster item first
+      const canonical = item.querySelector('span.zWGUib, div.zWGUib, span[class*="zWGUib"], div[class*="jT57Ub"], [data-participant-id] span, span.notranslate, div.notranslate');
+      if (canonical && !canonical.closest('button, [role="button"], [role="tooltip"], svg')) {
+        foundName = sanitizeStudentName(canonical.innerText);
+      }
+
+      // Check listitem aria-label (Format: "Rahul Sharma, Meeting host, Microphone muted")
+      if (!foundName) {
+        const itemAria = item.getAttribute('aria-label');
+        if (itemAria) {
+          const firstPart = itemAria.split(',')[0].trim();
+          foundName = sanitizeStudentName(firstPart);
+        }
+      }
+
+      // Fallback: check spans outside of avatar initials and buttons
+      if (!foundName) {
+        const spans = item.querySelectorAll('span, div');
+        for (const s of spans) {
+          if (s.closest('button, [role="button"], [role="tooltip"], svg, [data-avatar-container], [class*="avatar" i], [role="img"]')) continue;
+          if (s.children.length === 0 && s.innerText) {
+            const txt = s.innerText.trim();
+            if (txt.length >= 3 && txt.length <= 45) {
+              const c = sanitizeStudentName(txt);
+              if (c) {
+                foundName = c;
+                break;
+              }
+            }
+          }
         }
       }
 
