@@ -464,7 +464,8 @@ app.post('/api/session/sync', (req, res) => {
         
         // Accurate Presence & Left Status Transition
         const isPres = p.currentStatus ? (p.currentStatus === 'present') : (existing.currentStatus === 'present');
-        const isCamOn = isPres && (p.cameraStatus === 'on' || (existing.cameraStatus === 'on' && p.cameraStatus !== 'off'));
+        const isManualCam = (p.manualCamOverride === true || existing.manualCamOverride === true);
+        const isCamOn = isManualCam || (isPres && (p.cameraStatus === 'on' || (existing.cameraStatus === 'on' && p.cameraStatus !== 'off')));
         const joinTs = Math.min(toEpochMs(p.joinTime) || Date.now(), toEpochMs(existing.joinTime) || Date.now(), toEpochMs(p.firstSeen) || Date.now(), toEpochMs(existing.firstSeen) || Date.now());
         const leaveTime = isPres ? null : (p.leaveTime || existing.leaveTime || p.lastSeen || Date.now());
 
@@ -513,6 +514,7 @@ app.post('/api/session/sync', (req, res) => {
           currentStatus: isPres ? 'present' : 'left',
           cameraStatus: isCamOn ? 'on' : 'off',
           rawCameraStatus: isCamOn ? 'on' : 'off',
+          manualCamOverride: isManualCam,
           leaveTime: leaveTime,
           videoDetectionMode: isCamOn ? (p.cameraStatus === 'on' ? (p.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off',
           lastSeen: Math.max(toEpochMs(p.lastSeen) || Date.now(), toEpochMs(existing.lastSeen) || Date.now())
@@ -741,7 +743,65 @@ app.post('/api/session/action', (req, res) => {
     return res.json({ success: true });
   }
 
+  if (action === 'override') {
+    const { participantId, manualCamOverride } = payload || {};
+    if (participantId && currentSession.participants && currentSession.participants[participantId]) {
+      const p = currentSession.participants[participantId];
+      const isOverrideOn = (manualCamOverride === true || manualCamOverride === 'on');
+      p.manualCamOverride = isOverrideOn;
+      if (isOverrideOn) {
+        p.cameraStatus = 'on';
+        p.rawCameraStatus = 'on';
+        p.cameraOffCurrentStart = null;
+        p.consecutiveCamOffMs = 0;
+      }
+      persistCurrentSession();
+      broadcast({ type: 'PARTICIPANT_OVERRIDE', participantId: p.id, manualCamOverride: isOverrideOn, participant: p, session: currentSession });
+    }
+    return res.json({ success: true, session: currentSession });
+  }
+
   res.status(400).json({ error: 'Unknown action' });
+});
+
+// Manual Camera Override endpoint (Host can force Camera ON or revert to Auto)
+app.post(['/api/participant/override', '/api/participant-override'], (req, res) => {
+  const { participantId, manualCamOverride } = req.body;
+  if (!participantId) return res.status(400).json({ error: 'Missing participantId' });
+
+  if (!currentSession.participants) currentSession.participants = {};
+  let p = currentSession.participants[participantId];
+  if (!p) {
+    const foundKey = Object.keys(currentSession.participants).find(k => k === participantId || k.toLowerCase() === participantId.toLowerCase());
+    if (foundKey) p = currentSession.participants[foundKey];
+  }
+
+  if (!p) {
+    return res.status(404).json({ error: 'Participant not found in current session' });
+  }
+
+  const isOverrideOn = (manualCamOverride === true || manualCamOverride === 'on');
+  p.manualCamOverride = isOverrideOn;
+  if (isOverrideOn) {
+    p.cameraStatus = 'on';
+    p.rawCameraStatus = 'on';
+    p.cameraOffCurrentStart = null;
+    p.consecutiveCamOffMs = 0;
+  }
+
+  currentSession.lastUpdated = Date.now();
+  persistCurrentSession();
+
+  broadcast({
+    type: 'PARTICIPANT_OVERRIDE',
+    participantId: p.id,
+    manualCamOverride: isOverrideOn,
+    participant: p,
+    session: currentSession
+  });
+
+  console.log(`[Server] Manual camera override for [${p.name}] set to: ${isOverrideOn ? 'FORCE ON' : 'AUTO'}`);
+  res.json({ success: true, participant: p, manualCamOverride: isOverrideOn });
 });
 
 // List archived sessions

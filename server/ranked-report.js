@@ -259,38 +259,24 @@ function generateRankedAttendanceHtml(session, options = {}) {
     return true;
   });
 
-  // Dense ranking ONLY on students!
+  // Dense ranking ONLY on students (Host is exempt)!
   computeDenseRanks(participants, session);
 
   const exemptedCount = hostParticipant ? 1 : 0;
 
-  // 7 Hours Cutoff in milliseconds: 7 * 3600 * 1000 = 25200000 ms
+  // 7 Hours Milestone in milliseconds: 7 * 3600 * 1000 = 25200000 ms
   const cutoffMs = 7 * 3600 * 1000;
   
-  // Check if session has participants >= 7 hours
-  const hasSevenHourParticipants = participants.some(p => {
+  // Count 7+ Hours achievers without filtering anyone out! ALL students must be in the report!
+  const sevenHourAchieversCount = participants.filter(p => {
     const t = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
     return t >= cutoffMs;
-  });
+  }).length;
 
-  // Filter for qualified participants:
-  const effectiveCutoffMs = hasSevenHourParticipants ? cutoffMs : 0;
-  const cutoffLabel = hasSevenHourParticipants ? '07:00:00' : '00:00:00';
-  const cutoffBadge = hasSevenHourParticipants ? '7+ HOURS ELITE' : 'ALL QUALIFIED';
+  // ALL STUDENTS INCLUDED IN RANKED LIST - NO ONE IS FILTERED OUT!
+  const rankedList = participants;
 
-  const rankedList = participants.filter(p => {
-    const t = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
-    return t >= effectiveCutoffMs;
-  });
-
-  const belowCutoffList = participants.filter(p => {
-    const t = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
-    return t < effectiveCutoffMs;
-  });
-
-  const belowCutoffCount = belowCutoffList.length;
-
-  // Podium participants:
+  // Podium participants (Olympic Top 3):
   const rank1Students = rankedList.filter(p => p.rank === 1);
   const rank2Students = rankedList.filter(p => p.rank === 2);
   const rank3Students = rankedList.filter(p => p.rank === 3);
@@ -308,6 +294,8 @@ function generateRankedAttendanceHtml(session, options = {}) {
     const compScore = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : (camOn > 0 ? '100.0%' : '0.0%');
     const isPresent = p.currentStatus === 'present';
     const rejoins = p.rejoinCount || 0;
+    const isSevenHours = camOn >= cutoffMs;
+    const isManualCam = p.manualCamOverride === true;
 
     let badgeClass = 'badge-other';
     if (p.rank === 1) badgeClass = 'badge-gold';
@@ -321,6 +309,8 @@ function generateRankedAttendanceHtml(session, options = {}) {
         </td>
         <td class="col-name font-bold text-dark">
           ${escapeHtml(p.name.toUpperCase())}
+          ${isSevenHours ? '<span style="background: #fef08a; color: #854d0e; border: 1px solid #eab308; padding: 1px 6px; border-radius: 4px; font-size: 8.5px; font-weight: 800; margin-left: 6px;">⭐ 7+ HRS</span>' : ''}
+          ${isManualCam ? '<span style="background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; padding: 1px 5px; border-radius: 4px; font-size: 8.5px; font-weight: 800; margin-left: 5px;">📷 MANUAL ON</span>' : ''}
         </td>
         <td class="col-status text-center">
           <span class="badge-pill-sm ${isPresent ? 'badge-present' : 'badge-left'}">${isPresent ? '🟢 Present' : '⚪ Left'}</span>
@@ -931,7 +921,7 @@ function generateRankedAttendanceHtml(session, options = {}) {
         </div>
       </div>
       <div class="header-right">
-        <span class="badge-pill">${cutoffBadge}</span>
+        <span class="badge-pill">ALL STUDENTS RANKED</span>
         <span class="report-subtitle">&#9733; CONSOLIDATED RANKINGS &#9733;</span>
       </div>
     </header>
@@ -950,19 +940,19 @@ function generateRankedAttendanceHtml(session, options = {}) {
     <div class="kpi-boxes-row">
       <div class="kpi-box">
         <div class="kpi-box-num">${rankedList.length}</div>
-        <div class="kpi-box-label">RANKED PARTICIPANTS</div>
+        <div class="kpi-box-label">TOTAL STUDENTS</div>
       </div>
       <div class="kpi-box">
         <div class="kpi-box-num" style="color: #10b981;">${rankedList.filter(p => (p.cameraOffMs || 0) === 0).length}</div>
         <div class="kpi-box-label">100% CAM COMPLIANT</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-box-num" style="color: #2563eb;">${exemptedCount}</div>
-        <div class="kpi-box-label">EXEMPTED (HOST)</div>
+        <div class="kpi-box-num" style="color: #d97706;">${sevenHourAchieversCount}</div>
+        <div class="kpi-box-label">7+ HOURS ACHIEVERS</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-box-num" style="color: #dc2626;">${belowCutoffCount}</div>
-        <div class="kpi-box-label">BELOW ${cutoffLabel} CUTOFF</div>
+        <div class="kpi-box-num" style="color: #2563eb;">${exemptedCount}</div>
+        <div class="kpi-box-label">EXEMPTED (HOST)</div>
       </div>
     </div>
 
@@ -1004,7 +994,7 @@ function generateRankedAttendanceHtml(session, options = {}) {
     <!-- The Official Student Rankings Table (Neat, Short, Landscape) -->
     <div class="section-head">
       <span class="green-marker"></span>
-      <h2 class="section-title">Official Student Rankings (${cutoffBadge})</h2>
+      <h2 class="section-title">Official Student Rankings (All Students Dense Ranked)</h2>
     </div>
 
     <table class="ranked-table">

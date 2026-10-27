@@ -497,6 +497,31 @@
       border-color: rgba(16, 185, 129, 0.5);
       color: #fff;
     }
+    .cm-btn-override {
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid #3b82f6;
+      color: #93c5fd;
+      border-radius: 4px;
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 2px 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cm-btn-override:hover {
+      background: rgba(59, 130, 246, 0.4);
+      color: #fff;
+    }
+    .cm-btn-override.active {
+      background: rgba(16, 185, 129, 0.25);
+      border-color: #10b981;
+      color: #34d399;
+    }
+    .cm-btn-override.active:hover {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #ef4444;
+      color: #fca5a5;
+    }
     .cm-btn-pdf:hover {
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.55), rgba(5, 150, 105, 0.45));
       border-color: #00ff88;
@@ -1667,6 +1692,31 @@
     return detected;
   }
 
+  // ================= HOST MANUAL CAMERA OVERRIDE =================
+  function toggleManualCameraOverride(participantId) {
+    let p = session.participants[participantId];
+    if (!p) return;
+    const newOverride = !p.manualCamOverride;
+    p.manualCamOverride = newOverride;
+    if (newOverride) {
+      p.cameraStatus = 'on';
+      p.rawCameraStatus = 'on';
+      p.cameraOffCurrentStart = null;
+      p.consecutiveCamOffMs = 0;
+    }
+    chrome.runtime.sendMessage({
+      type: 'SERVER_ACTION',
+      serverUrl: getServerBaseUrl(),
+      action: 'override',
+      payload: { participantId, manualCamOverride: newOverride }
+    }, () => { const _e = chrome.runtime.lastError; });
+
+    saveSession();
+    syncSessionNow();
+    updateHudUI();
+    console.log(`[Cockroach Tracker] Host manual camera override for [${p.name}]: ${newOverride ? 'FORCE ON' : 'AUTO'}`);
+  }
+
   // ================= TOTAL TIME IN MEET CALCULATOR =================
   function calculateTotalInMeetMs(p, now = Date.now()) {
     if (!p) return 0;
@@ -2120,6 +2170,52 @@
         }
       }
     }
+  }
+
+  // ================= TICK ENGINE (WEB WORKER + VISIBILITY CATCHUP) =================
+  let tickWorker = null;
+  function startTickEngine() {
+    if (tickTimer) clearInterval(tickTimer);
+    if (tickWorker) {
+      try { tickWorker.terminate(); } catch (_) {}
+      tickWorker = null;
+    }
+
+    try {
+      const blobCode = `
+        let timer = null;
+        self.onmessage = function(e) {
+          if (e.data === 'start') {
+            if (timer) clearInterval(timer);
+            timer = setInterval(() => self.postMessage('tick'), 1000);
+          } else if (e.data === 'stop') {
+            if (timer) clearInterval(timer);
+            timer = null;
+          }
+        };
+      `;
+      const blob = new Blob([blobCode], { type: 'application/javascript' });
+      const workerUrl = URL.createObjectURL(blob);
+      tickWorker = new Worker(workerUrl);
+      tickWorker.onmessage = function(e) {
+        if (e.data === 'tick') {
+          onTimerTick();
+        }
+      };
+      tickWorker.postMessage('start');
+      console.log('[Cockroach Tracker] ⚡ Background-resistant Web Worker timer active');
+    } catch (err) {
+      console.warn('[Cockroach Tracker] Worker fallback to setInterval', err);
+      tickTimer = setInterval(onTimerTick, 1000);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        onTimerTick();
+        renderControls();
+        updateHudUI();
+      }
+    });
   }
 
   // ================= INITIALIZE & SYNC WITH SERVER =================

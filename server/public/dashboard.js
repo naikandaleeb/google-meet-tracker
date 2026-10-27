@@ -264,6 +264,18 @@ function initWebSocket() {
           state.currentPauseStart = null;
         }
         scheduleRenderUI();
+      } else if (data.type === 'PARTICIPANT_OVERRIDE') {
+        if (data.session) {
+          mergeSessionState(data.session);
+        } else if (data.participantId && state.participants && state.participants[data.participantId]) {
+          state.participants[data.participantId].manualCamOverride = data.manualCamOverride;
+          if (data.manualCamOverride) {
+            state.participants[data.participantId].cameraStatus = 'on';
+            state.participants[data.participantId].rawCameraStatus = 'on';
+            state.participants[data.participantId].cameraOffCurrentStart = null;
+          }
+        }
+        scheduleRenderUI();
       }
     } catch (e) {
       console.error('WebSocket parse error:', e);
@@ -795,6 +807,18 @@ function renderStudentsTable() {
           liveOffEl.innerText = `🔴 LIVE OFF: ${from} - Now (${formatHms(liveCutMs)} cut)`;
         }
       }
+
+      // Update manual camera override button
+      const overrideBtn = tr.querySelector('.btn-cam-override');
+      if (overrideBtn) {
+        const isOverridden = p.manualCamOverride === true;
+        const btnText = isOverridden ? '↺ Auto' : '📷 Force ON';
+        if (overrideBtn.innerText !== btnText) {
+          overrideBtn.innerText = btnText;
+          overrideBtn.className = `btn-cam-override ${isOverridden ? 'active' : ''}`;
+          overrideBtn.title = isOverridden ? 'Revert to automatic camera detection' : 'Host Override: Force Camera ON';
+        }
+      }
     });
     return;
   }
@@ -910,12 +934,53 @@ function renderStudentsTable() {
           </span>
         </td>
         <td>
-          <button class="btn-details" onclick="openStudentModal('${escapeHtml(p.id)}')">Breakdown</button>
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <button class="btn-details" onclick="openStudentModal('${escapeHtml(p.id)}')">Breakdown</button>
+            ${!isHost ? `
+              <button class="btn-cam-override ${p.manualCamOverride ? 'active' : ''}" 
+                      onclick="toggleParticipantCameraOverride('${escapeHtml(p.id)}')" 
+                      title="${p.manualCamOverride ? 'Revert to automatic camera detection' : 'Host Override: Force Camera ON'}">
+                ${p.manualCamOverride ? '↺ Auto' : '📷 Force ON'}
+              </button>
+            ` : ''}
+          </div>
         </td>
       </tr>
     `;
   }).join('');
 }
+
+// Host Manual Camera Override Toggle
+window.toggleParticipantCameraOverride = async function(id) {
+  const p = state.participants?.[id];
+  if (!p) return;
+  const newOverride = !p.manualCamOverride;
+  try {
+    const res = await fetch('/api/participant/override', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        participantId: id,
+        manualCamOverride: newOverride
+      })
+    });
+    const result = await res.json();
+    if (result.success) {
+      if (state.participants[id]) {
+        state.participants[id].manualCamOverride = newOverride;
+        if (newOverride) {
+          state.participants[id].cameraStatus = 'on';
+          state.participants[id].rawCameraStatus = 'on';
+          state.participants[id].cameraOffCurrentStart = null;
+        }
+      }
+      showToast(newOverride ? `📷 Manual Camera ON forced for ${p.name}` : `↺ Reverted ${p.name} to automatic camera detection`);
+      scheduleRenderUI();
+    }
+  } catch (err) {
+    showToast('Failed to update camera override: ' + err.message);
+  }
+};
 
 // Student Details Modal (Showing Exact Camera OFF Times & Join/Left History)
 window.openStudentModal = function(id) {
