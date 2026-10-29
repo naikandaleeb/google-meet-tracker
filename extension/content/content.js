@@ -976,11 +976,11 @@
   }
 
   function stopAttendance() {
-    if (!confirm('Turn OFF Attendance Tracking? Timers will freeze and all attendance data will remain visible on the dashboard.')) {
-      return;
-    }
     const now = Date.now();
     session.isTracking = false;
+    session.isPaused = false;
+    session.stoppedAt = now;
+    session.currentPauseStart = null;
 
     // If currently paused, close the pause
     if (session.isPaused && session.currentPauseStart) {
@@ -999,8 +999,8 @@
         if (last && !last.end) last.end = now;
       }
       if (p.cameraOffCurrentStart) {
-        const dur = now - p.cameraOffCurrentStart;
-        if (dur >= 2000) {
+        const dur = Math.max(0, now - p.cameraOffCurrentStart);
+        if (dur >= 1000) {
           if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
           p.cameraOffIntervals.push({
             start: p.cameraOffCurrentStart,
@@ -1013,12 +1013,16 @@
         }
         p.cameraOffCurrentStart = null;
       }
-      p.totalDuration = p.totalPresentMs || 0;
-      p.duration = p.validStudyMs || 0;
-      p.timeInCall = p.totalPresentMs || 0;
+      const totalOff = (p.cameraOffIntervals || []).reduce((sum, int) => sum + (int.durationMs || 0), 0);
+      p.cameraOffMs = Math.max(p.cameraOffMs || 0, totalOff);
+      p.validStudyMs = p.cameraOnMs || 0;
+      p.totalPresentMs = (p.cameraOnMs || 0) + (p.cameraOffMs || 0);
+      p.totalDuration = p.totalPresentMs;
+      p.duration = p.validStudyMs;
+      p.timeInCall = p.totalPresentMs;
       p.durationSeconds = Math.floor((p.validStudyMs || 0) / 1000);
       p.durationMinutes = Math.floor((p.validStudyMs || 0) / 60000);
-      p.studyDuration = p.validStudyMs || 0;
+      p.studyDuration = p.validStudyMs;
     });
 
     console.log('[Cockroach Tracker] ⏹️ Attendance Turned OFF (Finalized).');
@@ -2254,8 +2258,16 @@
           if (sp.presenceIntervals && Array.isArray(sp.presenceIntervals) && (!localP.presenceIntervals || localP.presenceIntervals.length === 0)) {
             localP.presenceIntervals = sp.presenceIntervals;
           }
-          if (sp.cameraOffIntervals && Array.isArray(sp.cameraOffIntervals) && (!localP.cameraOffIntervals || localP.cameraOffIntervals.length === 0)) {
-            localP.cameraOffIntervals = sp.cameraOffIntervals;
+          if (sp.cameraOffIntervals && Array.isArray(sp.cameraOffIntervals)) {
+            if (!localP.cameraOffIntervals) localP.cameraOffIntervals = [];
+            sp.cameraOffIntervals.forEach(newInt => {
+              const newStart = toEpochMs(newInt.start) || 0;
+              if (!localP.cameraOffIntervals.some(ex => Math.abs((toEpochMs(ex.start) || 0) - newStart) < 2000)) {
+                localP.cameraOffIntervals.push(newInt);
+              }
+            });
+            const totOff = localP.cameraOffIntervals.reduce((s, i) => s + (i.durationMs || 0), 0);
+            localP.cameraOffMs = Math.max(localP.cameraOffMs || 0, totOff);
           }
           if (sp.manualCamOverride !== undefined) {
             localP.manualCamOverride = sp.manualCamOverride;
@@ -2273,7 +2285,7 @@
     session.sessionId = serverSess.sessionId || session.sessionId;
     session.meetingCode = serverSess.meetingCode || session.meetingCode;
     session.isTracking = !!serverSess.isTracking;
-    if (Date.now() - lastUserPauseActionTime > 4000) { session.isPaused = !!serverSess.isPaused; }
+    session.isPaused = !!serverSess.isPaused;
     session.startedAt = serverSess.startedAt;
     session.stoppedAt = serverSess.stoppedAt;
     session.totalPausedMs = serverSess.totalPausedMs || 0;
@@ -2292,14 +2304,36 @@
   function handleServerEvent(event) {
     if (!event) return;
     console.log('[Cockroach Tracker] Server Event received:', event.type);
-    if (event.session) {
-      adoptServerSession(event.session);
-    } else if (event.type === 'ACTION_START') {
-      session.isTracking = true;
+
+    // Explicit action handling ALWAYS takes precedence
+    if (event.type === 'ACTION_STOP') {
+      session.isTracking = false;
+      session.isPaused = false;
+      session.stoppedAt = event.timestamp || (event.session && event.session.stoppedAt) || Date.now();
+      session.currentPauseStart = null;
+      renderControls();
+      updateHudUI();
+      saveSession();
+    } else if (event.type === 'ACTION_PAUSE') {
+      session.isPaused = true;
+      session.currentPauseStart = event.timestamp || (event.session && event.session.currentPauseStart) || Date.now();
+      renderControls();
+      updateHudUI();
+      saveSession();
+    } else if (event.type === 'ACTION_RESUME') {
       session.isPaused = false;
       session.currentPauseStart = null;
       renderControls();
       updateHudUI();
+      saveSession();
+    } else if (event.type === 'ACTION_START') {
+      session.isTracking = true;
+      session.isPaused = false;
+      session.currentPauseStart = null;
+      session.stoppedAt = null;
+      renderControls();
+      updateHudUI();
+      saveSession();
     } else if (event.type === 'PARTICIPANT_DELETED') {
       const pid = event.participantId;
       if (pid) deletedParticipants.add(pid.toLowerCase());
@@ -2310,21 +2344,10 @@
       renderControls();
       updateHudUI();
       saveSession();
-    } else if (event.type === 'ACTION_STOP') {
-      session.isTracking = false;
-      session.isPaused = false;
-      renderControls();
-      updateHudUI();
-    } else if (event.type === 'ACTION_PAUSE') {
-      session.isPaused = true;
-      session.currentPauseStart = event.timestamp || Date.now();
-      renderControls();
-      updateHudUI();
-    } else if (event.type === 'ACTION_RESUME') {
-      session.isPaused = false;
-      session.currentPauseStart = null;
-      renderControls();
-      updateHudUI();
+    }
+
+    if (event.session) {
+      adoptServerSession(event.session);
     }
   }
 
@@ -2340,7 +2363,7 @@
       if (syncDot) {
         if (response && response.success) {
           syncDot.className = 'cm-dot cm-dot-green';
-          if (response.data && response.data.session && response.data.session.sessionId !== session.sessionId) {
+          if (response.data && response.data.session) {
             adoptServerSession(response.data.session);
           }
         } else {

@@ -170,7 +170,18 @@ function mergeSessionState(incoming) {
         // Monotonic progression: Never let network latency cause timers to jerk backwards!
         const maxOn = Math.max(existing.cameraOnMs || 0, inc.cameraOnMs || 0);
         const maxOff = Math.max(existing.cameraOffMs || 0, inc.cameraOffMs || 0);
-        const tot = maxOn + maxOff;
+        const combinedOff = [...(existing.cameraOffIntervals || [])];
+        if (inc.cameraOffIntervals && Array.isArray(inc.cameraOffIntervals)) {
+          inc.cameraOffIntervals.forEach(newInt => {
+            const newStart = toEpochMs(newInt.start) || 0;
+            if (!combinedOff.some(ex => Math.abs((toEpochMs(ex.start) || 0) - newStart) < 2000)) {
+              combinedOff.push(newInt);
+            }
+          });
+        }
+        const totOffMs = combinedOff.reduce((s, i) => s + (i.durationMs || 0), 0);
+        const accurateOff = Math.max(maxOff, totOffMs);
+        const tot = maxOn + accurateOff;
         const maxTotalMeet = Math.max(existing.totalInMeetMs || 0, inc.totalInMeetMs || 0, tot);
         const rejoinCnt = Math.max(existing.rejoinCount || 0, inc.rejoinCount || 0);
 
@@ -196,8 +207,9 @@ function mergeSessionState(incoming) {
           rejoinedAt: inc.rejoinedAt || existing.rejoinedAt || null,
           presenceIntervals: inc.presenceIntervals || existing.presenceIntervals || [],
           joinLeaveHistory: inc.joinLeaveHistory || existing.joinLeaveHistory || [],
-          cameraOffCurrentStart: !isPres ? null : (inc.cameraOffCurrentStart !== undefined ? inc.cameraOffCurrentStart : existing.cameraOffCurrentStart),
-          cameraOffIntervals: inc.cameraOffIntervals || existing.cameraOffIntervals || [],
+          cameraOffCurrentStart: (!state.isTracking || state.isPaused || !isPres) ? null : (inc.cameraOffCurrentStart !== undefined ? inc.cameraOffCurrentStart : existing.cameraOffCurrentStart),
+          cameraOffIntervals: combinedOff,
+          cameraOffMs: accurateOff,
           videoDetectionMode: isCamOn ? (inc.cameraStatus === 'on' ? (inc.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off'
         };
       }
@@ -246,27 +258,35 @@ function initWebSocket() {
           state = data.session;
           scheduleRenderUI();
         }
-      } else if (data.type === 'INIT' || data.type === 'SESSION_UPDATE' || data.type === 'ACTION_START' || data.type === 'ACTION_STOP') {
+      } else if (data.type === 'ACTION_STOP') {
+        state.isTracking = false;
+        state.isPaused = false;
+        state.stoppedAt = data.timestamp || (data.session && data.session.stoppedAt) || Date.now();
+        state.currentPauseStart = null;
+        if (data.session) mergeSessionState(data.session);
+        scheduleRenderUI();
+      } else if (data.type === 'ACTION_PAUSE') {
+        state.isPaused = true;
+        state.currentPauseStart = data.timestamp || (data.session && data.session.currentPauseStart) || Date.now();
+        if (data.session) mergeSessionState(data.session);
+        scheduleRenderUI();
+      } else if (data.type === 'ACTION_RESUME') {
+        state.isPaused = false;
+        state.currentPauseStart = null;
+        if (data.session) mergeSessionState(data.session);
+        scheduleRenderUI();
+      } else if (data.type === 'ACTION_START') {
+        state.isTracking = true;
+        state.isPaused = false;
+        state.stoppedAt = null;
+        state.currentPauseStart = null;
+        if (data.session) mergeSessionState(data.session);
+        scheduleRenderUI();
+      } else if (data.type === 'INIT' || data.type === 'SESSION_UPDATE') {
         if (data.session) {
           mergeSessionState(data.session);
           scheduleRenderUI();
         }
-      } else if (data.type === 'ACTION_PAUSE') {
-        if (data.session) {
-          mergeSessionState(data.session);
-        } else {
-          state.isPaused = true;
-          state.currentPauseStart = data.timestamp;
-        }
-        scheduleRenderUI();
-      } else if (data.type === 'ACTION_RESUME') {
-        if (data.session) {
-          mergeSessionState(data.session);
-        } else {
-          state.isPaused = false;
-          state.currentPauseStart = null;
-        }
-        scheduleRenderUI();
       } else if (data.type === 'PARTICIPANT_OVERRIDE') {
         if (data.session) {
           mergeSessionState(data.session);
@@ -372,20 +392,28 @@ if (btnMasterStart) {
 
 if (btnMasterStop) {
   btnMasterStop.addEventListener('click', () => {
-    if (confirm('Turn OFF Attendance Tracking and freeze all student times? All attendance data will remain visible.')) {
-      sendAction('stop');
-    }
+    btnMasterStop.disabled = true;
+    setTimeout(() => { btnMasterStop.disabled = false; }, 800);
+    sendAction('stop');
   });
 }
 
 if (btnMasterPause) {
   btnMasterPause.addEventListener('click', () => {
+    btnMasterPause.disabled = true;
+    setTimeout(() => { btnMasterPause.disabled = false; }, 600);
     if (state.isPaused) sendAction('resume');
     else sendAction('pause');
   });
 }
 
-if (btnResumeBanner) btnResumeBanner.addEventListener('click', () => sendAction('resume'));
+if (btnResumeBanner) {
+  btnResumeBanner.addEventListener('click', () => {
+    btnResumeBanner.disabled = true;
+    setTimeout(() => { btnResumeBanner.disabled = false; }, 600);
+    sendAction('resume');
+  });
+}
 
 function triggerResetPrompt() {
   if (confirm('Archive current session and RESET all attendance timers to 00:00:00 for a completely fresh 12-hour study marathon?')) {

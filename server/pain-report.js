@@ -39,9 +39,10 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
   const joinTs = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sess.startedAt) || now;
   const leaveTs = toEpochMs(p.leaveTime) || (p.currentStatus === 'left' ? toEpochMs(p.lastSeen) : null);
   const sessionStopTs = toEpochMs(sess.stoppedAt);
+  const pauseStartTs = sess.isPaused ? toEpochMs(sess.currentPauseStart) : null;
   
-  // Effective end time: if participant left, use leaveTime; else if session stopped, use stoppedAt; else now
-  const effectiveEndTime = leaveTs || sessionStopTs || now;
+  // Effective end time: if participant left, use leaveTime; else if session stopped, use stoppedAt; else if session paused, use currentPauseStart; else now
+  const effectiveEndTime = leaveTs || sessionStopTs || pauseStartTs || now;
   const totalInCallMs = Math.max(0, effectiveEndTime - joinTs);
 
   p.joinTime = joinTs;
@@ -65,21 +66,21 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
     }
   }
 
-  // Open cameraOffCurrentStart check
-  if (p.cameraOffCurrentStart && (!sess.isPaused || !sess.stoppedAt)) {
+  // Open cameraOffCurrentStart check: ONLY if session is actively tracking and NOT paused and NOT stopped
+  if (p.cameraOffCurrentStart && sess.isTracking && !sess.isPaused && !sess.stoppedAt) {
     const offStart = toEpochMs(p.cameraOffCurrentStart);
     if (offStart) {
       const liveCutMs = Math.max(0, effectiveEndTime - offStart);
       if (liveCutMs >= 1000) {
         if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
-        const exists = p.cameraOffIntervals.some(int => Math.abs(toEpochMs(int.start) - offStart) < 2000);
+        const exists = p.cameraOffIntervals.some(int => Math.abs((toEpochMs(int.start) || 0) - offStart) < 2000);
         if (!exists) {
           p.cameraOffIntervals.push({
             start: offStart,
             end: effectiveEndTime,
             durationMs: liveCutMs,
-            fromTime: new Date(offStart).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-            toTime: new Date(effectiveEndTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+            fromTime: new Date(offStart).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }),
+            toTime: new Date(effectiveEndTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }),
             durationFormatted: `${Math.floor(liveCutMs / 60000)}m ${Math.floor((liveCutMs % 60000) / 1000)}s`
           });
         }
@@ -97,6 +98,10 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
       camOff = openIntervalOffMs;
     }
   }
+
+  // Accurately reconcile camOff with total intervals duration
+  const totalIntervalsOffMs = (p.cameraOffIntervals || []).reduce((sum, int) => sum + (int.durationMs || 0), 0);
+  camOff = Math.max(camOff, totalIntervalsOffMs);
 
   const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff)
     ? p.totalPresentMs

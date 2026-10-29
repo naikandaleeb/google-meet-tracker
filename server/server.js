@@ -210,9 +210,10 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
   const joinTs = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sess.startedAt) || now;
   const leaveTs = toEpochMs(p.leaveTime) || (p.currentStatus === 'left' ? toEpochMs(p.lastSeen) : null);
   const sessionStopTs = toEpochMs(sess.stoppedAt);
+  const pauseStartTs = sess.isPaused ? toEpochMs(sess.currentPauseStart) : null;
   
-  // Effective end time: if participant left, use leaveTime; else if session stopped, use stoppedAt; else now
-  const effectiveEndTime = leaveTs || sessionStopTs || now;
+  // Effective end time: if participant left, use leaveTime; else if session stopped, use stoppedAt; else if session paused, use currentPauseStart; else now
+  const effectiveEndTime = leaveTs || sessionStopTs || pauseStartTs || now;
   const totalInCallMs = Math.max(0, effectiveEndTime - joinTs);
 
   p.joinTime = joinTs;
@@ -236,21 +237,21 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
     }
   }
 
-  // Open cameraOffCurrentStart check
-  if (p.cameraOffCurrentStart && (!sess.isPaused || !sess.stoppedAt)) {
+  // Open cameraOffCurrentStart check: ONLY if session is actively tracking and NOT paused and NOT stopped
+  if (p.cameraOffCurrentStart && sess.isTracking && !sess.isPaused && !sess.stoppedAt) {
     const offStart = toEpochMs(p.cameraOffCurrentStart);
     if (offStart) {
       const liveCutMs = Math.max(0, effectiveEndTime - offStart);
       if (liveCutMs >= 1000) {
         if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
-        const exists = p.cameraOffIntervals.some(int => Math.abs(toEpochMs(int.start) - offStart) < 2000);
+        const exists = p.cameraOffIntervals.some(int => Math.abs((toEpochMs(int.start) || 0) - offStart) < 2000);
         if (!exists) {
           p.cameraOffIntervals.push({
             start: offStart,
             end: effectiveEndTime,
             durationMs: liveCutMs,
-            fromTime: new Date(offStart).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-            toTime: new Date(effectiveEndTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+            fromTime: new Date(offStart).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }),
+            toTime: new Date(effectiveEndTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }),
             durationFormatted: formatHmsStr(liveCutMs)
           });
         }
@@ -268,6 +269,10 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
       camOff = openIntervalOffMs;
     }
   }
+
+  // Accurately reconcile camOff with cameraOffIntervals
+  const totalIntervalsOffMs = (p.cameraOffIntervals || []).reduce((sum, int) => sum + (int.durationMs || 0), 0);
+  camOff = Math.max(camOff, totalIntervalsOffMs);
 
   const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff)
     ? p.totalPresentMs
@@ -521,22 +526,8 @@ app.post('/api/session/sync', (req, res) => {
     }
   }
 
-  // If incoming sync indicates tracking started, adopt it immediately
-  if (data.isTracking === true && !currentSession.isTracking) {
-    currentSession.isTracking = true;
-    currentSession.isPaused = false;
-    currentSession.stoppedAt = null;
-    if (data.startedAt && !currentSession.startedAt) {
-      currentSession.startedAt = data.startedAt;
-    }
-  }
-
-  // If incoming sync indicates attendance stopped, adopt it
-  if (data.isTracking === false && data.stoppedAt && currentSession.isTracking) {
-    currentSession.isTracking = false;
-    currentSession.isPaused = false;
-    currentSession.stoppedAt = data.stoppedAt;
-  }
+  // Routine sensor heartbeats must NEVER modify master tracking/pause state!
+  // Only explicit user control actions (POST /api/session/action or data.isExplicitAction) may change isTracking/isPaused.
 
   if (data.meetingCode) currentSession.meetingCode = data.meetingCode;
   if (data.meetingTitle) currentSession.meetingTitle = data.meetingTitle;
@@ -647,12 +638,14 @@ app.post('/api/session/sync', (req, res) => {
         };
 
         const totalInMeetMs = calculateTotalInMeetMs(mergedParticipantObj, Date.now());
+        const totalIntervalsOff = combinedOffIntervals.reduce((sum, int) => sum + (int.durationMs || 0), 0);
+        const accurateCamOff = Math.max(camOff, totalIntervalsOff);
 
         currentSession.participants[stableKey] = {
           ...mergedParticipantObj,
           totalPresentMs: totMeet,
           cameraOnMs: camOn,
-          cameraOffMs: camOff,
+          cameraOffMs: accurateCamOff,
           validStudyMs: camOn, // Strictly: Camera ON time = Valid Study Time
           totalInMeetMs: totalInMeetMs,
           timeInCall: totalInMeetMs,
@@ -670,6 +663,7 @@ app.post('/api/session/sync', (req, res) => {
           joinLeaveHistory: combinedJoinLeaveHistory.length > 0 ? combinedJoinLeaveHistory : (p.joinLeaveHistory || existing.joinLeaveHistory || []),
           cameraOffIntervals: combinedOffIntervals,
           cameraIntervals: p.cameraIntervals || existing.cameraIntervals || [],
+          cameraOffCurrentStart: (currentSession.isTracking && !currentSession.isPaused && !isCamOn && isPres) ? (p.cameraOffCurrentStart || existing.cameraOffCurrentStart || Date.now()) : null,
           videoDetectionMode: isCamOn ? (p.cameraStatus === 'on' ? (p.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off',
           lastSeen: Math.max(toEpochMs(p.lastSeen) || Date.now(), toEpochMs(existing.lastSeen) || Date.now())
         };
@@ -738,6 +732,12 @@ app.post('/api/session/action', (req, res) => {
     currentSession.stoppedAt = now;
     currentSession.lastUpdated = now;
 
+    if (currentSession.currentPauseStart) {
+      const pDur = Math.max(0, now - currentSession.currentPauseStart);
+      currentSession.totalPausedMs = (currentSession.totalPausedMs || 0) + pDur;
+      currentSession.currentPauseStart = null;
+    }
+
     // Calculate final study duration and close any open intervals
     Object.values(currentSession.participants || {}).forEach(p => {
       if (p.cameraIntervals && p.cameraIntervals.length > 0) {
@@ -746,9 +746,9 @@ app.post('/api/session/action', (req, res) => {
       }
       if (p.cameraOffCurrentStart) {
         const dur = now - p.cameraOffCurrentStart;
-        if (dur >= 2000) {
-          const fromTime = new Date(p.cameraOffCurrentStart).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-          const toTime = new Date(now).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+        if (dur >= 1000) {
+          const fromTime = new Date(p.cameraOffCurrentStart).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+          const toTime = new Date(now).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
           const sec = Math.floor(dur / 1000);
           const durStr = `${Math.floor(sec / 60)}m ${sec % 60}s`;
           if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
@@ -763,6 +763,14 @@ app.post('/api/session/action', (req, res) => {
         }
         p.cameraOffCurrentStart = null;
       }
+      const totalIntervalsOff = (p.cameraOffIntervals || []).reduce((sum, int) => sum + (int.durationMs || 0), 0);
+      p.cameraOffMs = Math.max(p.cameraOffMs || 0, totalIntervalsOff);
+      p.validStudyMs = p.cameraOnMs || 0;
+      p.totalPresentMs = (p.cameraOnMs || 0) + (p.cameraOffMs || 0);
+      p.duration = p.validStudyMs;
+      p.studyDuration = p.validStudyMs;
+      p.durationSeconds = Math.floor(p.validStudyMs / 1000);
+      p.durationMinutes = Math.floor(p.validStudyMs / 60000);
     });
 
     persistCurrentSession();
@@ -787,13 +795,15 @@ app.post('/api/session/action', (req, res) => {
               start: p.cameraOffCurrentStart,
               end: now,
               durationMs: offDur,
-              fromTime: new Date(p.cameraOffCurrentStart).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-              toTime: new Date(now).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+              fromTime: new Date(p.cameraOffCurrentStart).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }),
+              toTime: new Date(now).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }),
               durationFormatted: formatHmsStr(offDur)
             });
           }
           p.cameraOffCurrentStart = null;
         }
+        const totalIntervalsOff = (p.cameraOffIntervals || []).reduce((sum, int) => sum + (int.durationMs || 0), 0);
+        p.cameraOffMs = Math.max(p.cameraOffMs || 0, totalIntervalsOff);
       });
 
       persistCurrentSession();
