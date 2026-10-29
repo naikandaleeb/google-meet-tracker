@@ -814,7 +814,9 @@ app.post('/api/session/action', (req, res) => {
   }
 
   if (action === 'resume') {
-    if (currentSession.isTracking && currentSession.isPaused) {
+    currentSession.isTracking = true;
+    currentSession.stoppedAt = null;
+    if (currentSession.isPaused) {
       currentSession.isPaused = false;
       const rawPauseDuration = currentSession.currentPauseStart ? Math.max(0, now - currentSession.currentPauseStart) : 0;
       const maxAllowedPause = Math.max(0, now - (currentSession.startedAt || now));
@@ -827,21 +829,21 @@ app.post('/api/session/action', (req, res) => {
         durationMs: pauseDuration
       });
       currentSession.currentPauseStart = null;
-
-      // Restart cameraOffCurrentStart for participants whose camera is still off
-      Object.values(currentSession.participants || {}).forEach(p => {
-        if (p.cameraStatus === 'off' && p.currentStatus === 'present') {
-          p.cameraOffCurrentStart = now;
-        } else {
-          p.cameraOffCurrentStart = null;
-        }
-      });
-
-      persistCurrentSession();
-      broadcast({ type: 'ACTION_RESUME', timestamp: now, session: currentSession });
-      console.log('[Server] Attendance RESUMED at', new Date(now).toLocaleTimeString());
     }
-    return res.json({ success: true, isPaused: false, session: currentSession });
+
+    // Restart cameraOffCurrentStart for participants whose camera is still off
+    Object.values(currentSession.participants || {}).forEach(p => {
+      if (p.cameraStatus === 'off' && p.currentStatus === 'present') {
+        p.cameraOffCurrentStart = now;
+      } else {
+        p.cameraOffCurrentStart = null;
+      }
+    });
+
+    persistCurrentSession();
+    broadcast({ type: 'ACTION_RESUME', timestamp: now, session: currentSession });
+    console.log('[Server] Attendance RESUMED at', new Date(now).toLocaleTimeString());
+    return res.json({ success: true, isTracking: true, isPaused: false, session: currentSession });
   }
 
   if (action === 'reset') {
@@ -1082,81 +1084,32 @@ app.get('/api/session/export/pdf', (req, res) => {
   }
 });
 
-// Helper: Build Dense-Ranked CSV content for any session (Current or Archived)
+// Helper: Build 2-column CSV (Name & Net Time On only)
 function buildCsvContent(sess) {
   cleanAllSessionParticipants(sess);
   const participants = Object.values(sess.participants || {}).filter(p => {
-    return p.name && !p.name.toLowerCase().includes('keep_outline');
+    if (!p || !p.name) return false;
+    const lower = p.name.toLowerCase();
+    if (lower.includes('keep_outline') || lower.includes('turn off') || lower === 'pin' || lower === 'unpin') return false;
+    if (p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || lower === 'host' || lower === 'host (you)' || lower.includes('andaleeb gull')) return false;
+    return true;
   });
 
-  const formatDate = (ts) => ts ? new Date(ts).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : 'N/A';
-
-  // Compute dense ranks
-  computeDenseRanks(participants);
+  // Sort descending by valid study time (Rank 1 first)
+  participants.sort((a, b) => {
+    const timeA = a.validStudyMs !== undefined ? a.validStudyMs : (a.cameraOnMs || 0);
+    const timeB = b.validStudyMs !== undefined ? b.validStudyMs : (b.cameraOnMs || 0);
+    return timeB - timeA;
+  });
 
   const rows = [];
-  rows.push(['Cockroach Library 12-Hour Study Attendance & Camera Tracking Report']);
-  rows.push(['Meeting Code', sess.meetingCode || 'N/A']);
-  rows.push(['Status', sess.isTracking ? (sess.isPaused ? 'PAUSED' : 'TRACKING ACTIVE') : 'ATTENDANCE FINALIZED / OFF']);
-  rows.push(['Started At', formatDate(sess.startedAt)]);
-  rows.push(['Stopped At', formatDate(sess.stoppedAt)]);
-  rows.push(['Total Pause / Break Time', formatHmsStr(sess.totalPausedMs)]);
-  rows.push(['Total Participants Tracked', participants.length]);
-  rows.push([]);
-  rows.push([
-    'Rank',
-    'Participant Name',
-    'Presence Status',
-    'Current Camera',
-    'Total Attendance / Valid Study Duration',
-    'Deducted / Cut Time (Cam OFF)',
-    'Total In Meet Duration',
-    'Camera Compliance %',
-    'Rejoin Count',
-    'Join/Leave & Rejoin Timeline',
-    'Camera OFF Intervals (Exact Breakdown)',
-    'First Joined (IST)',
-    'Last Seen (IST)'
-  ]);
+  rows.push(['Name', 'Net Time On']);
 
   participants.forEach(p => {
-    const totMeet = p.totalPresentMs || 0;
-    const camOn = p.cameraOnMs || 0;
-    const camOff = p.cameraOffMs || 0;
-    const totalInMeet = p.totalInMeetMs || totMeet;
-    const camPercent = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : '0.0%';
-
-    const offList = (p.cameraOffIntervals || []).map(int => {
-      const from = int.fromTime || (int.start ? new Date(int.start).toLocaleTimeString('en-IN') : '');
-      const to = int.toTime || (int.end ? new Date(int.end).toLocaleTimeString('en-IN') : 'Present');
-      const dur = int.durationFormatted || formatHmsStr(int.durationMs || 0);
-      return `${from} - ${to} (${dur})`;
-    }).join('; ');
-
-    const joinLeaveLog = (p.joinLeaveHistory || []).map(ev => {
-      const timeStr = ev.formatted || (ev.time ? new Date(ev.time).toLocaleTimeString('en-IN') : '');
-      const awayStr = ev.awayFormatted ? ` (away ${ev.awayFormatted})` : '';
-      return `${(ev.event || '').toUpperCase()} at ${timeStr}${awayStr}`;
-    }).join('; ');
-
-    const isHost = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
-    const rankLabel = isHost ? 'EXEMPT [HOST]' : (`#${p.rank}${p.rank === 1 ? ' [👑 RANK 1]' : ''}`);
-
-    rows.push([
-      rankLabel,
-      `"${(p.name || 'Unknown').replace(/"/g, '""')}"`,
-      p.currentStatus || 'present',
-      (p.cameraStatus || 'off').toUpperCase(),
-      formatHmsStr(camOn),
-      `-${formatHmsStr(camOff)}`,
-      formatHmsStr(totalInMeet),
-      camPercent,
-      p.rejoinCount || 0,
-      `"${joinLeaveLog.replace(/"/g, '""')}"`,
-      `"${offList.replace(/"/g, '""')}"`,
-      formatDate(p.firstSeen),
-      formatDate(p.lastSeen)
-    ]);
+    const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
+    const formattedTime = formatHmsStr(camOn);
+    const safeName = `"${(p.name || 'Unknown').replace(/"/g, '""')}"`;
+    rows.push([safeName, formattedTime]);
   });
 
   return '\uFEFF' + rows.map(r => r.join(',')).join('\r\n');

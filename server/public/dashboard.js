@@ -348,6 +348,8 @@ async function sendAction(action, payload = {}) {
       if (action === 'start') {
         state.isTracking = true;
         state.isPaused = false;
+        state.stoppedAt = null;
+        state.currentPauseStart = null;
         showToast('▶️ Attendance tracking STARTED! Live timers running.');
       } else if (action === 'stop') {
         state.isTracking = false;
@@ -357,7 +359,10 @@ async function sendAction(action, payload = {}) {
         state.isPaused = true;
         showToast('⏸️ Study session paused for break!');
       } else if (action === 'resume') {
+        state.isTracking = true;
         state.isPaused = false;
+        state.stoppedAt = null;
+        state.currentPauseStart = null;
         showToast('▶️ Study session resumed! Timers active.');
       } else if (action === 'reset') {
         state = result.session;
@@ -374,18 +379,6 @@ async function sendAction(action, payload = {}) {
 // Event Listeners for Controls
 if (btnMasterStart) {
   btnMasterStart.addEventListener('click', () => {
-    if (state.stoppedAt && state.startedAt) {
-      const activeMs = calculateActiveStudyMs(state, Date.now());
-      const startFresh = confirm(
-        `A previous completed attendance session exists (${formatHms(activeMs)}).\n\n` +
-        `• Click OK to RESET TO 00:00:00 and start a brand new study marathon.\n` +
-        `• Click CANCEL to RESUME the existing session.`
-      );
-      if (startFresh) {
-        sendAction('start', { resetFirst: true });
-        return;
-      }
-    }
     sendAction('start');
   });
 }

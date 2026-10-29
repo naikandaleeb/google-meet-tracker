@@ -70,7 +70,7 @@
     'turn on microphone', 'turn off camera', 'turn on camera'
   ];
 
-  let lastUserPauseActionTime = 0;
+  let lastUserControlActionTime = 0;
   const knownHostNames = new Set(['host (you)', 'you', 'host', 'host (andaleeb gull)', 'andaleeb gull']);
   const deletedParticipants = new Set();
 
@@ -904,18 +904,6 @@
 
   // ================= ATTENDANCE ACTIONS =================
   function handleStartButtonClick() {
-    if (session.stoppedAt && session.startedAt) {
-      const activeMs = calculateActiveStudyMs(session, Date.now());
-      const choice = confirm(
-        `A previous completed attendance session exists (${formatHms(activeMs)}).\n\n` +
-        `• Click OK to RESET TO 00:00:00 and start a brand new study session.\n` +
-        `• Click CANCEL to RESUME the existing session.`
-      );
-      if (choice) {
-        resetSession(true);
-        return;
-      }
-    }
     startAttendance();
   }
 
@@ -927,6 +915,7 @@
 
   function startAttendance() {
     const now = Date.now();
+    lastUserControlActionTime = now;
     session.isTracking = true;
     session.isPaused = false;
     const isFresh = !session.startedAt;
@@ -969,14 +958,17 @@
       type: 'SERVER_ACTION',
       serverUrl: getServerBaseUrl(),
       action: 'start'
-    }, () => {
+    }, (resp) => {
       const _err = chrome.runtime.lastError;
-      syncSessionNow();
+      if (resp && resp.data && resp.data.session) {
+        adoptServerSession(resp.data.session);
+      }
     });
   }
 
   function stopAttendance() {
     const now = Date.now();
+    lastUserControlActionTime = now;
     session.isTracking = false;
     session.isPaused = false;
     session.stoppedAt = now;
@@ -1029,23 +1021,20 @@
 
     renderControls();
     saveSession();
-    syncSessionNow();
     updateHudUI();
 
-    // Inform server to stop and archive
+    // Inform server immediately to stop & archive
     chrome.runtime.sendMessage({
       type: 'SERVER_ACTION',
       serverUrl: getServerBaseUrl(),
       action: 'stop',
-      payload: { autoArchive: true }
-    }, () => {
+      payload: { autoArchive: true, isExplicitAction: true }
+    }, (resp) => {
       const _err = chrome.runtime.lastError;
+      if (resp && resp.data && resp.data.session) {
+        adoptServerSession(resp.data.session);
+      }
     });
-
-    // Auto-generate & open the Ranked PDF Report in the exact consolidated format!
-    setTimeout(() => {
-      openUrlInTab(`${getServerBaseUrl()}/report?print=true`);
-    }, 400);
   }
 
   function resetSession(autoStart = false) {
@@ -1122,23 +1111,26 @@
 
   // FIXED PAUSE / RESUME ENGINE (ZERO BACK-COUNTING, ZERO JUMPING)
   function toggleSessionPause() {
-    if (!session.isTracking) return;
     const now = Date.now();
-    lastUserPauseActionTime = now;
+    lastUserControlActionTime = now;
 
-    if (session.isPaused) {
-      // RESUMING FROM PAUSE
-      session.isPaused = false;
-      const pauseDuration = session.currentPauseStart ? Math.max(0, now - session.currentPauseStart) : 0;
-      session.totalPausedMs = (session.totalPausedMs || 0) + pauseDuration;
+    if (session.isPaused || !session.isTracking) {
+      // RESUMING
+      session.isTracking = true;
+      session.stoppedAt = null;
+      if (session.isPaused) {
+        session.isPaused = false;
+        const pauseDuration = session.currentPauseStart ? Math.max(0, now - session.currentPauseStart) : 0;
+        session.totalPausedMs = (session.totalPausedMs || 0) + pauseDuration;
 
-      if (!session.pauseHistory) session.pauseHistory = [];
-      session.pauseHistory.push({
-        pausedAt: session.currentPauseStart || (now - pauseDuration),
-        resumedAt: now,
-        durationMs: pauseDuration
-      });
-      session.currentPauseStart = null;
+        if (!session.pauseHistory) session.pauseHistory = [];
+        session.pauseHistory.push({
+          pausedAt: session.currentPauseStart || (now - pauseDuration),
+          resumedAt: now,
+          durationMs: pauseDuration
+        });
+        session.currentPauseStart = null;
+      }
       lastTickTime = now;
 
       // When resuming, restart cameraOffCurrentStart for participants whose camera is still off
@@ -1152,11 +1144,20 @@
 
       console.log('[Cockroach Tracker] ▶️ Resumed. Study timer active.');
 
+      renderControls();
+      saveSession();
+      updateHudUI();
+
       chrome.runtime.sendMessage({
         type: 'SERVER_ACTION',
         serverUrl: getServerBaseUrl(),
         action: 'resume'
-      }, () => { const _err = chrome.runtime.lastError; });
+      }, (resp) => {
+        const _err = chrome.runtime.lastError;
+        if (resp && resp.data && resp.data.session) {
+          adoptServerSession(resp.data.session);
+        }
+      });
     } else {
       // PAUSING TRACKING
       session.isPaused = true;
@@ -1183,17 +1184,21 @@
 
       console.log('[Cockroach Tracker] ⏸️ Paused. Study timer frozen.');
 
+      renderControls();
+      saveSession();
+      updateHudUI();
+
       chrome.runtime.sendMessage({
         type: 'SERVER_ACTION',
         serverUrl: getServerBaseUrl(),
         action: 'pause'
-      }, () => { const _err = chrome.runtime.lastError; });
+      }, (resp) => {
+        const _err = chrome.runtime.lastError;
+        if (resp && resp.data && resp.data.session) {
+          adoptServerSession(resp.data.session);
+        }
+      });
     }
-
-    renderControls();
-    saveSession();
-    syncSessionNow();
-    updateHudUI();
   }
 
   // ================= PARTICIPANT NAME EXTRACTION =================
@@ -1367,128 +1372,12 @@
     return true;
   }
 
-  // ================= SMART BLANK / OBS / POSTER VIDEO ANALYZER =================
-  let offscreenCanvas = null;
-  let offscreenCtx = null;
-
+  // ================= SMART CAMERA EVALUATION =================
+  // Strict Google Meet native camera detection:
+  // ONLY real camera off is detected (via Google Meet's native avatar/indicator/stream status).
+  // Zero dark pixel / black screen heuristics that falsely cut attendance!
   function analyzeVideoFrame(video) {
-    if (!video || video.readyState < 2 || !video.videoWidth || !video.videoHeight) {
-      return { isBlank: false, isApprovedPoster: false, mode: 'unready' };
-    }
-
-    // Throttle analysis per video element to once every 1500ms
-    const now = Date.now();
-    if (video._ckLastAnalysis && (now - video._ckLastAnalysis.time < 1500)) {
-      return video._ckLastAnalysis.result;
-    }
-
-    try {
-      if (!offscreenCanvas) {
-        offscreenCanvas = document.createElement('canvas');
-        offscreenCanvas.width = 32;
-        offscreenCanvas.height = 32;
-        offscreenCtx = offscreenCanvas.getContext('2d', { willReadFrequently: true });
-      }
-
-      offscreenCtx.drawImage(video, 0, 0, 32, 32);
-      const imgData = offscreenCtx.getImageData(0, 0, 32, 32);
-      const data = imgData.data;
-      const total = 32 * 32;
-
-      let darkPixelCount = 0; // Dark pixels (< 30)
-      let obsBlueCount = 0;   // OBS idle screen blue
-      let navyCount = 0;       // Poster 1 & 3 navy/teal
-      let creamCount = 0;      // Poster 1 & 3 cream text
-      let yellowCount = 0;     // Poster 1 & 2 yellow accents
-      let amberCount = 0;      // Poster 2 warm amber lighting
-      let sumBrightness = 0;
-      let maxPixelVal = 0;
-      let minPixelVal = 255;
-      let diffPixelCount = 0;
-
-      const prevData = video._ckPrevThumbnail;
-
-      for (let i = 0; i < data.length; i += 4) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
-        const br = (r + g + b) / 3;
-        sumBrightness += br;
-        if (br > maxPixelVal) maxPixelVal = br;
-        if (br < minPixelVal) minPixelVal = br;
-
-        // 1. Dark/Black pixels (< 30 in all channels) - covered lens or black screen
-        if (r < 30 && g < 30 && b < 30) darkPixelCount++;
-
-        // 2. OBS Idle Blue screen (RGB approx 15-45, 25-60, 55-120 with prominent blue tint)
-        if (r >= 15 && r <= 45 && g >= 25 && g <= 60 && b >= 55 && b <= 120 && (b - r) >= 20) obsBlueCount++;
-
-        // 3. Navy/Teal (Posters 1 & 3)
-        if (r >= 10 && r <= 65 && g >= 25 && g <= 80 && b >= 40 && b <= 105) navyCount++;
-
-        // 4. Cream ("BRB" text)
-        if (r >= 180 && g >= 170 && b >= 140 && Math.abs(r - g) <= 35) creamCount++;
-
-        // 5. Yellow/Gold ("STEPPING AWAY BRIEFLY", "15 MINUTE BREAK")
-        if (r >= 160 && g >= 120 && b <= 100 && (r - b) >= 50) yellowCount++;
-
-        // 6. Amber (Poster 2 warm room lighting)
-        if (r >= 45 && r <= 135 && g >= 30 && g <= 105 && b <= 55 && r > g && g > b) amberCount++;
-
-        // 7. Temporal motion tracking vs previous frame
-        if (prevData) {
-          const pixelDiff = (Math.abs(r - prevData[i]) + Math.abs(g - prevData[i + 1]) + Math.abs(b - prevData[i + 2])) / 3;
-          if (pixelDiff > 5) diffPixelCount++;
-        }
-      }
-
-      // Store current frame copy for next motion check
-      video._ckPrevThumbnail = new Uint8ClampedArray(data);
-
-      const avgBrightness = sumBrightness / total;
-      const pixelSpread = maxPixelVal - minPixelVal;
-
-      // 1. Approved Break Poster Recognition (The 3 Official Posters ONLY):
-      const isPoster1 = (navyCount > 150 && creamCount > 30 && yellowCount > 10);
-      const isPoster2 = (yellowCount > 35 && amberCount > 25);
-      const isPoster3 = (creamCount > 90 && yellowCount > 15);
-      const isApprovedPoster = isPoster1 || isPoster2 || isPoster3;
-
-      // 2. Blank / Covered Camera Detection:
-      // Real webcams in dark rooms have monitor glow (pixelSpread >= 25)
-      // Covered webcams (tape/paper/sensor gain) have flat low spread (< 24) and high dark ratio or low avg brightness
-      const isSolidBlack = (darkPixelCount / total >= 0.85 && pixelSpread < 24) || (avgBrightness < 25 && pixelSpread < 20);
-
-      // 3. OBS Default Blue Screen:
-      const isObsIdle = (obsBlueCount / total >= 0.60);
-
-      // 4. Unauthorized Poster / Fake Image / Static OBS Screen:
-      // A static image/poster has near-zero frame changes over time (< 1.5% pixel change)
-      const motionRatio = prevData ? (diffPixelCount / total) : 0.05;
-      if (prevData && motionRatio < 0.015) {
-        video._ckStaticTicks = (video._ckStaticTicks || 0) + 1;
-      } else {
-        video._ckStaticTicks = 0;
-      }
-
-      // If video has been static for 2+ consecutive checks (3+ seconds) and is NOT an approved poster:
-      const isUnauthorizedPoster = (video._ckStaticTicks >= 2) && !isApprovedPoster && !isSolidBlack;
-
-      // Overall Cut Flag: Blank, OBS screen, or ANY poster other than the 3 approved posters!
-      const isBlank = !isApprovedPoster && (isSolidBlack || isObsIdle || isUnauthorizedPoster);
-
-      let mode = 'webcam';
-      if (isApprovedPoster) mode = 'poster';
-      else if (isSolidBlack) mode = 'blank';
-      else if (isObsIdle) mode = 'obs';
-      else if (isUnauthorizedPoster) mode = 'unauthorized_poster';
-
-      const result = { isBlank, isApprovedPoster, mode };
-      video._ckLastAnalysis = { time: now, result };
-      return result;
-    } catch (err) {
-      return { isBlank: false, isApprovedPoster: false, mode: 'fallback' };
-    }
+    return { isBlank: false, isApprovedPoster: false, mode: 'webcam' };
   }
 
   function evaluateTileCamera(tile) {
@@ -1509,12 +1398,6 @@
 
     // 5. If video is actively streaming frames:
     if (isVideoActive(video)) {
-      const analysis = analyzeVideoFrame(video);
-      // Blank or fake OBS idle screen -> Camera is OFF (cut attendance!)
-      if (analysis.isBlank) {
-        return 'off';
-      }
-      // Approved break poster or normal live webcam -> Camera is ON!
       return 'on';
     }
 
@@ -1675,11 +1558,6 @@
 
     document.querySelectorAll('video').forEach(v => {
       if (!isVideoActive(v)) return;
-
-      const analysis = analyzeVideoFrame(v);
-      if (analysis.isBlank) {
-        return;
-      }
 
       // Find participant name by walking up to enclosing tile container
       let container = v.parentElement;
@@ -2276,22 +2154,29 @@
       }
     }
 
+    const isRecentLocalAction = (Date.now() - lastUserControlActionTime) < 4000;
+
     const controlChanged = session.sessionId !== serverSess.sessionId ||
-                           session.isTracking !== serverSess.isTracking ||
-                           session.isPaused !== serverSess.isPaused ||
-                           session.startedAt !== serverSess.startedAt ||
-                           session.stoppedAt !== serverSess.stoppedAt;
+                           (!isRecentLocalAction && (
+                             session.isTracking !== serverSess.isTracking ||
+                             session.isPaused !== serverSess.isPaused ||
+                             session.startedAt !== serverSess.startedAt ||
+                             session.stoppedAt !== serverSess.stoppedAt
+                           ));
 
     session.sessionId = serverSess.sessionId || session.sessionId;
     session.meetingCode = serverSess.meetingCode || session.meetingCode;
-    session.isTracking = !!serverSess.isTracking;
-    session.isPaused = !!serverSess.isPaused;
-    session.startedAt = serverSess.startedAt;
-    session.stoppedAt = serverSess.stoppedAt;
-    session.totalPausedMs = serverSess.totalPausedMs || 0;
-    session.currentPauseStart = serverSess.currentPauseStart;
-    session.pauseHistory = serverSess.pauseHistory || [];
     session.targetDurationHours = serverSess.targetDurationHours || 12;
+
+    if (!isRecentLocalAction) {
+      session.isTracking = !!serverSess.isTracking;
+      session.isPaused = !!serverSess.isPaused;
+      session.startedAt = serverSess.startedAt;
+      session.stoppedAt = serverSess.stoppedAt;
+      session.totalPausedMs = serverSess.totalPausedMs || 0;
+      session.currentPauseStart = serverSess.currentPauseStart;
+      session.pauseHistory = serverSess.pauseHistory || [];
+    }
 
     if (controlChanged) {
       console.log(`[Cockroach Tracker] Master tracking state synced from server: isTracking=${session.isTracking}, isPaused=${session.isPaused}`);
@@ -2307,6 +2192,7 @@
 
     // Explicit action handling ALWAYS takes precedence
     if (event.type === 'ACTION_STOP') {
+      lastUserControlActionTime = Date.now();
       session.isTracking = false;
       session.isPaused = false;
       session.stoppedAt = event.timestamp || (event.session && event.session.stoppedAt) || Date.now();
@@ -2315,22 +2201,29 @@
       updateHudUI();
       saveSession();
     } else if (event.type === 'ACTION_PAUSE') {
+      lastUserControlActionTime = Date.now();
       session.isPaused = true;
       session.currentPauseStart = event.timestamp || (event.session && event.session.currentPauseStart) || Date.now();
       renderControls();
       updateHudUI();
       saveSession();
     } else if (event.type === 'ACTION_RESUME') {
+      lastUserControlActionTime = Date.now();
+      session.isTracking = true;
       session.isPaused = false;
+      session.stoppedAt = null;
       session.currentPauseStart = null;
+      lastTickTime = Date.now();
       renderControls();
       updateHudUI();
       saveSession();
     } else if (event.type === 'ACTION_START') {
+      lastUserControlActionTime = Date.now();
       session.isTracking = true;
       session.isPaused = false;
       session.currentPauseStart = null;
       session.stoppedAt = null;
+      lastTickTime = Date.now();
       renderControls();
       updateHudUI();
       saveSession();
