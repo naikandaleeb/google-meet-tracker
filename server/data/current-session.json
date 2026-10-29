@@ -4,12 +4,12 @@
   "meetingTitle": "Cockroach Library 12-Hour Study Marathon",
   "startedAt": 1793257114620,
   "stoppedAt": null,
-  "lastUpdated": 1793287804222,
+  "lastUpdated": 1793290588961,
   "lastResetAt": 1793172845953,
   "isTracking": true,
-  "isPaused": true,
+  "isPaused": false,
   "totalPausedMs": 2181712,
-  "currentPauseStart": 1793286311036,
+  "currentPauseStart": null,
   "pauseHistory": [
     {
       "pausedAt": 1793277078154,
@@ -40,7 +40,7 @@
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
@@ -117,17 +117,17 @@
           "formatted": "12:28 pm"
         }
       ],
-      "totalInMeetMs": 598412721,
-      "totalPresentMs": 31628080,
-      "cameraOnMs": 26227946,
+      "totalInMeetMs": 617905894,
+      "totalPresentMs": 32846612,
+      "cameraOnMs": 27446478,
       "cameraOffMs": 5400134,
-      "validStudyMs": 26227946,
-      "totalDuration": 31628080,
-      "duration": 26227946,
-      "timeInCall": 598412721,
-      "durationSeconds": 26227,
-      "durationMinutes": 437,
-      "studyDuration": 26227946,
+      "validStudyMs": 27446478,
+      "totalDuration": 32846612,
+      "duration": 27446478,
+      "timeInCall": 617905894,
+      "durationSeconds": 27446,
+      "durationMinutes": 457,
+      "studyDuration": 27446478,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -216,6 +216,46 @@
         },
         {
           "start": 1793287684256,
+          "end": 1793287858305,
+          "state": "on"
+        },
+        {
+          "start": 1793287858305,
+          "end": 1793287862293,
+          "state": "off"
+        },
+        {
+          "start": 1793287862293,
+          "end": 1793287943312,
+          "state": "on"
+        },
+        {
+          "start": 1793287943312,
+          "end": 1793287948283,
+          "state": "off"
+        },
+        {
+          "start": 1793287948283,
+          "end": 1793288120505,
+          "state": "on"
+        },
+        {
+          "start": 1793288120505,
+          "end": 1793288124321,
+          "state": "off"
+        },
+        {
+          "start": 1793288124321,
+          "end": 1793289345307,
+          "state": "on"
+        },
+        {
+          "start": 1793289345307,
+          "end": 1793289348357,
+          "state": "off"
+        },
+        {
+          "start": 1793289348357,
           "end": null,
           "state": "on"
         }
@@ -231,13 +271,13 @@
       "name": "Nitish Singh Rajput",
       "isLocal": false,
       "currentStatus": "present",
-      "cameraStatus": "off",
+      "cameraStatus": "on",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 1,
       "rejoinedAt": 1793217660196,
       "presenceIntervals": [
@@ -296,17 +336,17 @@
           "formatted": "12:28 pm"
         }
       ],
-      "totalInMeetMs": 404151874,
-      "totalPresentMs": 27284596,
-      "cameraOnMs": 23309536,
+      "totalInMeetMs": 418075549,
+      "totalPresentMs": 28294900,
+      "cameraOnMs": 24319840,
       "cameraOffMs": 3975060,
-      "validStudyMs": 23309536,
-      "totalDuration": 27284596,
-      "duration": 23309536,
-      "timeInCall": 404151874,
-      "durationSeconds": 23309,
-      "durationMinutes": 388,
-      "studyDuration": 23309536,
+      "validStudyMs": 24319840,
+      "totalDuration": 28294900,
+      "duration": 24319840,
+      "timeInCall": 418075549,
+      "durationSeconds": 24319,
+      "durationMinutes": 405,
+      "studyDuration": 24319840,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -3493,6 +3533,238 @@
           "fromTime": "08:47 pm",
           "toTime": "08:47 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289364770,
+          "end": 1793289378771,
+          "durationMs": 14001,
+          "fromTime": "09:26 pm",
+          "toTime": "09:26 pm",
+          "durationFormatted": "00:00:14"
+        },
+        {
+          "start": 1793289427783,
+          "end": 1793289433772,
+          "durationMs": 5989,
+          "fromTime": "09:27 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793289439771,
+          "end": 1793289443774,
+          "durationMs": 4003,
+          "fromTime": "09:27 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793289453798,
+          "end": 1793289475775,
+          "durationMs": 21977,
+          "fromTime": "09:27 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:00:21"
+        },
+        {
+          "start": 1793289479775,
+          "end": 1793289487919,
+          "durationMs": 8144,
+          "fromTime": "09:27 pm",
+          "toTime": "09:28 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793289531789,
+          "end": 1793289535785,
+          "durationMs": 3996,
+          "fromTime": "09:28 pm",
+          "toTime": "09:28 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793289539769,
+          "end": 1793289541777,
+          "durationMs": 2008,
+          "fromTime": "09:28 pm",
+          "toTime": "09:29 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289695267,
+          "end": 1793289697261,
+          "durationMs": 1994,
+          "fromTime": "09:31 pm",
+          "toTime": "09:31 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793289763355,
+          "end": 1793289777267,
+          "durationMs": 13912,
+          "fromTime": "09:32 pm",
+          "toTime": "09:32 pm",
+          "durationFormatted": "00:00:13"
+        },
+        {
+          "start": 1793289789265,
+          "end": 1793289799262,
+          "durationMs": 9997,
+          "fromTime": "09:33 pm",
+          "toTime": "09:33 pm",
+          "durationFormatted": "00:00:09"
+        },
+        {
+          "start": 1793289833266,
+          "end": 1793289841368,
+          "durationMs": 8102,
+          "fromTime": "09:33 pm",
+          "toTime": "09:34 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793289845266,
+          "end": 1793289847271,
+          "durationMs": 2005,
+          "fromTime": "09:34 pm",
+          "toTime": "09:34 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289851265,
+          "end": 1793289859261,
+          "durationMs": 7996,
+          "fromTime": "09:34 pm",
+          "toTime": "09:34 pm",
+          "durationFormatted": "00:00:07"
+        },
+        {
+          "start": 1793289895261,
+          "end": 1793289899266,
+          "durationMs": 4005,
+          "fromTime": "09:34 pm",
+          "toTime": "09:34 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793289915266,
+          "end": 1793289921265,
+          "durationMs": 5999,
+          "fromTime": "09:35 pm",
+          "toTime": "09:35 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793290011270,
+          "end": 1793290017266,
+          "durationMs": 5996,
+          "fromTime": "09:36 pm",
+          "toTime": "09:36 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793290021286,
+          "end": 1793290023265,
+          "durationMs": 1979,
+          "fromTime": "09:37 pm",
+          "toTime": "09:37 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290027261,
+          "end": 1793290029286,
+          "durationMs": 2025,
+          "fromTime": "09:37 pm",
+          "toTime": "09:37 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290039261,
+          "end": 1793290041266,
+          "durationMs": 2005,
+          "fromTime": "09:37 pm",
+          "toTime": "09:37 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290117261,
+          "end": 1793290119266,
+          "durationMs": 2005,
+          "fromTime": "09:38 pm",
+          "toTime": "09:38 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290213261,
+          "end": 1793290215321,
+          "durationMs": 2060,
+          "fromTime": "09:40 pm",
+          "toTime": "09:40 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290221266,
+          "end": 1793290235267,
+          "durationMs": 14001,
+          "fromTime": "09:40 pm",
+          "toTime": "09:40 pm",
+          "durationFormatted": "00:00:14"
+        },
+        {
+          "start": 1793290291264,
+          "end": 1793290293255,
+          "durationMs": 1991,
+          "fromTime": "09:41 pm",
+          "toTime": "09:41 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290447263,
+          "end": 1793290475865,
+          "durationMs": 28602,
+          "fromTime": "09:44 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:28"
+        },
+        {
+          "start": 1793290457266,
+          "end": 1793290461265,
+          "durationMs": 3999,
+          "fromTime": "09:44 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290493266,
+          "end": 1793290499381,
+          "durationMs": 6115,
+          "fromTime": "09:44 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:06"
+        },
+        {
+          "start": 1793290511255,
+          "end": 1793290513263,
+          "durationMs": 2008,
+          "fromTime": "09:45 pm",
+          "toTime": "09:45 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290567261,
+          "end": 1793290575850,
+          "durationMs": 8589,
+          "fromTime": "09:46 pm",
+          "toTime": "09:46 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793290579261,
+          "end": 1793290583265,
+          "durationMs": 4004,
+          "fromTime": "09:46 pm",
+          "toTime": "09:46 pm",
+          "durationFormatted": "00:00:04"
         }
       ],
       "cameraIntervals": [
@@ -7898,12 +8170,457 @@
         },
         {
           "start": 1793286685260,
-          "end": null,
+          "end": 1793288781442,
           "state": "off"
+        },
+        {
+          "start": 1793288781442,
+          "end": 1793288785559,
+          "state": "on"
+        },
+        {
+          "start": 1793288785559,
+          "end": 1793288791261,
+          "state": "off"
+        },
+        {
+          "start": 1793288791261,
+          "end": 1793288901326,
+          "state": "on"
+        },
+        {
+          "start": 1793288901326,
+          "end": 1793288903297,
+          "state": "off"
+        },
+        {
+          "start": 1793288903297,
+          "end": 1793288925268,
+          "state": "on"
+        },
+        {
+          "start": 1793288925268,
+          "end": 1793288927266,
+          "state": "off"
+        },
+        {
+          "start": 1793288927266,
+          "end": 1793288933266,
+          "state": "on"
+        },
+        {
+          "start": 1793288933266,
+          "end": 1793288937265,
+          "state": "off"
+        },
+        {
+          "start": 1793288937265,
+          "end": 1793289197623,
+          "state": "on"
+        },
+        {
+          "start": 1793289197623,
+          "end": 1793289199261,
+          "state": "off"
+        },
+        {
+          "start": 1793289199261,
+          "end": 1793289205261,
+          "state": "on"
+        },
+        {
+          "start": 1793289205261,
+          "end": 1793289209269,
+          "state": "off"
+        },
+        {
+          "start": 1793289209269,
+          "end": 1793289213265,
+          "state": "on"
+        },
+        {
+          "start": 1793289213265,
+          "end": 1793289215266,
+          "state": "off"
+        },
+        {
+          "start": 1793289215266,
+          "end": 1793289229261,
+          "state": "on"
+        },
+        {
+          "start": 1793289229261,
+          "end": 1793289231287,
+          "state": "off"
+        },
+        {
+          "start": 1793289231287,
+          "end": 1793289234267,
+          "state": "on"
+        },
+        {
+          "start": 1793289234267,
+          "end": 1793289244331,
+          "state": "off"
+        },
+        {
+          "start": 1793289244331,
+          "end": 1793289260273,
+          "state": "on"
+        },
+        {
+          "start": 1793289260273,
+          "end": 1793289262261,
+          "state": "off"
+        },
+        {
+          "start": 1793289262261,
+          "end": 1793289270266,
+          "state": "on"
+        },
+        {
+          "start": 1793289270266,
+          "end": 1793289302266,
+          "state": "off"
+        },
+        {
+          "start": 1793289302266,
+          "end": 1793289308272,
+          "state": "on"
+        },
+        {
+          "start": 1793289308272,
+          "end": 1793289318266,
+          "state": "off"
+        },
+        {
+          "start": 1793289318266,
+          "end": 1793289322354,
+          "state": "on"
+        },
+        {
+          "start": 1793289322354,
+          "end": 1793289332266,
+          "state": "off"
+        },
+        {
+          "start": 1793289332266,
+          "end": 1793289354558,
+          "state": "on"
+        },
+        {
+          "start": 1793289354558,
+          "end": 1793289358433,
+          "state": "off"
+        },
+        {
+          "start": 1793289358433,
+          "end": 1793289362790,
+          "state": "on"
+        },
+        {
+          "start": 1793289362790,
+          "end": 1793289378771,
+          "state": "off"
+        },
+        {
+          "start": 1793289378771,
+          "end": 1793289386939,
+          "state": "on"
+        },
+        {
+          "start": 1793289386939,
+          "end": 1793289401946,
+          "state": "off"
+        },
+        {
+          "start": 1793289401946,
+          "end": 1793289427783,
+          "state": "on"
+        },
+        {
+          "start": 1793289427783,
+          "end": 1793289433772,
+          "state": "off"
+        },
+        {
+          "start": 1793289433772,
+          "end": 1793289439771,
+          "state": "on"
+        },
+        {
+          "start": 1793289439771,
+          "end": 1793289443774,
+          "state": "off"
+        },
+        {
+          "start": 1793289443774,
+          "end": 1793289453798,
+          "state": "on"
+        },
+        {
+          "start": 1793289453798,
+          "end": 1793289475775,
+          "state": "off"
+        },
+        {
+          "start": 1793289475775,
+          "end": 1793289479775,
+          "state": "on"
+        },
+        {
+          "start": 1793289479775,
+          "end": 1793289487919,
+          "state": "off"
+        },
+        {
+          "start": 1793289487919,
+          "end": 1793289531789,
+          "state": "on"
+        },
+        {
+          "start": 1793289531789,
+          "end": 1793289535785,
+          "state": "off"
+        },
+        {
+          "start": 1793289535785,
+          "end": 1793289539769,
+          "state": "on"
+        },
+        {
+          "start": 1793289539769,
+          "end": 1793289541777,
+          "state": "off"
+        },
+        {
+          "start": 1793289541777,
+          "end": 1793289695267,
+          "state": "on"
+        },
+        {
+          "start": 1793289695267,
+          "end": 1793289697261,
+          "state": "off"
+        },
+        {
+          "start": 1793289697261,
+          "end": 1793289763355,
+          "state": "on"
+        },
+        {
+          "start": 1793289763355,
+          "end": 1793289777267,
+          "state": "off"
+        },
+        {
+          "start": 1793289777267,
+          "end": 1793289789265,
+          "state": "on"
+        },
+        {
+          "start": 1793289789265,
+          "end": 1793289799262,
+          "state": "off"
+        },
+        {
+          "start": 1793289799262,
+          "end": 1793289833266,
+          "state": "on"
+        },
+        {
+          "start": 1793289833266,
+          "end": 1793289841368,
+          "state": "off"
+        },
+        {
+          "start": 1793289841368,
+          "end": 1793289845266,
+          "state": "on"
+        },
+        {
+          "start": 1793289845266,
+          "end": 1793289847271,
+          "state": "off"
+        },
+        {
+          "start": 1793289847271,
+          "end": 1793289851265,
+          "state": "on"
+        },
+        {
+          "start": 1793289851265,
+          "end": 1793289859261,
+          "state": "off"
+        },
+        {
+          "start": 1793289859261,
+          "end": 1793289895261,
+          "state": "on"
+        },
+        {
+          "start": 1793289895261,
+          "end": 1793289899266,
+          "state": "off"
+        },
+        {
+          "start": 1793289899266,
+          "end": 1793289915266,
+          "state": "on"
+        },
+        {
+          "start": 1793289915266,
+          "end": 1793289921265,
+          "state": "off"
+        },
+        {
+          "start": 1793289921265,
+          "end": 1793290011270,
+          "state": "on"
+        },
+        {
+          "start": 1793290011270,
+          "end": 1793290017266,
+          "state": "off"
+        },
+        {
+          "start": 1793290017266,
+          "end": 1793290021286,
+          "state": "on"
+        },
+        {
+          "start": 1793290021286,
+          "end": 1793290023265,
+          "state": "off"
+        },
+        {
+          "start": 1793290023265,
+          "end": 1793290027261,
+          "state": "on"
+        },
+        {
+          "start": 1793290027261,
+          "end": 1793290029286,
+          "state": "off"
+        },
+        {
+          "start": 1793290029286,
+          "end": 1793290039261,
+          "state": "on"
+        },
+        {
+          "start": 1793290039261,
+          "end": 1793290041266,
+          "state": "off"
+        },
+        {
+          "start": 1793290041266,
+          "end": 1793290117261,
+          "state": "on"
+        },
+        {
+          "start": 1793290117261,
+          "end": 1793290119266,
+          "state": "off"
+        },
+        {
+          "start": 1793290119266,
+          "end": 1793290213261,
+          "state": "on"
+        },
+        {
+          "start": 1793290213261,
+          "end": 1793290215321,
+          "state": "off"
+        },
+        {
+          "start": 1793290215321,
+          "end": 1793290221266,
+          "state": "on"
+        },
+        {
+          "start": 1793290221266,
+          "end": 1793290235267,
+          "state": "off"
+        },
+        {
+          "start": 1793290235267,
+          "end": 1793290291264,
+          "state": "on"
+        },
+        {
+          "start": 1793290291264,
+          "end": 1793290293255,
+          "state": "off"
+        },
+        {
+          "start": 1793290293255,
+          "end": 1793290447263,
+          "state": "on"
+        },
+        {
+          "start": 1793290447263,
+          "end": 1793290451261,
+          "state": "off"
+        },
+        {
+          "start": 1793290451261,
+          "end": 1793290457266,
+          "state": "on"
+        },
+        {
+          "start": 1793290457266,
+          "end": 1793290461265,
+          "state": "off"
+        },
+        {
+          "start": 1793290461265,
+          "end": 1793290493266,
+          "state": "on"
+        },
+        {
+          "start": 1793290493266,
+          "end": 1793290499381,
+          "state": "off"
+        },
+        {
+          "start": 1793290499381,
+          "end": 1793290511255,
+          "state": "on"
+        },
+        {
+          "start": 1793290511255,
+          "end": 1793290513263,
+          "state": "off"
+        },
+        {
+          "start": 1793290513263,
+          "end": 1793290567261,
+          "state": "on"
+        },
+        {
+          "start": 1793290567261,
+          "end": 1793290573261,
+          "state": "off"
+        },
+        {
+          "start": 1793290573261,
+          "end": 1793290579261,
+          "state": "on"
+        },
+        {
+          "start": 1793290579261,
+          "end": 1793290583265,
+          "state": "off"
+        },
+        {
+          "start": 1793290583265,
+          "end": null,
+          "state": "on"
         }
       ],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "off",
+      "rawCameraStatus": "on",
       "manualCamOverride": false,
       "isHost": false,
       "isExempt": false
@@ -8098,10 +8815,10 @@
       "pendingTicks": 0,
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
-      "leaveTime": 1793284310257,
-      "lastSeen": 1793284310257,
-      "rejoinCount": 5,
-      "rejoinedAt": 1793278614295,
+      "leaveTime": 1793290496266,
+      "lastSeen": 1793290496266,
+      "rejoinCount": 6,
+      "rejoinedAt": 1793290472516,
       "presenceIntervals": [
         {
           "joinTime": 1793172836767,
@@ -8148,6 +8865,13 @@
           "joinTime": 1793278614295,
           "leaveTime": null,
           "durationMs": 0
+        },
+        {
+          "joinTime": 1793290472516,
+          "leaveTime": 1793290496266,
+          "durationMs": 23750,
+          "durationFormatted": "00:00:23",
+          "leaveFormatted": "09:44 pm"
         }
       ],
       "joinLeaveHistory": [
@@ -8200,21 +8924,28 @@
           "formatted": "06:26 pm",
           "awayMs": 1574037,
           "awayFormatted": "00:26:14"
+        },
+        {
+          "event": "rejoined",
+          "time": 1793290472516,
+          "formatted": "09:44 pm",
+          "awayMs": 6162259,
+          "awayFormatted": "01:42:42"
         }
       ],
-      "totalInMeetMs": 255762072,
-      "totalPresentMs": 17677449,
+      "totalInMeetMs": 286715867,
+      "totalPresentMs": 17702454,
       "cameraOnMs": 15931545,
-      "cameraOffMs": 1745904,
+      "cameraOffMs": 1770909,
       "validStudyMs": 15931545,
-      "totalDuration": 17677449,
+      "totalDuration": 17702454,
       "duration": 15931545,
-      "timeInCall": 255762072,
+      "timeInCall": 286715867,
       "durationSeconds": 15931,
       "durationMinutes": 265,
       "studyDuration": 15931545,
-      "consecutiveCamOffMs": 3996,
-      "cameraOffCurrentStart": null,
+      "consecutiveCamOffMs": 29001,
+      "cameraOffCurrentStart": 1793290472516,
       "cameraOffIntervals": [
         {
           "start": 1793259890265,
@@ -8783,6 +9514,14 @@
           "fromTime": "08:01 pm",
           "toTime": "08:01 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290472516,
+          "end": 1793290496266,
+          "durationMs": 23750,
+          "fromTime": "09:44 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:23"
         }
       ],
       "cameraIntervals": [
@@ -9604,7 +10343,7 @@
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
@@ -9641,17 +10380,17 @@
           "formatted": "12:28 pm"
         }
       ],
-      "totalInMeetMs": 223972930,
-      "totalPresentMs": 26285584,
-      "cameraOnMs": 25633671,
-      "cameraOffMs": 651913,
-      "validStudyMs": 25633671,
-      "totalDuration": 26285584,
-      "duration": 25633671,
-      "timeInCall": 223972930,
-      "durationSeconds": 25633,
-      "durationMinutes": 427,
-      "studyDuration": 25633671,
+      "totalInMeetMs": 232327132,
+      "totalPresentMs": 27504116,
+      "cameraOnMs": 26840735,
+      "cameraOffMs": 663381,
+      "validStudyMs": 26840735,
+      "totalDuration": 27504116,
+      "duration": 26840735,
+      "timeInCall": 232327132,
+      "durationSeconds": 26840,
+      "durationMinutes": 447,
+      "studyDuration": 26840735,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -10534,6 +11273,30 @@
           "fromTime": "08:47 pm",
           "toTime": "08:47 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289455822,
+          "end": 1793289461803,
+          "durationMs": 5981,
+          "fromTime": "09:27 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793289837265,
+          "end": 1793289839266,
+          "durationMs": 2001,
+          "fromTime": "09:33 pm",
+          "toTime": "09:33 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289847271,
+          "end": 1793289849266,
+          "durationMs": 1995,
+          "fromTime": "09:34 pm",
+          "toTime": "09:34 pm",
+          "durationFormatted": "00:00:01"
         }
       ],
       "cameraIntervals": [
@@ -11784,6 +12547,96 @@
         },
         {
           "start": 1793287581265,
+          "end": 1793287828261,
+          "state": "on"
+        },
+        {
+          "start": 1793287828261,
+          "end": 1793287830265,
+          "state": "off"
+        },
+        {
+          "start": 1793287830265,
+          "end": 1793288881261,
+          "state": "on"
+        },
+        {
+          "start": 1793288881261,
+          "end": 1793288885379,
+          "state": "off"
+        },
+        {
+          "start": 1793288885379,
+          "end": 1793289009270,
+          "state": "on"
+        },
+        {
+          "start": 1793289009270,
+          "end": 1793289013261,
+          "state": "off"
+        },
+        {
+          "start": 1793289013261,
+          "end": 1793289309265,
+          "state": "on"
+        },
+        {
+          "start": 1793289309265,
+          "end": 1793289313263,
+          "state": "off"
+        },
+        {
+          "start": 1793289313263,
+          "end": 1793289323331,
+          "state": "on"
+        },
+        {
+          "start": 1793289323331,
+          "end": 1793289325350,
+          "state": "off"
+        },
+        {
+          "start": 1793289325350,
+          "end": 1793289399782,
+          "state": "on"
+        },
+        {
+          "start": 1793289399782,
+          "end": 1793289401946,
+          "state": "off"
+        },
+        {
+          "start": 1793289401946,
+          "end": 1793289455822,
+          "state": "on"
+        },
+        {
+          "start": 1793289455822,
+          "end": 1793289461803,
+          "state": "off"
+        },
+        {
+          "start": 1793289461803,
+          "end": 1793289837265,
+          "state": "on"
+        },
+        {
+          "start": 1793289837265,
+          "end": 1793289839266,
+          "state": "off"
+        },
+        {
+          "start": 1793289839266,
+          "end": 1793289847271,
+          "state": "on"
+        },
+        {
+          "start": 1793289847271,
+          "end": 1793289849266,
+          "state": "off"
+        },
+        {
+          "start": 1793289849266,
           "end": null,
           "state": "on"
         }
@@ -11805,7 +12658,7 @@
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
@@ -11842,19 +12695,19 @@
           "formatted": "03:22 pm"
         }
       ],
-      "totalInMeetMs": 213510003,
-      "totalPresentMs": 17058944,
-      "cameraOnMs": 9590711,
-      "cameraOffMs": 7468233,
-      "validStudyMs": 9590711,
-      "totalDuration": 17058944,
-      "duration": 9590711,
-      "timeInCall": 213510003,
-      "durationSeconds": 9590,
-      "durationMinutes": 159,
-      "studyDuration": 9590711,
-      "consecutiveCamOffMs": 95328,
-      "cameraOffCurrentStart": 1793286324265,
+      "totalInMeetMs": 221864178,
+      "totalPresentMs": 18277476,
+      "cameraOnMs": 10178824,
+      "cameraOffMs": 8098652,
+      "validStudyMs": 10178824,
+      "totalDuration": 18277476,
+      "duration": 10178824,
+      "timeInCall": 221864178,
+      "durationSeconds": 10178,
+      "durationMinutes": 169,
+      "studyDuration": 10178824,
+      "consecutiveCamOffMs": 3002,
+      "cameraOffCurrentStart": 1793290584264,
       "cameraOffIntervals": [
         {
           "start": 1793267760668,
@@ -13703,6 +14556,310 @@
           "fromTime": "08:47 pm",
           "toTime": "08:47 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289531789,
+          "end": 1793289537773,
+          "durationMs": 5984,
+          "fromTime": "09:28 pm",
+          "toTime": "09:28 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793289557782,
+          "end": 1793289559810,
+          "durationMs": 2028,
+          "fromTime": "09:29 pm",
+          "toTime": "09:29 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289591792,
+          "end": 1793289601784,
+          "durationMs": 9992,
+          "fromTime": "09:29 pm",
+          "toTime": "09:30 pm",
+          "durationFormatted": "00:00:09"
+        },
+        {
+          "start": 1793289613840,
+          "end": 1793289623768,
+          "durationMs": 9928,
+          "fromTime": "09:30 pm",
+          "toTime": "09:30 pm",
+          "durationFormatted": "00:00:09"
+        },
+        {
+          "start": 1793289631791,
+          "end": 1793289633793,
+          "durationMs": 2002,
+          "fromTime": "09:30 pm",
+          "toTime": "09:30 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289669794,
+          "end": 1793289677771,
+          "durationMs": 7977,
+          "fromTime": "09:31 pm",
+          "toTime": "09:31 pm",
+          "durationFormatted": "00:00:07"
+        },
+        {
+          "start": 1793289699320,
+          "end": 1793289703463,
+          "durationMs": 4143,
+          "fromTime": "09:31 pm",
+          "toTime": "09:31 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793289729266,
+          "end": 1793289731186,
+          "durationMs": 1920,
+          "fromTime": "09:32 pm",
+          "toTime": "09:32 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793289769261,
+          "end": 1793289777267,
+          "durationMs": 8006,
+          "fromTime": "09:32 pm",
+          "toTime": "09:32 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793289811308,
+          "end": 1793289815266,
+          "durationMs": 3958,
+          "fromTime": "09:33 pm",
+          "toTime": "09:33 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793289819265,
+          "end": 1793289821266,
+          "durationMs": 2001,
+          "fromTime": "09:33 pm",
+          "toTime": "09:33 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289827258,
+          "end": 1793289833266,
+          "durationMs": 6008,
+          "fromTime": "09:33 pm",
+          "toTime": "09:33 pm",
+          "durationFormatted": "00:00:06"
+        },
+        {
+          "start": 1793289837265,
+          "end": 1793289839266,
+          "durationMs": 2001,
+          "fromTime": "09:33 pm",
+          "toTime": "09:33 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289847271,
+          "end": 1793289849266,
+          "durationMs": 1995,
+          "fromTime": "09:34 pm",
+          "toTime": "09:34 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793289855345,
+          "end": 1793289859261,
+          "durationMs": 3916,
+          "fromTime": "09:34 pm",
+          "toTime": "09:34 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793289867267,
+          "end": 1793289871261,
+          "durationMs": 3994,
+          "fromTime": "09:34 pm",
+          "toTime": "09:34 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793289879265,
+          "end": 1793289881267,
+          "durationMs": 2002,
+          "fromTime": "09:34 pm",
+          "toTime": "09:34 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289893599,
+          "end": 1793290116268,
+          "durationMs": 222669,
+          "fromTime": "09:34 pm",
+          "toTime": "09:38 pm",
+          "durationFormatted": "00:03:42"
+        },
+        {
+          "start": 1793290135914,
+          "end": 1793290138262,
+          "durationMs": 2348,
+          "fromTime": "09:38 pm",
+          "toTime": "09:38 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290146266,
+          "end": 1793290152267,
+          "durationMs": 6001,
+          "fromTime": "09:39 pm",
+          "toTime": "09:39 pm",
+          "durationFormatted": "00:00:06"
+        },
+        {
+          "start": 1793290158266,
+          "end": 1793290294261,
+          "durationMs": 135995,
+          "fromTime": "09:39 pm",
+          "toTime": "09:41 pm",
+          "durationFormatted": "00:02:15"
+        },
+        {
+          "start": 1793290298266,
+          "end": 1793290300261,
+          "durationMs": 1995,
+          "fromTime": "09:41 pm",
+          "toTime": "09:41 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290304266,
+          "end": 1793290312359,
+          "durationMs": 8093,
+          "fromTime": "09:41 pm",
+          "toTime": "09:41 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793290320289,
+          "end": 1793290324353,
+          "durationMs": 4064,
+          "fromTime": "09:42 pm",
+          "toTime": "09:42 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793290332265,
+          "end": 1793290342261,
+          "durationMs": 9996,
+          "fromTime": "09:42 pm",
+          "toTime": "09:42 pm",
+          "durationFormatted": "00:00:09"
+        },
+        {
+          "start": 1793290346267,
+          "end": 1793290348299,
+          "durationMs": 2032,
+          "fromTime": "09:42 pm",
+          "toTime": "09:42 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290352266,
+          "end": 1793290358259,
+          "durationMs": 5993,
+          "fromTime": "09:42 pm",
+          "toTime": "09:42 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793290362255,
+          "end": 1793290366261,
+          "durationMs": 4006,
+          "fromTime": "09:42 pm",
+          "toTime": "09:42 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793290370386,
+          "end": 1793290378261,
+          "durationMs": 7875,
+          "fromTime": "09:42 pm",
+          "toTime": "09:42 pm",
+          "durationFormatted": "00:00:07"
+        },
+        {
+          "start": 1793290390262,
+          "end": 1793290406267,
+          "durationMs": 16005,
+          "fromTime": "09:43 pm",
+          "toTime": "09:43 pm",
+          "durationFormatted": "00:00:16"
+        },
+        {
+          "start": 1793290416266,
+          "end": 1793290445553,
+          "durationMs": 29287,
+          "fromTime": "09:43 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:29"
+        },
+        {
+          "start": 1793290458266,
+          "end": 1793290460266,
+          "durationMs": 2000,
+          "fromTime": "09:44 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290468261,
+          "end": 1793290470265,
+          "durationMs": 2004,
+          "fromTime": "09:44 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290474324,
+          "end": 1793290482266,
+          "durationMs": 7942,
+          "fromTime": "09:44 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:07"
+        },
+        {
+          "start": 1793290488264,
+          "end": 1793290492261,
+          "durationMs": 3997,
+          "fromTime": "09:44 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290496266,
+          "end": 1793290508272,
+          "durationMs": 12006,
+          "fromTime": "09:44 pm",
+          "toTime": "09:45 pm",
+          "durationFormatted": "00:00:12"
+        },
+        {
+          "start": 1793290552261,
+          "end": 1793290558260,
+          "durationMs": 5999,
+          "fromTime": "09:45 pm",
+          "toTime": "09:45 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793290572265,
+          "end": 1793290580362,
+          "durationMs": 8097,
+          "fromTime": "09:46 pm",
+          "toTime": "09:46 pm",
+          "durationFormatted": "00:00:08"
         }
       ],
       "cameraIntervals": [
@@ -15938,6 +17095,666 @@
         },
         {
           "start": 1793286188617,
+          "end": 1793288728261,
+          "state": "off"
+        },
+        {
+          "start": 1793288728261,
+          "end": 1793288752287,
+          "state": "on"
+        },
+        {
+          "start": 1793288752287,
+          "end": 1793288764263,
+          "state": "off"
+        },
+        {
+          "start": 1793288764263,
+          "end": 1793288798365,
+          "state": "on"
+        },
+        {
+          "start": 1793288798365,
+          "end": 1793288806364,
+          "state": "off"
+        },
+        {
+          "start": 1793288806364,
+          "end": 1793288832266,
+          "state": "on"
+        },
+        {
+          "start": 1793288832266,
+          "end": 1793288840268,
+          "state": "off"
+        },
+        {
+          "start": 1793288840268,
+          "end": 1793288844257,
+          "state": "on"
+        },
+        {
+          "start": 1793288844257,
+          "end": 1793288854261,
+          "state": "off"
+        },
+        {
+          "start": 1793288854261,
+          "end": 1793288862265,
+          "state": "on"
+        },
+        {
+          "start": 1793288862265,
+          "end": 1793288864266,
+          "state": "off"
+        },
+        {
+          "start": 1793288864266,
+          "end": 1793288876265,
+          "state": "on"
+        },
+        {
+          "start": 1793288876265,
+          "end": 1793288894266,
+          "state": "off"
+        },
+        {
+          "start": 1793288894266,
+          "end": 1793288898265,
+          "state": "on"
+        },
+        {
+          "start": 1793288898265,
+          "end": 1793288900266,
+          "state": "off"
+        },
+        {
+          "start": 1793288900266,
+          "end": 1793288984286,
+          "state": "on"
+        },
+        {
+          "start": 1793288984286,
+          "end": 1793288992262,
+          "state": "off"
+        },
+        {
+          "start": 1793288992262,
+          "end": 1793289026469,
+          "state": "on"
+        },
+        {
+          "start": 1793289026469,
+          "end": 1793289028262,
+          "state": "off"
+        },
+        {
+          "start": 1793289028262,
+          "end": 1793289036374,
+          "state": "on"
+        },
+        {
+          "start": 1793289036374,
+          "end": 1793289038266,
+          "state": "off"
+        },
+        {
+          "start": 1793289038266,
+          "end": 1793289052261,
+          "state": "on"
+        },
+        {
+          "start": 1793289052261,
+          "end": 1793289054265,
+          "state": "off"
+        },
+        {
+          "start": 1793289054265,
+          "end": 1793289078265,
+          "state": "on"
+        },
+        {
+          "start": 1793289078265,
+          "end": 1793289084266,
+          "state": "off"
+        },
+        {
+          "start": 1793289084266,
+          "end": 1793289122366,
+          "state": "on"
+        },
+        {
+          "start": 1793289122366,
+          "end": 1793289124262,
+          "state": "off"
+        },
+        {
+          "start": 1793289124262,
+          "end": 1793289148261,
+          "state": "on"
+        },
+        {
+          "start": 1793289148261,
+          "end": 1793289156265,
+          "state": "off"
+        },
+        {
+          "start": 1793289156265,
+          "end": 1793289160261,
+          "state": "on"
+        },
+        {
+          "start": 1793289160261,
+          "end": 1793289168253,
+          "state": "off"
+        },
+        {
+          "start": 1793289168253,
+          "end": 1793289180266,
+          "state": "on"
+        },
+        {
+          "start": 1793289180266,
+          "end": 1793289184261,
+          "state": "off"
+        },
+        {
+          "start": 1793289184261,
+          "end": 1793289188266,
+          "state": "on"
+        },
+        {
+          "start": 1793289188266,
+          "end": 1793289192265,
+          "state": "off"
+        },
+        {
+          "start": 1793289192265,
+          "end": 1793289214260,
+          "state": "on"
+        },
+        {
+          "start": 1793289214260,
+          "end": 1793289216374,
+          "state": "off"
+        },
+        {
+          "start": 1793289216374,
+          "end": 1793289252266,
+          "state": "on"
+        },
+        {
+          "start": 1793289252266,
+          "end": 1793289256261,
+          "state": "off"
+        },
+        {
+          "start": 1793289256261,
+          "end": 1793289260273,
+          "state": "on"
+        },
+        {
+          "start": 1793289260273,
+          "end": 1793289262261,
+          "state": "off"
+        },
+        {
+          "start": 1793289262261,
+          "end": 1793289284267,
+          "state": "on"
+        },
+        {
+          "start": 1793289284267,
+          "end": 1793289286262,
+          "state": "off"
+        },
+        {
+          "start": 1793289286262,
+          "end": 1793289290301,
+          "state": "on"
+        },
+        {
+          "start": 1793289290301,
+          "end": 1793289292261,
+          "state": "off"
+        },
+        {
+          "start": 1793289292261,
+          "end": 1793289304261,
+          "state": "on"
+        },
+        {
+          "start": 1793289304261,
+          "end": 1793289306266,
+          "state": "off"
+        },
+        {
+          "start": 1793289306266,
+          "end": 1793289326257,
+          "state": "on"
+        },
+        {
+          "start": 1793289326257,
+          "end": 1793289342414,
+          "state": "off"
+        },
+        {
+          "start": 1793289342414,
+          "end": 1793289346330,
+          "state": "on"
+        },
+        {
+          "start": 1793289346330,
+          "end": 1793289354558,
+          "state": "off"
+        },
+        {
+          "start": 1793289354558,
+          "end": 1793289391868,
+          "state": "on"
+        },
+        {
+          "start": 1793289391868,
+          "end": 1793289393768,
+          "state": "off"
+        },
+        {
+          "start": 1793289393768,
+          "end": 1793289399782,
+          "state": "on"
+        },
+        {
+          "start": 1793289399782,
+          "end": 1793289401946,
+          "state": "off"
+        },
+        {
+          "start": 1793289401946,
+          "end": 1793289531789,
+          "state": "on"
+        },
+        {
+          "start": 1793289531789,
+          "end": 1793289537773,
+          "state": "off"
+        },
+        {
+          "start": 1793289537773,
+          "end": 1793289557782,
+          "state": "on"
+        },
+        {
+          "start": 1793289557782,
+          "end": 1793289559810,
+          "state": "off"
+        },
+        {
+          "start": 1793289559810,
+          "end": 1793289591792,
+          "state": "on"
+        },
+        {
+          "start": 1793289591792,
+          "end": 1793289601784,
+          "state": "off"
+        },
+        {
+          "start": 1793289601784,
+          "end": 1793289613840,
+          "state": "on"
+        },
+        {
+          "start": 1793289613840,
+          "end": 1793289623768,
+          "state": "off"
+        },
+        {
+          "start": 1793289623768,
+          "end": 1793289631791,
+          "state": "on"
+        },
+        {
+          "start": 1793289631791,
+          "end": 1793289633793,
+          "state": "off"
+        },
+        {
+          "start": 1793289633793,
+          "end": 1793289669794,
+          "state": "on"
+        },
+        {
+          "start": 1793289669794,
+          "end": 1793289677771,
+          "state": "off"
+        },
+        {
+          "start": 1793289677771,
+          "end": 1793289699320,
+          "state": "on"
+        },
+        {
+          "start": 1793289699320,
+          "end": 1793289703463,
+          "state": "off"
+        },
+        {
+          "start": 1793289703463,
+          "end": 1793289729266,
+          "state": "on"
+        },
+        {
+          "start": 1793289729266,
+          "end": 1793289731266,
+          "state": "off"
+        },
+        {
+          "start": 1793289731266,
+          "end": 1793289769261,
+          "state": "on"
+        },
+        {
+          "start": 1793289769261,
+          "end": 1793289777267,
+          "state": "off"
+        },
+        {
+          "start": 1793289777267,
+          "end": 1793289811308,
+          "state": "on"
+        },
+        {
+          "start": 1793289811308,
+          "end": 1793289815266,
+          "state": "off"
+        },
+        {
+          "start": 1793289815266,
+          "end": 1793289819265,
+          "state": "on"
+        },
+        {
+          "start": 1793289819265,
+          "end": 1793289821266,
+          "state": "off"
+        },
+        {
+          "start": 1793289821266,
+          "end": 1793289827258,
+          "state": "on"
+        },
+        {
+          "start": 1793289827258,
+          "end": 1793289833266,
+          "state": "off"
+        },
+        {
+          "start": 1793289833266,
+          "end": 1793289837265,
+          "state": "on"
+        },
+        {
+          "start": 1793289837265,
+          "end": 1793289839266,
+          "state": "off"
+        },
+        {
+          "start": 1793289839266,
+          "end": 1793289847271,
+          "state": "on"
+        },
+        {
+          "start": 1793289847271,
+          "end": 1793289849266,
+          "state": "off"
+        },
+        {
+          "start": 1793289849266,
+          "end": 1793289855345,
+          "state": "on"
+        },
+        {
+          "start": 1793289855345,
+          "end": 1793289859261,
+          "state": "off"
+        },
+        {
+          "start": 1793289859261,
+          "end": 1793289867267,
+          "state": "on"
+        },
+        {
+          "start": 1793289867267,
+          "end": 1793289871261,
+          "state": "off"
+        },
+        {
+          "start": 1793289871261,
+          "end": 1793289879265,
+          "state": "on"
+        },
+        {
+          "start": 1793289879265,
+          "end": 1793289881267,
+          "state": "off"
+        },
+        {
+          "start": 1793289881267,
+          "end": 1793289893599,
+          "state": "on"
+        },
+        {
+          "start": 1793289893599,
+          "end": 1793290116268,
+          "state": "off"
+        },
+        {
+          "start": 1793290116268,
+          "end": 1793290135914,
+          "state": "on"
+        },
+        {
+          "start": 1793290135914,
+          "end": 1793290138262,
+          "state": "off"
+        },
+        {
+          "start": 1793290138262,
+          "end": 1793290146266,
+          "state": "on"
+        },
+        {
+          "start": 1793290146266,
+          "end": 1793290152267,
+          "state": "off"
+        },
+        {
+          "start": 1793290152267,
+          "end": 1793290158266,
+          "state": "on"
+        },
+        {
+          "start": 1793290158266,
+          "end": 1793290294261,
+          "state": "off"
+        },
+        {
+          "start": 1793290294261,
+          "end": 1793290298266,
+          "state": "on"
+        },
+        {
+          "start": 1793290298266,
+          "end": 1793290300261,
+          "state": "off"
+        },
+        {
+          "start": 1793290300261,
+          "end": 1793290304266,
+          "state": "on"
+        },
+        {
+          "start": 1793290304266,
+          "end": 1793290312359,
+          "state": "off"
+        },
+        {
+          "start": 1793290312359,
+          "end": 1793290320289,
+          "state": "on"
+        },
+        {
+          "start": 1793290320289,
+          "end": 1793290324353,
+          "state": "off"
+        },
+        {
+          "start": 1793290324353,
+          "end": 1793290332265,
+          "state": "on"
+        },
+        {
+          "start": 1793290332265,
+          "end": 1793290342261,
+          "state": "off"
+        },
+        {
+          "start": 1793290342261,
+          "end": 1793290346267,
+          "state": "on"
+        },
+        {
+          "start": 1793290346267,
+          "end": 1793290348299,
+          "state": "off"
+        },
+        {
+          "start": 1793290348299,
+          "end": 1793290352266,
+          "state": "on"
+        },
+        {
+          "start": 1793290352266,
+          "end": 1793290358259,
+          "state": "off"
+        },
+        {
+          "start": 1793290358259,
+          "end": 1793290362255,
+          "state": "on"
+        },
+        {
+          "start": 1793290362255,
+          "end": 1793290366261,
+          "state": "off"
+        },
+        {
+          "start": 1793290366261,
+          "end": 1793290370386,
+          "state": "on"
+        },
+        {
+          "start": 1793290370386,
+          "end": 1793290378261,
+          "state": "off"
+        },
+        {
+          "start": 1793290378261,
+          "end": 1793290390262,
+          "state": "on"
+        },
+        {
+          "start": 1793290390262,
+          "end": 1793290406267,
+          "state": "off"
+        },
+        {
+          "start": 1793290406267,
+          "end": 1793290416266,
+          "state": "on"
+        },
+        {
+          "start": 1793290416266,
+          "end": 1793290448318,
+          "state": "off"
+        },
+        {
+          "start": 1793290448318,
+          "end": 1793290458266,
+          "state": "on"
+        },
+        {
+          "start": 1793290458266,
+          "end": 1793290460266,
+          "state": "off"
+        },
+        {
+          "start": 1793290460266,
+          "end": 1793290468261,
+          "state": "on"
+        },
+        {
+          "start": 1793290468261,
+          "end": 1793290470265,
+          "state": "off"
+        },
+        {
+          "start": 1793290470265,
+          "end": 1793290474324,
+          "state": "on"
+        },
+        {
+          "start": 1793290474324,
+          "end": 1793290482266,
+          "state": "off"
+        },
+        {
+          "start": 1793290482266,
+          "end": 1793290488264,
+          "state": "on"
+        },
+        {
+          "start": 1793290488264,
+          "end": 1793290492261,
+          "state": "off"
+        },
+        {
+          "start": 1793290492261,
+          "end": 1793290496266,
+          "state": "on"
+        },
+        {
+          "start": 1793290496266,
+          "end": 1793290508272,
+          "state": "off"
+        },
+        {
+          "start": 1793290508272,
+          "end": 1793290552261,
+          "state": "on"
+        },
+        {
+          "start": 1793290552261,
+          "end": 1793290558260,
+          "state": "off"
+        },
+        {
+          "start": 1793290558260,
+          "end": 1793290572265,
+          "state": "on"
+        },
+        {
+          "start": 1793290572265,
+          "end": 1793290580362,
+          "state": "off"
+        },
+        {
+          "start": 1793290580362,
+          "end": 1793290584264,
+          "state": "on"
+        },
+        {
+          "start": 1793290584264,
           "end": null,
           "state": "off"
         }
@@ -15953,13 +17770,13 @@
       "name": "Anshiii Patel",
       "isLocal": false,
       "currentStatus": "present",
-      "cameraStatus": "off",
+      "cameraStatus": "on",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 4,
       "rejoinedAt": 1793287156295,
       "presenceIntervals": [
@@ -16048,17 +17865,17 @@
           "awayFormatted": "00:08:39"
         }
       ],
-      "totalInMeetMs": 224931558,
-      "totalPresentMs": 24455585,
-      "cameraOnMs": 20326631,
-      "cameraOffMs": 4128954,
-      "validStudyMs": 20326631,
-      "totalDuration": 24455585,
-      "duration": 20326631,
-      "timeInCall": 224931558,
-      "durationSeconds": 20326,
-      "durationMinutes": 338,
-      "studyDuration": 20326631,
+      "totalInMeetMs": 238855253,
+      "totalPresentMs": 25674117,
+      "cameraOnMs": 21472593,
+      "cameraOffMs": 4201524,
+      "validStudyMs": 21472593,
+      "totalDuration": 25674117,
+      "duration": 21472593,
+      "timeInCall": 238855253,
+      "durationSeconds": 21472,
+      "durationMinutes": 357,
+      "studyDuration": 21472593,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -17477,6 +19294,22 @@
           "fromTime": "08:35 pm",
           "toTime": "08:36 pm",
           "durationFormatted": "00:01:00"
+        },
+        {
+          "start": 1793289507793,
+          "end": 1793289521837,
+          "durationMs": 14044,
+          "fromTime": "09:28 pm",
+          "toTime": "09:28 pm",
+          "durationFormatted": "00:00:14"
+        },
+        {
+          "start": 1793289777267,
+          "end": 1793289791266,
+          "durationMs": 13999,
+          "fromTime": "09:32 pm",
+          "toTime": "09:33 pm",
+          "durationFormatted": "00:00:13"
         }
       ],
       "cameraIntervals": [
@@ -19362,12 +21195,47 @@
         },
         {
           "start": 1793287186264,
-          "end": null,
+          "end": 1793287810316,
           "state": "off"
+        },
+        {
+          "start": 1793287810316,
+          "end": 1793287895266,
+          "state": "on"
+        },
+        {
+          "start": 1793287895266,
+          "end": 1793288743261,
+          "state": "off"
+        },
+        {
+          "start": 1793288743261,
+          "end": 1793289507793,
+          "state": "on"
+        },
+        {
+          "start": 1793289507793,
+          "end": 1793289521837,
+          "state": "off"
+        },
+        {
+          "start": 1793289521837,
+          "end": 1793289777267,
+          "state": "on"
+        },
+        {
+          "start": 1793289777267,
+          "end": 1793289791266,
+          "state": "off"
+        },
+        {
+          "start": 1793289791266,
+          "end": null,
+          "state": "on"
         }
       ],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "off",
+      "rawCameraStatus": "on",
       "manualCamOverride": false,
       "isHost": false,
       "isExempt": false
@@ -19382,10 +21250,10 @@
       "pendingTicks": 0,
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
-      "leaveTime": 1793275563260,
-      "lastSeen": 1793275563260,
-      "rejoinCount": 3,
-      "rejoinedAt": 1793269987280,
+      "leaveTime": 1793290317265,
+      "lastSeen": 1793290317265,
+      "rejoinCount": 4,
+      "rejoinedAt": 1793289864275,
       "presenceIntervals": [
         {
           "joinTime": 1793172836767,
@@ -19420,6 +21288,11 @@
         },
         {
           "joinTime": 1793269987280,
+          "leaveTime": null,
+          "durationMs": 0
+        },
+        {
+          "joinTime": 1793289864275,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -19460,21 +21333,28 @@
           "formatted": "04:03 pm",
           "awayMs": 8093016,
           "awayFormatted": "02:14:53"
+        },
+        {
+          "event": "rejoined",
+          "time": 1793289864275,
+          "formatted": "09:34 pm",
+          "awayMs": 14301015,
+          "awayFormatted": "03:58:21"
         }
       ],
-      "totalInMeetMs": 208001399,
-      "totalPresentMs": 7485001,
+      "totalInMeetMs": 252716404,
+      "totalPresentMs": 7938914,
       "cameraOnMs": 0,
-      "cameraOffMs": 7485001,
+      "cameraOffMs": 7938914,
       "validStudyMs": 0,
-      "totalDuration": 7485001,
+      "totalDuration": 7938914,
       "duration": 0,
-      "timeInCall": 208001399,
+      "timeInCall": 252716404,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
-      "consecutiveCamOffMs": 7485001,
-      "cameraOffCurrentStart": null,
+      "consecutiveCamOffMs": 7938914,
+      "cameraOffCurrentStart": 1793289864275,
       "cameraOffIntervals": [
         {
           "start": 1793259812291,
@@ -19499,6 +21379,14 @@
           "fromTime": "04:03 pm",
           "toTime": "06:01 pm",
           "durationFormatted": "01:58:10"
+        },
+        {
+          "start": 1793289864275,
+          "end": 1793290317265,
+          "durationMs": 452990,
+          "fromTime": "09:34 pm",
+          "toTime": "09:41 pm",
+          "durationFormatted": "00:07:32"
         }
       ],
       "cameraIntervals": [
@@ -20163,13 +22051,13 @@
       "name": "Sahil Hussain",
       "isLocal": false,
       "currentStatus": "present",
-      "cameraStatus": "off",
+      "cameraStatus": "on",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 1,
       "rejoinedAt": 1793265227258,
       "presenceIntervals": [
@@ -20230,19 +22118,19 @@
           "awayFormatted": "00:04:16"
         }
       ],
-      "totalInMeetMs": 333750982,
-      "totalPresentMs": 26966510,
-      "cameraOnMs": 23741006,
-      "cameraOffMs": 3225504,
-      "validStudyMs": 23741006,
-      "totalDuration": 26966510,
-      "duration": 23741006,
-      "timeInCall": 333750982,
-      "durationSeconds": 23741,
-      "durationMinutes": 395,
-      "studyDuration": 23741006,
-      "consecutiveCamOffMs": 127323,
-      "cameraOffCurrentStart": 1793286324265,
+      "totalInMeetMs": 344889914,
+      "totalPresentMs": 27248243,
+      "cameraOnMs": 23908607,
+      "cameraOffMs": 3339636,
+      "validStudyMs": 23908607,
+      "totalDuration": 27248243,
+      "duration": 23908607,
+      "timeInCall": 344889914,
+      "durationSeconds": 23908,
+      "durationMinutes": 398,
+      "studyDuration": 23908607,
+      "consecutiveCamOffMs": 0,
+      "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
         {
           "start": 1793257114620,
@@ -20779,6 +22667,54 @@
           "fromTime": "08:47 pm",
           "toTime": "08:47 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289354401,
+          "end": 1793289428322,
+          "durationMs": 73921,
+          "fromTime": "09:25 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:01:13"
+        },
+        {
+          "start": 1793289439771,
+          "end": 1793289445787,
+          "durationMs": 6016,
+          "fromTime": "09:27 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:00:06"
+        },
+        {
+          "start": 1793289451906,
+          "end": 1793289519767,
+          "durationMs": 67861,
+          "fromTime": "09:27 pm",
+          "toTime": "09:28 pm",
+          "durationFormatted": "00:01:07"
+        },
+        {
+          "start": 1793289525828,
+          "end": 1793289545912,
+          "durationMs": 20084,
+          "fromTime": "09:28 pm",
+          "toTime": "09:29 pm",
+          "durationFormatted": "00:00:20"
+        },
+        {
+          "start": 1793289551786,
+          "end": 1793289608318,
+          "durationMs": 56532,
+          "fromTime": "09:29 pm",
+          "toTime": "09:30 pm",
+          "durationFormatted": "00:00:56"
+        },
+        {
+          "start": 1793289655770,
+          "end": 1793289731186,
+          "durationMs": 75416,
+          "fromTime": "09:30 pm",
+          "toTime": "09:32 pm",
+          "durationFormatted": "00:01:15"
         }
       ],
       "cameraIntervals": [
@@ -21354,12 +23290,97 @@
         },
         {
           "start": 1793286156268,
-          "end": null,
+          "end": 1793288726266,
           "state": "off"
+        },
+        {
+          "start": 1793288726266,
+          "end": 1793289318266,
+          "state": "on"
+        },
+        {
+          "start": 1793289318266,
+          "end": 1793289326257,
+          "state": "off"
+        },
+        {
+          "start": 1793289326257,
+          "end": 1793289330523,
+          "state": "on"
+        },
+        {
+          "start": 1793289330523,
+          "end": 1793289346330,
+          "state": "off"
+        },
+        {
+          "start": 1793289346330,
+          "end": 1793289352260,
+          "state": "on"
+        },
+        {
+          "start": 1793289352260,
+          "end": 1793289435772,
+          "state": "off"
+        },
+        {
+          "start": 1793289435772,
+          "end": 1793289439771,
+          "state": "on"
+        },
+        {
+          "start": 1793289439771,
+          "end": 1793289445787,
+          "state": "off"
+        },
+        {
+          "start": 1793289445787,
+          "end": 1793289451906,
+          "state": "on"
+        },
+        {
+          "start": 1793289451906,
+          "end": 1793289519767,
+          "state": "off"
+        },
+        {
+          "start": 1793289519767,
+          "end": 1793289525828,
+          "state": "on"
+        },
+        {
+          "start": 1793289525828,
+          "end": 1793289545912,
+          "state": "off"
+        },
+        {
+          "start": 1793289545912,
+          "end": 1793289551786,
+          "state": "on"
+        },
+        {
+          "start": 1793289551786,
+          "end": 1793289645797,
+          "state": "off"
+        },
+        {
+          "start": 1793289645797,
+          "end": 1793289655770,
+          "state": "on"
+        },
+        {
+          "start": 1793289655770,
+          "end": 1793290452265,
+          "state": "off"
+        },
+        {
+          "start": 1793290452265,
+          "end": null,
+          "state": "on"
         }
       ],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "off",
+      "rawCameraStatus": "on",
       "manualCamOverride": false,
       "isHost": false,
       "isExempt": false
@@ -21368,16 +23389,16 @@
       "id": "p_priya_singh",
       "name": "Priya Singh",
       "isLocal": false,
-      "currentStatus": "left",
-      "cameraStatus": "off",
+      "currentStatus": "present",
+      "cameraStatus": "on",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793177769319,
       "joinTime": 1793177769319,
-      "leaveTime": 1793286233458,
-      "lastSeen": 1793286233458,
-      "rejoinCount": 6,
-      "rejoinedAt": 1793284060295,
+      "leaveTime": null,
+      "lastSeen": 1793290586267,
+      "rejoinCount": 7,
+      "rejoinedAt": 1793289110292,
       "presenceIntervals": [
         {
           "joinTime": 1793177769319,
@@ -21433,6 +23454,11 @@
         },
         {
           "joinTime": 1793284060295,
+          "leaveTime": null,
+          "durationMs": 0
+        },
+        {
+          "joinTime": 1793289110292,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -21508,20 +23534,27 @@
           "formatted": "07:57 pm",
           "awayMs": 126766,
           "awayFormatted": "00:02:06"
+        },
+        {
+          "event": "rejoined",
+          "time": 1793289110292,
+          "formatted": "09:21 pm",
+          "awayMs": 2876834,
+          "awayFormatted": "00:47:56"
         }
       ],
-      "totalInMeetMs": 378580174,
-      "totalPresentMs": 25522136,
-      "cameraOnMs": 23277529,
-      "cameraOffMs": 2244607,
-      "validStudyMs": 23277529,
-      "totalDuration": 25522136,
-      "duration": 23277529,
-      "timeInCall": 378580174,
-      "durationSeconds": 23277,
-      "durationMinutes": 387,
-      "studyDuration": 23277529,
-      "consecutiveCamOffMs": 18844,
+      "totalInMeetMs": 423614049,
+      "totalPresentMs": 26696116,
+      "cameraOnMs": 24352831,
+      "cameraOffMs": 2343285,
+      "validStudyMs": 24352831,
+      "totalDuration": 26696116,
+      "duration": 24352831,
+      "timeInCall": 423614049,
+      "durationSeconds": 24352,
+      "durationMinutes": 405,
+      "studyDuration": 24352831,
+      "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
         {
@@ -22731,6 +24764,54 @@
           "fromTime": "08:33 pm",
           "toTime": "08:33 pm",
           "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793289429795,
+          "end": 1793289433772,
+          "durationMs": 3977,
+          "fromTime": "09:27 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793289439771,
+          "end": 1793289475775,
+          "durationMs": 36004,
+          "fromTime": "09:27 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:00:36"
+        },
+        {
+          "start": 1793289559810,
+          "end": 1793289608318,
+          "durationMs": 48508,
+          "fromTime": "09:29 pm",
+          "toTime": "09:30 pm",
+          "durationFormatted": "00:00:48"
+        },
+        {
+          "start": 1793289789265,
+          "end": 1793289791266,
+          "durationMs": 2001,
+          "fromTime": "09:33 pm",
+          "toTime": "09:33 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289869266,
+          "end": 1793289871261,
+          "durationMs": 1995,
+          "fromTime": "09:34 pm",
+          "toTime": "09:34 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290459261,
+          "end": 1793290461265,
+          "durationMs": 2004,
+          "fromTime": "09:44 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:02"
         }
       ],
       "cameraIntervals": [
@@ -24256,12 +26337,127 @@
         },
         {
           "start": 1793286200265,
-          "end": null,
+          "end": 1793289112305,
           "state": "off"
+        },
+        {
+          "start": 1793289112305,
+          "end": 1793289294266,
+          "state": "on"
+        },
+        {
+          "start": 1793289294266,
+          "end": 1793289316283,
+          "state": "off"
+        },
+        {
+          "start": 1793289316283,
+          "end": 1793289322354,
+          "state": "on"
+        },
+        {
+          "start": 1793289322354,
+          "end": 1793289332266,
+          "state": "off"
+        },
+        {
+          "start": 1793289332266,
+          "end": 1793289336284,
+          "state": "on"
+        },
+        {
+          "start": 1793289336284,
+          "end": 1793289340394,
+          "state": "off"
+        },
+        {
+          "start": 1793289340394,
+          "end": 1793289344483,
+          "state": "on"
+        },
+        {
+          "start": 1793289344483,
+          "end": 1793289346330,
+          "state": "off"
+        },
+        {
+          "start": 1793289346330,
+          "end": 1793289352260,
+          "state": "on"
+        },
+        {
+          "start": 1793289352260,
+          "end": 1793289370792,
+          "state": "off"
+        },
+        {
+          "start": 1793289370792,
+          "end": 1793289429795,
+          "state": "on"
+        },
+        {
+          "start": 1793289429795,
+          "end": 1793289433772,
+          "state": "off"
+        },
+        {
+          "start": 1793289433772,
+          "end": 1793289439771,
+          "state": "on"
+        },
+        {
+          "start": 1793289439771,
+          "end": 1793289475775,
+          "state": "off"
+        },
+        {
+          "start": 1793289475775,
+          "end": 1793289559810,
+          "state": "on"
+        },
+        {
+          "start": 1793289559810,
+          "end": 1793289609769,
+          "state": "off"
+        },
+        {
+          "start": 1793289609769,
+          "end": 1793289789265,
+          "state": "on"
+        },
+        {
+          "start": 1793289789265,
+          "end": 1793289791266,
+          "state": "off"
+        },
+        {
+          "start": 1793289791266,
+          "end": 1793289869266,
+          "state": "on"
+        },
+        {
+          "start": 1793289869266,
+          "end": 1793289871261,
+          "state": "off"
+        },
+        {
+          "start": 1793289871261,
+          "end": 1793290459261,
+          "state": "on"
+        },
+        {
+          "start": 1793290459261,
+          "end": 1793290461265,
+          "state": "off"
+        },
+        {
+          "start": 1793290461265,
+          "end": null,
+          "state": "on"
         }
       ],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "off",
+      "rawCameraStatus": "on",
       "manualCamOverride": false,
       "isHost": false,
       "isExempt": false
@@ -29928,7 +32124,7 @@
       "firstSeen": 1793177769319,
       "joinTime": 1793177769319,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
@@ -29965,17 +32161,17 @@
           "formatted": "12:28 pm"
         }
       ],
-      "totalInMeetMs": 219040363,
-      "totalPresentMs": 26285584,
-      "cameraOnMs": 20188275,
-      "cameraOffMs": 6097309,
-      "validStudyMs": 20188275,
-      "totalDuration": 26285584,
-      "duration": 20188275,
-      "timeInCall": 219040363,
-      "durationSeconds": 20188,
-      "durationMinutes": 336,
-      "studyDuration": 20188275,
+      "totalInMeetMs": 227394571,
+      "totalPresentMs": 27504116,
+      "cameraOnMs": 21296060,
+      "cameraOffMs": 6208056,
+      "validStudyMs": 21296060,
+      "totalDuration": 27504116,
+      "duration": 21296060,
+      "timeInCall": 227394571,
+      "durationSeconds": 21296,
+      "durationMinutes": 354,
+      "studyDuration": 21296060,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -31538,6 +33734,118 @@
           "fromTime": "08:29 pm",
           "toTime": "08:29 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289364770,
+          "end": 1793289378771,
+          "durationMs": 14001,
+          "fromTime": "09:26 pm",
+          "toTime": "09:26 pm",
+          "durationFormatted": "00:00:14"
+        },
+        {
+          "start": 1793289961262,
+          "end": 1793289969278,
+          "durationMs": 8016,
+          "fromTime": "09:36 pm",
+          "toTime": "09:36 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793289991262,
+          "end": 1793289993265,
+          "durationMs": 2003,
+          "fromTime": "09:36 pm",
+          "toTime": "09:36 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290003261,
+          "end": 1793290021286,
+          "durationMs": 18025,
+          "fromTime": "09:36 pm",
+          "toTime": "09:37 pm",
+          "durationFormatted": "00:00:18"
+        },
+        {
+          "start": 1793290025268,
+          "end": 1793290027261,
+          "durationMs": 1993,
+          "fromTime": "09:37 pm",
+          "toTime": "09:37 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290035272,
+          "end": 1793290039261,
+          "durationMs": 3989,
+          "fromTime": "09:37 pm",
+          "toTime": "09:37 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290045400,
+          "end": 1793290047311,
+          "durationMs": 1911,
+          "fromTime": "09:37 pm",
+          "toTime": "09:37 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290061266,
+          "end": 1793290065265,
+          "durationMs": 3999,
+          "fromTime": "09:37 pm",
+          "toTime": "09:37 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290229266,
+          "end": 1793290233352,
+          "durationMs": 4086,
+          "fromTime": "09:40 pm",
+          "toTime": "09:40 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793290267263,
+          "end": 1793290269265,
+          "durationMs": 2002,
+          "fromTime": "09:41 pm",
+          "toTime": "09:41 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290279261,
+          "end": 1793290281336,
+          "durationMs": 2075,
+          "fromTime": "09:41 pm",
+          "toTime": "09:41 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290351262,
+          "end": 1793290387261,
+          "durationMs": 35999,
+          "fromTime": "09:42 pm",
+          "toTime": "09:43 pm",
+          "durationFormatted": "00:00:35"
+        },
+        {
+          "start": 1793290399263,
+          "end": 1793290412331,
+          "durationMs": 13068,
+          "fromTime": "09:43 pm",
+          "toTime": "09:43 pm",
+          "durationFormatted": "00:00:13"
+        },
+        {
+          "start": 1793290418267,
+          "end": 1793290445553,
+          "durationMs": 27286,
+          "fromTime": "09:43 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:27"
         }
       ],
       "cameraIntervals": [
@@ -33578,6 +35886,326 @@
         },
         {
           "start": 1793287325257,
+          "end": 1793288505266,
+          "state": "on"
+        },
+        {
+          "start": 1793288505266,
+          "end": 1793288507260,
+          "state": "off"
+        },
+        {
+          "start": 1793288507260,
+          "end": 1793288527264,
+          "state": "on"
+        },
+        {
+          "start": 1793288527264,
+          "end": 1793288541265,
+          "state": "off"
+        },
+        {
+          "start": 1793288541265,
+          "end": 1793288597293,
+          "state": "on"
+        },
+        {
+          "start": 1793288597293,
+          "end": 1793288601531,
+          "state": "off"
+        },
+        {
+          "start": 1793288601531,
+          "end": 1793289193261,
+          "state": "on"
+        },
+        {
+          "start": 1793289193261,
+          "end": 1793289207273,
+          "state": "off"
+        },
+        {
+          "start": 1793289207273,
+          "end": 1793289215266,
+          "state": "on"
+        },
+        {
+          "start": 1793289215266,
+          "end": 1793289221265,
+          "state": "off"
+        },
+        {
+          "start": 1793289221265,
+          "end": 1793289223297,
+          "state": "on"
+        },
+        {
+          "start": 1793289223297,
+          "end": 1793289233516,
+          "state": "off"
+        },
+        {
+          "start": 1793289233516,
+          "end": 1793289237265,
+          "state": "on"
+        },
+        {
+          "start": 1793289237265,
+          "end": 1793289247267,
+          "state": "off"
+        },
+        {
+          "start": 1793289247267,
+          "end": 1793289251266,
+          "state": "on"
+        },
+        {
+          "start": 1793289251266,
+          "end": 1793289257266,
+          "state": "off"
+        },
+        {
+          "start": 1793289257266,
+          "end": 1793289263266,
+          "state": "on"
+        },
+        {
+          "start": 1793289263266,
+          "end": 1793289269261,
+          "state": "off"
+        },
+        {
+          "start": 1793289269261,
+          "end": 1793289273266,
+          "state": "on"
+        },
+        {
+          "start": 1793289273266,
+          "end": 1793289279265,
+          "state": "off"
+        },
+        {
+          "start": 1793289279265,
+          "end": 1793289281257,
+          "state": "on"
+        },
+        {
+          "start": 1793289281257,
+          "end": 1793289283263,
+          "state": "off"
+        },
+        {
+          "start": 1793289283263,
+          "end": 1793289289261,
+          "state": "on"
+        },
+        {
+          "start": 1793289289261,
+          "end": 1793289297265,
+          "state": "off"
+        },
+        {
+          "start": 1793289297265,
+          "end": 1793289299266,
+          "state": "on"
+        },
+        {
+          "start": 1793289299266,
+          "end": 1793289303401,
+          "state": "off"
+        },
+        {
+          "start": 1793289303401,
+          "end": 1793289331259,
+          "state": "on"
+        },
+        {
+          "start": 1793289331259,
+          "end": 1793289333258,
+          "state": "off"
+        },
+        {
+          "start": 1793289333258,
+          "end": 1793289341266,
+          "state": "on"
+        },
+        {
+          "start": 1793289341266,
+          "end": 1793289357284,
+          "state": "off"
+        },
+        {
+          "start": 1793289357284,
+          "end": 1793289359267,
+          "state": "on"
+        },
+        {
+          "start": 1793289359267,
+          "end": 1793289378771,
+          "state": "off"
+        },
+        {
+          "start": 1793289378771,
+          "end": 1793289380768,
+          "state": "on"
+        },
+        {
+          "start": 1793289380768,
+          "end": 1793289388808,
+          "state": "off"
+        },
+        {
+          "start": 1793289388808,
+          "end": 1793289399782,
+          "state": "on"
+        },
+        {
+          "start": 1793289399782,
+          "end": 1793289401946,
+          "state": "off"
+        },
+        {
+          "start": 1793289401946,
+          "end": 1793289409777,
+          "state": "on"
+        },
+        {
+          "start": 1793289409777,
+          "end": 1793289425924,
+          "state": "off"
+        },
+        {
+          "start": 1793289425924,
+          "end": 1793289961262,
+          "state": "on"
+        },
+        {
+          "start": 1793289961262,
+          "end": 1793289969278,
+          "state": "off"
+        },
+        {
+          "start": 1793289969278,
+          "end": 1793289991262,
+          "state": "on"
+        },
+        {
+          "start": 1793289991262,
+          "end": 1793289993265,
+          "state": "off"
+        },
+        {
+          "start": 1793289993265,
+          "end": 1793290003261,
+          "state": "on"
+        },
+        {
+          "start": 1793290003261,
+          "end": 1793290021286,
+          "state": "off"
+        },
+        {
+          "start": 1793290021286,
+          "end": 1793290025268,
+          "state": "on"
+        },
+        {
+          "start": 1793290025268,
+          "end": 1793290027261,
+          "state": "off"
+        },
+        {
+          "start": 1793290027261,
+          "end": 1793290035272,
+          "state": "on"
+        },
+        {
+          "start": 1793290035272,
+          "end": 1793290039261,
+          "state": "off"
+        },
+        {
+          "start": 1793290039261,
+          "end": 1793290045400,
+          "state": "on"
+        },
+        {
+          "start": 1793290045400,
+          "end": 1793290047311,
+          "state": "off"
+        },
+        {
+          "start": 1793290047311,
+          "end": 1793290061266,
+          "state": "on"
+        },
+        {
+          "start": 1793290061266,
+          "end": 1793290065265,
+          "state": "off"
+        },
+        {
+          "start": 1793290065265,
+          "end": 1793290229266,
+          "state": "on"
+        },
+        {
+          "start": 1793290229266,
+          "end": 1793290233352,
+          "state": "off"
+        },
+        {
+          "start": 1793290233352,
+          "end": 1793290267263,
+          "state": "on"
+        },
+        {
+          "start": 1793290267263,
+          "end": 1793290269265,
+          "state": "off"
+        },
+        {
+          "start": 1793290269265,
+          "end": 1793290279261,
+          "state": "on"
+        },
+        {
+          "start": 1793290279261,
+          "end": 1793290281336,
+          "state": "off"
+        },
+        {
+          "start": 1793290281336,
+          "end": 1793290351262,
+          "state": "on"
+        },
+        {
+          "start": 1793290351262,
+          "end": 1793290387261,
+          "state": "off"
+        },
+        {
+          "start": 1793290387261,
+          "end": 1793290399263,
+          "state": "on"
+        },
+        {
+          "start": 1793290399263,
+          "end": 1793290412331,
+          "state": "off"
+        },
+        {
+          "start": 1793290412331,
+          "end": 1793290418267,
+          "state": "on"
+        },
+        {
+          "start": 1793290418267,
+          "end": 1793290422266,
+          "state": "off"
+        },
+        {
+          "start": 1793290422266,
           "end": null,
           "state": "on"
         }
@@ -33599,7 +36227,7 @@
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 4,
       "rejoinedAt": 1793281612350,
       "presenceIntervals": [
@@ -33676,19 +36304,19 @@
           "awayFormatted": "00:07:12"
         }
       ],
-      "totalInMeetMs": 124880221,
-      "totalPresentMs": 17161483,
+      "totalInMeetMs": 138803851,
+      "totalPresentMs": 18380015,
       "cameraOnMs": 8460428,
-      "cameraOffMs": 8701055,
+      "cameraOffMs": 9919587,
       "validStudyMs": 8460428,
-      "totalDuration": 17161483,
+      "totalDuration": 18380015,
       "duration": 8460428,
-      "timeInCall": 124880221,
+      "timeInCall": 138803851,
       "durationSeconds": 8460,
       "durationMinutes": 141,
       "studyDuration": 8460428,
-      "consecutiveCamOffMs": 472362,
-      "cameraOffCurrentStart": 1793286324265,
+      "consecutiveCamOffMs": 1690894,
+      "cameraOffCurrentStart": 1793289354401,
       "cameraOffIntervals": [
         {
           "start": 1793261693264,
@@ -33945,6 +36573,22 @@
           "fromTime": "08:47 pm",
           "toTime": "08:47 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793288613078,
+          "end": 1793288946483,
+          "durationMs": 333405,
+          "fromTime": "09:13 pm",
+          "toTime": "09:19 pm",
+          "durationFormatted": "00:05:33"
+        },
+        {
+          "start": 1793289354401,
+          "end": 1793289428322,
+          "durationMs": 73921,
+          "fromTime": "09:25 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:01:13"
         }
       ],
       "cameraIntervals": [
@@ -34166,7 +36810,7 @@
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 1,
       "rejoinedAt": 1793231321029,
       "presenceIntervals": [
@@ -34205,19 +36849,19 @@
           "formatted": "12:28 pm"
         }
       ],
-      "totalInMeetMs": 165488674,
-      "totalPresentMs": 26284560,
-      "cameraOnMs": 24253986,
-      "cameraOffMs": 2030574,
-      "validStudyMs": 24253986,
-      "totalDuration": 26284560,
-      "duration": 24253986,
-      "timeInCall": 165488674,
-      "durationSeconds": 24253,
-      "durationMinutes": 404,
-      "studyDuration": 24253986,
-      "consecutiveCamOffMs": 0,
-      "cameraOffCurrentStart": null,
+      "totalInMeetMs": 173842873,
+      "totalPresentMs": 27503092,
+      "cameraOnMs": 25228003,
+      "cameraOffMs": 2275089,
+      "validStudyMs": 25228003,
+      "totalDuration": 27503092,
+      "duration": 25228003,
+      "timeInCall": 173842873,
+      "durationSeconds": 25228,
+      "durationMinutes": 420,
+      "studyDuration": 25228003,
+      "consecutiveCamOffMs": 137949,
+      "cameraOffCurrentStart": 1793290449265,
       "cameraOffIntervals": [
         {
           "start": 1793257114620,
@@ -35010,6 +37654,78 @@
           "fromTime": "08:47 pm",
           "toTime": "08:47 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793288613078,
+          "end": 1793288651351,
+          "durationMs": 38273,
+          "fromTime": "09:13 pm",
+          "toTime": "09:14 pm",
+          "durationFormatted": "00:00:38"
+        },
+        {
+          "start": 1793289354401,
+          "end": 1793289364770,
+          "durationMs": 10369,
+          "fromTime": "09:25 pm",
+          "toTime": "09:26 pm",
+          "durationFormatted": "00:00:10"
+        },
+        {
+          "start": 1793290083265,
+          "end": 1793290089266,
+          "durationMs": 6001,
+          "fromTime": "09:38 pm",
+          "toTime": "09:38 pm",
+          "durationFormatted": "00:00:06"
+        },
+        {
+          "start": 1793290169418,
+          "end": 1793290173265,
+          "durationMs": 3847,
+          "fromTime": "09:39 pm",
+          "toTime": "09:39 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290177261,
+          "end": 1793290205271,
+          "durationMs": 28010,
+          "fromTime": "09:39 pm",
+          "toTime": "09:40 pm",
+          "durationFormatted": "00:00:28"
+        },
+        {
+          "start": 1793290209269,
+          "end": 1793290223267,
+          "durationMs": 13998,
+          "fromTime": "09:40 pm",
+          "toTime": "09:40 pm",
+          "durationFormatted": "00:00:13"
+        },
+        {
+          "start": 1793290261288,
+          "end": 1793290267263,
+          "durationMs": 5975,
+          "fromTime": "09:41 pm",
+          "toTime": "09:41 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793290307341,
+          "end": 1793290309261,
+          "durationMs": 1920,
+          "fromTime": "09:41 pm",
+          "toTime": "09:41 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290449265,
+          "end": 1793290517380,
+          "durationMs": 68115,
+          "fromTime": "09:44 pm",
+          "toTime": "09:45 pm",
+          "durationFormatted": "00:01:08"
         }
       ],
       "cameraIntervals": [
@@ -36365,6 +39081,206 @@
         },
         {
           "start": 1793287760309,
+          "end": 1793288651351,
+          "state": "off"
+        },
+        {
+          "start": 1793288651351,
+          "end": 1793288655283,
+          "state": "on"
+        },
+        {
+          "start": 1793288655283,
+          "end": 1793288771267,
+          "state": "off"
+        },
+        {
+          "start": 1793288771267,
+          "end": 1793289049261,
+          "state": "on"
+        },
+        {
+          "start": 1793289049261,
+          "end": 1793289051367,
+          "state": "off"
+        },
+        {
+          "start": 1793289051367,
+          "end": 1793289061261,
+          "state": "on"
+        },
+        {
+          "start": 1793289061261,
+          "end": 1793289067372,
+          "state": "off"
+        },
+        {
+          "start": 1793289067372,
+          "end": 1793289143266,
+          "state": "on"
+        },
+        {
+          "start": 1793289143266,
+          "end": 1793289145261,
+          "state": "off"
+        },
+        {
+          "start": 1793289145261,
+          "end": 1793289171286,
+          "state": "on"
+        },
+        {
+          "start": 1793289171286,
+          "end": 1793289177267,
+          "state": "off"
+        },
+        {
+          "start": 1793289177267,
+          "end": 1793289183265,
+          "state": "on"
+        },
+        {
+          "start": 1793289183265,
+          "end": 1793289221265,
+          "state": "off"
+        },
+        {
+          "start": 1793289221265,
+          "end": 1793289235262,
+          "state": "on"
+        },
+        {
+          "start": 1793289235262,
+          "end": 1793289269261,
+          "state": "off"
+        },
+        {
+          "start": 1793289269261,
+          "end": 1793289281257,
+          "state": "on"
+        },
+        {
+          "start": 1793289281257,
+          "end": 1793289287266,
+          "state": "off"
+        },
+        {
+          "start": 1793289287266,
+          "end": 1793289309265,
+          "state": "on"
+        },
+        {
+          "start": 1793289309265,
+          "end": 1793289321262,
+          "state": "off"
+        },
+        {
+          "start": 1793289321262,
+          "end": 1793289329261,
+          "state": "on"
+        },
+        {
+          "start": 1793289329261,
+          "end": 1793289331259,
+          "state": "off"
+        },
+        {
+          "start": 1793289331259,
+          "end": 1793289353327,
+          "state": "on"
+        },
+        {
+          "start": 1793289353327,
+          "end": 1793289364770,
+          "state": "off"
+        },
+        {
+          "start": 1793289364770,
+          "end": 1793289376966,
+          "state": "on"
+        },
+        {
+          "start": 1793289376966,
+          "end": 1793289388808,
+          "state": "off"
+        },
+        {
+          "start": 1793289388808,
+          "end": 1793289393768,
+          "state": "on"
+        },
+        {
+          "start": 1793289393768,
+          "end": 1793289413768,
+          "state": "off"
+        },
+        {
+          "start": 1793289413768,
+          "end": 1793290083265,
+          "state": "on"
+        },
+        {
+          "start": 1793290083265,
+          "end": 1793290089266,
+          "state": "off"
+        },
+        {
+          "start": 1793290089266,
+          "end": 1793290169418,
+          "state": "on"
+        },
+        {
+          "start": 1793290169418,
+          "end": 1793290173265,
+          "state": "off"
+        },
+        {
+          "start": 1793290173265,
+          "end": 1793290177261,
+          "state": "on"
+        },
+        {
+          "start": 1793290177261,
+          "end": 1793290205271,
+          "state": "off"
+        },
+        {
+          "start": 1793290205271,
+          "end": 1793290209269,
+          "state": "on"
+        },
+        {
+          "start": 1793290209269,
+          "end": 1793290223267,
+          "state": "off"
+        },
+        {
+          "start": 1793290223267,
+          "end": 1793290261288,
+          "state": "on"
+        },
+        {
+          "start": 1793290261288,
+          "end": 1793290267263,
+          "state": "off"
+        },
+        {
+          "start": 1793290267263,
+          "end": 1793290307341,
+          "state": "on"
+        },
+        {
+          "start": 1793290307341,
+          "end": 1793290309261,
+          "state": "off"
+        },
+        {
+          "start": 1793290309261,
+          "end": 1793290449265,
+          "state": "on"
+        },
+        {
+          "start": 1793290449265,
           "end": null,
           "state": "off"
         }
@@ -36386,7 +39302,7 @@
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 3,
       "rejoinedAt": 1793285767315,
       "presenceIntervals": [
@@ -36451,19 +39367,19 @@
           "awayFormatted": "00:50:18"
         }
       ],
-      "totalInMeetMs": 112311145,
-      "totalPresentMs": 12088146,
+      "totalInMeetMs": 123449997,
+      "totalPresentMs": 12798981,
       "cameraOnMs": 8995965,
-      "cameraOffMs": 3092181,
+      "cameraOffMs": 3803016,
       "validStudyMs": 8995965,
-      "totalDuration": 12088146,
+      "totalDuration": 12798981,
       "duration": 8995965,
-      "timeInCall": 112311145,
+      "timeInCall": 123449997,
       "durationSeconds": 8995,
       "durationMinutes": 149,
       "studyDuration": 8995965,
-      "consecutiveCamOffMs": 513847,
-      "cameraOffCurrentStart": 1793286324265,
+      "consecutiveCamOffMs": 1732379,
+      "cameraOffCurrentStart": 1793289354401,
       "cameraOffIntervals": [
         {
           "start": 1793268925275,
@@ -38080,6 +40996,22 @@
           "fromTime": "08:47 pm",
           "toTime": "08:47 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793288613078,
+          "end": 1793288946483,
+          "durationMs": 333405,
+          "fromTime": "09:13 pm",
+          "toTime": "09:19 pm",
+          "durationFormatted": "00:05:33"
+        },
+        {
+          "start": 1793289354401,
+          "end": 1793289428322,
+          "durationMs": 73921,
+          "fromTime": "09:25 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:01:13"
         }
       ],
       "cameraIntervals": [
@@ -40081,13 +43013,13 @@
       "name": "Tanvi",
       "isLocal": false,
       "currentStatus": "present",
-      "cameraStatus": "off",
+      "cameraStatus": "on",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 4,
       "rejoinedAt": 1793277996256,
       "presenceIntervals": [
@@ -40164,17 +43096,17 @@
           "awayFormatted": "00:00:13"
         }
       ],
-      "totalInMeetMs": 135569366,
-      "totalPresentMs": 18100600,
-      "cameraOnMs": 16388718,
+      "totalInMeetMs": 149493001,
+      "totalPresentMs": 19319132,
+      "cameraOnMs": 17607250,
       "cameraOffMs": 1711882,
-      "validStudyMs": 16388718,
-      "totalDuration": 18100600,
-      "duration": 16388718,
-      "timeInCall": 135569366,
-      "durationSeconds": 16388,
-      "durationMinutes": 273,
-      "studyDuration": 16388718,
+      "validStudyMs": 17607250,
+      "totalDuration": 19319132,
+      "duration": 17607250,
+      "timeInCall": 149493001,
+      "durationSeconds": 17607,
+      "durationMinutes": 293,
+      "studyDuration": 17607250,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -41854,12 +44786,17 @@
         },
         {
           "start": 1793286859262,
-          "end": null,
+          "end": 1793288588274,
           "state": "off"
+        },
+        {
+          "start": 1793288588274,
+          "end": null,
+          "state": "on"
         }
       ],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "off",
+      "rawCameraStatus": "on",
       "manualCamOverride": false,
       "isHost": false,
       "isExempt": false
@@ -44735,7 +47672,7 @@
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 7,
       "rejoinedAt": 1793280143622,
       "presenceIntervals": [
@@ -44852,19 +47789,19 @@
           "awayFormatted": "00:05:02"
         }
       ],
-      "totalInMeetMs": 145238724,
-      "totalPresentMs": 10795680,
+      "totalInMeetMs": 161947080,
+      "totalPresentMs": 12014212,
       "cameraOnMs": 1847943,
-      "cameraOffMs": 8947737,
+      "cameraOffMs": 10166269,
       "validStudyMs": 1847943,
-      "totalDuration": 10795680,
+      "totalDuration": 12014212,
       "duration": 1847943,
-      "timeInCall": 145238724,
+      "timeInCall": 161947080,
       "durationSeconds": 1847,
       "durationMinutes": 30,
       "studyDuration": 1847943,
-      "consecutiveCamOffMs": 0,
-      "cameraOffCurrentStart": null,
+      "consecutiveCamOffMs": 1173980,
+      "cameraOffCurrentStart": 1793289354401,
       "cameraOffIntervals": [
         {
           "start": 1793257253262,
@@ -45481,6 +48418,14 @@
           "fromTime": "08:47 pm",
           "toTime": "08:47 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289354401,
+          "end": 1793289428322,
+          "durationMs": 73921,
+          "fromTime": "09:25 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:01:13"
         }
       ],
       "cameraIntervals": [
@@ -46246,6 +49191,56 @@
         },
         {
           "start": 1793286401772,
+          "end": 1793288908321,
+          "state": "off"
+        },
+        {
+          "start": 1793288908321,
+          "end": 1793289004260,
+          "state": "on"
+        },
+        {
+          "start": 1793289004260,
+          "end": 1793289006364,
+          "state": "off"
+        },
+        {
+          "start": 1793289006364,
+          "end": 1793289020258,
+          "state": "on"
+        },
+        {
+          "start": 1793289020258,
+          "end": 1793289028262,
+          "state": "off"
+        },
+        {
+          "start": 1793289028262,
+          "end": 1793289030266,
+          "state": "on"
+        },
+        {
+          "start": 1793289030266,
+          "end": 1793289040344,
+          "state": "off"
+        },
+        {
+          "start": 1793289040344,
+          "end": 1793289042265,
+          "state": "on"
+        },
+        {
+          "start": 1793289042265,
+          "end": 1793289044266,
+          "state": "off"
+        },
+        {
+          "start": 1793289044266,
+          "end": 1793289058261,
+          "state": "on"
+        },
+        {
+          "start": 1793289058261,
           "end": null,
           "state": "off"
         }
@@ -46267,7 +49262,7 @@
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 1,
       "rejoinedAt": 1793287755529,
       "presenceIntervals": [
@@ -46318,19 +49313,19 @@
           "awayFormatted": "02:58:34"
         }
       ],
-      "totalInMeetMs": 160526356,
-      "totalPresentMs": 1109443,
-      "cameraOnMs": 395443,
-      "cameraOffMs": 714000,
-      "validStudyMs": 395443,
-      "totalDuration": 1109443,
-      "duration": 395443,
-      "timeInCall": 160526356,
-      "durationSeconds": 395,
-      "durationMinutes": 6,
-      "studyDuration": 395443,
-      "consecutiveCamOffMs": 449671,
-      "cameraOffCurrentStart": null,
+      "totalInMeetMs": 171665200,
+      "totalPresentMs": 2091408,
+      "cameraOnMs": 782443,
+      "cameraOffMs": 1308965,
+      "validStudyMs": 782443,
+      "totalDuration": 2091408,
+      "duration": 782443,
+      "timeInCall": 171665200,
+      "durationSeconds": 782,
+      "durationMinutes": 13,
+      "studyDuration": 782443,
+      "consecutiveCamOffMs": 372001,
+      "cameraOffCurrentStart": 1793290215321,
       "cameraOffIntervals": [
         {
           "start": 1793276169286,
@@ -46347,6 +49342,22 @@
           "fromTime": "05:53 pm",
           "toTime": "06:01 pm",
           "durationFormatted": "00:08:05"
+        },
+        {
+          "start": 1793289471983,
+          "end": 1793289608318,
+          "durationMs": 136335,
+          "fromTime": "09:27 pm",
+          "toTime": "09:30 pm",
+          "durationFormatted": "00:02:16"
+        },
+        {
+          "start": 1793290215321,
+          "end": 1793290445553,
+          "durationMs": 230232,
+          "fromTime": "09:40 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:03:50"
         }
       ],
       "cameraIntervals": [
@@ -46362,6 +49373,36 @@
         },
         {
           "start": 1793276592775,
+          "end": 1793288771267,
+          "state": "off"
+        },
+        {
+          "start": 1793288771267,
+          "end": 1793288846267,
+          "state": "on"
+        },
+        {
+          "start": 1793288846267,
+          "end": 1793289359267,
+          "state": "off"
+        },
+        {
+          "start": 1793289359267,
+          "end": 1793289471983,
+          "state": "on"
+        },
+        {
+          "start": 1793289471983,
+          "end": 1793289885266,
+          "state": "off"
+        },
+        {
+          "start": 1793289885266,
+          "end": 1793290215321,
+          "state": "on"
+        },
+        {
+          "start": 1793290215321,
           "end": null,
           "state": "off"
         }
@@ -46578,10 +49619,10 @@
       "pendingTicks": 0,
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
-      "leaveTime": 1793227524027,
-      "lastSeen": 1793227524027,
+      "leaveTime": 1793288125269,
+      "lastSeen": 1793288125269,
       "rejoinCount": 3,
-      "rejoinedAt": 1793220210028,
+      "rejoinedAt": 1793288053430,
       "presenceIntervals": [
         {
           "joinTime": 1793209488733,
@@ -46600,6 +49641,16 @@
         },
         {
           "joinTime": 1793220210028,
+          "leaveTime": null,
+          "durationMs": 0
+        },
+        {
+          "joinTime": 1793288006411,
+          "leaveTime": null,
+          "durationMs": 0
+        },
+        {
+          "joinTime": 1793288053430,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -46630,16 +49681,28 @@
           "formatted": "02:13 am",
           "awayMs": 750000,
           "awayFormatted": "00:12:30"
+        },
+        {
+          "event": "joined",
+          "time": 1793288006411,
+          "formatted": "09:03 pm"
+        },
+        {
+          "event": "rejoined",
+          "time": 1793288053430,
+          "formatted": "09:04 pm",
+          "awayMs": 32164,
+          "awayFormatted": "00:00:32"
         }
       ],
-      "totalInMeetMs": 45480270,
+      "totalInMeetMs": 288075935,
       "totalPresentMs": 173004,
       "cameraOnMs": 0,
       "cameraOffMs": 173004,
       "validStudyMs": 0,
       "totalDuration": 173004,
       "duration": 0,
-      "timeInCall": 45480270,
+      "timeInCall": 288075935,
       "durationSeconds": 0,
       "durationMinutes": 0,
       "studyDuration": 0,
@@ -46648,82 +49711,7 @@
       "cameraOffIntervals": [],
       "cameraIntervals": [
         {
-          "start": 1793215573027,
-          "end": 1793215775022,
-          "state": "on"
-        },
-        {
-          "start": 1793215775022,
-          "end": 1793219346029,
-          "state": "off"
-        },
-        {
-          "start": 1793219346029,
-          "end": 1793219359026,
-          "state": "on"
-        },
-        {
-          "start": 1793219359026,
-          "end": 1793219360022,
-          "state": "off"
-        },
-        {
-          "start": 1793219360022,
-          "end": 1793219369023,
-          "state": "on"
-        },
-        {
-          "start": 1793219369023,
-          "end": 1793219372022,
-          "state": "off"
-        },
-        {
-          "start": 1793219372022,
-          "end": 1793219391028,
-          "state": "on"
-        },
-        {
-          "start": 1793219391028,
-          "end": 1793219394027,
-          "state": "off"
-        },
-        {
-          "start": 1793219394027,
-          "end": 1793219397027,
-          "state": "on"
-        },
-        {
-          "start": 1793219397027,
-          "end": 1793219399022,
-          "state": "off"
-        },
-        {
-          "start": 1793219399022,
-          "end": 1793219450022,
-          "state": "on"
-        },
-        {
-          "start": 1793219450022,
-          "end": 1793219453024,
-          "state": "off"
-        },
-        {
-          "start": 1793219453024,
-          "end": 1793219455026,
-          "state": "on"
-        },
-        {
-          "start": 1793219455026,
-          "end": 1793220213027,
-          "state": "off"
-        },
-        {
-          "start": 1793220213027,
-          "end": 1793220221154,
-          "state": "on"
-        },
-        {
-          "start": 1793220221154,
+          "start": 1793288006411,
           "end": null,
           "state": "off"
         }
@@ -46739,13 +49727,13 @@
       "name": "Sriman Samudrala",
       "isLocal": false,
       "currentStatus": "present",
-      "cameraStatus": "off",
+      "cameraStatus": "on",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793214740264,
       "joinTime": 1793214740264,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 2,
       "rejoinedAt": 1793284103422,
       "presenceIntervals": [
@@ -46796,17 +49784,17 @@
           "awayFormatted": "01:51:11"
         }
       ],
-      "totalInMeetMs": 106525662,
-      "totalPresentMs": 6435345,
-      "cameraOnMs": 6225532,
-      "cameraOffMs": 209813,
-      "validStudyMs": 6225532,
-      "totalDuration": 6435345,
-      "duration": 6225532,
-      "timeInCall": 106525662,
-      "durationSeconds": 6225,
-      "durationMinutes": 103,
-      "studyDuration": 6225532,
+      "totalInMeetMs": 117664506,
+      "totalPresentMs": 7653877,
+      "cameraOnMs": 7389425,
+      "cameraOffMs": 264452,
+      "validStudyMs": 7389425,
+      "totalDuration": 7653877,
+      "duration": 7389425,
+      "timeInCall": 117664506,
+      "durationSeconds": 7389,
+      "durationMinutes": 123,
+      "studyDuration": 7389425,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -47049,6 +50037,70 @@
           "fromTime": "08:35 pm",
           "toTime": "08:35 pm",
           "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793289427783,
+          "end": 1793289431988,
+          "durationMs": 4205,
+          "fromTime": "09:27 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793289523792,
+          "end": 1793289525828,
+          "durationMs": 2036,
+          "fromTime": "09:28 pm",
+          "toTime": "09:28 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290383299,
+          "end": 1793290404273,
+          "durationMs": 20974,
+          "fromTime": "09:43 pm",
+          "toTime": "09:43 pm",
+          "durationFormatted": "00:00:20"
+        },
+        {
+          "start": 1793290408261,
+          "end": 1793290410265,
+          "durationMs": 2004,
+          "fromTime": "09:43 pm",
+          "toTime": "09:43 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290462261,
+          "end": 1793290464322,
+          "durationMs": 2061,
+          "fromTime": "09:44 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290480261,
+          "end": 1793290484257,
+          "durationMs": 3996,
+          "fromTime": "09:44 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290488264,
+          "end": 1793290496266,
+          "durationMs": 8002,
+          "fromTime": "09:44 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793290522261,
+          "end": 1793290563631,
+          "durationMs": 41370,
+          "fromTime": "09:45 pm",
+          "toTime": "09:46 pm",
+          "durationFormatted": "00:00:41"
         }
       ],
       "cameraIntervals": [
@@ -47359,12 +50411,157 @@
         },
         {
           "start": 1793287661266,
-          "end": null,
+          "end": 1793288008261,
           "state": "off"
+        },
+        {
+          "start": 1793288008261,
+          "end": 1793288012453,
+          "state": "on"
+        },
+        {
+          "start": 1793288012453,
+          "end": 1793288022550,
+          "state": "off"
+        },
+        {
+          "start": 1793288022550,
+          "end": 1793288026261,
+          "state": "on"
+        },
+        {
+          "start": 1793288026261,
+          "end": 1793288058288,
+          "state": "off"
+        },
+        {
+          "start": 1793288058288,
+          "end": 1793288062260,
+          "state": "on"
+        },
+        {
+          "start": 1793288062260,
+          "end": 1793288140262,
+          "state": "off"
+        },
+        {
+          "start": 1793288140262,
+          "end": 1793288144266,
+          "state": "on"
+        },
+        {
+          "start": 1793288144266,
+          "end": 1793288369292,
+          "state": "off"
+        },
+        {
+          "start": 1793288369292,
+          "end": 1793288393290,
+          "state": "on"
+        },
+        {
+          "start": 1793288393290,
+          "end": 1793288501267,
+          "state": "off"
+        },
+        {
+          "start": 1793288501267,
+          "end": 1793289127262,
+          "state": "on"
+        },
+        {
+          "start": 1793289127262,
+          "end": 1793289129270,
+          "state": "off"
+        },
+        {
+          "start": 1793289129270,
+          "end": 1793289427783,
+          "state": "on"
+        },
+        {
+          "start": 1793289427783,
+          "end": 1793289431988,
+          "state": "off"
+        },
+        {
+          "start": 1793289431988,
+          "end": 1793289523792,
+          "state": "on"
+        },
+        {
+          "start": 1793289523792,
+          "end": 1793289525828,
+          "state": "off"
+        },
+        {
+          "start": 1793289525828,
+          "end": 1793290383299,
+          "state": "on"
+        },
+        {
+          "start": 1793290383299,
+          "end": 1793290404273,
+          "state": "off"
+        },
+        {
+          "start": 1793290404273,
+          "end": 1793290408261,
+          "state": "on"
+        },
+        {
+          "start": 1793290408261,
+          "end": 1793290410265,
+          "state": "off"
+        },
+        {
+          "start": 1793290410265,
+          "end": 1793290462261,
+          "state": "on"
+        },
+        {
+          "start": 1793290462261,
+          "end": 1793290464322,
+          "state": "off"
+        },
+        {
+          "start": 1793290464322,
+          "end": 1793290480261,
+          "state": "on"
+        },
+        {
+          "start": 1793290480261,
+          "end": 1793290484257,
+          "state": "off"
+        },
+        {
+          "start": 1793290484257,
+          "end": 1793290488264,
+          "state": "on"
+        },
+        {
+          "start": 1793290488264,
+          "end": 1793290496266,
+          "state": "off"
+        },
+        {
+          "start": 1793290496266,
+          "end": 1793290522261,
+          "state": "on"
+        },
+        {
+          "start": 1793290522261,
+          "end": 1793290534260,
+          "state": "off"
+        },
+        {
+          "start": 1793290534260,
+          "end": null,
+          "state": "on"
         }
       ],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "off",
+      "rawCameraStatus": "on",
       "manualCamOverride": false,
       "isHost": false,
       "isExempt": false
@@ -48854,7 +52051,7 @@
       "firstSeen": 1793214740264,
       "joinTime": 1793214740264,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 3,
       "rejoinedAt": 1793286274298,
       "presenceIntervals": [
@@ -48943,17 +52140,17 @@
           "awayFormatted": "00:03:28"
         }
       ],
-      "totalInMeetMs": 245511892,
-      "totalPresentMs": 11072287,
-      "cameraOnMs": 5368463,
+      "totalInMeetMs": 262220236,
+      "totalPresentMs": 12290819,
+      "cameraOnMs": 6586995,
       "cameraOffMs": 5703824,
-      "validStudyMs": 5368463,
-      "totalDuration": 11072287,
-      "duration": 5368463,
-      "timeInCall": 245511892,
-      "durationSeconds": 5368,
-      "durationMinutes": 89,
-      "studyDuration": 5368463,
+      "validStudyMs": 6586995,
+      "totalDuration": 12290819,
+      "duration": 6586995,
+      "timeInCall": 262220236,
+      "durationSeconds": 6586,
+      "durationMinutes": 109,
+      "studyDuration": 6586995,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -49138,6 +52335,26 @@
         },
         {
           "start": 1793286276265,
+          "end": 1793288744266,
+          "state": "on"
+        },
+        {
+          "start": 1793288744266,
+          "end": 1793288896261,
+          "state": "off"
+        },
+        {
+          "start": 1793288896261,
+          "end": 1793289077268,
+          "state": "on"
+        },
+        {
+          "start": 1793289077268,
+          "end": 1793289288629,
+          "state": "off"
+        },
+        {
+          "start": 1793289288629,
           "end": null,
           "state": "on"
         }
@@ -58143,14 +61360,14 @@
       "id": "p_aditya_raj_singh",
       "name": "Aditya Raj Singh",
       "isLocal": false,
-      "currentStatus": "present",
+      "currentStatus": "left",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793257114266,
       "joinTime": 1793257114266,
-      "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "leaveTime": 1793289751587,
+      "lastSeen": 1793289751587,
       "rejoinCount": 5,
       "rejoinedAt": 1793286460515,
       "presenceIntervals": [
@@ -58229,19 +61446,19 @@
           "awayFormatted": "00:01:40"
         }
       ],
-      "totalInMeetMs": 50955555,
-      "totalPresentMs": 26093587,
-      "cameraOnMs": 21117255,
-      "cameraOffMs": 4976332,
-      "validStudyMs": 21117255,
-      "totalDuration": 26093587,
-      "duration": 21117255,
-      "timeInCall": 50955555,
-      "durationSeconds": 21117,
-      "durationMinutes": 351,
-      "studyDuration": 21117255,
-      "consecutiveCamOffMs": 72322,
-      "cameraOffCurrentStart": 1793286324265,
+      "totalInMeetMs": 60692280,
+      "totalPresentMs": 26477439,
+      "cameraOnMs": 21487110,
+      "cameraOffMs": 4990329,
+      "validStudyMs": 21487110,
+      "totalDuration": 26477439,
+      "duration": 21487110,
+      "timeInCall": 60692280,
+      "durationSeconds": 21487,
+      "durationMinutes": 358,
+      "studyDuration": 21487110,
+      "consecutiveCamOffMs": 1321,
+      "cameraOffCurrentStart": 1793289751587,
       "cameraOffIntervals": [
         {
           "start": 1793257114620,
@@ -62602,6 +65819,30 @@
           "fromTime": "08:47 pm",
           "toTime": "08:47 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793288620379,
+          "end": 1793288622266,
+          "durationMs": 1887,
+          "fromTime": "09:13 pm",
+          "toTime": "09:13 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793288642266,
+          "end": 1793288652388,
+          "durationMs": 10122,
+          "fromTime": "09:14 pm",
+          "toTime": "09:14 pm",
+          "durationFormatted": "00:00:10"
+        },
+        {
+          "start": 1793288665261,
+          "end": 1793288670265,
+          "durationMs": 5004,
+          "fromTime": "09:14 pm",
+          "toTime": "09:14 pm",
+          "durationFormatted": "00:00:05"
         }
       ],
       "cameraIntervals": [
@@ -67967,6 +71208,166 @@
         },
         {
           "start": 1793286217709,
+          "end": 1793288462335,
+          "state": "off"
+        },
+        {
+          "start": 1793288462335,
+          "end": 1793288468267,
+          "state": "on"
+        },
+        {
+          "start": 1793288468267,
+          "end": 1793288472476,
+          "state": "off"
+        },
+        {
+          "start": 1793288472476,
+          "end": 1793288478265,
+          "state": "on"
+        },
+        {
+          "start": 1793288478265,
+          "end": 1793288514265,
+          "state": "off"
+        },
+        {
+          "start": 1793288514265,
+          "end": 1793288556265,
+          "state": "on"
+        },
+        {
+          "start": 1793288556265,
+          "end": 1793288558267,
+          "state": "off"
+        },
+        {
+          "start": 1793288558267,
+          "end": 1793288564268,
+          "state": "on"
+        },
+        {
+          "start": 1793288564268,
+          "end": 1793288568265,
+          "state": "off"
+        },
+        {
+          "start": 1793288568265,
+          "end": 1793288604275,
+          "state": "on"
+        },
+        {
+          "start": 1793288604275,
+          "end": 1793288610266,
+          "state": "off"
+        },
+        {
+          "start": 1793288610266,
+          "end": 1793288616342,
+          "state": "on"
+        },
+        {
+          "start": 1793288616342,
+          "end": 1793288622266,
+          "state": "off"
+        },
+        {
+          "start": 1793288622266,
+          "end": 1793288636257,
+          "state": "on"
+        },
+        {
+          "start": 1793288636257,
+          "end": 1793288638419,
+          "state": "off"
+        },
+        {
+          "start": 1793288638419,
+          "end": 1793288642266,
+          "state": "on"
+        },
+        {
+          "start": 1793288642266,
+          "end": 1793288652388,
+          "state": "off"
+        },
+        {
+          "start": 1793288652388,
+          "end": 1793288656393,
+          "state": "on"
+        },
+        {
+          "start": 1793288656393,
+          "end": 1793288660383,
+          "state": "off"
+        },
+        {
+          "start": 1793288660383,
+          "end": 1793288664536,
+          "state": "on"
+        },
+        {
+          "start": 1793288664536,
+          "end": 1793288670265,
+          "state": "off"
+        },
+        {
+          "start": 1793288670265,
+          "end": 1793288749261,
+          "state": "on"
+        },
+        {
+          "start": 1793288749261,
+          "end": 1793288753266,
+          "state": "off"
+        },
+        {
+          "start": 1793288753266,
+          "end": 1793288851262,
+          "state": "on"
+        },
+        {
+          "start": 1793288851262,
+          "end": 1793288859265,
+          "state": "off"
+        },
+        {
+          "start": 1793288859265,
+          "end": 1793288863261,
+          "state": "on"
+        },
+        {
+          "start": 1793288863261,
+          "end": 1793288867268,
+          "state": "off"
+        },
+        {
+          "start": 1793288867268,
+          "end": 1793288945266,
+          "state": "on"
+        },
+        {
+          "start": 1793288945266,
+          "end": 1793288947260,
+          "state": "off"
+        },
+        {
+          "start": 1793288947260,
+          "end": 1793289039266,
+          "state": "on"
+        },
+        {
+          "start": 1793289039266,
+          "end": 1793289051367,
+          "state": "off"
+        },
+        {
+          "start": 1793289051367,
+          "end": 1793289751587,
+          "state": "on"
+        },
+        {
+          "start": 1793289751587,
           "end": null,
           "state": "off"
         }
@@ -68072,7 +71473,7 @@
       "firstSeen": 1793257114266,
       "joinTime": 1793257114266,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 1,
       "rejoinedAt": 1793278796270,
       "presenceIntervals": [
@@ -68103,17 +71504,17 @@
           "awayFormatted": "02:00:53"
         }
       ],
-      "totalInMeetMs": 23436486,
-      "totalPresentMs": 20492059,
-      "cameraOnMs": 10545376,
-      "cameraOffMs": 9946683,
-      "validStudyMs": 10545376,
-      "totalDuration": 20492059,
-      "duration": 10545376,
-      "timeInCall": 23436486,
-      "durationSeconds": 10545,
-      "durationMinutes": 175,
-      "studyDuration": 10545376,
+      "totalInMeetMs": 26221217,
+      "totalPresentMs": 21710591,
+      "cameraOnMs": 11366059,
+      "cameraOffMs": 10344532,
+      "validStudyMs": 11366059,
+      "totalDuration": 21710591,
+      "duration": 11366059,
+      "timeInCall": 26221217,
+      "durationSeconds": 11366,
+      "durationMinutes": 189,
+      "studyDuration": 11366059,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -70092,6 +73493,206 @@
           "fromTime": "08:47 pm",
           "toTime": "08:47 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289429795,
+          "end": 1793289433772,
+          "durationMs": 3977,
+          "fromTime": "09:27 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793289441768,
+          "end": 1793289455822,
+          "durationMs": 14054,
+          "fromTime": "09:27 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:00:14"
+        },
+        {
+          "start": 1793289461803,
+          "end": 1793289465768,
+          "durationMs": 3965,
+          "fromTime": "09:27 pm",
+          "toTime": "09:27 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793289473779,
+          "end": 1793289481781,
+          "durationMs": 8002,
+          "fromTime": "09:27 pm",
+          "toTime": "09:28 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793289499941,
+          "end": 1793289502061,
+          "durationMs": 2120,
+          "fromTime": "09:28 pm",
+          "toTime": "09:28 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289521837,
+          "end": 1793289523792,
+          "durationMs": 1955,
+          "fromTime": "09:28 pm",
+          "toTime": "09:28 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793289543899,
+          "end": 1793289545912,
+          "durationMs": 2013,
+          "fromTime": "09:29 pm",
+          "toTime": "09:29 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289565789,
+          "end": 1793289571783,
+          "durationMs": 5994,
+          "fromTime": "09:29 pm",
+          "toTime": "09:29 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793289595924,
+          "end": 1793289599876,
+          "durationMs": 3952,
+          "fromTime": "09:29 pm",
+          "toTime": "09:29 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793289605773,
+          "end": 1793289609769,
+          "durationMs": 3996,
+          "fromTime": "09:30 pm",
+          "toTime": "09:30 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793289639788,
+          "end": 1793289641993,
+          "durationMs": 2205,
+          "fromTime": "09:30 pm",
+          "toTime": "09:30 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289645797,
+          "end": 1793289649771,
+          "durationMs": 3974,
+          "fromTime": "09:30 pm",
+          "toTime": "09:30 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793289671911,
+          "end": 1793289679986,
+          "durationMs": 8075,
+          "fromTime": "09:31 pm",
+          "toTime": "09:31 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793289693265,
+          "end": 1793289701266,
+          "durationMs": 8001,
+          "fromTime": "09:31 pm",
+          "toTime": "09:31 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793289725266,
+          "end": 1793289731186,
+          "durationMs": 5920,
+          "fromTime": "09:32 pm",
+          "toTime": "09:32 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793289751587,
+          "end": 1793289761266,
+          "durationMs": 9679,
+          "fromTime": "09:32 pm",
+          "toTime": "09:32 pm",
+          "durationFormatted": "00:00:09"
+        },
+        {
+          "start": 1793289765265,
+          "end": 1793289767266,
+          "durationMs": 2001,
+          "fromTime": "09:32 pm",
+          "toTime": "09:32 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289777267,
+          "end": 1793289783265,
+          "durationMs": 5998,
+          "fromTime": "09:32 pm",
+          "toTime": "09:33 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793289795267,
+          "end": 1793289797324,
+          "durationMs": 2057,
+          "fromTime": "09:33 pm",
+          "toTime": "09:33 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289823368,
+          "end": 1793289825265,
+          "durationMs": 1897,
+          "fromTime": "09:33 pm",
+          "toTime": "09:33 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793289923323,
+          "end": 1793289931334,
+          "durationMs": 8011,
+          "fromTime": "09:35 pm",
+          "toTime": "09:35 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793289945266,
+          "end": 1793289947267,
+          "durationMs": 2001,
+          "fromTime": "09:35 pm",
+          "toTime": "09:35 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289977267,
+          "end": 1793289979261,
+          "durationMs": 1994,
+          "fromTime": "09:36 pm",
+          "toTime": "09:36 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290005266,
+          "end": 1793290009261,
+          "durationMs": 3995,
+          "fromTime": "09:36 pm",
+          "toTime": "09:36 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290079266,
+          "end": 1793290289266,
+          "durationMs": 210000,
+          "fromTime": "09:37 pm",
+          "toTime": "09:41 pm",
+          "durationFormatted": "00:03:30"
         }
       ],
       "cameraIntervals": [
@@ -72502,6 +76103,526 @@
         },
         {
           "start": 1793287787472,
+          "end": 1793287793266,
+          "state": "on"
+        },
+        {
+          "start": 1793287793266,
+          "end": 1793287795261,
+          "state": "off"
+        },
+        {
+          "start": 1793287795261,
+          "end": 1793287803266,
+          "state": "on"
+        },
+        {
+          "start": 1793287803266,
+          "end": 1793287805267,
+          "state": "off"
+        },
+        {
+          "start": 1793287805267,
+          "end": 1793287818265,
+          "state": "on"
+        },
+        {
+          "start": 1793287818265,
+          "end": 1793287828261,
+          "state": "off"
+        },
+        {
+          "start": 1793287828261,
+          "end": 1793287837261,
+          "state": "on"
+        },
+        {
+          "start": 1793287837261,
+          "end": 1793288881261,
+          "state": "off"
+        },
+        {
+          "start": 1793288881261,
+          "end": 1793288935261,
+          "state": "on"
+        },
+        {
+          "start": 1793288935261,
+          "end": 1793288937265,
+          "state": "off"
+        },
+        {
+          "start": 1793288937265,
+          "end": 1793288943265,
+          "state": "on"
+        },
+        {
+          "start": 1793288943265,
+          "end": 1793288945266,
+          "state": "off"
+        },
+        {
+          "start": 1793288945266,
+          "end": 1793289037261,
+          "state": "on"
+        },
+        {
+          "start": 1793289037261,
+          "end": 1793289041270,
+          "state": "off"
+        },
+        {
+          "start": 1793289041270,
+          "end": 1793289051367,
+          "state": "on"
+        },
+        {
+          "start": 1793289051367,
+          "end": 1793289073256,
+          "state": "off"
+        },
+        {
+          "start": 1793289073256,
+          "end": 1793289083314,
+          "state": "on"
+        },
+        {
+          "start": 1793289083314,
+          "end": 1793289089290,
+          "state": "off"
+        },
+        {
+          "start": 1793289089290,
+          "end": 1793289123264,
+          "state": "on"
+        },
+        {
+          "start": 1793289123264,
+          "end": 1793289125349,
+          "state": "off"
+        },
+        {
+          "start": 1793289125349,
+          "end": 1793289143266,
+          "state": "on"
+        },
+        {
+          "start": 1793289143266,
+          "end": 1793289151260,
+          "state": "off"
+        },
+        {
+          "start": 1793289151260,
+          "end": 1793289167268,
+          "state": "on"
+        },
+        {
+          "start": 1793289167268,
+          "end": 1793289169392,
+          "state": "off"
+        },
+        {
+          "start": 1793289169392,
+          "end": 1793289177267,
+          "state": "on"
+        },
+        {
+          "start": 1793289177267,
+          "end": 1793289179262,
+          "state": "off"
+        },
+        {
+          "start": 1793289179262,
+          "end": 1793289195271,
+          "state": "on"
+        },
+        {
+          "start": 1793289195271,
+          "end": 1793289197623,
+          "state": "off"
+        },
+        {
+          "start": 1793289197623,
+          "end": 1793289203277,
+          "state": "on"
+        },
+        {
+          "start": 1793289203277,
+          "end": 1793289207273,
+          "state": "off"
+        },
+        {
+          "start": 1793289207273,
+          "end": 1793289211267,
+          "state": "on"
+        },
+        {
+          "start": 1793289211267,
+          "end": 1793289221265,
+          "state": "off"
+        },
+        {
+          "start": 1793289221265,
+          "end": 1793289225267,
+          "state": "on"
+        },
+        {
+          "start": 1793289225267,
+          "end": 1793289227266,
+          "state": "off"
+        },
+        {
+          "start": 1793289227266,
+          "end": 1793289231287,
+          "state": "on"
+        },
+        {
+          "start": 1793289231287,
+          "end": 1793289233516,
+          "state": "off"
+        },
+        {
+          "start": 1793289233516,
+          "end": 1793289255291,
+          "state": "on"
+        },
+        {
+          "start": 1793289255291,
+          "end": 1793289257266,
+          "state": "off"
+        },
+        {
+          "start": 1793289257266,
+          "end": 1793289273266,
+          "state": "on"
+        },
+        {
+          "start": 1793289273266,
+          "end": 1793289275270,
+          "state": "off"
+        },
+        {
+          "start": 1793289275270,
+          "end": 1793289293266,
+          "state": "on"
+        },
+        {
+          "start": 1793289293266,
+          "end": 1793289299266,
+          "state": "off"
+        },
+        {
+          "start": 1793289299266,
+          "end": 1793289323331,
+          "state": "on"
+        },
+        {
+          "start": 1793289323331,
+          "end": 1793289325350,
+          "state": "off"
+        },
+        {
+          "start": 1793289325350,
+          "end": 1793289335270,
+          "state": "on"
+        },
+        {
+          "start": 1793289335270,
+          "end": 1793289341266,
+          "state": "off"
+        },
+        {
+          "start": 1793289341266,
+          "end": 1793289355268,
+          "state": "on"
+        },
+        {
+          "start": 1793289355268,
+          "end": 1793289359267,
+          "state": "off"
+        },
+        {
+          "start": 1793289359267,
+          "end": 1793289375867,
+          "state": "on"
+        },
+        {
+          "start": 1793289375867,
+          "end": 1793289395771,
+          "state": "off"
+        },
+        {
+          "start": 1793289395771,
+          "end": 1793289399782,
+          "state": "on"
+        },
+        {
+          "start": 1793289399782,
+          "end": 1793289413768,
+          "state": "off"
+        },
+        {
+          "start": 1793289413768,
+          "end": 1793289417793,
+          "state": "on"
+        },
+        {
+          "start": 1793289417793,
+          "end": 1793289424386,
+          "state": "off"
+        },
+        {
+          "start": 1793289424386,
+          "end": 1793289429795,
+          "state": "on"
+        },
+        {
+          "start": 1793289429795,
+          "end": 1793289433772,
+          "state": "off"
+        },
+        {
+          "start": 1793289433772,
+          "end": 1793289441768,
+          "state": "on"
+        },
+        {
+          "start": 1793289441768,
+          "end": 1793289455822,
+          "state": "off"
+        },
+        {
+          "start": 1793289455822,
+          "end": 1793289461803,
+          "state": "on"
+        },
+        {
+          "start": 1793289461803,
+          "end": 1793289465768,
+          "state": "off"
+        },
+        {
+          "start": 1793289465768,
+          "end": 1793289473779,
+          "state": "on"
+        },
+        {
+          "start": 1793289473779,
+          "end": 1793289481781,
+          "state": "off"
+        },
+        {
+          "start": 1793289481781,
+          "end": 1793289499941,
+          "state": "on"
+        },
+        {
+          "start": 1793289499941,
+          "end": 1793289502061,
+          "state": "off"
+        },
+        {
+          "start": 1793289502061,
+          "end": 1793289521837,
+          "state": "on"
+        },
+        {
+          "start": 1793289521837,
+          "end": 1793289523792,
+          "state": "off"
+        },
+        {
+          "start": 1793289523792,
+          "end": 1793289543899,
+          "state": "on"
+        },
+        {
+          "start": 1793289543899,
+          "end": 1793289545912,
+          "state": "off"
+        },
+        {
+          "start": 1793289545912,
+          "end": 1793289565789,
+          "state": "on"
+        },
+        {
+          "start": 1793289565789,
+          "end": 1793289571783,
+          "state": "off"
+        },
+        {
+          "start": 1793289571783,
+          "end": 1793289595924,
+          "state": "on"
+        },
+        {
+          "start": 1793289595924,
+          "end": 1793289599876,
+          "state": "off"
+        },
+        {
+          "start": 1793289599876,
+          "end": 1793289605773,
+          "state": "on"
+        },
+        {
+          "start": 1793289605773,
+          "end": 1793289609769,
+          "state": "off"
+        },
+        {
+          "start": 1793289609769,
+          "end": 1793289639788,
+          "state": "on"
+        },
+        {
+          "start": 1793289639788,
+          "end": 1793289641993,
+          "state": "off"
+        },
+        {
+          "start": 1793289641993,
+          "end": 1793289645797,
+          "state": "on"
+        },
+        {
+          "start": 1793289645797,
+          "end": 1793289649771,
+          "state": "off"
+        },
+        {
+          "start": 1793289649771,
+          "end": 1793289671911,
+          "state": "on"
+        },
+        {
+          "start": 1793289671911,
+          "end": 1793289679986,
+          "state": "off"
+        },
+        {
+          "start": 1793289679986,
+          "end": 1793289693265,
+          "state": "on"
+        },
+        {
+          "start": 1793289693265,
+          "end": 1793289701266,
+          "state": "off"
+        },
+        {
+          "start": 1793289701266,
+          "end": 1793289725266,
+          "state": "on"
+        },
+        {
+          "start": 1793289725266,
+          "end": 1793289747387,
+          "state": "off"
+        },
+        {
+          "start": 1793289747387,
+          "end": 1793289751587,
+          "state": "on"
+        },
+        {
+          "start": 1793289751587,
+          "end": 1793289761266,
+          "state": "off"
+        },
+        {
+          "start": 1793289761266,
+          "end": 1793289765265,
+          "state": "on"
+        },
+        {
+          "start": 1793289765265,
+          "end": 1793289767266,
+          "state": "off"
+        },
+        {
+          "start": 1793289767266,
+          "end": 1793289777267,
+          "state": "on"
+        },
+        {
+          "start": 1793289777267,
+          "end": 1793289783265,
+          "state": "off"
+        },
+        {
+          "start": 1793289783265,
+          "end": 1793289795267,
+          "state": "on"
+        },
+        {
+          "start": 1793289795267,
+          "end": 1793289797324,
+          "state": "off"
+        },
+        {
+          "start": 1793289797324,
+          "end": 1793289823368,
+          "state": "on"
+        },
+        {
+          "start": 1793289823368,
+          "end": 1793289825265,
+          "state": "off"
+        },
+        {
+          "start": 1793289825265,
+          "end": 1793289923323,
+          "state": "on"
+        },
+        {
+          "start": 1793289923323,
+          "end": 1793289931334,
+          "state": "off"
+        },
+        {
+          "start": 1793289931334,
+          "end": 1793289945266,
+          "state": "on"
+        },
+        {
+          "start": 1793289945266,
+          "end": 1793289947267,
+          "state": "off"
+        },
+        {
+          "start": 1793289947267,
+          "end": 1793289977267,
+          "state": "on"
+        },
+        {
+          "start": 1793289977267,
+          "end": 1793289979261,
+          "state": "off"
+        },
+        {
+          "start": 1793289979261,
+          "end": 1793290005266,
+          "state": "on"
+        },
+        {
+          "start": 1793290005266,
+          "end": 1793290009261,
+          "state": "off"
+        },
+        {
+          "start": 1793290009261,
+          "end": 1793290079266,
+          "state": "on"
+        },
+        {
+          "start": 1793290079266,
+          "end": 1793290289266,
+          "state": "off"
+        },
+        {
+          "start": 1793290289266,
           "end": null,
           "state": "on"
         }
@@ -72517,13 +76638,13 @@
       "name": "Bhargavi Yadav",
       "isLocal": false,
       "currentStatus": "present",
-      "cameraStatus": "off",
+      "cameraStatus": "on",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793257114266,
       "joinTime": 1793257114266,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 3,
       "rejoinedAt": 1793284571258,
       "presenceIntervals": [
@@ -72580,17 +76701,17 @@
           "awayFormatted": "00:28:04"
         }
       ],
-      "totalInMeetMs": 23007904,
-      "totalPresentMs": 15107918,
-      "cameraOnMs": 11768250,
-      "cameraOffMs": 3339668,
-      "validStudyMs": 11768250,
-      "totalDuration": 15107918,
-      "duration": 11768250,
-      "timeInCall": 23007904,
-      "durationSeconds": 11768,
-      "durationMinutes": 196,
-      "studyDuration": 11768250,
+      "totalInMeetMs": 28577358,
+      "totalPresentMs": 16326450,
+      "cameraOnMs": 12942230,
+      "cameraOffMs": 3384220,
+      "validStudyMs": 12942230,
+      "totalDuration": 16326450,
+      "duration": 12942230,
+      "timeInCall": 28577358,
+      "durationSeconds": 12942,
+      "durationMinutes": 215,
+      "studyDuration": 12942230,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -72905,12 +77026,17 @@
         },
         {
           "start": 1793287681267,
-          "end": null,
+          "end": 1793288738279,
           "state": "off"
+        },
+        {
+          "start": 1793288738279,
+          "end": null,
+          "state": "on"
         }
       ],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "off",
+      "rawCameraStatus": "on",
       "manualCamOverride": false,
       "isHost": false,
       "isExempt": false
@@ -74400,16 +78526,16 @@
       "id": "p_shalu_kumari",
       "name": "Shalu Kumari",
       "isLocal": false,
-      "currentStatus": "left",
-      "cameraStatus": "off",
+      "currentStatus": "present",
+      "cameraStatus": "on",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793258393403,
       "joinTime": 1793258393403,
-      "leaveTime": 1793259227265,
-      "lastSeen": 1793271569365,
-      "rejoinCount": 0,
-      "rejoinedAt": null,
+      "leaveTime": null,
+      "lastSeen": 1793290586267,
+      "rejoinCount": 1,
+      "rejoinedAt": 1793289689701,
       "presenceIntervals": [
         {
           "joinTime": 1793258393403,
@@ -74417,6 +78543,11 @@
           "durationMs": 833862,
           "durationFormatted": "00:13:53",
           "leaveFormatted": "01:03 pm"
+        },
+        {
+          "joinTime": 1793289689701,
+          "leaveTime": null,
+          "durationMs": 0
         }
       ],
       "joinLeaveHistory": [
@@ -74424,19 +78555,26 @@
           "event": "joined",
           "time": 1793258393403,
           "formatted": "12:49 pm"
+        },
+        {
+          "event": "rejoined",
+          "time": 1793289689701,
+          "formatted": "09:31 pm",
+          "awayMs": 30462436,
+          "awayFormatted": "08:27:42"
         }
       ],
-      "totalInMeetMs": 833862,
-      "totalPresentMs": 835000,
-      "cameraOnMs": 510736,
-      "cameraOffMs": 324264,
-      "validStudyMs": 510736,
-      "totalDuration": 835000,
-      "duration": 510736,
-      "timeInCall": 833862,
-      "durationSeconds": 510,
-      "durationMinutes": 8,
-      "studyDuration": 510736,
+      "totalInMeetMs": 1733139,
+      "totalPresentMs": 1732492,
+      "cameraOnMs": 1224107,
+      "cameraOffMs": 508385,
+      "validStudyMs": 1224107,
+      "totalDuration": 1732492,
+      "duration": 1224107,
+      "timeInCall": 1733139,
+      "durationSeconds": 1224,
+      "durationMinutes": 20,
+      "studyDuration": 1224107,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -74679,6 +78817,166 @@
           "fromTime": "01:03 pm",
           "toTime": "01:03 pm",
           "durationFormatted": "00:00:10"
+        },
+        {
+          "start": 1793289689701,
+          "end": 1793289692267,
+          "durationMs": 2566,
+          "fromTime": "09:31 pm",
+          "toTime": "09:31 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289696272,
+          "end": 1793289698387,
+          "durationMs": 2115,
+          "fromTime": "09:31 pm",
+          "toTime": "09:31 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289752295,
+          "end": 1793289754298,
+          "durationMs": 2003,
+          "fromTime": "09:32 pm",
+          "toTime": "09:32 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289758259,
+          "end": 1793289760261,
+          "durationMs": 2002,
+          "fromTime": "09:32 pm",
+          "toTime": "09:32 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289766262,
+          "end": 1793289770266,
+          "durationMs": 4004,
+          "fromTime": "09:32 pm",
+          "toTime": "09:32 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793289782266,
+          "end": 1793289790262,
+          "durationMs": 7996,
+          "fromTime": "09:33 pm",
+          "toTime": "09:33 pm",
+          "durationFormatted": "00:00:07"
+        },
+        {
+          "start": 1793289888259,
+          "end": 1793289906265,
+          "durationMs": 18006,
+          "fromTime": "09:34 pm",
+          "toTime": "09:35 pm",
+          "durationFormatted": "00:00:18"
+        },
+        {
+          "start": 1793289920266,
+          "end": 1793289922261,
+          "durationMs": 1995,
+          "fromTime": "09:35 pm",
+          "toTime": "09:35 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290016266,
+          "end": 1793290036261,
+          "durationMs": 19995,
+          "fromTime": "09:36 pm",
+          "toTime": "09:37 pm",
+          "durationFormatted": "00:00:19"
+        },
+        {
+          "start": 1793290056264,
+          "end": 1793290070266,
+          "durationMs": 14002,
+          "fromTime": "09:37 pm",
+          "toTime": "09:37 pm",
+          "durationFormatted": "00:00:14"
+        },
+        {
+          "start": 1793290082267,
+          "end": 1793290084261,
+          "durationMs": 1994,
+          "fromTime": "09:38 pm",
+          "toTime": "09:38 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290090262,
+          "end": 1793290104265,
+          "durationMs": 14003,
+          "fromTime": "09:38 pm",
+          "toTime": "09:38 pm",
+          "durationFormatted": "00:00:14"
+        },
+        {
+          "start": 1793290114261,
+          "end": 1793290144261,
+          "durationMs": 30000,
+          "fromTime": "09:38 pm",
+          "toTime": "09:39 pm",
+          "durationFormatted": "00:00:30"
+        },
+        {
+          "start": 1793290306261,
+          "end": 1793290320289,
+          "durationMs": 14028,
+          "fromTime": "09:41 pm",
+          "toTime": "09:42 pm",
+          "durationFormatted": "00:00:14"
+        },
+        {
+          "start": 1793290324353,
+          "end": 1793290326262,
+          "durationMs": 1909,
+          "fromTime": "09:42 pm",
+          "toTime": "09:42 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290334336,
+          "end": 1793290340256,
+          "durationMs": 5920,
+          "fromTime": "09:42 pm",
+          "toTime": "09:42 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793290368321,
+          "end": 1793290370386,
+          "durationMs": 2065,
+          "fromTime": "09:42 pm",
+          "toTime": "09:42 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290414261,
+          "end": 1793290418267,
+          "durationMs": 4006,
+          "fromTime": "09:43 pm",
+          "toTime": "09:43 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793290438260,
+          "end": 1793290451687,
+          "durationMs": 13427,
+          "fromTime": "09:43 pm",
+          "toTime": "09:44 pm",
+          "durationFormatted": "00:00:13"
+        },
+        {
+          "start": 1793290558260,
+          "end": 1793290562309,
+          "durationMs": 4049,
+          "fromTime": "09:45 pm",
+          "toTime": "09:46 pm",
+          "durationFormatted": "00:00:04"
         }
       ],
       "cameraIntervals": [
@@ -74989,12 +79287,207 @@
         },
         {
           "start": 1793259223269,
+          "end": 1793289692267,
+          "state": "on"
+        },
+        {
+          "start": 1793289692267,
+          "end": 1793289696272,
+          "state": "on"
+        },
+        {
+          "start": 1793289696272,
+          "end": 1793289698387,
+          "state": "off"
+        },
+        {
+          "start": 1793289698387,
+          "end": 1793289752295,
+          "state": "on"
+        },
+        {
+          "start": 1793289752295,
+          "end": 1793289754298,
+          "state": "off"
+        },
+        {
+          "start": 1793289754298,
+          "end": 1793289758259,
+          "state": "on"
+        },
+        {
+          "start": 1793289758259,
+          "end": 1793289760261,
+          "state": "off"
+        },
+        {
+          "start": 1793289760261,
+          "end": 1793289766262,
+          "state": "on"
+        },
+        {
+          "start": 1793289766262,
+          "end": 1793289770266,
+          "state": "off"
+        },
+        {
+          "start": 1793289770266,
+          "end": 1793289782266,
+          "state": "on"
+        },
+        {
+          "start": 1793289782266,
+          "end": 1793289790262,
+          "state": "off"
+        },
+        {
+          "start": 1793289790262,
+          "end": 1793289888259,
+          "state": "on"
+        },
+        {
+          "start": 1793289888259,
+          "end": 1793289906265,
+          "state": "off"
+        },
+        {
+          "start": 1793289906265,
+          "end": 1793289920266,
+          "state": "on"
+        },
+        {
+          "start": 1793289920266,
+          "end": 1793289922261,
+          "state": "off"
+        },
+        {
+          "start": 1793289922261,
+          "end": 1793290016266,
+          "state": "on"
+        },
+        {
+          "start": 1793290016266,
+          "end": 1793290036261,
+          "state": "off"
+        },
+        {
+          "start": 1793290036261,
+          "end": 1793290056264,
+          "state": "on"
+        },
+        {
+          "start": 1793290056264,
+          "end": 1793290070266,
+          "state": "off"
+        },
+        {
+          "start": 1793290070266,
+          "end": 1793290082267,
+          "state": "on"
+        },
+        {
+          "start": 1793290082267,
+          "end": 1793290084261,
+          "state": "off"
+        },
+        {
+          "start": 1793290084261,
+          "end": 1793290090262,
+          "state": "on"
+        },
+        {
+          "start": 1793290090262,
+          "end": 1793290104265,
+          "state": "off"
+        },
+        {
+          "start": 1793290104265,
+          "end": 1793290114261,
+          "state": "on"
+        },
+        {
+          "start": 1793290114261,
+          "end": 1793290144261,
+          "state": "off"
+        },
+        {
+          "start": 1793290144261,
+          "end": 1793290306261,
+          "state": "on"
+        },
+        {
+          "start": 1793290306261,
+          "end": 1793290320289,
+          "state": "off"
+        },
+        {
+          "start": 1793290320289,
+          "end": 1793290324353,
+          "state": "on"
+        },
+        {
+          "start": 1793290324353,
+          "end": 1793290326262,
+          "state": "off"
+        },
+        {
+          "start": 1793290326262,
+          "end": 1793290334336,
+          "state": "on"
+        },
+        {
+          "start": 1793290334336,
+          "end": 1793290340256,
+          "state": "off"
+        },
+        {
+          "start": 1793290340256,
+          "end": 1793290368321,
+          "state": "on"
+        },
+        {
+          "start": 1793290368321,
+          "end": 1793290370386,
+          "state": "off"
+        },
+        {
+          "start": 1793290370386,
+          "end": 1793290414261,
+          "state": "on"
+        },
+        {
+          "start": 1793290414261,
+          "end": 1793290418267,
+          "state": "off"
+        },
+        {
+          "start": 1793290418267,
+          "end": 1793290438260,
+          "state": "on"
+        },
+        {
+          "start": 1793290438260,
+          "end": 1793290470265,
+          "state": "off"
+        },
+        {
+          "start": 1793290470265,
+          "end": 1793290558260,
+          "state": "on"
+        },
+        {
+          "start": 1793290558260,
+          "end": 1793290562309,
+          "state": "off"
+        },
+        {
+          "start": 1793290562309,
           "end": null,
           "state": "on"
         }
       ],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "off",
+      "rawCameraStatus": "on",
       "manualCamOverride": false,
       "isHost": false,
       "isExempt": false
@@ -76114,7 +80607,7 @@
       "firstSeen": 1793265099281,
       "joinTime": 1793265099281,
       "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "lastSeen": 1793290586267,
       "rejoinCount": 1,
       "rejoinedAt": 1793275448275,
       "presenceIntervals": [
@@ -76143,17 +80636,17 @@
           "awayFormatted": "00:48:40"
         }
       ],
-      "totalInMeetMs": 35060952,
-      "totalPresentMs": 15382938,
-      "cameraOnMs": 13647135,
+      "totalInMeetMs": 40630402,
+      "totalPresentMs": 16601470,
+      "cameraOnMs": 14865667,
       "cameraOffMs": 1735803,
-      "validStudyMs": 13647135,
-      "totalDuration": 15382938,
-      "duration": 13647135,
-      "timeInCall": 35060952,
-      "durationSeconds": 13647,
-      "durationMinutes": 227,
-      "studyDuration": 13647135,
+      "validStudyMs": 14865667,
+      "totalDuration": 16601470,
+      "duration": 14865667,
+      "timeInCall": 40630402,
+      "durationSeconds": 14865,
+      "durationMinutes": 247,
+      "studyDuration": 14865667,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -77050,14 +81543,14 @@
       "id": "p_bharti_thakur",
       "name": "Bharti Thakur",
       "isLocal": false,
-      "currentStatus": "present",
-      "cameraStatus": "on",
+      "currentStatus": "left",
+      "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793269510302,
       "joinTime": 1793269510302,
-      "leaveTime": null,
-      "lastSeen": 1793287788265,
+      "leaveTime": 1793289329261,
+      "lastSeen": 1793289329261,
       "rejoinCount": 1,
       "rejoinedAt": 1793279841799,
       "presenceIntervals": [
@@ -77086,17 +81579,17 @@
           "awayFormatted": "00:11:29"
         }
       ],
-      "totalInMeetMs": 26256441,
-      "totalPresentMs": 14621496,
-      "cameraOnMs": 8126935,
-      "cameraOffMs": 6494561,
-      "validStudyMs": 8126935,
-      "totalDuration": 14621496,
-      "duration": 8126935,
-      "timeInCall": 26256441,
-      "durationSeconds": 8126,
-      "durationMinutes": 135,
-      "studyDuration": 8126935,
+      "totalInMeetMs": 29306421,
+      "totalPresentMs": 14666048,
+      "cameraOnMs": 8160627,
+      "cameraOffMs": 6505421,
+      "validStudyMs": 8160627,
+      "totalDuration": 14666048,
+      "duration": 8160627,
+      "timeInCall": 29306421,
+      "durationSeconds": 8160,
+      "durationMinutes": 136,
+      "studyDuration": 8160627,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -78643,6 +83136,22 @@
           "fromTime": "08:35 pm",
           "toTime": "08:35 pm",
           "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793288613472,
+          "end": 1793288615267,
+          "durationMs": 1795,
+          "fromTime": "09:13 pm",
+          "toTime": "09:13 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793288620379,
+          "end": 1793288627267,
+          "durationMs": 6888,
+          "fromTime": "09:13 pm",
+          "toTime": "09:13 pm",
+          "durationFormatted": "00:00:06"
         }
       ],
       "cameraIntervals": [
@@ -81063,12 +85572,422 @@
         },
         {
           "start": 1793287781367,
+          "end": 1793287797260,
+          "state": "on"
+        },
+        {
+          "start": 1793287797260,
+          "end": 1793287803266,
+          "state": "off"
+        },
+        {
+          "start": 1793287803266,
+          "end": 1793287832269,
+          "state": "on"
+        },
+        {
+          "start": 1793287832269,
+          "end": 1793287838266,
+          "state": "off"
+        },
+        {
+          "start": 1793287838266,
+          "end": 1793287846261,
+          "state": "on"
+        },
+        {
+          "start": 1793287846261,
+          "end": 1793287876260,
+          "state": "off"
+        },
+        {
+          "start": 1793287876260,
+          "end": 1793287890266,
+          "state": "on"
+        },
+        {
+          "start": 1793287890266,
+          "end": 1793287906276,
+          "state": "off"
+        },
+        {
+          "start": 1793287906276,
+          "end": 1793287910265,
+          "state": "on"
+        },
+        {
+          "start": 1793287910265,
+          "end": 1793287964276,
+          "state": "off"
+        },
+        {
+          "start": 1793287964276,
+          "end": 1793287968308,
+          "state": "on"
+        },
+        {
+          "start": 1793287968308,
+          "end": 1793287976266,
+          "state": "off"
+        },
+        {
+          "start": 1793287976266,
+          "end": 1793287990260,
+          "state": "on"
+        },
+        {
+          "start": 1793287990260,
+          "end": 1793288231307,
+          "state": "off"
+        },
+        {
+          "start": 1793288231307,
+          "end": 1793288299337,
+          "state": "on"
+        },
+        {
+          "start": 1793288299337,
+          "end": 1793288309366,
+          "state": "off"
+        },
+        {
+          "start": 1793288309366,
+          "end": 1793288317558,
+          "state": "on"
+        },
+        {
+          "start": 1793288317558,
+          "end": 1793288319506,
+          "state": "off"
+        },
+        {
+          "start": 1793288319506,
+          "end": 1793288365375,
+          "state": "on"
+        },
+        {
+          "start": 1793288365375,
+          "end": 1793288367270,
+          "state": "off"
+        },
+        {
+          "start": 1793288367270,
+          "end": 1793288373413,
+          "state": "on"
+        },
+        {
+          "start": 1793288373413,
+          "end": 1793288375266,
+          "state": "off"
+        },
+        {
+          "start": 1793288375266,
+          "end": 1793288405266,
+          "state": "on"
+        },
+        {
+          "start": 1793288405266,
+          "end": 1793288407261,
+          "state": "off"
+        },
+        {
+          "start": 1793288407261,
+          "end": 1793288415348,
+          "state": "on"
+        },
+        {
+          "start": 1793288415348,
+          "end": 1793288417266,
+          "state": "off"
+        },
+        {
+          "start": 1793288417266,
+          "end": 1793288493267,
+          "state": "on"
+        },
+        {
+          "start": 1793288493267,
+          "end": 1793288495266,
+          "state": "off"
+        },
+        {
+          "start": 1793288495266,
+          "end": 1793288527264,
+          "state": "on"
+        },
+        {
+          "start": 1793288527264,
+          "end": 1793288529558,
+          "state": "off"
+        },
+        {
+          "start": 1793288529558,
+          "end": 1793288533263,
+          "state": "on"
+        },
+        {
+          "start": 1793288533263,
+          "end": 1793288537266,
+          "state": "off"
+        },
+        {
+          "start": 1793288537266,
+          "end": 1793288547269,
+          "state": "on"
+        },
+        {
+          "start": 1793288547269,
+          "end": 1793288555359,
+          "state": "off"
+        },
+        {
+          "start": 1793288555359,
+          "end": 1793288559263,
+          "state": "on"
+        },
+        {
+          "start": 1793288559263,
+          "end": 1793288563262,
+          "state": "off"
+        },
+        {
+          "start": 1793288563262,
+          "end": 1793288605389,
+          "state": "on"
+        },
+        {
+          "start": 1793288605389,
+          "end": 1793288609266,
+          "state": "off"
+        },
+        {
+          "start": 1793288609266,
+          "end": 1793288613472,
+          "state": "on"
+        },
+        {
+          "start": 1793288613472,
+          "end": 1793288615267,
+          "state": "off"
+        },
+        {
+          "start": 1793288615267,
+          "end": 1793288619394,
+          "state": "on"
+        },
+        {
+          "start": 1793288619394,
+          "end": 1793288627267,
+          "state": "off"
+        },
+        {
+          "start": 1793288627267,
+          "end": 1793288655283,
+          "state": "on"
+        },
+        {
+          "start": 1793288655283,
+          "end": 1793288657266,
+          "state": "off"
+        },
+        {
+          "start": 1793288657266,
+          "end": 1793288669265,
+          "state": "on"
+        },
+        {
+          "start": 1793288669265,
+          "end": 1793288673471,
+          "state": "off"
+        },
+        {
+          "start": 1793288673471,
+          "end": 1793288819266,
+          "state": "on"
+        },
+        {
+          "start": 1793288819266,
+          "end": 1793288821365,
+          "state": "off"
+        },
+        {
+          "start": 1793288821365,
+          "end": 1793288853265,
+          "state": "on"
+        },
+        {
+          "start": 1793288853265,
+          "end": 1793288857261,
+          "state": "off"
+        },
+        {
+          "start": 1793288857261,
+          "end": 1793288877361,
+          "state": "on"
+        },
+        {
+          "start": 1793288877361,
+          "end": 1793288879265,
+          "state": "off"
+        },
+        {
+          "start": 1793288879265,
+          "end": 1793288913265,
+          "state": "on"
+        },
+        {
+          "start": 1793288913265,
+          "end": 1793288915266,
+          "state": "off"
+        },
+        {
+          "start": 1793288915266,
+          "end": 1793288929261,
+          "state": "on"
+        },
+        {
+          "start": 1793288929261,
+          "end": 1793288933266,
+          "state": "off"
+        },
+        {
+          "start": 1793288933266,
+          "end": 1793288951265,
+          "state": "on"
+        },
+        {
+          "start": 1793288951265,
+          "end": 1793288955254,
+          "state": "off"
+        },
+        {
+          "start": 1793288955254,
+          "end": 1793288991437,
+          "state": "on"
+        },
+        {
+          "start": 1793288991437,
+          "end": 1793288995262,
+          "state": "off"
+        },
+        {
+          "start": 1793288995262,
+          "end": 1793289001294,
+          "state": "on"
+        },
+        {
+          "start": 1793289001294,
+          "end": 1793289005266,
+          "state": "off"
+        },
+        {
+          "start": 1793289005266,
+          "end": 1793289009270,
+          "state": "on"
+        },
+        {
+          "start": 1793289009270,
+          "end": 1793289029265,
+          "state": "off"
+        },
+        {
+          "start": 1793289029265,
+          "end": 1793289035266,
+          "state": "on"
+        },
+        {
+          "start": 1793289035266,
+          "end": 1793289099267,
+          "state": "off"
+        },
+        {
+          "start": 1793289099267,
+          "end": 1793289103266,
+          "state": "on"
+        },
+        {
+          "start": 1793289103266,
+          "end": 1793289129270,
+          "state": "off"
+        },
+        {
+          "start": 1793289129270,
+          "end": 1793289133381,
+          "state": "on"
+        },
+        {
+          "start": 1793289133381,
+          "end": 1793289139319,
+          "state": "off"
+        },
+        {
+          "start": 1793289139319,
+          "end": 1793289143266,
+          "state": "on"
+        },
+        {
+          "start": 1793289143266,
+          "end": 1793289165267,
+          "state": "off"
+        },
+        {
+          "start": 1793289165267,
+          "end": 1793289169392,
+          "state": "on"
+        },
+        {
+          "start": 1793289169392,
+          "end": 1793289197623,
+          "state": "off"
+        },
+        {
+          "start": 1793289197623,
+          "end": 1793289201291,
+          "state": "on"
+        },
+        {
+          "start": 1793289201291,
+          "end": 1793289235262,
+          "state": "off"
+        },
+        {
+          "start": 1793289235262,
+          "end": 1793289239266,
+          "state": "on"
+        },
+        {
+          "start": 1793289239266,
+          "end": 1793289275270,
+          "state": "off"
+        },
+        {
+          "start": 1793289275270,
+          "end": 1793289279265,
+          "state": "on"
+        },
+        {
+          "start": 1793289279265,
+          "end": 1793289287266,
+          "state": "off"
+        },
+        {
+          "start": 1793289287266,
+          "end": 1793289309265,
+          "state": "on"
+        },
+        {
+          "start": 1793289309265,
+          "end": 1793289321262,
+          "state": "off"
+        },
+        {
+          "start": 1793289321262,
           "end": null,
           "state": "on"
         }
       ],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "on",
+      "rawCameraStatus": "off",
       "manualCamOverride": false,
       "isHost": false,
       "isExempt": false
@@ -82143,6 +87062,152 @@
         },
         {
           "start": 1793284080292,
+          "end": null,
+          "state": "off"
+        }
+      ],
+      "videoDetectionMode": "off",
+      "rawCameraStatus": "off",
+      "manualCamOverride": false,
+      "isHost": false,
+      "isExempt": false
+    },
+    "p_ayan_sd": {
+      "id": "p_ayan_sd",
+      "name": "Ayan Sd",
+      "isLocal": false,
+      "currentStatus": "left",
+      "cameraStatus": "off",
+      "pendingStatus": null,
+      "pendingTicks": 0,
+      "firstSeen": 1793287822451,
+      "joinTime": 1793287822451,
+      "leaveTime": 1793288975257,
+      "lastSeen": 1793288975257,
+      "rejoinCount": 0,
+      "rejoinedAt": null,
+      "presenceIntervals": [
+        {
+          "joinTime": 1793287822451,
+          "leaveTime": null,
+          "durationMs": 0
+        }
+      ],
+      "joinLeaveHistory": [
+        {
+          "event": "joined",
+          "time": 1793287822451,
+          "formatted": "09:00 pm"
+        }
+      ],
+      "totalInMeetMs": 1152806,
+      "totalPresentMs": 44552,
+      "cameraOnMs": 0,
+      "cameraOffMs": 44552,
+      "validStudyMs": 0,
+      "totalDuration": 44552,
+      "duration": 0,
+      "timeInCall": 1152806,
+      "durationSeconds": 0,
+      "durationMinutes": 0,
+      "studyDuration": 0,
+      "consecutiveCamOffMs": 44552,
+      "cameraOffCurrentStart": null,
+      "cameraOffIntervals": [
+        {
+          "start": 1793288613078,
+          "end": 1793288946483,
+          "durationMs": 333405,
+          "fromTime": "09:13 pm",
+          "toTime": "09:19 pm",
+          "durationFormatted": "00:05:33"
+        }
+      ],
+      "cameraIntervals": [
+        {
+          "start": 1793287822451,
+          "end": null,
+          "state": "off"
+        }
+      ],
+      "videoDetectionMode": "off",
+      "rawCameraStatus": "off",
+      "manualCamOverride": false,
+      "isHost": false,
+      "isExempt": false
+    },
+    "p_gyaneshwar_meher": {
+      "id": "p_gyaneshwar_meher",
+      "name": "Gyaneshwar Meher",
+      "isLocal": false,
+      "currentStatus": "left",
+      "cameraStatus": "off",
+      "pendingStatus": null,
+      "pendingTicks": 0,
+      "firstSeen": 1793289948304,
+      "joinTime": 1793289948304,
+      "leaveTime": 1793289979261,
+      "lastSeen": 1793289979261,
+      "rejoinCount": 0,
+      "rejoinedAt": null,
+      "presenceIntervals": [
+        {
+          "joinTime": 1793289948304,
+          "leaveTime": null,
+          "durationMs": 0
+        }
+      ],
+      "joinLeaveHistory": [
+        {
+          "event": "joined",
+          "time": 1793289948304,
+          "formatted": "09:35 pm"
+        }
+      ],
+      "totalInMeetMs": 30957,
+      "totalPresentMs": 31994,
+      "cameraOnMs": 9845,
+      "cameraOffMs": 22149,
+      "validStudyMs": 9845,
+      "totalDuration": 31994,
+      "duration": 9845,
+      "timeInCall": 30957,
+      "durationSeconds": 9,
+      "durationMinutes": 0,
+      "studyDuration": 9845,
+      "consecutiveCamOffMs": 19995,
+      "cameraOffCurrentStart": 1793289960266,
+      "cameraOffIntervals": [
+        {
+          "start": 1793289948304,
+          "end": 1793289950382,
+          "durationMs": 2078,
+          "fromTime": "09:35 pm",
+          "toTime": "09:35 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793289960266,
+          "end": 1793289979261,
+          "durationMs": 18995,
+          "fromTime": "09:36 pm",
+          "toTime": "09:36 pm",
+          "durationFormatted": "00:00:18"
+        }
+      ],
+      "cameraIntervals": [
+        {
+          "start": 1793289948304,
+          "end": 1793289950382,
+          "state": "off"
+        },
+        {
+          "start": 1793289950382,
+          "end": 1793289960266,
+          "state": "on"
+        },
+        {
+          "start": 1793289960266,
           "end": null,
           "state": "off"
         }

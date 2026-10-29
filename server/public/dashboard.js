@@ -116,16 +116,19 @@ function calculateActiveStudyMs(sess, now = Date.now()) {
   const stoppedAt = toEpochMs(sess.stoppedAt);
   if (stoppedAt) {
     const elapsed = Math.max(0, stoppedAt - startedAt);
-    return Math.max(0, elapsed - (sess.totalPausedMs || 0));
+    const safePaused = Math.min(sess.totalPausedMs || 0, elapsed);
+    return Math.max(0, elapsed - safePaused);
   }
   if (sess.isPaused) {
     // PAUSED: Study clock stays completely FROZEN at the moment pause was clicked!
     const pauseStart = toEpochMs(sess.currentPauseStart) || now;
     const elapsedUpToPause = Math.max(0, pauseStart - startedAt);
-    return Math.max(0, elapsedUpToPause - (sess.totalPausedMs || 0));
+    const safePaused = Math.min(sess.totalPausedMs || 0, elapsedUpToPause);
+    return Math.max(0, elapsedUpToPause - safePaused);
   }
   const elapsed = Math.max(0, now - startedAt);
-  return Math.max(0, elapsed - (sess.totalPausedMs || 0));
+  const safePaused = Math.min(sess.totalPausedMs || 0, elapsed);
+  return Math.max(0, elapsed - safePaused);
 }
 
 function showToast(msg) {

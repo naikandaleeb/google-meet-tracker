@@ -288,17 +288,20 @@
     const stoppedAt = toEpochMs(sess.stoppedAt);
     if (stoppedAt) {
       const elapsed = Math.max(0, stoppedAt - startedAt);
-      return Math.max(0, elapsed - (sess.totalPausedMs || 0));
+      const safePaused = Math.min(sess.totalPausedMs || 0, elapsed);
+      return Math.max(0, elapsed - safePaused);
     }
     if (sess.isPaused) {
       // PAUSED: Study clock stays completely FROZEN at the exact moment pause was pressed!
       const pauseStart = toEpochMs(sess.currentPauseStart) || now;
       const elapsedUpToPause = Math.max(0, pauseStart - startedAt);
-      return Math.max(0, elapsedUpToPause - (sess.totalPausedMs || 0));
+      const safePaused = Math.min(sess.totalPausedMs || 0, elapsedUpToPause);
+      return Math.max(0, elapsedUpToPause - safePaused);
     }
     // RUNNING: Elapsed time minus all completed pauses
     const elapsed = Math.max(0, now - startedAt);
-    return Math.max(0, elapsed - (sess.totalPausedMs || 0));
+    const safePaused = Math.min(sess.totalPausedMs || 0, elapsed);
+    return Math.max(0, elapsed - safePaused);
   }
 
   // ================= EMBEDDED SHADOW DOM CSS =================
@@ -924,30 +927,37 @@
     const now = Date.now();
     session.isTracking = true;
     session.isPaused = false;
-    session.startedAt = now;
+    const isFresh = !session.startedAt;
+    if (isFresh) {
+      session.startedAt = now;
+      session.totalPausedMs = 0;
+      session.pauseHistory = [];
+    }
     session.stoppedAt = null;
     session.currentPauseStart = null;
     lastTickTime = now;
 
-    // Synchronize all currently present participants to start tracking at this exact moment
-    Object.values(session.participants || {}).forEach(p => {
-      p.firstSeen = now;
-      p.lastSeen = now;
-      p.totalPresentMs = 0;
-      p.cameraOnMs = 0;
-      p.cameraOffMs = 0;
-      p.validStudyMs = 0;
-      p.consecutiveCamOffMs = 0;
-      p.cameraOffIntervals = [];
-      p.cameraIntervals = [{ start: now, end: null, state: p.cameraStatus }];
-      if (p.cameraStatus === 'off') {
-        p.cameraOffCurrentStart = now;
-      } else {
-        p.cameraOffCurrentStart = null;
-      }
-    });
+    // Synchronize participants: Only reset hours to 0 on a completely FRESH start, NEVER on a resume!
+    if (isFresh) {
+      Object.values(session.participants || {}).forEach(p => {
+        p.firstSeen = now;
+        p.lastSeen = now;
+        p.totalPresentMs = 0;
+        p.cameraOnMs = 0;
+        p.cameraOffMs = 0;
+        p.validStudyMs = 0;
+        p.consecutiveCamOffMs = 0;
+        p.cameraOffIntervals = [];
+        p.cameraIntervals = [{ start: now, end: null, state: p.cameraStatus }];
+        if (p.cameraStatus === 'off') {
+          p.cameraOffCurrentStart = now;
+        } else {
+          p.cameraOffCurrentStart = null;
+        }
+      });
+    }
 
-    console.log('[Cockroach Tracker] ▶️ Attendance Started! Study timer running.');
+    console.log('[Cockroach Tracker] ▶️ Attendance Started/Resumed! Study timer running.');
 
     renderControls();
     saveSession();
@@ -2202,6 +2212,34 @@
       }
     }
 
+    // Merge participants monotonically from server session so hours & attendance are never lost
+    if (serverSess.participants && typeof serverSess.participants === 'object') {
+      if (!session.participants) session.participants = {};
+      for (const [id, sp] of Object.entries(serverSess.participants)) {
+        if (deletedParticipants.has(id.toLowerCase()) || (sp.name && deletedParticipants.has(sp.name.toLowerCase()))) continue;
+        const localP = session.participants[id];
+        if (!localP) {
+          session.participants[id] = { ...sp };
+        } else {
+          localP.cameraOnMs = Math.max(localP.cameraOnMs || 0, sp.cameraOnMs || 0);
+          localP.cameraOffMs = Math.max(localP.cameraOffMs || 0, sp.cameraOffMs || 0);
+          localP.validStudyMs = Math.max(localP.validStudyMs || 0, sp.validStudyMs || 0);
+          localP.totalPresentMs = Math.max(localP.totalPresentMs || 0, sp.totalPresentMs || 0);
+          localP.firstSeen = Math.min(toEpochMs(localP.firstSeen) || Date.now(), toEpochMs(sp.firstSeen) || Date.now());
+          localP.joinTime = Math.min(toEpochMs(localP.joinTime) || Date.now(), toEpochMs(sp.joinTime) || Date.now());
+          if (sp.presenceIntervals && Array.isArray(sp.presenceIntervals) && (!localP.presenceIntervals || localP.presenceIntervals.length === 0)) {
+            localP.presenceIntervals = sp.presenceIntervals;
+          }
+          if (sp.cameraOffIntervals && Array.isArray(sp.cameraOffIntervals) && (!localP.cameraOffIntervals || localP.cameraOffIntervals.length === 0)) {
+            localP.cameraOffIntervals = sp.cameraOffIntervals;
+          }
+          if (sp.manualCamOverride !== undefined) {
+            localP.manualCamOverride = sp.manualCamOverride;
+          }
+        }
+      }
+    }
+
     const controlChanged = session.sessionId !== serverSess.sessionId ||
                            session.isTracking !== serverSess.isTracking ||
                            session.isPaused !== serverSess.isPaused ||
@@ -2421,30 +2459,33 @@
       }
     });
 
+    let timersStarted = false;
+    function startEnginesOnce() {
+      if (timersStarted) return;
+      timersStarted = true;
+      mountHUD();
+      renderControls();
+      updateHudUI();
+      if (tickTimer) clearInterval(tickTimer);
+      tickTimer = setInterval(onTimerTick, 1000);
+      if (syncTimer) clearInterval(syncTimer);
+      syncTimer = setInterval(syncSessionNow, config.syncIntervalMs);
+    }
+
     chrome.runtime.sendMessage({
       type: 'GET_SERVER_SESSION',
       serverUrl: getServerBaseUrl()
     }, (resp) => {
       const _ignored = chrome.runtime.lastError;
       if (resp && resp.success && resp.session) {
-        const s = resp.session;
-        if (s.isTracking || (s.meetingCode === session.meetingCode && (s.startedAt || Object.keys(s.participants || {}).length > 0))) {
-          session = { ...session, ...s };
-          console.log('[Cockroach Tracker] Synced initial state from server:', session.sessionId);
-        }
+        adoptServerSession(resp.session);
+        console.log('[Cockroach Tracker] Hydrated master session from server:', session.sessionId);
       }
-      mountHUD();
-      renderControls();
-      updateHudUI();
+      startEnginesOnce();
     });
 
-    mountHUD();
-
-    if (tickTimer) clearInterval(tickTimer);
-    tickTimer = setInterval(onTimerTick, 1000);
-
-    if (syncTimer) clearInterval(syncTimer);
-    syncTimer = setInterval(syncSessionNow, config.syncIntervalMs);
+    // Fallback in case of network lag: start engines after 1200ms
+    setTimeout(startEnginesOnce, 1200);
 
     const observer = new MutationObserver(() => {
       if (!document.getElementById('cockroach-hud-host')) {

@@ -391,6 +391,27 @@ function cleanAllSessionParticipants(sess) {
   sess.participants = cleaned;
 }
 
+// Sanitize pause history against duplicate pause loops
+function sanitizePauseHistory(sess) {
+  if (!sess) return;
+  if (sess.pauseHistory && Array.isArray(sess.pauseHistory)) {
+    const seenPauseTimes = new Set();
+    const validPauses = [];
+    sess.pauseHistory.forEach(ph => {
+      if (ph.pausedAt && !seenPauseTimes.has(ph.pausedAt)) {
+        seenPauseTimes.add(ph.pausedAt);
+        validPauses.push(ph);
+      }
+    });
+    sess.pauseHistory = validPauses;
+    sess.totalPausedMs = validPauses.reduce((sum, p) => sum + (p.durationMs || 0), 0);
+    if (sess.currentPauseStart && seenPauseTimes.has(sess.currentPauseStart)) {
+      sess.currentPauseStart = null;
+      sess.isPaused = false;
+    }
+  }
+}
+
 // Load saved session if exists
 try {
   if (fs.existsSync(CURRENT_SESSION_FILE)) {
@@ -398,6 +419,7 @@ try {
     if (raw) {
       currentSession = JSON.parse(raw);
       cleanAllSessionParticipants(currentSession);
+      sanitizePauseHistory(currentSession);
     }
   }
 } catch (err) {
@@ -518,32 +540,8 @@ app.post('/api/session/sync', (req, res) => {
   if (data.meetingTitle) currentSession.meetingTitle = data.meetingTitle;
   if (data.targetDurationHours) currentSession.targetDurationHours = data.targetDurationHours;
 
-  // Handle pause / resume synchronization seamlessly:
-  // If extension is actively running and reports isPaused change, adopt it immediately!
-  if (typeof data.isPaused === 'boolean' && data.isPaused !== currentSession.isPaused && currentSession.isTracking) {
-    currentSession.isPaused = data.isPaused;
-    const now = Date.now();
-    if (data.isPaused) {
-      currentSession.currentPauseStart = data.currentPauseStart || now;
-      console.log('[Server] Synced PAUSE from extension at', new Date(now).toLocaleTimeString());
-    } else {
-      if (currentSession.currentPauseStart) {
-        const pauseDuration = Math.max(0, now - currentSession.currentPauseStart);
-        currentSession.totalPausedMs = (currentSession.totalPausedMs || 0) + pauseDuration;
-        if (!currentSession.pauseHistory) currentSession.pauseHistory = [];
-        currentSession.pauseHistory.push({
-          pausedAt: currentSession.currentPauseStart,
-          resumedAt: now,
-          durationMs: pauseDuration
-        });
-        currentSession.currentPauseStart = null;
-      }
-      console.log('[Server] Synced RESUME from extension at', new Date(now).toLocaleTimeString());
-    }
-    persistCurrentSession();
-    broadcast({ type: data.isPaused ? 'ACTION_PAUSE' : 'ACTION_RESUME', timestamp: now, session: currentSession });
-  }
-
+  // Explicit control actions (Pause/Resume/Start/Stop) passed directly in sync payload:
+  // ROUTINE HEARTBEATS MUST NEVER ALTER isPaused OR ACCUMULATE FAKE PAUSE DURATIONS!
   if (data.isExplicitAction) {
     if (typeof data.isTracking === 'boolean') currentSession.isTracking = data.isTracking;
     if (typeof data.isPaused === 'boolean') currentSession.isPaused = data.isPaused;
@@ -798,7 +796,9 @@ app.post('/api/session/action', (req, res) => {
   if (action === 'resume') {
     if (currentSession.isTracking && currentSession.isPaused) {
       currentSession.isPaused = false;
-      const pauseDuration = currentSession.currentPauseStart ? (now - currentSession.currentPauseStart) : 0;
+      const rawPauseDuration = currentSession.currentPauseStart ? Math.max(0, now - currentSession.currentPauseStart) : 0;
+      const maxAllowedPause = Math.max(0, now - (currentSession.startedAt || now));
+      const pauseDuration = Math.min(rawPauseDuration, maxAllowedPause);
       currentSession.totalPausedMs = (currentSession.totalPausedMs || 0) + pauseDuration;
       if (!currentSession.pauseHistory) currentSession.pauseHistory = [];
       currentSession.pauseHistory.push({
@@ -900,7 +900,23 @@ app.post('/api/session/action', (req, res) => {
     return res.json({ success: true, session: currentSession });
   }
 
+  if (action === 'fix_breaks') {
+    sanitizePauseHistory(currentSession);
+    persistCurrentSession();
+    broadcast({ type: 'SESSION_UPDATE', session: currentSession });
+    return res.json({ success: true, session: currentSession });
+  }
+
   res.status(400).json({ error: 'Unknown action' });
+});
+
+// Fix break time / deduplicate pause history endpoint
+app.post(['/api/session/fix-breaks', '/api/session/repair-time'], (req, res) => {
+  sanitizePauseHistory(currentSession);
+  currentSession.lastUpdated = Date.now();
+  persistCurrentSession();
+  broadcast({ type: 'SESSION_UPDATE', session: currentSession });
+  return res.json({ success: true, session: currentSession });
 });
 
 // Permanently Delete Participant endpoint (Host can delete student from attendance)
