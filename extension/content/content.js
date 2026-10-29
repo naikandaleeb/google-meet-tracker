@@ -72,6 +72,7 @@
 
   let lastUserPauseActionTime = 0;
   const knownHostNames = new Set(['host (you)', 'you', 'host', 'host (andaleeb gull)', 'andaleeb gull']);
+  const deletedParticipants = new Set();
 
   function isHostIdentifier(nameOrId) {
     if (!nameOrId) return false;
@@ -1713,6 +1714,7 @@
 
       const participantKey = 'p_' + name.toLowerCase().replace(/[^a-z0-9]/g, '_');
       if (isHostIdentifier(participantKey)) return;
+      if (deletedParticipants.has(participantKey) || deletedParticipants.has(name.toLowerCase())) return;
 
       let tileCamOn = false;
       let detectionMode = 'off';
@@ -1826,6 +1828,7 @@
 
       const participantKey = 'p_' + foundName.toLowerCase().replace(/[^a-z0-9]/g, '_');
       if (isHostIdentifier(participantKey)) return;
+      if (deletedParticipants.has(participantKey) || deletedParticipants.has(foundName.toLowerCase())) return;
 
       // If already detected in grid tiles:
       if (detected.has(participantKey)) {
@@ -2183,6 +2186,22 @@
   function adoptServerSession(serverSess) {
     if (!serverSess) return;
 
+    if (serverSess.deletedParticipants && Array.isArray(serverSess.deletedParticipants)) {
+      serverSess.deletedParticipants.forEach(dp => {
+        deletedParticipants.add(dp.toLowerCase());
+        if (session.participants && session.participants[dp]) {
+          delete session.participants[dp];
+        }
+      });
+      if (session.participants) {
+        for (const [k, p] of Object.entries(session.participants)) {
+          if (p.name && deletedParticipants.has(p.name.toLowerCase())) {
+            delete session.participants[k];
+          }
+        }
+      }
+    }
+
     const controlChanged = session.sessionId !== serverSess.sessionId ||
                            session.isTracking !== serverSess.isTracking ||
                            session.isPaused !== serverSess.isPaused ||
@@ -2219,6 +2238,16 @@
       session.currentPauseStart = null;
       renderControls();
       updateHudUI();
+    } else if (event.type === 'PARTICIPANT_DELETED') {
+      const pid = event.participantId;
+      if (pid) deletedParticipants.add(pid.toLowerCase());
+      if (event.participantName) deletedParticipants.add(event.participantName.toLowerCase());
+      if (session.participants && session.participants[pid]) {
+        delete session.participants[pid];
+      }
+      renderControls();
+      updateHudUI();
+      saveSession();
     } else if (event.type === 'ACTION_STOP') {
       session.isTracking = false;
       session.isPaused = false;

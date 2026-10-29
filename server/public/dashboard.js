@@ -934,6 +934,12 @@ function renderStudentsTable() {
                       title="${p.manualCamOverride ? 'Revert to automatic camera detection' : 'Host Override: Force Camera ON'}">
                 ${p.manualCamOverride ? '↺ Auto' : '📷 Force ON'}
               </button>
+              <button class="btn-delete-student" 
+                      onclick="deleteParticipantPrompt('${escapeHtml(p.id)}')" 
+                      title="Permanently delete ${escapeHtml(p.name)} from attendance"
+                      style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 4px; padding: 3px 8px; font-size: 11px; cursor: pointer; transition: all 0.2s;">
+                🗑️
+              </button>
             ` : ''}
           </div>
         </td>
@@ -941,6 +947,33 @@ function renderStudentsTable() {
     `;
   }).join('');
 }
+
+// Permanently Delete Participant from Attendance
+window.deleteParticipantPrompt = async function(id, callback) {
+  const p = state.participants?.[id];
+  const name = p ? p.name : id;
+  if (!confirm(`Are you sure you want to permanently delete "${name}" from attendance?`)) {
+    return;
+  }
+  try {
+    const res = await fetch('/api/participant/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ participantId: id })
+    });
+    const result = await res.json();
+    if (result.success) {
+      delete state.participants[id];
+      if (typeof callback === 'function') callback();
+      showToast(`🗑️ "${name}" removed from attendance.`);
+      scheduleRenderUI();
+    } else {
+      alert('Failed to delete participant: ' + (result.error || 'Unknown error'));
+    }
+  } catch (err) {
+    alert('Error deleting participant: ' + err.message);
+  }
+};
 
 // Host Manual Camera Override Toggle
 window.toggleParticipantCameraOverride = async function(id) {
@@ -1112,6 +1145,22 @@ window.openStudentModal = function(id) {
   }
 
   if (logContainer) logContainer.innerHTML = html;
+
+  const modalDeleteBtn = document.getElementById('modal-btn-delete-student');
+  if (modalDeleteBtn) {
+    const isHost = p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
+    if (isHost) {
+      modalDeleteBtn.style.display = 'none';
+    } else {
+      modalDeleteBtn.style.display = 'inline-block';
+      modalDeleteBtn.onclick = () => {
+        deleteParticipantPrompt(p.id, () => {
+          studentModal.style.display = 'none';
+        });
+      };
+    }
+  }
+
   studentModal.style.display = 'flex';
 };
 

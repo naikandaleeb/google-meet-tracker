@@ -421,7 +421,12 @@
             <h3 class="modal-student-name" id="modal-name">Student Name</h3>
             <div class="modal-student-id" id="modal-id">ID: --</div>
           </div>
-          <button class="btn-close-modal" id="btn-close-modal">&times;</button>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button class="btn btn-sm btn-danger-outline" id="modal-btn-delete-student" title="Permanently delete this participant from attendance">
+              🗑️ Delete Participant
+            </button>
+            <button class="btn-close-modal" id="btn-close-modal">&times;</button>
+          </div>
         </div>
         <div class="modal-body">
           <div class="modal-stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">

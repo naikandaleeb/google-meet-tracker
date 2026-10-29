@@ -237,6 +237,7 @@ function consolidateParticipantsForReport(rawList, session = {}) {
   const map = new Map();
   rawList.forEach(p => {
     if (!p || !p.name) return;
+    if (session.deletedParticipants && (session.deletedParticipants.includes(p.id) || (p.name && session.deletedParticipants.includes(p.name.toLowerCase())))) return;
     const isLocal = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
     const validName = cleanParticipantName(p.name, isLocal);
     if (!validName) return;

@@ -565,6 +565,7 @@ app.post('/api/session/sync', (req, res) => {
     if (!currentSession.participants) currentSession.participants = {};
     for (const [key, p] of Object.entries(data.participants)) {
       if (badKeys.includes(key)) continue;
+      if (currentSession.deletedParticipants && (currentSession.deletedParticipants.includes(key) || (p.name && currentSession.deletedParticipants.includes(p.name.toLowerCase())))) continue;
       const isLocal = p.isLocal || key === 'local_host' || key === 'p_andaleeb_gull' ||
                       (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
       const validName = isLocal ? (p.name && p.name.toLowerCase().includes('andaleeb') ? 'Host (Andaleeb Gull)' : 'Host (You)') : cleanParticipantName(p.name, false);
@@ -617,6 +618,27 @@ app.post('/api/session/sync', (req, res) => {
             }
           });
         }
+
+        const rejoinCount = Math.max(p.rejoinCount || 0, existing.rejoinCount || 0);
+        const rejoinedAt = p.rejoinedAt || existing.rejoinedAt || null;
+
+        const mergedParticipantObj = {
+          ...existing,
+          ...p,
+          id: stableKey,
+          name: validName,
+          isLocal: isLocal,
+          presenceIntervals: combinedPresenceIntervals.length > 0 ? combinedPresenceIntervals : (p.presenceIntervals || existing.presenceIntervals || []),
+          currentStatus: isPres ? 'present' : 'left',
+          cameraStatus: isCamOn ? 'on' : 'off',
+          rawCameraStatus: isCamOn ? 'on' : 'off',
+          manualCamOverride: isManualCam,
+          leaveTime: leaveTime,
+          videoDetectionMode: isCamOn ? (p.cameraStatus === 'on' ? (p.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off',
+          lastSeen: Math.max(toEpochMs(p.lastSeen) || Date.now(), toEpochMs(existing.lastSeen) || Date.now())
+        };
+
+        const totalInMeetMs = calculateTotalInMeetMs(mergedParticipantObj, Date.now());
 
         currentSession.participants[stableKey] = {
           ...mergedParticipantObj,
@@ -839,6 +861,27 @@ app.post('/api/session/action', (req, res) => {
     return res.json({ success: true });
   }
 
+  if (action === 'delete_participant') {
+    const { participantId } = payload || {};
+    if (participantId && currentSession.participants) {
+      let targetKey = participantId;
+      if (!currentSession.participants[targetKey]) {
+        targetKey = Object.keys(currentSession.participants).find(k => k === participantId || k.toLowerCase() === participantId.toLowerCase());
+      }
+      if (targetKey && currentSession.participants[targetKey]) {
+        const deletedName = currentSession.participants[targetKey].name;
+        delete currentSession.participants[targetKey];
+        if (!currentSession.deletedParticipants) currentSession.deletedParticipants = [];
+        if (!currentSession.deletedParticipants.includes(targetKey)) currentSession.deletedParticipants.push(targetKey);
+        if (!currentSession.deletedParticipants.includes(deletedName.toLowerCase())) currentSession.deletedParticipants.push(deletedName.toLowerCase());
+        persistCurrentSession();
+        broadcast({ type: 'PARTICIPANT_DELETED', participantId: targetKey, participantName: deletedName, session: currentSession });
+        console.log(`[Server] 🗑️ Action deleted participant [${deletedName}] (${targetKey})`);
+      }
+    }
+    return res.json({ success: true, session: currentSession });
+  }
+
   if (action === 'override') {
     const { participantId, manualCamOverride } = payload || {};
     if (participantId && currentSession.participants && currentSession.participants[participantId]) {
@@ -858,6 +901,72 @@ app.post('/api/session/action', (req, res) => {
   }
 
   res.status(400).json({ error: 'Unknown action' });
+});
+
+// Permanently Delete Participant endpoint (Host can delete student from attendance)
+app.post(['/api/participant/delete', '/api/participant-delete'], (req, res) => {
+  const { participantId } = req.body || {};
+  if (!participantId) return res.status(400).json({ error: 'Missing participantId' });
+
+  if (!currentSession.participants) currentSession.participants = {};
+  let targetKey = participantId;
+  let p = currentSession.participants[targetKey];
+  if (!p) {
+    targetKey = Object.keys(currentSession.participants).find(k => k === participantId || k.toLowerCase() === participantId.toLowerCase() || (currentSession.participants[k] && currentSession.participants[k].name.toLowerCase() === participantId.toLowerCase()));
+    if (targetKey) p = currentSession.participants[targetKey];
+  }
+
+  if (!p) {
+    return res.status(404).json({ error: 'Participant not found in current session' });
+  }
+
+  const deletedName = p.name;
+  delete currentSession.participants[targetKey];
+
+  if (!currentSession.deletedParticipants) currentSession.deletedParticipants = [];
+  if (!currentSession.deletedParticipants.includes(targetKey)) {
+    currentSession.deletedParticipants.push(targetKey);
+  }
+  const normName = deletedName.toLowerCase();
+  if (!currentSession.deletedParticipants.includes(normName)) {
+    currentSession.deletedParticipants.push(normName);
+  }
+
+  currentSession.lastUpdated = Date.now();
+  persistCurrentSession();
+
+  broadcast({
+    type: 'PARTICIPANT_DELETED',
+    participantId: targetKey,
+    participantName: deletedName,
+    session: currentSession
+  });
+
+  console.log(`[Server] 🗑️ Deleted participant [${deletedName}] (${targetKey}) from attendance`);
+  return res.json({ success: true, deletedId: targetKey, deletedName, session: currentSession });
+});
+
+app.delete('/api/participant/:id', (req, res) => {
+  const participantId = req.params.id;
+  if (!currentSession.participants) currentSession.participants = {};
+  let targetKey = participantId;
+  let p = currentSession.participants[targetKey];
+  if (!p) {
+    targetKey = Object.keys(currentSession.participants).find(k => k === participantId || k.toLowerCase() === participantId.toLowerCase() || (currentSession.participants[k] && currentSession.participants[k].name.toLowerCase() === participantId.toLowerCase()));
+    if (targetKey) p = currentSession.participants[targetKey];
+  }
+  if (!p) return res.status(404).json({ error: 'Participant not found' });
+
+  const deletedName = p.name;
+  delete currentSession.participants[targetKey];
+  if (!currentSession.deletedParticipants) currentSession.deletedParticipants = [];
+  if (!currentSession.deletedParticipants.includes(targetKey)) currentSession.deletedParticipants.push(targetKey);
+  if (!currentSession.deletedParticipants.includes(deletedName.toLowerCase())) currentSession.deletedParticipants.push(deletedName.toLowerCase());
+
+  currentSession.lastUpdated = Date.now();
+  persistCurrentSession();
+  broadcast({ type: 'PARTICIPANT_DELETED', participantId: targetKey, participantName: deletedName, session: currentSession });
+  return res.json({ success: true, deletedId: targetKey, deletedName, session: currentSession });
 });
 
 // Manual Camera Override endpoint (Host can force Camera ON or revert to Auto)
