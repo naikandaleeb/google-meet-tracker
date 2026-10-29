@@ -25,9 +25,11 @@ function cleanParticipantName(raw, isLocal = false) {
   // 1. Strip Google Meet Material Icon ligatures
   s = s.replace(/\b(?:keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz|videocam_off|screen_share|closed_caption|hand_raise|call_end)\b/gi, '').trim();
 
-  // 2. Reject Companion & Audio Pairing status strings (NEVER a student name)
-  if (/^(?:paired\s+with|audio\s+paired\s+with|audio\s+paired|companion\s+mode|peering|पेयर\s+किया\s+गया)\b/i.test(s) ||
-      /\b(?:paired\s+with|audio\s+paired\s+with|companion\s+mode)\b/i.test(s)) {
+  // 2. Strip Companion & Audio Pairing prefixes/suffixes to extract actual student name (e.g. "Paired with Riya" -> "Riya")
+  s = s.replace(/^(?:paired\s+with|audio\s+paired\s+with|audio\s+paired|peering\s+with|peered\s+with|पेयर\s+किया\s+गया)\s+/gi, '').trim();
+  s = s.replace(/\s*[\(,]\s*(?:paired\s+with|audio\s+paired\s+with|audio\s+paired|companion\s+mode|companion)[^\)\]]*[\)\]]?/gi, '').trim();
+  s = s.replace(/\s+(?:paired\s+with|companion\s+mode).*$/gi, '').trim();
+  if (/^(?:paired\s+with|audio\s+paired\s+with|companion\s+mode|peering)$/i.test(s)) {
     return null;
   }
 
@@ -117,7 +119,7 @@ function cleanParticipantName(raw, isLocal = false) {
     'others will see your video', 'no one else is here', 'joining info',
     'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection',
     'message', 'messages', 'open the people panel', 'open the panel', 'open panel',
-    'close panel', 'paired with', 'paired with riya', 'paired with souvik debnath',
+    'close panel', 'paired with',
     'spam com', 'spam', 'admin', 'moderator', 'report spam', 'report abuse'
   ];
 
@@ -130,7 +132,7 @@ function cleanParticipantName(raw, isLocal = false) {
   if (lower.includes('for everyone') || lower.includes('click to') ||
       lower.includes('microphone') || lower.includes('turn off') ||
       lower.includes('turn on') || lower.includes('more options') ||
-      lower.includes('visual effects') || lower.includes('paired with') ||
+      lower.includes('visual effects') ||
       lower.includes('open the') || lower.includes('close the') ||
       lower.includes('send a message') || lower.includes('in-call message')) {
     return null;
@@ -554,21 +556,29 @@ app.post('/api/session/sync', (req, res) => {
 
   currentSession.lastUpdated = Date.now();
 
+  // Aliases for paired companion devices to real students
+  const STABLE_KEY_ALIASES = {
+    'p_paired_with_riya': 'p_riya',
+    'p_paired_with_souvik_debnath': 'p_souvik_debnath'
+  };
+
   // Purge bad keys & host duplicate
-  const badKeys = ['p_message', 'p_open_the_people_panel', 'p_paired_with_riya', 'p_paired_with_souvik_debnath', 'p_admin', 'p_spam_com', 'p_andaleeb_gull'];
+  const badKeys = ['p_message', 'p_open_the_people_panel', 'p_admin', 'p_spam_com', 'p_andaleeb_gull'];
   badKeys.forEach(bk => { if (currentSession.participants && currentSession.participants[bk]) delete currentSession.participants[bk]; });
 
   // Merge participants with clean name enforcement and valid study time calculation
   if (data.participants && typeof data.participants === 'object') {
     if (!currentSession.participants) currentSession.participants = {};
     for (const [key, p] of Object.entries(data.participants)) {
-      if (badKeys.includes(key)) continue;
-      if (currentSession.deletedParticipants && (currentSession.deletedParticipants.includes(key) || (p.name && currentSession.deletedParticipants.includes(p.name.toLowerCase())))) continue;
-      const isLocal = p.isLocal || key === 'local_host' || key === 'p_andaleeb_gull' ||
+      const mappedKey = STABLE_KEY_ALIASES[key] || key;
+      if (badKeys.includes(mappedKey)) continue;
+      if (currentSession.deletedParticipants && (currentSession.deletedParticipants.includes(mappedKey) || (p.name && currentSession.deletedParticipants.includes(p.name.toLowerCase())))) continue;
+      const isLocal = p.isLocal || mappedKey === 'local_host' || mappedKey === 'p_andaleeb_gull' ||
                       (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
       const validName = isLocal ? (p.name && p.name.toLowerCase().includes('andaleeb') ? 'Host (Andaleeb Gull)' : 'Host (You)') : cleanParticipantName(p.name, false);
       if (validName) {
-        const stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
+        let stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
+        if (STABLE_KEY_ALIASES[stableKey]) stableKey = STABLE_KEY_ALIASES[stableKey];
         if (stableKey === 'local_host' && currentSession.participants['p_andaleeb_gull']) {
           delete currentSession.participants['p_andaleeb_gull'];
         }

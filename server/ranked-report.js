@@ -166,8 +166,11 @@ function cleanParticipantName(raw, isLocal = false) {
 
   s = s.replace(/\b(?:keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz|videocam_off|screen_share|closed_caption|hand_raise|call_end)\b/gi, '').trim();
 
-  if (/^(?:paired\s+with|audio\s+paired\s+with|audio\s+paired|companion\s+mode|peering|पेयर\s+किया\s+गया)\b/i.test(s) ||
-      /\b(?:paired\s+with|audio\s+paired\s+with|companion\s+mode)\b/i.test(s)) {
+  // Strip Companion & Audio Pairing prefixes/suffixes to extract actual student name (e.g. "Paired with Riya" -> "Riya")
+  s = s.replace(/^(?:paired\s+with|audio\s+paired\s+with|audio\s+paired|peering\s+with|peered\s+with|पेयर\s+किया\s+गया)\s+/gi, '').trim();
+  s = s.replace(/\s*[\(,]\s*(?:paired\s+with|audio\s+paired\s+with|audio\s+paired|companion\s+mode|companion)[^\)\]]*[\)\]]?/gi, '').trim();
+  s = s.replace(/\s+(?:paired\s+with|companion\s+mode).*$/gi, '').trim();
+  if (/^(?:paired\s+with|audio\s+paired\s+with|companion\s+mode|peering)$/i.test(s)) {
     return null;
   }
 
@@ -238,7 +241,7 @@ function cleanParticipantName(raw, isLocal = false) {
     'others will see your video', 'no one else is here', 'joining info',
     'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection',
     'message', 'messages', 'open the people panel', 'open the panel', 'open panel',
-    'close panel', 'paired with', 'paired with riya', 'paired with souvik debnath',
+    'close panel', 'paired with',
     'spam com', 'spam', 'admin', 'moderator', 'report spam', 'report abuse'
   ];
 
@@ -251,7 +254,7 @@ function cleanParticipantName(raw, isLocal = false) {
   if (lower.includes('for everyone') || lower.includes('click to') ||
       lower.includes('microphone') || lower.includes('turn off') ||
       lower.includes('turn on') || lower.includes('more options') ||
-      lower.includes('visual effects') || lower.includes('paired with') ||
+      lower.includes('visual effects') ||
       lower.includes('open the') || lower.includes('close the') ||
       lower.includes('send a message') || lower.includes('in-call message')) {
     return null;
@@ -280,7 +283,12 @@ function consolidateParticipantsForReport(rawList, session = {}) {
     const validName = cleanParticipantName(p.name, isLocal);
     if (!validName) return;
 
-    const stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
+    const STABLE_KEY_ALIASES = {
+      'p_paired_with_riya': 'p_riya',
+      'p_paired_with_souvik_debnath': 'p_souvik_debnath'
+    };
+    let stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
+    if (STABLE_KEY_ALIASES[stableKey]) stableKey = STABLE_KEY_ALIASES[stableKey];
     const existing = map.get(stableKey);
 
     if (existing) {

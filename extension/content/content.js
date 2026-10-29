@@ -92,9 +92,11 @@
     // 1. Strip Google Meet Material Icon ligatures
     s = s.replace(/\b(?:keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz|videocam_off|screen_share|closed_caption|hand_raise|call_end)\b/gi, '').trim();
 
-    // 2. Reject Companion & Audio Pairing status strings (NEVER a student name)
-    if (/^(?:paired\s+with|audio\s+paired\s+with|audio\s+paired|companion\s+mode|peering|पेयर\s+किया\s+गया)\b/i.test(s) ||
-        /\b(?:paired\s+with|audio\s+paired\s+with|companion\s+mode)\b/i.test(s)) {
+    // 2. Strip Companion & Audio Pairing prefixes/suffixes to extract actual student name (e.g. "Paired with Riya" -> "Riya")
+    s = s.replace(/^(?:paired\s+with|audio\s+paired\s+with|audio\s+paired|peering\s+with|peered\s+with|पेयर\s+किया\s+गया)\s+/gi, '').trim();
+    s = s.replace(/\s*[\(,]\s*(?:paired\s+with|audio\s+paired\s+with|audio\s+paired|companion\s+mode|companion)[^\)\]]*[\)\]]?/gi, '').trim();
+    s = s.replace(/\s+(?:paired\s+with|companion\s+mode).*$/gi, '').trim();
+    if (/^(?:paired\s+with|audio\s+paired\s+with|companion\s+mode|peering)$/i.test(s)) {
       return null;
     }
 
@@ -184,7 +186,7 @@
       'others will see your video', 'no one else is here', 'joining info',
       'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection',
       'message', 'messages', 'open the people panel', 'open the panel', 'open panel',
-      'close panel', 'paired with', 'paired with riya', 'paired with souvik debnath',
+      'close panel', 'paired with',
       'spam com', 'spam', 'admin', 'moderator', 'report spam', 'report abuse'
     ];
 
@@ -197,7 +199,7 @@
     if (lower.includes('for everyone') || lower.includes('click to') ||
         lower.includes('microphone') || lower.includes('turn off') ||
         lower.includes('turn on') || lower.includes('more options') ||
-        lower.includes('visual effects') || lower.includes('paired with') ||
+        lower.includes('visual effects') ||
         lower.includes('open the') || lower.includes('close the') ||
         lower.includes('send a message') || lower.includes('in-call message')) {
       return null;
@@ -1583,8 +1585,30 @@
     const detected = new Map();
     const now = Date.now();
 
+    // Aliases to consolidate paired companion keys into real student keys
+    const KEY_ALIASES = {
+      'p_paired_with_riya': 'p_riya',
+      'p_paired_with_souvik_debnath': 'p_souvik_debnath'
+    };
+    if (session.participants) {
+      for (const [fromKey, toKey] of Object.entries(KEY_ALIASES)) {
+        if (session.participants[fromKey]) {
+          const fromP = session.participants[fromKey];
+          if (!session.participants[toKey]) {
+            session.participants[toKey] = { ...fromP, id: toKey, name: toKey === 'p_riya' ? 'Riya' : 'Souvik Debnath' };
+          } else {
+            const toP = session.participants[toKey];
+            toP.cameraOnMs = Math.max(toP.cameraOnMs || 0, fromP.cameraOnMs || 0);
+            toP.totalPresentMs = Math.max(toP.totalPresentMs || 0, fromP.totalPresentMs || 0);
+            toP.validStudyMs = Math.max(toP.validStudyMs || 0, fromP.validStudyMs || 0);
+          }
+          delete session.participants[fromKey];
+        }
+      }
+    }
+
     // Clean session from bad keys and host duplicates immediately
-    const badKeys = ['p_message', 'p_open_the_people_panel', 'p_paired_with_riya', 'p_paired_with_souvik_debnath', 'p_admin', 'p_spam_com', 'p_andaleeb_gull'];
+    const badKeys = ['p_message', 'p_open_the_people_panel', 'p_admin', 'p_spam_com', 'p_andaleeb_gull'];
     badKeys.forEach(bk => {
       if (session.participants && session.participants[bk]) {
         delete session.participants[bk];

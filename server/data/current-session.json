@@ -4,7 +4,7 @@
   "meetingTitle": "Cockroach Library 12-Hour Study Marathon",
   "startedAt": 1793257114620,
   "stoppedAt": null,
-  "lastUpdated": 1793290588961,
+  "lastUpdated": 1793291924571,
   "lastResetAt": 1793172845953,
   "isTracking": true,
   "isPaused": false,
@@ -40,7 +40,7 @@
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
@@ -117,17 +117,17 @@
           "formatted": "12:28 pm"
         }
       ],
-      "totalInMeetMs": 617905894,
-      "totalPresentMs": 32846612,
-      "cameraOnMs": 27446478,
+      "totalInMeetMs": 627255164,
+      "totalPresentMs": 34136611,
+      "cameraOnMs": 28736477,
       "cameraOffMs": 5400134,
-      "validStudyMs": 27446478,
-      "totalDuration": 32846612,
-      "duration": 27446478,
-      "timeInCall": 617905894,
-      "durationSeconds": 27446,
-      "durationMinutes": 457,
-      "studyDuration": 27446478,
+      "validStudyMs": 28736477,
+      "totalDuration": 34136611,
+      "duration": 28736477,
+      "timeInCall": 627255164,
+      "durationSeconds": 28736,
+      "durationMinutes": 478,
+      "studyDuration": 28736477,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -277,7 +277,7 @@
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 1,
       "rejoinedAt": 1793217660196,
       "presenceIntervals": [
@@ -336,17 +336,17 @@
           "formatted": "12:28 pm"
         }
       ],
-      "totalInMeetMs": 418075549,
-      "totalPresentMs": 28294900,
-      "cameraOnMs": 24319840,
+      "totalInMeetMs": 424753669,
+      "totalPresentMs": 29485138,
+      "cameraOnMs": 25510078,
       "cameraOffMs": 3975060,
-      "validStudyMs": 24319840,
-      "totalDuration": 28294900,
-      "duration": 24319840,
-      "timeInCall": 418075549,
-      "durationSeconds": 24319,
-      "durationMinutes": 405,
-      "studyDuration": 24319840,
+      "validStudyMs": 25510078,
+      "totalDuration": 29485138,
+      "duration": 25510078,
+      "timeInCall": 424753669,
+      "durationSeconds": 25510,
+      "durationMinutes": 425,
+      "studyDuration": 25510078,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -3765,6 +3765,190 @@
           "fromTime": "09:46 pm",
           "toTime": "09:46 pm",
           "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793290589266,
+          "end": 1793290597261,
+          "durationMs": 7995,
+          "fromTime": "09:46 pm",
+          "toTime": "09:46 pm",
+          "durationFormatted": "00:00:07"
+        },
+        {
+          "start": 1793290617266,
+          "end": 1793290623265,
+          "durationMs": 5999,
+          "fromTime": "09:46 pm",
+          "toTime": "09:47 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793290627261,
+          "end": 1793290631261,
+          "durationMs": 4000,
+          "fromTime": "09:47 pm",
+          "toTime": "09:47 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793290683265,
+          "end": 1793290685353,
+          "durationMs": 2088,
+          "fromTime": "09:48 pm",
+          "toTime": "09:48 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290773306,
+          "end": 1793290775276,
+          "durationMs": 1970,
+          "fromTime": "09:49 pm",
+          "toTime": "09:49 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290797256,
+          "end": 1793290805314,
+          "durationMs": 8058,
+          "fromTime": "09:49 pm",
+          "toTime": "09:50 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793290809265,
+          "end": 1793290811267,
+          "durationMs": 2002,
+          "fromTime": "09:50 pm",
+          "toTime": "09:50 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290831345,
+          "end": 1793290837288,
+          "durationMs": 5943,
+          "fromTime": "09:50 pm",
+          "toTime": "09:50 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793290940309,
+          "end": 1793290942273,
+          "durationMs": 1964,
+          "fromTime": "09:52 pm",
+          "toTime": "09:52 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793291147773,
+          "end": 1793291170828,
+          "durationMs": 23055,
+          "fromTime": "09:55 pm",
+          "toTime": "09:56 pm",
+          "durationFormatted": "00:00:23"
+        },
+        {
+          "start": 1793291231267,
+          "end": 1793291233261,
+          "durationMs": 1994,
+          "fromTime": "09:57 pm",
+          "toTime": "09:57 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793291237266,
+          "end": 1793291239262,
+          "durationMs": 1996,
+          "fromTime": "09:57 pm",
+          "toTime": "09:57 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793291277264,
+          "end": 1793291281262,
+          "durationMs": 3998,
+          "fromTime": "09:57 pm",
+          "toTime": "09:58 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793291401262,
+          "end": 1793291403268,
+          "durationMs": 2006,
+          "fromTime": "10:00 pm",
+          "toTime": "10:00 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793291407261,
+          "end": 1793291411990,
+          "durationMs": 4729,
+          "fromTime": "10:00 pm",
+          "toTime": "10:00 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793291527354,
+          "end": 1793291529265,
+          "durationMs": 1911,
+          "fromTime": "10:02 pm",
+          "toTime": "10:02 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793291587256,
+          "end": 1793291591207,
+          "durationMs": 3951,
+          "fromTime": "10:03 pm",
+          "toTime": "10:03 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793291603278,
+          "end": 1793291607266,
+          "durationMs": 3988,
+          "fromTime": "10:03 pm",
+          "toTime": "10:03 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793291615258,
+          "end": 1793291619352,
+          "durationMs": 4094,
+          "fromTime": "10:03 pm",
+          "toTime": "10:03 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793291633267,
+          "end": 1793291639345,
+          "durationMs": 6078,
+          "fromTime": "10:03 pm",
+          "toTime": "10:03 pm",
+          "durationFormatted": "00:00:06"
+        },
+        {
+          "start": 1793291647288,
+          "end": 1793291657215,
+          "durationMs": 9927,
+          "fromTime": "10:04 pm",
+          "toTime": "10:04 pm",
+          "durationFormatted": "00:00:09"
+        },
+        {
+          "start": 1793291683351,
+          "end": 1793291689261,
+          "durationMs": 5910,
+          "fromTime": "10:04 pm",
+          "toTime": "10:04 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793291795268,
+          "end": 1793291797387,
+          "durationMs": 2119,
+          "fromTime": "10:06 pm",
+          "toTime": "10:06 pm",
+          "durationFormatted": "00:00:02"
         }
       ],
       "cameraIntervals": [
@@ -8615,6 +8799,236 @@
         },
         {
           "start": 1793290583265,
+          "end": 1793290589266,
+          "state": "on"
+        },
+        {
+          "start": 1793290589266,
+          "end": 1793290597261,
+          "state": "off"
+        },
+        {
+          "start": 1793290597261,
+          "end": 1793290617266,
+          "state": "on"
+        },
+        {
+          "start": 1793290617266,
+          "end": 1793290623265,
+          "state": "off"
+        },
+        {
+          "start": 1793290623265,
+          "end": 1793290627261,
+          "state": "on"
+        },
+        {
+          "start": 1793290627261,
+          "end": 1793290631261,
+          "state": "off"
+        },
+        {
+          "start": 1793290631261,
+          "end": 1793290683265,
+          "state": "on"
+        },
+        {
+          "start": 1793290683265,
+          "end": 1793290685353,
+          "state": "off"
+        },
+        {
+          "start": 1793290685353,
+          "end": 1793290773306,
+          "state": "on"
+        },
+        {
+          "start": 1793290773306,
+          "end": 1793290775276,
+          "state": "off"
+        },
+        {
+          "start": 1793290775276,
+          "end": 1793290797256,
+          "state": "on"
+        },
+        {
+          "start": 1793290797256,
+          "end": 1793290805314,
+          "state": "off"
+        },
+        {
+          "start": 1793290805314,
+          "end": 1793290809265,
+          "state": "on"
+        },
+        {
+          "start": 1793290809265,
+          "end": 1793290811267,
+          "state": "off"
+        },
+        {
+          "start": 1793290811267,
+          "end": 1793290831345,
+          "state": "on"
+        },
+        {
+          "start": 1793290831345,
+          "end": 1793290837288,
+          "state": "off"
+        },
+        {
+          "start": 1793290837288,
+          "end": 1793290940309,
+          "state": "on"
+        },
+        {
+          "start": 1793290940309,
+          "end": 1793290942273,
+          "state": "off"
+        },
+        {
+          "start": 1793290942273,
+          "end": 1793291147773,
+          "state": "on"
+        },
+        {
+          "start": 1793291147773,
+          "end": 1793291155775,
+          "state": "off"
+        },
+        {
+          "start": 1793291155775,
+          "end": 1793291231267,
+          "state": "on"
+        },
+        {
+          "start": 1793291231267,
+          "end": 1793291233261,
+          "state": "off"
+        },
+        {
+          "start": 1793291233261,
+          "end": 1793291237266,
+          "state": "on"
+        },
+        {
+          "start": 1793291237266,
+          "end": 1793291239262,
+          "state": "off"
+        },
+        {
+          "start": 1793291239262,
+          "end": 1793291277264,
+          "state": "on"
+        },
+        {
+          "start": 1793291277264,
+          "end": 1793291281262,
+          "state": "off"
+        },
+        {
+          "start": 1793291281262,
+          "end": 1793291401262,
+          "state": "on"
+        },
+        {
+          "start": 1793291401262,
+          "end": 1793291403268,
+          "state": "off"
+        },
+        {
+          "start": 1793291403268,
+          "end": 1793291407261,
+          "state": "on"
+        },
+        {
+          "start": 1793291407261,
+          "end": 1793291411269,
+          "state": "off"
+        },
+        {
+          "start": 1793291411269,
+          "end": 1793291527354,
+          "state": "on"
+        },
+        {
+          "start": 1793291527354,
+          "end": 1793291529265,
+          "state": "off"
+        },
+        {
+          "start": 1793291529265,
+          "end": 1793291587256,
+          "state": "on"
+        },
+        {
+          "start": 1793291587256,
+          "end": 1793291591207,
+          "state": "off"
+        },
+        {
+          "start": 1793291591207,
+          "end": 1793291603278,
+          "state": "on"
+        },
+        {
+          "start": 1793291603278,
+          "end": 1793291607266,
+          "state": "off"
+        },
+        {
+          "start": 1793291607266,
+          "end": 1793291615258,
+          "state": "on"
+        },
+        {
+          "start": 1793291615258,
+          "end": 1793291619352,
+          "state": "off"
+        },
+        {
+          "start": 1793291619352,
+          "end": 1793291633267,
+          "state": "on"
+        },
+        {
+          "start": 1793291633267,
+          "end": 1793291639345,
+          "state": "off"
+        },
+        {
+          "start": 1793291639345,
+          "end": 1793291647288,
+          "state": "on"
+        },
+        {
+          "start": 1793291647288,
+          "end": 1793291657267,
+          "state": "off"
+        },
+        {
+          "start": 1793291657267,
+          "end": 1793291683351,
+          "state": "on"
+        },
+        {
+          "start": 1793291683351,
+          "end": 1793291689261,
+          "state": "off"
+        },
+        {
+          "start": 1793291689261,
+          "end": 1793291795268,
+          "state": "on"
+        },
+        {
+          "start": 1793291795268,
+          "end": 1793291797387,
+          "state": "off"
+        },
+        {
+          "start": 1793291797387,
           "end": null,
           "state": "on"
         }
@@ -10343,9 +10757,9 @@
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
-      "rejoinCount": 0,
-      "rejoinedAt": null,
+      "lastSeen": 1793291876266,
+      "rejoinCount": 1,
+      "rejoinedAt": 1793291587256,
       "presenceIntervals": [
         {
           "joinTime": 1793172836767,
@@ -10359,6 +10773,11 @@
         },
         {
           "joinTime": 1793257114266,
+          "leaveTime": null,
+          "durationMs": 0
+        },
+        {
+          "joinTime": 1793291587256,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -10378,19 +10797,26 @@
           "event": "joined",
           "time": 1793257114266,
           "formatted": "12:28 pm"
+        },
+        {
+          "event": "rejoined",
+          "time": 1793291587256,
+          "formatted": "10:03 pm",
+          "awayMs": 352629,
+          "awayFormatted": "00:05:52"
         }
       ],
-      "totalInMeetMs": 232327132,
-      "totalPresentMs": 27504116,
-      "cameraOnMs": 26840735,
-      "cameraOffMs": 663381,
-      "validStudyMs": 26840735,
-      "totalDuration": 27504116,
-      "duration": 26840735,
-      "timeInCall": 232327132,
-      "durationSeconds": 26840,
-      "durationMinutes": 447,
-      "studyDuration": 26840735,
+      "totalInMeetMs": 236671342,
+      "totalPresentMs": 28442477,
+      "cameraOnMs": 27683160,
+      "cameraOffMs": 759317,
+      "validStudyMs": 27683160,
+      "totalDuration": 28442477,
+      "duration": 27683160,
+      "timeInCall": 236671342,
+      "durationSeconds": 27683,
+      "durationMinutes": 461,
+      "studyDuration": 27683160,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -11297,6 +11723,62 @@
           "fromTime": "09:34 pm",
           "toTime": "09:34 pm",
           "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290653394,
+          "end": 1793290657262,
+          "durationMs": 3868,
+          "fromTime": "09:47 pm",
+          "toTime": "09:47 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290944265,
+          "end": 1793290948314,
+          "durationMs": 4049,
+          "fromTime": "09:52 pm",
+          "toTime": "09:52 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793290958266,
+          "end": 1793290962265,
+          "durationMs": 3999,
+          "fromTime": "09:52 pm",
+          "toTime": "09:52 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290964253,
+          "end": 1793290968381,
+          "durationMs": 4128,
+          "fromTime": "09:52 pm",
+          "toTime": "09:52 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793291105990,
+          "end": 1793291111782,
+          "durationMs": 5792,
+          "fromTime": "09:55 pm",
+          "toTime": "09:55 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793291179799,
+          "end": 1793291234627,
+          "durationMs": 54828,
+          "fromTime": "09:56 pm",
+          "toTime": "09:57 pm",
+          "durationFormatted": "00:00:54"
+        },
+        {
+          "start": 1793291605261,
+          "end": 1793291621266,
+          "durationMs": 16005,
+          "fromTime": "10:03 pm",
+          "toTime": "10:03 pm",
+          "durationFormatted": "00:00:16"
         }
       ],
       "cameraIntervals": [
@@ -12637,6 +13119,76 @@
         },
         {
           "start": 1793289849266,
+          "end": 1793290653394,
+          "state": "on"
+        },
+        {
+          "start": 1793290653394,
+          "end": 1793290657262,
+          "state": "off"
+        },
+        {
+          "start": 1793290657262,
+          "end": 1793290944265,
+          "state": "on"
+        },
+        {
+          "start": 1793290944265,
+          "end": 1793290948314,
+          "state": "off"
+        },
+        {
+          "start": 1793290948314,
+          "end": 1793290958266,
+          "state": "on"
+        },
+        {
+          "start": 1793290958266,
+          "end": 1793290962265,
+          "state": "off"
+        },
+        {
+          "start": 1793290962265,
+          "end": 1793290964253,
+          "state": "on"
+        },
+        {
+          "start": 1793290964253,
+          "end": 1793290968381,
+          "state": "off"
+        },
+        {
+          "start": 1793290968381,
+          "end": 1793291105990,
+          "state": "on"
+        },
+        {
+          "start": 1793291105990,
+          "end": 1793291111782,
+          "state": "off"
+        },
+        {
+          "start": 1793291111782,
+          "end": 1793291179799,
+          "state": "on"
+        },
+        {
+          "start": 1793291179799,
+          "end": 1793291589386,
+          "state": "off"
+        },
+        {
+          "start": 1793291589386,
+          "end": 1793291605261,
+          "state": "on"
+        },
+        {
+          "start": 1793291605261,
+          "end": 1793291621266,
+          "state": "off"
+        },
+        {
+          "start": 1793291621266,
           "end": null,
           "state": "on"
         }
@@ -12658,7 +13210,7 @@
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
@@ -12695,19 +13247,19 @@
           "formatted": "03:22 pm"
         }
       ],
-      "totalInMeetMs": 221864178,
-      "totalPresentMs": 18277476,
-      "cameraOnMs": 10178824,
-      "cameraOffMs": 8098652,
-      "validStudyMs": 10178824,
-      "totalDuration": 18277476,
-      "duration": 10178824,
-      "timeInCall": 221864178,
-      "durationSeconds": 10178,
-      "durationMinutes": 169,
-      "studyDuration": 10178824,
-      "consecutiveCamOffMs": 3002,
-      "cameraOffCurrentStart": 1793290584264,
+      "totalInMeetMs": 225871089,
+      "totalPresentMs": 19567475,
+      "cameraOnMs": 10848303,
+      "cameraOffMs": 8719172,
+      "validStudyMs": 10848303,
+      "totalDuration": 19567475,
+      "duration": 10848303,
+      "timeInCall": 225871089,
+      "durationSeconds": 10848,
+      "durationMinutes": 180,
+      "studyDuration": 10848303,
+      "consecutiveCamOffMs": 65999,
+      "cameraOffCurrentStart": 1793291811265,
       "cameraOffIntervals": [
         {
           "start": 1793267760668,
@@ -14860,6 +15412,350 @@
           "fromTime": "09:46 pm",
           "toTime": "09:46 pm",
           "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793290584264,
+          "end": 1793290596265,
+          "durationMs": 12001,
+          "fromTime": "09:46 pm",
+          "toTime": "09:46 pm",
+          "durationFormatted": "00:00:12"
+        },
+        {
+          "start": 1793290600261,
+          "end": 1793290604267,
+          "durationMs": 4006,
+          "fromTime": "09:46 pm",
+          "toTime": "09:46 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793290614265,
+          "end": 1793290618257,
+          "durationMs": 3992,
+          "fromTime": "09:46 pm",
+          "toTime": "09:46 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290622266,
+          "end": 1793290624262,
+          "durationMs": 1996,
+          "fromTime": "09:47 pm",
+          "toTime": "09:47 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290630262,
+          "end": 1793290652266,
+          "durationMs": 22004,
+          "fromTime": "09:47 pm",
+          "toTime": "09:47 pm",
+          "durationFormatted": "00:00:22"
+        },
+        {
+          "start": 1793290656265,
+          "end": 1793290660261,
+          "durationMs": 3996,
+          "fromTime": "09:47 pm",
+          "toTime": "09:47 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290680265,
+          "end": 1793290684261,
+          "durationMs": 3996,
+          "fromTime": "09:48 pm",
+          "toTime": "09:48 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290688264,
+          "end": 1793290690261,
+          "durationMs": 1997,
+          "fromTime": "09:48 pm",
+          "toTime": "09:48 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290706266,
+          "end": 1793290710297,
+          "durationMs": 4031,
+          "fromTime": "09:48 pm",
+          "toTime": "09:48 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793290718267,
+          "end": 1793290750260,
+          "durationMs": 31993,
+          "fromTime": "09:48 pm",
+          "toTime": "09:49 pm",
+          "durationFormatted": "00:00:31"
+        },
+        {
+          "start": 1793290756262,
+          "end": 1793290774261,
+          "durationMs": 17999,
+          "fromTime": "09:49 pm",
+          "toTime": "09:49 pm",
+          "durationFormatted": "00:00:17"
+        },
+        {
+          "start": 1793290867956,
+          "end": 1793290869776,
+          "durationMs": 1820,
+          "fromTime": "09:51 pm",
+          "toTime": "09:51 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290889771,
+          "end": 1793290893773,
+          "durationMs": 4002,
+          "fromTime": "09:51 pm",
+          "toTime": "09:51 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793290899773,
+          "end": 1793290919904,
+          "durationMs": 20131,
+          "fromTime": "09:51 pm",
+          "toTime": "09:51 pm",
+          "durationFormatted": "00:00:20"
+        },
+        {
+          "start": 1793290932268,
+          "end": 1793290942273,
+          "durationMs": 10005,
+          "fromTime": "09:52 pm",
+          "toTime": "09:52 pm",
+          "durationFormatted": "00:00:10"
+        },
+        {
+          "start": 1793290966261,
+          "end": 1793291016771,
+          "durationMs": 50510,
+          "fromTime": "09:52 pm",
+          "toTime": "09:53 pm",
+          "durationFormatted": "00:00:50"
+        },
+        {
+          "start": 1793291030776,
+          "end": 1793291063768,
+          "durationMs": 32992,
+          "fromTime": "09:53 pm",
+          "toTime": "09:54 pm",
+          "durationFormatted": "00:00:32"
+        },
+        {
+          "start": 1793291073777,
+          "end": 1793291095772,
+          "durationMs": 21995,
+          "fromTime": "09:54 pm",
+          "toTime": "09:54 pm",
+          "durationFormatted": "00:00:21"
+        },
+        {
+          "start": 1793291139779,
+          "end": 1793291149776,
+          "durationMs": 9997,
+          "fromTime": "09:55 pm",
+          "toTime": "09:55 pm",
+          "durationFormatted": "00:00:09"
+        },
+        {
+          "start": 1793291153769,
+          "end": 1793291170828,
+          "durationMs": 17059,
+          "fromTime": "09:55 pm",
+          "toTime": "09:56 pm",
+          "durationFormatted": "00:00:17"
+        },
+        {
+          "start": 1793291168064,
+          "end": 1793291169928,
+          "durationMs": 1864,
+          "fromTime": "09:56 pm",
+          "toTime": "09:56 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793291177770,
+          "end": 1793291183777,
+          "durationMs": 6007,
+          "fromTime": "09:56 pm",
+          "toTime": "09:56 pm",
+          "durationFormatted": "00:00:06"
+        },
+        {
+          "start": 1793291209263,
+          "end": 1793291221261,
+          "durationMs": 11998,
+          "fromTime": "09:56 pm",
+          "toTime": "09:57 pm",
+          "durationFormatted": "00:00:11"
+        },
+        {
+          "start": 1793291239262,
+          "end": 1793291247266,
+          "durationMs": 8004,
+          "fromTime": "09:57 pm",
+          "toTime": "09:57 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793291251261,
+          "end": 1793291259266,
+          "durationMs": 8005,
+          "fromTime": "09:57 pm",
+          "toTime": "09:57 pm",
+          "durationFormatted": "00:00:08"
+        },
+        {
+          "start": 1793291263263,
+          "end": 1793291275261,
+          "durationMs": 11998,
+          "fromTime": "09:57 pm",
+          "toTime": "09:57 pm",
+          "durationFormatted": "00:00:11"
+        },
+        {
+          "start": 1793291287261,
+          "end": 1793291289266,
+          "durationMs": 2005,
+          "fromTime": "09:58 pm",
+          "toTime": "09:58 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793291297269,
+          "end": 1793291299262,
+          "durationMs": 1993,
+          "fromTime": "09:58 pm",
+          "toTime": "09:58 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793291365258,
+          "end": 1793291369266,
+          "durationMs": 4008,
+          "fromTime": "09:59 pm",
+          "toTime": "09:59 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793291451382,
+          "end": 1793291457266,
+          "durationMs": 5884,
+          "fromTime": "10:00 pm",
+          "toTime": "10:00 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793291463265,
+          "end": 1793291470427,
+          "durationMs": 7162,
+          "fromTime": "10:01 pm",
+          "toTime": "10:01 pm",
+          "durationFormatted": "00:00:07"
+        },
+        {
+          "start": 1793291499265,
+          "end": 1793291509262,
+          "durationMs": 9997,
+          "fromTime": "10:01 pm",
+          "toTime": "10:01 pm",
+          "durationFormatted": "00:00:09"
+        },
+        {
+          "start": 1793291513257,
+          "end": 1793291543270,
+          "durationMs": 30013,
+          "fromTime": "10:01 pm",
+          "toTime": "10:02 pm",
+          "durationFormatted": "00:00:30"
+        },
+        {
+          "start": 1793291557409,
+          "end": 1793291559264,
+          "durationMs": 1855,
+          "fromTime": "10:02 pm",
+          "toTime": "10:02 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793291581264,
+          "end": 1793291585268,
+          "durationMs": 4004,
+          "fromTime": "10:03 pm",
+          "toTime": "10:03 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793291597263,
+          "end": 1793291599261,
+          "durationMs": 1998,
+          "fromTime": "10:03 pm",
+          "toTime": "10:03 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793291621266,
+          "end": 1793291631266,
+          "durationMs": 10000,
+          "fromTime": "10:03 pm",
+          "toTime": "10:03 pm",
+          "durationFormatted": "00:00:10"
+        },
+        {
+          "start": 1793291637264,
+          "end": 1793291641261,
+          "durationMs": 3997,
+          "fromTime": "10:03 pm",
+          "toTime": "10:04 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793291651301,
+          "end": 1793291657215,
+          "durationMs": 5914,
+          "fromTime": "10:04 pm",
+          "toTime": "10:04 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793291663267,
+          "end": 1793291667257,
+          "durationMs": 3990,
+          "fromTime": "10:04 pm",
+          "toTime": "10:04 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793291679260,
+          "end": 1793291723580,
+          "durationMs": 44320,
+          "fromTime": "10:04 pm",
+          "toTime": "10:05 pm",
+          "durationFormatted": "00:00:44"
+        },
+        {
+          "start": 1793291721265,
+          "end": 1793291780098,
+          "durationMs": 58833,
+          "fromTime": "10:05 pm",
+          "toTime": "10:06 pm",
+          "durationFormatted": "00:00:58"
+        },
+        {
+          "start": 1793291811265,
+          "end": 1793291849754,
+          "durationMs": 38489,
+          "fromTime": "10:06 pm",
+          "toTime": "10:07 pm",
+          "durationFormatted": "00:00:38"
         }
       ],
       "cameraIntervals": [
@@ -17755,6 +18651,426 @@
         },
         {
           "start": 1793290584264,
+          "end": 1793290596265,
+          "state": "off"
+        },
+        {
+          "start": 1793290596265,
+          "end": 1793290600261,
+          "state": "on"
+        },
+        {
+          "start": 1793290600261,
+          "end": 1793290604267,
+          "state": "off"
+        },
+        {
+          "start": 1793290604267,
+          "end": 1793290614265,
+          "state": "on"
+        },
+        {
+          "start": 1793290614265,
+          "end": 1793290618257,
+          "state": "off"
+        },
+        {
+          "start": 1793290618257,
+          "end": 1793290622266,
+          "state": "on"
+        },
+        {
+          "start": 1793290622266,
+          "end": 1793290624262,
+          "state": "off"
+        },
+        {
+          "start": 1793290624262,
+          "end": 1793290630262,
+          "state": "on"
+        },
+        {
+          "start": 1793290630262,
+          "end": 1793290652266,
+          "state": "off"
+        },
+        {
+          "start": 1793290652266,
+          "end": 1793290656265,
+          "state": "on"
+        },
+        {
+          "start": 1793290656265,
+          "end": 1793290660261,
+          "state": "off"
+        },
+        {
+          "start": 1793290660261,
+          "end": 1793290680265,
+          "state": "on"
+        },
+        {
+          "start": 1793290680265,
+          "end": 1793290684261,
+          "state": "off"
+        },
+        {
+          "start": 1793290684261,
+          "end": 1793290688264,
+          "state": "on"
+        },
+        {
+          "start": 1793290688264,
+          "end": 1793290690261,
+          "state": "off"
+        },
+        {
+          "start": 1793290690261,
+          "end": 1793290706266,
+          "state": "on"
+        },
+        {
+          "start": 1793290706266,
+          "end": 1793290710297,
+          "state": "off"
+        },
+        {
+          "start": 1793290710297,
+          "end": 1793290718267,
+          "state": "on"
+        },
+        {
+          "start": 1793290718267,
+          "end": 1793290750260,
+          "state": "off"
+        },
+        {
+          "start": 1793290750260,
+          "end": 1793290756262,
+          "state": "on"
+        },
+        {
+          "start": 1793290756262,
+          "end": 1793290774261,
+          "state": "off"
+        },
+        {
+          "start": 1793290774261,
+          "end": 1793290867956,
+          "state": "on"
+        },
+        {
+          "start": 1793290867956,
+          "end": 1793290869776,
+          "state": "off"
+        },
+        {
+          "start": 1793290869776,
+          "end": 1793290889771,
+          "state": "on"
+        },
+        {
+          "start": 1793290889771,
+          "end": 1793290893773,
+          "state": "off"
+        },
+        {
+          "start": 1793290893773,
+          "end": 1793290899773,
+          "state": "on"
+        },
+        {
+          "start": 1793290899773,
+          "end": 1793290919904,
+          "state": "off"
+        },
+        {
+          "start": 1793290919904,
+          "end": 1793290932268,
+          "state": "on"
+        },
+        {
+          "start": 1793290932268,
+          "end": 1793290942273,
+          "state": "off"
+        },
+        {
+          "start": 1793290942273,
+          "end": 1793290966261,
+          "state": "on"
+        },
+        {
+          "start": 1793290966261,
+          "end": 1793291016771,
+          "state": "off"
+        },
+        {
+          "start": 1793291016771,
+          "end": 1793291030776,
+          "state": "on"
+        },
+        {
+          "start": 1793291030776,
+          "end": 1793291063768,
+          "state": "off"
+        },
+        {
+          "start": 1793291063768,
+          "end": 1793291073777,
+          "state": "on"
+        },
+        {
+          "start": 1793291073777,
+          "end": 1793291095772,
+          "state": "off"
+        },
+        {
+          "start": 1793291095772,
+          "end": 1793291139779,
+          "state": "on"
+        },
+        {
+          "start": 1793291139779,
+          "end": 1793291149776,
+          "state": "off"
+        },
+        {
+          "start": 1793291149776,
+          "end": 1793291153769,
+          "state": "on"
+        },
+        {
+          "start": 1793291153769,
+          "end": 1793291159798,
+          "state": "off"
+        },
+        {
+          "start": 1793291159798,
+          "end": 1793291168064,
+          "state": "on"
+        },
+        {
+          "start": 1793291168064,
+          "end": 1793291169928,
+          "state": "off"
+        },
+        {
+          "start": 1793291169928,
+          "end": 1793291177770,
+          "state": "on"
+        },
+        {
+          "start": 1793291177770,
+          "end": 1793291183777,
+          "state": "off"
+        },
+        {
+          "start": 1793291183777,
+          "end": 1793291209263,
+          "state": "on"
+        },
+        {
+          "start": 1793291209263,
+          "end": 1793291221261,
+          "state": "off"
+        },
+        {
+          "start": 1793291221261,
+          "end": 1793291239262,
+          "state": "on"
+        },
+        {
+          "start": 1793291239262,
+          "end": 1793291247266,
+          "state": "off"
+        },
+        {
+          "start": 1793291247266,
+          "end": 1793291251261,
+          "state": "on"
+        },
+        {
+          "start": 1793291251261,
+          "end": 1793291259266,
+          "state": "off"
+        },
+        {
+          "start": 1793291259266,
+          "end": 1793291263263,
+          "state": "on"
+        },
+        {
+          "start": 1793291263263,
+          "end": 1793291275261,
+          "state": "off"
+        },
+        {
+          "start": 1793291275261,
+          "end": 1793291287261,
+          "state": "on"
+        },
+        {
+          "start": 1793291287261,
+          "end": 1793291289266,
+          "state": "off"
+        },
+        {
+          "start": 1793291289266,
+          "end": 1793291297269,
+          "state": "on"
+        },
+        {
+          "start": 1793291297269,
+          "end": 1793291299262,
+          "state": "off"
+        },
+        {
+          "start": 1793291299262,
+          "end": 1793291365258,
+          "state": "on"
+        },
+        {
+          "start": 1793291365258,
+          "end": 1793291369266,
+          "state": "off"
+        },
+        {
+          "start": 1793291369266,
+          "end": 1793291451382,
+          "state": "on"
+        },
+        {
+          "start": 1793291451382,
+          "end": 1793291457266,
+          "state": "off"
+        },
+        {
+          "start": 1793291457266,
+          "end": 1793291463265,
+          "state": "on"
+        },
+        {
+          "start": 1793291463265,
+          "end": 1793291495266,
+          "state": "off"
+        },
+        {
+          "start": 1793291495266,
+          "end": 1793291499265,
+          "state": "on"
+        },
+        {
+          "start": 1793291499265,
+          "end": 1793291509262,
+          "state": "off"
+        },
+        {
+          "start": 1793291509262,
+          "end": 1793291513257,
+          "state": "on"
+        },
+        {
+          "start": 1793291513257,
+          "end": 1793291543270,
+          "state": "off"
+        },
+        {
+          "start": 1793291543270,
+          "end": 1793291557409,
+          "state": "on"
+        },
+        {
+          "start": 1793291557409,
+          "end": 1793291559264,
+          "state": "off"
+        },
+        {
+          "start": 1793291559264,
+          "end": 1793291581264,
+          "state": "on"
+        },
+        {
+          "start": 1793291581264,
+          "end": 1793291585268,
+          "state": "off"
+        },
+        {
+          "start": 1793291585268,
+          "end": 1793291597263,
+          "state": "on"
+        },
+        {
+          "start": 1793291597263,
+          "end": 1793291599261,
+          "state": "off"
+        },
+        {
+          "start": 1793291599261,
+          "end": 1793291621266,
+          "state": "on"
+        },
+        {
+          "start": 1793291621266,
+          "end": 1793291631266,
+          "state": "off"
+        },
+        {
+          "start": 1793291631266,
+          "end": 1793291637264,
+          "state": "on"
+        },
+        {
+          "start": 1793291637264,
+          "end": 1793291641261,
+          "state": "off"
+        },
+        {
+          "start": 1793291641261,
+          "end": 1793291651301,
+          "state": "on"
+        },
+        {
+          "start": 1793291651301,
+          "end": 1793291659262,
+          "state": "off"
+        },
+        {
+          "start": 1793291659262,
+          "end": 1793291663267,
+          "state": "on"
+        },
+        {
+          "start": 1793291663267,
+          "end": 1793291667257,
+          "state": "off"
+        },
+        {
+          "start": 1793291667257,
+          "end": 1793291679260,
+          "state": "on"
+        },
+        {
+          "start": 1793291679260,
+          "end": 1793291717267,
+          "state": "off"
+        },
+        {
+          "start": 1793291717267,
+          "end": 1793291721265,
+          "state": "on"
+        },
+        {
+          "start": 1793291721265,
+          "end": 1793291807266,
+          "state": "off"
+        },
+        {
+          "start": 1793291807266,
+          "end": 1793291811265,
+          "state": "on"
+        },
+        {
+          "start": 1793291811265,
           "end": null,
           "state": "off"
         }
@@ -17776,7 +19092,7 @@
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 4,
       "rejoinedAt": 1793287156295,
       "presenceIntervals": [
@@ -17865,17 +19181,17 @@
           "awayFormatted": "00:08:39"
         }
       ],
-      "totalInMeetMs": 238855253,
-      "totalPresentMs": 25674117,
-      "cameraOnMs": 21472593,
-      "cameraOffMs": 4201524,
-      "validStudyMs": 21472593,
-      "totalDuration": 25674117,
-      "duration": 21472593,
-      "timeInCall": 238855253,
-      "durationSeconds": 21472,
-      "durationMinutes": 357,
-      "studyDuration": 21472593,
+      "totalInMeetMs": 245533358,
+      "totalPresentMs": 26964116,
+      "cameraOnMs": 22326766,
+      "cameraOffMs": 4637350,
+      "validStudyMs": 22326766,
+      "totalDuration": 26964116,
+      "duration": 22326766,
+      "timeInCall": 245533358,
+      "durationSeconds": 22326,
+      "durationMinutes": 372,
+      "studyDuration": 22326766,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -19310,6 +20626,70 @@
           "fromTime": "09:32 pm",
           "toTime": "09:33 pm",
           "durationFormatted": "00:00:13"
+        },
+        {
+          "start": 1793290733327,
+          "end": 1793290737265,
+          "durationMs": 3938,
+          "fromTime": "09:48 pm",
+          "toTime": "09:48 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290741268,
+          "end": 1793290747260,
+          "durationMs": 5992,
+          "fromTime": "09:49 pm",
+          "toTime": "09:49 pm",
+          "durationFormatted": "00:00:05"
+        },
+        {
+          "start": 1793290753340,
+          "end": 1793290757328,
+          "durationMs": 3988,
+          "fromTime": "09:49 pm",
+          "toTime": "09:49 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290801273,
+          "end": 1793290809265,
+          "durationMs": 7992,
+          "fromTime": "09:50 pm",
+          "toTime": "09:50 pm",
+          "durationFormatted": "00:00:07"
+        },
+        {
+          "start": 1793290815264,
+          "end": 1793291030776,
+          "durationMs": 215512,
+          "fromTime": "09:50 pm",
+          "toTime": "09:53 pm",
+          "durationFormatted": "00:03:35"
+        },
+        {
+          "start": 1793291034290,
+          "end": 1793291049767,
+          "durationMs": 15477,
+          "fromTime": "09:53 pm",
+          "toTime": "09:54 pm",
+          "durationFormatted": "00:00:15"
+        },
+        {
+          "start": 1793291055782,
+          "end": 1793291151775,
+          "durationMs": 95993,
+          "fromTime": "09:54 pm",
+          "toTime": "09:55 pm",
+          "durationFormatted": "00:01:35"
+        },
+        {
+          "start": 1793291179799,
+          "end": 1793291267266,
+          "durationMs": 87467,
+          "fromTime": "09:56 pm",
+          "toTime": "09:57 pm",
+          "durationFormatted": "00:01:27"
         }
       ],
       "cameraIntervals": [
@@ -21230,6 +22610,86 @@
         },
         {
           "start": 1793289791266,
+          "end": 1793290733327,
+          "state": "on"
+        },
+        {
+          "start": 1793290733327,
+          "end": 1793290737265,
+          "state": "off"
+        },
+        {
+          "start": 1793290737265,
+          "end": 1793290741268,
+          "state": "on"
+        },
+        {
+          "start": 1793290741268,
+          "end": 1793290747260,
+          "state": "off"
+        },
+        {
+          "start": 1793290747260,
+          "end": 1793290753340,
+          "state": "on"
+        },
+        {
+          "start": 1793290753340,
+          "end": 1793290757328,
+          "state": "off"
+        },
+        {
+          "start": 1793290757328,
+          "end": 1793290801273,
+          "state": "on"
+        },
+        {
+          "start": 1793290801273,
+          "end": 1793290809265,
+          "state": "off"
+        },
+        {
+          "start": 1793290809265,
+          "end": 1793290815264,
+          "state": "on"
+        },
+        {
+          "start": 1793290815264,
+          "end": 1793291030776,
+          "state": "off"
+        },
+        {
+          "start": 1793291030776,
+          "end": 1793291034290,
+          "state": "on"
+        },
+        {
+          "start": 1793291034290,
+          "end": 1793291049767,
+          "state": "off"
+        },
+        {
+          "start": 1793291049767,
+          "end": 1793291055782,
+          "state": "on"
+        },
+        {
+          "start": 1793291055782,
+          "end": 1793291151775,
+          "state": "off"
+        },
+        {
+          "start": 1793291151775,
+          "end": 1793291179799,
+          "state": "on"
+        },
+        {
+          "start": 1793291179799,
+          "end": 1793291267266,
+          "state": "off"
+        },
+        {
+          "start": 1793291267266,
           "end": null,
           "state": "on"
         }
@@ -21406,16 +22866,16 @@
       "id": "p_yusra_naaz",
       "name": "Yusra Naaz",
       "isLocal": false,
-      "currentStatus": "left",
+      "currentStatus": "present",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
-      "leaveTime": 1793264049261,
-      "lastSeen": 1793264049261,
-      "rejoinCount": 0,
-      "rejoinedAt": null,
+      "leaveTime": null,
+      "lastSeen": 1793291876266,
+      "rejoinCount": 1,
+      "rejoinedAt": 1793291809349,
       "presenceIntervals": [
         {
           "joinTime": 1793172836767,
@@ -21433,6 +22893,11 @@
           "durationMs": 1930008,
           "durationFormatted": "00:32:10",
           "leaveFormatted": "02:24 pm"
+        },
+        {
+          "joinTime": 1793291809349,
+          "leaveTime": null,
+          "durationMs": 0
         }
       ],
       "joinLeaveHistory": [
@@ -21450,21 +22915,28 @@
           "event": "joined",
           "time": 1793262119253,
           "formatted": "01:51 pm"
+        },
+        {
+          "event": "rejoined",
+          "time": 1793291809349,
+          "formatted": "10:06 pm",
+          "awayMs": 27760088,
+          "awayFormatted": "07:42:40"
         }
       ],
-      "totalInMeetMs": 147703030,
-      "totalPresentMs": 1930995,
+      "totalInMeetMs": 203568998,
+      "totalPresentMs": 1998924,
       "cameraOnMs": 876993,
-      "cameraOffMs": 1054002,
+      "cameraOffMs": 1121931,
       "validStudyMs": 876993,
-      "totalDuration": 1930995,
+      "totalDuration": 1998924,
       "duration": 876993,
-      "timeInCall": 147703030,
+      "timeInCall": 203568998,
       "durationSeconds": 876,
       "durationMinutes": 14,
       "studyDuration": 876993,
-      "consecutiveCamOffMs": 82996,
-      "cameraOffCurrentStart": null,
+      "consecutiveCamOffMs": 150925,
+      "cameraOffCurrentStart": 1793291809349,
       "cameraOffIntervals": [
         {
           "start": 1793262119253,
@@ -21721,6 +23193,14 @@
           "fromTime": "02:22 pm",
           "toTime": "03:02 pm",
           "durationFormatted": "00:39:34"
+        },
+        {
+          "start": 1793291809349,
+          "end": 1793291849754,
+          "durationMs": 40405,
+          "fromTime": "10:06 pm",
+          "toTime": "10:07 pm",
+          "durationFormatted": "00:00:40"
         }
       ],
       "cameraIntervals": [
@@ -22057,7 +23537,7 @@
       "firstSeen": 1793172836767,
       "joinTime": 1793172836767,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 1,
       "rejoinedAt": 1793265227258,
       "presenceIntervals": [
@@ -22118,17 +23598,17 @@
           "awayFormatted": "00:04:16"
         }
       ],
-      "totalInMeetMs": 344889914,
-      "totalPresentMs": 27248243,
-      "cameraOnMs": 23908607,
+      "totalInMeetMs": 350232450,
+      "totalPresentMs": 28538242,
+      "cameraOnMs": 25198606,
       "cameraOffMs": 3339636,
-      "validStudyMs": 23908607,
-      "totalDuration": 27248243,
-      "duration": 23908607,
-      "timeInCall": 344889914,
-      "durationSeconds": 23908,
-      "durationMinutes": 398,
-      "studyDuration": 23908607,
+      "validStudyMs": 25198606,
+      "totalDuration": 28538242,
+      "duration": 25198606,
+      "timeInCall": 350232450,
+      "durationSeconds": 25198,
+      "durationMinutes": 419,
+      "studyDuration": 25198606,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -23396,7 +24876,7 @@
       "firstSeen": 1793177769319,
       "joinTime": 1793177769319,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 7,
       "rejoinedAt": 1793289110292,
       "presenceIntervals": [
@@ -23543,17 +25023,17 @@
           "awayFormatted": "00:47:56"
         }
       ],
-      "totalInMeetMs": 423614049,
-      "totalPresentMs": 26696116,
-      "cameraOnMs": 24352831,
-      "cameraOffMs": 2343285,
-      "validStudyMs": 24352831,
-      "totalDuration": 26696116,
-      "duration": 24352831,
-      "timeInCall": 423614049,
-      "durationSeconds": 24352,
-      "durationMinutes": 405,
-      "studyDuration": 24352831,
+      "totalInMeetMs": 438306023,
+      "totalPresentMs": 27986115,
+      "cameraOnMs": 25640828,
+      "cameraOffMs": 2345287,
+      "validStudyMs": 25640828,
+      "totalDuration": 27986115,
+      "duration": 25640828,
+      "timeInCall": 438306023,
+      "durationSeconds": 25640,
+      "durationMinutes": 427,
+      "studyDuration": 25640828,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -24811,6 +26291,14 @@
           "durationMs": 2004,
           "fromTime": "09:44 pm",
           "toTime": "09:44 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290609261,
+          "end": 1793290611266,
+          "durationMs": 2005,
+          "fromTime": "09:46 pm",
+          "toTime": "09:46 pm",
           "durationFormatted": "00:00:02"
         }
       ],
@@ -26452,6 +27940,16 @@
         },
         {
           "start": 1793290461265,
+          "end": 1793290609261,
+          "state": "on"
+        },
+        {
+          "start": 1793290609261,
+          "end": 1793290611266,
+          "state": "off"
+        },
+        {
+          "start": 1793290611266,
           "end": null,
           "state": "on"
         }
@@ -32124,7 +33622,7 @@
       "firstSeen": 1793177769319,
       "joinTime": 1793177769319,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 0,
       "rejoinedAt": null,
       "presenceIntervals": [
@@ -32161,17 +33659,17 @@
           "formatted": "12:28 pm"
         }
       ],
-      "totalInMeetMs": 227394571,
-      "totalPresentMs": 27504116,
-      "cameraOnMs": 21296060,
-      "cameraOffMs": 6208056,
-      "validStudyMs": 21296060,
-      "totalDuration": 27504116,
-      "duration": 21296060,
-      "timeInCall": 227394571,
-      "durationSeconds": 21296,
-      "durationMinutes": 354,
-      "studyDuration": 21296060,
+      "totalInMeetMs": 231401437,
+      "totalPresentMs": 28794115,
+      "cameraOnMs": 22459468,
+      "cameraOffMs": 6334647,
+      "validStudyMs": 22459468,
+      "totalDuration": 28794115,
+      "duration": 22459468,
+      "timeInCall": 231401437,
+      "durationSeconds": 22459,
+      "durationMinutes": 374,
+      "studyDuration": 22459468,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -33846,6 +35344,134 @@
           "fromTime": "09:43 pm",
           "toTime": "09:44 pm",
           "durationFormatted": "00:00:27"
+        },
+        {
+          "start": 1793290885783,
+          "end": 1793290888076,
+          "durationMs": 2293,
+          "fromTime": "09:51 pm",
+          "toTime": "09:51 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290956265,
+          "end": 1793290958266,
+          "durationMs": 2001,
+          "fromTime": "09:52 pm",
+          "toTime": "09:52 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290962265,
+          "end": 1793290966261,
+          "durationMs": 3996,
+          "fromTime": "09:52 pm",
+          "toTime": "09:52 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290972261,
+          "end": 1793290984261,
+          "durationMs": 12000,
+          "fromTime": "09:52 pm",
+          "toTime": "09:53 pm",
+          "durationFormatted": "00:00:12"
+        },
+        {
+          "start": 1793290988266,
+          "end": 1793290994266,
+          "durationMs": 6000,
+          "fromTime": "09:53 pm",
+          "toTime": "09:53 pm",
+          "durationFormatted": "00:00:06"
+        },
+        {
+          "start": 1793290998265,
+          "end": 1793291002771,
+          "durationMs": 4506,
+          "fromTime": "09:53 pm",
+          "toTime": "09:53 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793291022779,
+          "end": 1793291024775,
+          "durationMs": 1996,
+          "fromTime": "09:53 pm",
+          "toTime": "09:53 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793291397265,
+          "end": 1793291401262,
+          "durationMs": 3997,
+          "fromTime": "09:59 pm",
+          "toTime": "10:00 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793291689261,
+          "end": 1793291691272,
+          "durationMs": 2011,
+          "fromTime": "10:04 pm",
+          "toTime": "10:04 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793291701262,
+          "end": 1793291723580,
+          "durationMs": 22318,
+          "fromTime": "10:05 pm",
+          "toTime": "10:05 pm",
+          "durationFormatted": "00:00:22"
+        },
+        {
+          "start": 1793291727258,
+          "end": 1793291739266,
+          "durationMs": 12008,
+          "fromTime": "10:05 pm",
+          "toTime": "10:05 pm",
+          "durationFormatted": "00:00:12"
+        },
+        {
+          "start": 1793291747266,
+          "end": 1793291765274,
+          "durationMs": 18008,
+          "fromTime": "10:05 pm",
+          "toTime": "10:06 pm",
+          "durationFormatted": "00:00:18"
+        },
+        {
+          "start": 1793291775264,
+          "end": 1793291780098,
+          "durationMs": 4834,
+          "fromTime": "10:06 pm",
+          "toTime": "10:06 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793291805264,
+          "end": 1793291809349,
+          "durationMs": 4085,
+          "fromTime": "10:06 pm",
+          "toTime": "10:06 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793291831267,
+          "end": 1793291849754,
+          "durationMs": 18487,
+          "fromTime": "10:07 pm",
+          "toTime": "10:07 pm",
+          "durationFormatted": "00:00:18"
+        },
+        {
+          "start": 1793291863321,
+          "end": 1793291867270,
+          "durationMs": 3949,
+          "fromTime": "10:07 pm",
+          "toTime": "10:07 pm",
+          "durationFormatted": "00:00:03"
         }
       ],
       "cameraIntervals": [
@@ -36206,6 +37832,166 @@
         },
         {
           "start": 1793290422266,
+          "end": 1793290885783,
+          "state": "on"
+        },
+        {
+          "start": 1793290885783,
+          "end": 1793290888076,
+          "state": "off"
+        },
+        {
+          "start": 1793290888076,
+          "end": 1793290956265,
+          "state": "on"
+        },
+        {
+          "start": 1793290956265,
+          "end": 1793290958266,
+          "state": "off"
+        },
+        {
+          "start": 1793290958266,
+          "end": 1793290962265,
+          "state": "on"
+        },
+        {
+          "start": 1793290962265,
+          "end": 1793290966261,
+          "state": "off"
+        },
+        {
+          "start": 1793290966261,
+          "end": 1793290972261,
+          "state": "on"
+        },
+        {
+          "start": 1793290972261,
+          "end": 1793290984261,
+          "state": "off"
+        },
+        {
+          "start": 1793290984261,
+          "end": 1793290988266,
+          "state": "on"
+        },
+        {
+          "start": 1793290988266,
+          "end": 1793290994266,
+          "state": "off"
+        },
+        {
+          "start": 1793290994266,
+          "end": 1793290998265,
+          "state": "on"
+        },
+        {
+          "start": 1793290998265,
+          "end": 1793291002771,
+          "state": "off"
+        },
+        {
+          "start": 1793291002771,
+          "end": 1793291022779,
+          "state": "on"
+        },
+        {
+          "start": 1793291022779,
+          "end": 1793291024775,
+          "state": "off"
+        },
+        {
+          "start": 1793291024775,
+          "end": 1793291397265,
+          "state": "on"
+        },
+        {
+          "start": 1793291397265,
+          "end": 1793291401262,
+          "state": "off"
+        },
+        {
+          "start": 1793291401262,
+          "end": 1793291689261,
+          "state": "on"
+        },
+        {
+          "start": 1793291689261,
+          "end": 1793291691272,
+          "state": "off"
+        },
+        {
+          "start": 1793291691272,
+          "end": 1793291701262,
+          "state": "on"
+        },
+        {
+          "start": 1793291701262,
+          "end": 1793291723266,
+          "state": "off"
+        },
+        {
+          "start": 1793291723266,
+          "end": 1793291727258,
+          "state": "on"
+        },
+        {
+          "start": 1793291727258,
+          "end": 1793291739266,
+          "state": "off"
+        },
+        {
+          "start": 1793291739266,
+          "end": 1793291747266,
+          "state": "on"
+        },
+        {
+          "start": 1793291747266,
+          "end": 1793291765274,
+          "state": "off"
+        },
+        {
+          "start": 1793291765274,
+          "end": 1793291775264,
+          "state": "on"
+        },
+        {
+          "start": 1793291775264,
+          "end": 1793291781477,
+          "state": "off"
+        },
+        {
+          "start": 1793291781477,
+          "end": 1793291805264,
+          "state": "on"
+        },
+        {
+          "start": 1793291805264,
+          "end": 1793291809349,
+          "state": "off"
+        },
+        {
+          "start": 1793291809349,
+          "end": 1793291831267,
+          "state": "on"
+        },
+        {
+          "start": 1793291831267,
+          "end": 1793291853362,
+          "state": "off"
+        },
+        {
+          "start": 1793291853362,
+          "end": 1793291863321,
+          "state": "on"
+        },
+        {
+          "start": 1793291863321,
+          "end": 1793291867270,
+          "state": "off"
+        },
+        {
+          "start": 1793291867270,
           "end": null,
           "state": "on"
         }
@@ -36227,7 +38013,7 @@
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 4,
       "rejoinedAt": 1793281612350,
       "presenceIntervals": [
@@ -36304,18 +38090,18 @@
           "awayFormatted": "00:07:12"
         }
       ],
-      "totalInMeetMs": 138803851,
-      "totalPresentMs": 18380015,
+      "totalInMeetMs": 145482021,
+      "totalPresentMs": 19670014,
       "cameraOnMs": 8460428,
-      "cameraOffMs": 9919587,
+      "cameraOffMs": 11209586,
       "validStudyMs": 8460428,
-      "totalDuration": 18380015,
+      "totalDuration": 19670014,
       "duration": 8460428,
-      "timeInCall": 138803851,
+      "timeInCall": 145482021,
       "durationSeconds": 8460,
       "durationMinutes": 141,
       "studyDuration": 8460428,
-      "consecutiveCamOffMs": 1690894,
+      "consecutiveCamOffMs": 2980893,
       "cameraOffCurrentStart": 1793289354401,
       "cameraOffIntervals": [
         {
@@ -36810,7 +38596,7 @@
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 1,
       "rejoinedAt": 1793231321029,
       "presenceIntervals": [
@@ -36849,19 +38635,19 @@
           "formatted": "12:28 pm"
         }
       ],
-      "totalInMeetMs": 173842873,
-      "totalPresentMs": 27503092,
-      "cameraOnMs": 25228003,
-      "cameraOffMs": 2275089,
-      "validStudyMs": 25228003,
-      "totalDuration": 27503092,
-      "duration": 25228003,
-      "timeInCall": 173842873,
-      "durationSeconds": 25228,
-      "durationMinutes": 420,
-      "studyDuration": 25228003,
-      "consecutiveCamOffMs": 137949,
-      "cameraOffCurrentStart": 1793290449265,
+      "totalInMeetMs": 177849775,
+      "totalPresentMs": 28793091,
+      "cameraOnMs": 25401310,
+      "cameraOffMs": 3391781,
+      "validStudyMs": 25401310,
+      "totalDuration": 28793091,
+      "duration": 25401310,
+      "timeInCall": 177849775,
+      "durationSeconds": 25401,
+      "durationMinutes": 423,
+      "studyDuration": 25401310,
+      "consecutiveCamOffMs": 21918,
+      "cameraOffCurrentStart": 1793291855363,
       "cameraOffIntervals": [
         {
           "start": 1793257114620,
@@ -37726,6 +39512,150 @@
           "fromTime": "09:44 pm",
           "toTime": "09:45 pm",
           "durationFormatted": "00:01:08"
+        },
+        {
+          "start": 1793290633262,
+          "end": 1793290635266,
+          "durationMs": 2004,
+          "fromTime": "09:47 pm",
+          "toTime": "09:47 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290645261,
+          "end": 1793290806265,
+          "durationMs": 161004,
+          "fromTime": "09:47 pm",
+          "toTime": "09:50 pm",
+          "durationFormatted": "00:02:41"
+        },
+        {
+          "start": 1793290885783,
+          "end": 1793290923775,
+          "durationMs": 37992,
+          "fromTime": "09:51 pm",
+          "toTime": "09:52 pm",
+          "durationFormatted": "00:00:37"
+        },
+        {
+          "start": 1793290927794,
+          "end": 1793290948314,
+          "durationMs": 20520,
+          "fromTime": "09:52 pm",
+          "toTime": "09:52 pm",
+          "durationFormatted": "00:00:20"
+        },
+        {
+          "start": 1793290952266,
+          "end": 1793291105990,
+          "durationMs": 153724,
+          "fromTime": "09:52 pm",
+          "toTime": "09:55 pm",
+          "durationFormatted": "00:02:33"
+        },
+        {
+          "start": 1793291115770,
+          "end": 1793291122006,
+          "durationMs": 6236,
+          "fromTime": "09:55 pm",
+          "toTime": "09:55 pm",
+          "durationFormatted": "00:00:06"
+        },
+        {
+          "start": 1793291125781,
+          "end": 1793291170828,
+          "durationMs": 45047,
+          "fromTime": "09:55 pm",
+          "toTime": "09:56 pm",
+          "durationFormatted": "00:00:45"
+        },
+        {
+          "start": 1793291275261,
+          "end": 1793291297269,
+          "durationMs": 22008,
+          "fromTime": "09:57 pm",
+          "toTime": "09:58 pm",
+          "durationFormatted": "00:00:22"
+        },
+        {
+          "start": 1793291305261,
+          "end": 1793291410461,
+          "durationMs": 105200,
+          "fromTime": "09:58 pm",
+          "toTime": "10:00 pm",
+          "durationFormatted": "00:01:45"
+        },
+        {
+          "start": 1793291415266,
+          "end": 1793291438999,
+          "durationMs": 23733,
+          "fromTime": "10:00 pm",
+          "toTime": "10:00 pm",
+          "durationFormatted": "00:00:23"
+        },
+        {
+          "start": 1793291603278,
+          "end": 1793291635355,
+          "durationMs": 32077,
+          "fromTime": "10:03 pm",
+          "toTime": "10:03 pm",
+          "durationFormatted": "00:00:32"
+        },
+        {
+          "start": 1793291639345,
+          "end": 1793291657215,
+          "durationMs": 17870,
+          "fromTime": "10:03 pm",
+          "toTime": "10:04 pm",
+          "durationFormatted": "00:00:17"
+        },
+        {
+          "start": 1793291675332,
+          "end": 1793291679260,
+          "durationMs": 3928,
+          "fromTime": "10:04 pm",
+          "toTime": "10:04 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793291685267,
+          "end": 1793291723580,
+          "durationMs": 38313,
+          "fromTime": "10:04 pm",
+          "toTime": "10:05 pm",
+          "durationFormatted": "00:00:38"
+        },
+        {
+          "start": 1793291735265,
+          "end": 1793291780098,
+          "durationMs": 44833,
+          "fromTime": "10:05 pm",
+          "toTime": "10:06 pm",
+          "durationFormatted": "00:00:44"
+        },
+        {
+          "start": 1793291787266,
+          "end": 1793291811265,
+          "durationMs": 23999,
+          "fromTime": "10:06 pm",
+          "toTime": "10:06 pm",
+          "durationFormatted": "00:00:23"
+        },
+        {
+          "start": 1793291815261,
+          "end": 1793291849754,
+          "durationMs": 34493,
+          "fromTime": "10:06 pm",
+          "toTime": "10:07 pm",
+          "durationFormatted": "00:00:34"
+        },
+        {
+          "start": 1793291855363,
+          "end": 1793291871066,
+          "durationMs": 15703,
+          "fromTime": "10:07 pm",
+          "toTime": "10:07 pm",
+          "durationFormatted": "00:00:15"
         }
       ],
       "cameraIntervals": [
@@ -39281,6 +41211,186 @@
         },
         {
           "start": 1793290449265,
+          "end": 1793290629265,
+          "state": "off"
+        },
+        {
+          "start": 1793290629265,
+          "end": 1793290633262,
+          "state": "on"
+        },
+        {
+          "start": 1793290633262,
+          "end": 1793290635266,
+          "state": "off"
+        },
+        {
+          "start": 1793290635266,
+          "end": 1793290645261,
+          "state": "on"
+        },
+        {
+          "start": 1793290645261,
+          "end": 1793290806265,
+          "state": "off"
+        },
+        {
+          "start": 1793290806265,
+          "end": 1793290885783,
+          "state": "on"
+        },
+        {
+          "start": 1793290885783,
+          "end": 1793290923775,
+          "state": "off"
+        },
+        {
+          "start": 1793290923775,
+          "end": 1793290927794,
+          "state": "on"
+        },
+        {
+          "start": 1793290927794,
+          "end": 1793290948314,
+          "state": "off"
+        },
+        {
+          "start": 1793290948314,
+          "end": 1793290952266,
+          "state": "on"
+        },
+        {
+          "start": 1793290952266,
+          "end": 1793291105990,
+          "state": "off"
+        },
+        {
+          "start": 1793291105990,
+          "end": 1793291115770,
+          "state": "on"
+        },
+        {
+          "start": 1793291115770,
+          "end": 1793291122006,
+          "state": "off"
+        },
+        {
+          "start": 1793291122006,
+          "end": 1793291125781,
+          "state": "on"
+        },
+        {
+          "start": 1793291125781,
+          "end": 1793291271265,
+          "state": "off"
+        },
+        {
+          "start": 1793291271265,
+          "end": 1793291275261,
+          "state": "on"
+        },
+        {
+          "start": 1793291275261,
+          "end": 1793291297269,
+          "state": "off"
+        },
+        {
+          "start": 1793291297269,
+          "end": 1793291305261,
+          "state": "on"
+        },
+        {
+          "start": 1793291305261,
+          "end": 1793291411269,
+          "state": "off"
+        },
+        {
+          "start": 1793291411269,
+          "end": 1793291415266,
+          "state": "on"
+        },
+        {
+          "start": 1793291415266,
+          "end": 1793291597263,
+          "state": "off"
+        },
+        {
+          "start": 1793291597263,
+          "end": 1793291603278,
+          "state": "on"
+        },
+        {
+          "start": 1793291603278,
+          "end": 1793291635355,
+          "state": "off"
+        },
+        {
+          "start": 1793291635355,
+          "end": 1793291639345,
+          "state": "on"
+        },
+        {
+          "start": 1793291639345,
+          "end": 1793291667257,
+          "state": "off"
+        },
+        {
+          "start": 1793291667257,
+          "end": 1793291675332,
+          "state": "on"
+        },
+        {
+          "start": 1793291675332,
+          "end": 1793291679260,
+          "state": "off"
+        },
+        {
+          "start": 1793291679260,
+          "end": 1793291685267,
+          "state": "on"
+        },
+        {
+          "start": 1793291685267,
+          "end": 1793291731262,
+          "state": "off"
+        },
+        {
+          "start": 1793291731262,
+          "end": 1793291735265,
+          "state": "on"
+        },
+        {
+          "start": 1793291735265,
+          "end": 1793291783266,
+          "state": "off"
+        },
+        {
+          "start": 1793291783266,
+          "end": 1793291787266,
+          "state": "on"
+        },
+        {
+          "start": 1793291787266,
+          "end": 1793291811265,
+          "state": "off"
+        },
+        {
+          "start": 1793291811265,
+          "end": 1793291815261,
+          "state": "on"
+        },
+        {
+          "start": 1793291815261,
+          "end": 1793291849267,
+          "state": "off"
+        },
+        {
+          "start": 1793291849267,
+          "end": 1793291855363,
+          "state": "on"
+        },
+        {
+          "start": 1793291855363,
           "end": null,
           "state": "off"
         }
@@ -39302,7 +41412,7 @@
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 3,
       "rejoinedAt": 1793285767315,
       "presenceIntervals": [
@@ -39367,18 +41477,18 @@
           "awayFormatted": "00:50:18"
         }
       ],
-      "totalInMeetMs": 123449997,
-      "totalPresentMs": 12798981,
+      "totalInMeetMs": 128792545,
+      "totalPresentMs": 14088980,
       "cameraOnMs": 8995965,
-      "cameraOffMs": 3803016,
+      "cameraOffMs": 5093015,
       "validStudyMs": 8995965,
-      "totalDuration": 12798981,
+      "totalDuration": 14088980,
       "duration": 8995965,
-      "timeInCall": 123449997,
+      "timeInCall": 128792545,
       "durationSeconds": 8995,
       "durationMinutes": 149,
       "studyDuration": 8995965,
-      "consecutiveCamOffMs": 1732379,
+      "consecutiveCamOffMs": 3022378,
       "cameraOffCurrentStart": 1793289354401,
       "cameraOffIntervals": [
         {
@@ -43019,7 +45129,7 @@
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 4,
       "rejoinedAt": 1793277996256,
       "presenceIntervals": [
@@ -43096,17 +45206,17 @@
           "awayFormatted": "00:00:13"
         }
       ],
-      "totalInMeetMs": 149493001,
-      "totalPresentMs": 19319132,
-      "cameraOnMs": 17607250,
-      "cameraOffMs": 1711882,
-      "validStudyMs": 17607250,
-      "totalDuration": 19319132,
-      "duration": 17607250,
-      "timeInCall": 149493001,
-      "durationSeconds": 17607,
-      "durationMinutes": 293,
-      "studyDuration": 17607250,
+      "totalInMeetMs": 156171171,
+      "totalPresentMs": 20609131,
+      "cameraOnMs": 18717223,
+      "cameraOffMs": 1891908,
+      "validStudyMs": 18717223,
+      "totalDuration": 20609131,
+      "duration": 18717223,
+      "timeInCall": 156171171,
+      "durationSeconds": 18717,
+      "durationMinutes": 311,
+      "studyDuration": 18717223,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -43821,6 +45931,14 @@
           "fromTime": "08:47 pm",
           "toTime": "08:47 pm",
           "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793291007781,
+          "end": 1793291170828,
+          "durationMs": 163047,
+          "fromTime": "09:53 pm",
+          "toTime": "09:56 pm",
+          "durationFormatted": "00:02:43"
         }
       ],
       "cameraIntervals": [
@@ -44791,6 +46909,16 @@
         },
         {
           "start": 1793288588274,
+          "end": 1793291007781,
+          "state": "on"
+        },
+        {
+          "start": 1793291007781,
+          "end": 1793291187807,
+          "state": "off"
+        },
+        {
+          "start": 1793291187807,
           "end": null,
           "state": "on"
         }
@@ -47672,7 +49800,7 @@
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 7,
       "rejoinedAt": 1793280143622,
       "presenceIntervals": [
@@ -47724,6 +49852,11 @@
         },
         {
           "joinTime": 1793280143622,
+          "leaveTime": null,
+          "durationMs": 0
+        },
+        {
+          "joinTime": 1793285141453,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -47787,20 +49920,25 @@
           "formatted": "06:52 pm",
           "awayMs": 302501,
           "awayFormatted": "00:05:02"
+        },
+        {
+          "event": "joined",
+          "time": 1793285141453,
+          "formatted": "08:15 pm"
         }
       ],
-      "totalInMeetMs": 161947080,
-      "totalPresentMs": 12014212,
+      "totalInMeetMs": 176744099,
+      "totalPresentMs": 13304211,
       "cameraOnMs": 1847943,
-      "cameraOffMs": 10166269,
+      "cameraOffMs": 11456268,
       "validStudyMs": 1847943,
-      "totalDuration": 12014212,
+      "totalDuration": 13304211,
       "duration": 1847943,
-      "timeInCall": 161947080,
+      "timeInCall": 176744099,
       "durationSeconds": 1847,
       "durationMinutes": 30,
       "studyDuration": 1847943,
-      "consecutiveCamOffMs": 1173980,
+      "consecutiveCamOffMs": 3647520,
       "cameraOffCurrentStart": 1793289354401,
       "cameraOffIntervals": [
         {
@@ -48426,821 +50564,59 @@
           "fromTime": "09:25 pm",
           "toTime": "09:27 pm",
           "durationFormatted": "00:01:13"
+        },
+        {
+          "start": 1793285141453,
+          "end": 1793286064676,
+          "durationMs": 923223,
+          "fromTime": "08:15 pm",
+          "toTime": "08:31 pm",
+          "durationFormatted": "00:15:23"
+        },
+        {
+          "start": 1793286217709,
+          "end": 1793286219226,
+          "durationMs": 1517,
+          "fromTime": "08:33 pm",
+          "toTime": "08:33 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793286238368,
+          "end": 1793286240293,
+          "durationMs": 1925,
+          "fromTime": "08:33 pm",
+          "toTime": "08:34 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793286254360,
+          "end": 1793286257468,
+          "durationMs": 3108,
+          "fromTime": "08:34 pm",
+          "toTime": "08:34 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793286291270,
+          "end": 1793286306331,
+          "durationMs": 15061,
+          "fromTime": "08:34 pm",
+          "toTime": "08:35 pm",
+          "durationFormatted": "00:00:15"
+        },
+        {
+          "start": 1793286313281,
+          "end": 1793286314487,
+          "durationMs": 1206,
+          "fromTime": "08:35 pm",
+          "toTime": "08:35 pm",
+          "durationFormatted": "00:00:01"
         }
       ],
       "cameraIntervals": [
         {
-          "start": 1793257253262,
-          "end": 1793274605266,
-          "state": "off"
-        },
-        {
-          "start": 1793274605266,
-          "end": 1793274609260,
-          "state": "on"
-        },
-        {
-          "start": 1793274609260,
-          "end": 1793274611264,
-          "state": "off"
-        },
-        {
-          "start": 1793274611264,
-          "end": 1793274615265,
-          "state": "on"
-        },
-        {
-          "start": 1793274615265,
-          "end": 1793274621261,
-          "state": "off"
-        },
-        {
-          "start": 1793274621261,
-          "end": 1793274631265,
-          "state": "on"
-        },
-        {
-          "start": 1793274631265,
-          "end": 1793274677125,
-          "state": "off"
-        },
-        {
-          "start": 1793274677125,
-          "end": 1793274703490,
-          "state": "on"
-        },
-        {
-          "start": 1793274703490,
-          "end": 1793274721266,
-          "state": "off"
-        },
-        {
-          "start": 1793274721266,
-          "end": 1793274727296,
-          "state": "on"
-        },
-        {
-          "start": 1793274727296,
-          "end": 1793274745266,
-          "state": "off"
-        },
-        {
-          "start": 1793274745266,
-          "end": 1793274749252,
-          "state": "on"
-        },
-        {
-          "start": 1793274749252,
-          "end": 1793274757265,
-          "state": "off"
-        },
-        {
-          "start": 1793274757265,
-          "end": 1793274761264,
-          "state": "on"
-        },
-        {
-          "start": 1793274761264,
-          "end": 1793274775265,
-          "state": "off"
-        },
-        {
-          "start": 1793274775265,
-          "end": 1793274779264,
-          "state": "on"
-        },
-        {
-          "start": 1793274779264,
-          "end": 1793274789323,
-          "state": "off"
-        },
-        {
-          "start": 1793274789323,
-          "end": 1793274819262,
-          "state": "on"
-        },
-        {
-          "start": 1793274819262,
-          "end": 1793274827264,
-          "state": "off"
-        },
-        {
-          "start": 1793274827264,
-          "end": 1793274845270,
-          "state": "on"
-        },
-        {
-          "start": 1793274845270,
-          "end": 1793274893264,
-          "state": "off"
-        },
-        {
-          "start": 1793274893264,
-          "end": 1793274897261,
-          "state": "on"
-        },
-        {
-          "start": 1793274897261,
-          "end": 1793274921264,
-          "state": "off"
-        },
-        {
-          "start": 1793274921264,
-          "end": 1793274925265,
-          "state": "on"
-        },
-        {
-          "start": 1793274925265,
-          "end": 1793275021301,
-          "state": "off"
-        },
-        {
-          "start": 1793275021301,
-          "end": 1793275025265,
-          "state": "on"
-        },
-        {
-          "start": 1793275025265,
-          "end": 1793275033321,
-          "state": "off"
-        },
-        {
-          "start": 1793275033321,
-          "end": 1793275041260,
-          "state": "on"
-        },
-        {
-          "start": 1793275041260,
-          "end": 1793275055443,
-          "state": "off"
-        },
-        {
-          "start": 1793275055443,
-          "end": 1793275059277,
-          "state": "on"
-        },
-        {
-          "start": 1793275059277,
-          "end": 1793275101265,
-          "state": "off"
-        },
-        {
-          "start": 1793275101265,
-          "end": 1793275105265,
-          "state": "on"
-        },
-        {
-          "start": 1793275105265,
-          "end": 1793275107320,
-          "state": "off"
-        },
-        {
-          "start": 1793275107320,
-          "end": 1793275111265,
-          "state": "on"
-        },
-        {
-          "start": 1793275111265,
-          "end": 1793275137393,
-          "state": "off"
-        },
-        {
-          "start": 1793275137393,
-          "end": 1793275143261,
-          "state": "on"
-        },
-        {
-          "start": 1793275143261,
-          "end": 1793275159265,
-          "state": "off"
-        },
-        {
-          "start": 1793275159265,
-          "end": 1793275163281,
-          "state": "on"
-        },
-        {
-          "start": 1793275163281,
-          "end": 1793275201340,
-          "state": "off"
-        },
-        {
-          "start": 1793275201340,
-          "end": 1793275205305,
-          "state": "on"
-        },
-        {
-          "start": 1793275205305,
-          "end": 1793275229497,
-          "state": "off"
-        },
-        {
-          "start": 1793275229497,
-          "end": 1793275235267,
-          "state": "on"
-        },
-        {
-          "start": 1793275235267,
-          "end": 1793275247265,
-          "state": "off"
-        },
-        {
-          "start": 1793275247265,
-          "end": 1793275394417,
-          "state": "on"
-        },
-        {
-          "start": 1793275394417,
-          "end": 1793275552277,
-          "state": "off"
-        },
-        {
-          "start": 1793275552277,
-          "end": 1793275568265,
-          "state": "on"
-        },
-        {
-          "start": 1793275568265,
-          "end": 1793275572261,
-          "state": "off"
-        },
-        {
-          "start": 1793275572261,
-          "end": 1793275576265,
-          "state": "on"
-        },
-        {
-          "start": 1793275576265,
-          "end": 1793275578261,
-          "state": "off"
-        },
-        {
-          "start": 1793275578261,
-          "end": 1793275586265,
-          "state": "on"
-        },
-        {
-          "start": 1793275586265,
-          "end": 1793275606267,
-          "state": "off"
-        },
-        {
-          "start": 1793275606267,
-          "end": 1793275610264,
-          "state": "on"
-        },
-        {
-          "start": 1793275610264,
-          "end": 1793275642266,
-          "state": "off"
-        },
-        {
-          "start": 1793275642266,
-          "end": 1793276615773,
-          "state": "on"
-        },
-        {
-          "start": 1793276615773,
-          "end": 1793285060261,
-          "state": "off"
-        },
-        {
-          "start": 1793285060261,
-          "end": 1793285100265,
-          "state": "on"
-        },
-        {
-          "start": 1793285100265,
-          "end": 1793285102265,
-          "state": "off"
-        },
-        {
-          "start": 1793285102265,
-          "end": 1793285114266,
-          "state": "on"
-        },
-        {
-          "start": 1793285114266,
-          "end": 1793285116261,
-          "state": "off"
-        },
-        {
-          "start": 1793285116261,
-          "end": 1793285120260,
-          "state": "on"
-        },
-        {
-          "start": 1793285120260,
-          "end": 1793285124367,
-          "state": "off"
-        },
-        {
-          "start": 1793285124367,
-          "end": 1793285136265,
-          "state": "on"
-        },
-        {
-          "start": 1793285136265,
-          "end": 1793285144311,
-          "state": "off"
-        },
-        {
-          "start": 1793285144311,
-          "end": 1793285148265,
-          "state": "on"
-        },
-        {
-          "start": 1793285148265,
-          "end": 1793285168267,
-          "state": "off"
-        },
-        {
-          "start": 1793285168267,
-          "end": 1793285190316,
-          "state": "on"
-        },
-        {
-          "start": 1793285190316,
-          "end": 1793285194261,
-          "state": "off"
-        },
-        {
-          "start": 1793285194261,
-          "end": 1793285212260,
-          "state": "on"
-        },
-        {
-          "start": 1793285212260,
-          "end": 1793285218267,
-          "state": "off"
-        },
-        {
-          "start": 1793285218267,
-          "end": 1793285254261,
-          "state": "on"
-        },
-        {
-          "start": 1793285254261,
-          "end": 1793285258358,
-          "state": "off"
-        },
-        {
-          "start": 1793285258358,
-          "end": 1793285306770,
-          "state": "on"
-        },
-        {
-          "start": 1793285306770,
-          "end": 1793285308769,
-          "state": "off"
-        },
-        {
-          "start": 1793285308769,
-          "end": 1793285314771,
-          "state": "on"
-        },
-        {
-          "start": 1793285314771,
-          "end": 1793285318785,
-          "state": "off"
-        },
-        {
-          "start": 1793285318785,
-          "end": 1793285324774,
-          "state": "on"
-        },
-        {
-          "start": 1793285324774,
-          "end": 1793285326772,
-          "state": "off"
-        },
-        {
-          "start": 1793285326772,
-          "end": 1793285330771,
-          "state": "on"
-        },
-        {
-          "start": 1793285330771,
-          "end": 1793285332776,
-          "state": "off"
-        },
-        {
-          "start": 1793285332776,
-          "end": 1793285336776,
-          "state": "on"
-        },
-        {
-          "start": 1793285336776,
-          "end": 1793285340775,
-          "state": "off"
-        },
-        {
-          "start": 1793285340775,
-          "end": 1793285350779,
-          "state": "on"
-        },
-        {
-          "start": 1793285350779,
-          "end": 1793285352775,
-          "state": "off"
-        },
-        {
-          "start": 1793285352775,
-          "end": 1793285356770,
-          "state": "on"
-        },
-        {
-          "start": 1793285356770,
-          "end": 1793285364770,
-          "state": "off"
-        },
-        {
-          "start": 1793285364770,
-          "end": 1793285370771,
-          "state": "on"
-        },
-        {
-          "start": 1793285370771,
-          "end": 1793285384266,
-          "state": "off"
-        },
-        {
-          "start": 1793285384266,
-          "end": 1793285398264,
-          "state": "on"
-        },
-        {
-          "start": 1793285398264,
-          "end": 1793285400265,
-          "state": "off"
-        },
-        {
-          "start": 1793285400265,
-          "end": 1793285403504,
-          "state": "on"
-        },
-        {
-          "start": 1793285403504,
-          "end": 1793285540264,
-          "state": "off"
-        },
-        {
-          "start": 1793285540264,
-          "end": 1793285556266,
-          "state": "on"
-        },
-        {
-          "start": 1793285556266,
-          "end": 1793285566261,
-          "state": "off"
-        },
-        {
-          "start": 1793285566261,
-          "end": 1793285610265,
-          "state": "on"
-        },
-        {
-          "start": 1793285610265,
-          "end": 1793285614262,
-          "state": "off"
-        },
-        {
-          "start": 1793285614262,
-          "end": 1793285630265,
-          "state": "on"
-        },
-        {
-          "start": 1793285630265,
-          "end": 1793285634266,
-          "state": "off"
-        },
-        {
-          "start": 1793285634266,
-          "end": 1793285656261,
-          "state": "on"
-        },
-        {
-          "start": 1793285656261,
-          "end": 1793285660266,
-          "state": "off"
-        },
-        {
-          "start": 1793285660266,
-          "end": 1793285700776,
-          "state": "on"
-        },
-        {
-          "start": 1793285700776,
-          "end": 1793285702770,
-          "state": "off"
-        },
-        {
-          "start": 1793285702770,
-          "end": 1793285720770,
-          "state": "on"
-        },
-        {
-          "start": 1793285720770,
-          "end": 1793285730823,
-          "state": "off"
-        },
-        {
-          "start": 1793285730823,
-          "end": 1793285736771,
-          "state": "on"
-        },
-        {
-          "start": 1793285736771,
-          "end": 1793285748772,
-          "state": "off"
-        },
-        {
-          "start": 1793285748772,
-          "end": 1793285754775,
-          "state": "on"
-        },
-        {
-          "start": 1793285754775,
-          "end": 1793285769264,
-          "state": "off"
-        },
-        {
-          "start": 1793285769264,
-          "end": 1793285775265,
-          "state": "on"
-        },
-        {
-          "start": 1793285775265,
-          "end": 1793285783267,
-          "state": "off"
-        },
-        {
-          "start": 1793285783267,
-          "end": 1793285789266,
-          "state": "on"
-        },
-        {
-          "start": 1793285789266,
-          "end": 1793285795266,
-          "state": "off"
-        },
-        {
-          "start": 1793285795266,
-          "end": 1793285803263,
-          "state": "on"
-        },
-        {
-          "start": 1793285803263,
-          "end": 1793285815261,
-          "state": "off"
-        },
-        {
-          "start": 1793285815261,
-          "end": 1793285823265,
-          "state": "on"
-        },
-        {
-          "start": 1793285823265,
-          "end": 1793285965260,
-          "state": "off"
-        },
-        {
-          "start": 1793285965260,
-          "end": 1793285976281,
-          "state": "on"
-        },
-        {
-          "start": 1793285976281,
-          "end": 1793286133261,
-          "state": "off"
-        },
-        {
-          "start": 1793286133261,
-          "end": 1793286137268,
-          "state": "on"
-        },
-        {
-          "start": 1793286137268,
-          "end": 1793286139261,
-          "state": "off"
-        },
-        {
-          "start": 1793286139261,
-          "end": 1793286143319,
-          "state": "on"
-        },
-        {
-          "start": 1793286143319,
-          "end": 1793286145262,
-          "state": "off"
-        },
-        {
-          "start": 1793286145262,
-          "end": 1793286149266,
-          "state": "on"
-        },
-        {
-          "start": 1793286149266,
-          "end": 1793286155266,
-          "state": "off"
-        },
-        {
-          "start": 1793286155266,
-          "end": 1793286165265,
-          "state": "on"
-        },
-        {
-          "start": 1793286165265,
-          "end": 1793286173267,
-          "state": "off"
-        },
-        {
-          "start": 1793286173267,
-          "end": 1793286177265,
-          "state": "on"
-        },
-        {
-          "start": 1793286177265,
-          "end": 1793286181261,
-          "state": "off"
-        },
-        {
-          "start": 1793286181261,
-          "end": 1793286199261,
-          "state": "on"
-        },
-        {
-          "start": 1793286199261,
-          "end": 1793286201274,
-          "state": "off"
-        },
-        {
-          "start": 1793286201274,
-          "end": 1793286205262,
-          "state": "on"
-        },
-        {
-          "start": 1793286205262,
-          "end": 1793286209255,
-          "state": "off"
-        },
-        {
-          "start": 1793286209255,
-          "end": 1793286229433,
-          "state": "on"
-        },
-        {
-          "start": 1793286229433,
-          "end": 1793286239257,
-          "state": "off"
-        },
-        {
-          "start": 1793286239257,
-          "end": 1793286247263,
-          "state": "on"
-        },
-        {
-          "start": 1793286247263,
-          "end": 1793286251341,
-          "state": "off"
-        },
-        {
-          "start": 1793286251341,
-          "end": 1793286259348,
-          "state": "on"
-        },
-        {
-          "start": 1793286259348,
-          "end": 1793286261266,
-          "state": "off"
-        },
-        {
-          "start": 1793286261266,
-          "end": 1793286265263,
-          "state": "on"
-        },
-        {
-          "start": 1793286265263,
-          "end": 1793286279261,
-          "state": "off"
-        },
-        {
-          "start": 1793286279261,
-          "end": 1793286295261,
-          "state": "on"
-        },
-        {
-          "start": 1793286295261,
-          "end": 1793286313281,
-          "state": "off"
-        },
-        {
-          "start": 1793286313281,
-          "end": 1793286317266,
-          "state": "on"
-        },
-        {
-          "start": 1793286317266,
-          "end": 1793286319261,
-          "state": "off"
-        },
-        {
-          "start": 1793286319261,
-          "end": 1793286323268,
-          "state": "on"
-        },
-        {
-          "start": 1793286323268,
-          "end": 1793286353774,
-          "state": "off"
-        },
-        {
-          "start": 1793286353774,
-          "end": 1793286357827,
-          "state": "on"
-        },
-        {
-          "start": 1793286357827,
-          "end": 1793286359748,
-          "state": "off"
-        },
-        {
-          "start": 1793286359748,
-          "end": 1793286375770,
-          "state": "on"
-        },
-        {
-          "start": 1793286375770,
-          "end": 1793286377776,
-          "state": "off"
-        },
-        {
-          "start": 1793286377776,
-          "end": 1793286381780,
-          "state": "on"
-        },
-        {
-          "start": 1793286381780,
-          "end": 1793286389773,
-          "state": "off"
-        },
-        {
-          "start": 1793286389773,
-          "end": 1793286401772,
-          "state": "on"
-        },
-        {
-          "start": 1793286401772,
-          "end": 1793288908321,
-          "state": "off"
-        },
-        {
-          "start": 1793288908321,
-          "end": 1793289004260,
-          "state": "on"
-        },
-        {
-          "start": 1793289004260,
-          "end": 1793289006364,
-          "state": "off"
-        },
-        {
-          "start": 1793289006364,
-          "end": 1793289020258,
-          "state": "on"
-        },
-        {
-          "start": 1793289020258,
-          "end": 1793289028262,
-          "state": "off"
-        },
-        {
-          "start": 1793289028262,
-          "end": 1793289030266,
-          "state": "on"
-        },
-        {
-          "start": 1793289030266,
-          "end": 1793289040344,
-          "state": "off"
-        },
-        {
-          "start": 1793289040344,
-          "end": 1793289042265,
-          "state": "on"
-        },
-        {
-          "start": 1793289042265,
-          "end": 1793289044266,
-          "state": "off"
-        },
-        {
-          "start": 1793289044266,
-          "end": 1793289058261,
-          "state": "on"
-        },
-        {
-          "start": 1793289058261,
+          "start": 1793285141453,
           "end": null,
           "state": "off"
         }
@@ -49262,7 +50638,7 @@
       "firstSeen": 1793209488733,
       "joinTime": 1793209488733,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 1,
       "rejoinedAt": 1793287755529,
       "presenceIntervals": [
@@ -49313,19 +50689,19 @@
           "awayFormatted": "02:58:34"
         }
       ],
-      "totalInMeetMs": 171665200,
-      "totalPresentMs": 2091408,
-      "cameraOnMs": 782443,
-      "cameraOffMs": 1308965,
-      "validStudyMs": 782443,
-      "totalDuration": 2091408,
-      "duration": 782443,
-      "timeInCall": 171665200,
-      "durationSeconds": 782,
-      "durationMinutes": 13,
-      "studyDuration": 782443,
-      "consecutiveCamOffMs": 372001,
-      "cameraOffCurrentStart": 1793290215321,
+      "totalInMeetMs": 177007748,
+      "totalPresentMs": 3381407,
+      "cameraOnMs": 1533439,
+      "cameraOffMs": 1847968,
+      "validStudyMs": 1533439,
+      "totalDuration": 3381407,
+      "duration": 1533439,
+      "timeInCall": 177007748,
+      "durationSeconds": 1533,
+      "durationMinutes": 25,
+      "studyDuration": 1533439,
+      "consecutiveCamOffMs": 394004,
+      "cameraOffCurrentStart": 1793291483266,
       "cameraOffIntervals": [
         {
           "start": 1793276169286,
@@ -49358,6 +50734,22 @@
           "fromTime": "09:40 pm",
           "toTime": "09:44 pm",
           "durationFormatted": "00:03:50"
+        },
+        {
+          "start": 1793290791343,
+          "end": 1793290807342,
+          "durationMs": 15999,
+          "fromTime": "09:49 pm",
+          "toTime": "09:50 pm",
+          "durationFormatted": "00:00:15"
+        },
+        {
+          "start": 1793291483266,
+          "end": 1793291561817,
+          "durationMs": 78551,
+          "fromTime": "10:01 pm",
+          "toTime": "10:02 pm",
+          "durationFormatted": "00:01:18"
         }
       ],
       "cameraIntervals": [
@@ -49403,6 +50795,26 @@
         },
         {
           "start": 1793290215321,
+          "end": 1793290716266,
+          "state": "off"
+        },
+        {
+          "start": 1793290716266,
+          "end": 1793290791343,
+          "state": "on"
+        },
+        {
+          "start": 1793290791343,
+          "end": 1793290807342,
+          "state": "off"
+        },
+        {
+          "start": 1793290807342,
+          "end": 1793291483266,
+          "state": "on"
+        },
+        {
+          "start": 1793291483266,
           "end": null,
           "state": "off"
         }
@@ -49726,14 +51138,14 @@
       "id": "p_sriman_samudrala",
       "name": "Sriman Samudrala",
       "isLocal": false,
-      "currentStatus": "present",
-      "cameraStatus": "on",
+      "currentStatus": "left",
+      "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793214740264,
       "joinTime": 1793214740264,
-      "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "leaveTime": 1793290815264,
+      "lastSeen": 1793290815264,
       "rejoinCount": 2,
       "rejoinedAt": 1793284103422,
       "presenceIntervals": [
@@ -49784,17 +51196,17 @@
           "awayFormatted": "01:51:11"
         }
       ],
-      "totalInMeetMs": 117664506,
-      "totalPresentMs": 7653877,
-      "cameraOnMs": 7389425,
+      "totalInMeetMs": 118569634,
+      "totalPresentMs": 7882874,
+      "cameraOnMs": 7618422,
       "cameraOffMs": 264452,
-      "validStudyMs": 7389425,
-      "totalDuration": 7653877,
-      "duration": 7389425,
-      "timeInCall": 117664506,
-      "durationSeconds": 7389,
-      "durationMinutes": 123,
-      "studyDuration": 7389425,
+      "validStudyMs": 7618422,
+      "totalDuration": 7882874,
+      "duration": 7618422,
+      "timeInCall": 118569634,
+      "durationSeconds": 7618,
+      "durationMinutes": 126,
+      "studyDuration": 7618422,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -50561,7 +51973,7 @@
         }
       ],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "on",
+      "rawCameraStatus": "off",
       "manualCamOverride": false,
       "isHost": false,
       "isExempt": false
@@ -52051,9 +53463,9 @@
       "firstSeen": 1793214740264,
       "joinTime": 1793214740264,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
-      "rejoinCount": 3,
-      "rejoinedAt": 1793286274298,
+      "lastSeen": 1793291876266,
+      "rejoinCount": 4,
+      "rejoinedAt": 1793291780308,
       "presenceIntervals": [
         {
           "joinTime": 1793214740264,
@@ -52089,6 +53501,11 @@
         },
         {
           "joinTime": 1793286274298,
+          "leaveTime": null,
+          "durationMs": 0
+        },
+        {
+          "joinTime": 1793291780308,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -52138,19 +53555,26 @@
           "formatted": "08:34 pm",
           "awayMs": 208586,
           "awayFormatted": "00:03:28"
+        },
+        {
+          "event": "rejoined",
+          "time": 1793291780308,
+          "formatted": "10:06 pm",
+          "awayMs": 23043,
+          "awayFormatted": "00:00:23"
         }
       ],
-      "totalInMeetMs": 262220236,
-      "totalPresentMs": 12290819,
-      "cameraOnMs": 6586995,
-      "cameraOffMs": 5703824,
-      "validStudyMs": 6586995,
-      "totalDuration": 12290819,
-      "duration": 6586995,
-      "timeInCall": 262220236,
-      "durationSeconds": 6586,
-      "durationMinutes": 109,
-      "studyDuration": 6586995,
+      "totalInMeetMs": 270378352,
+      "totalPresentMs": 13558822,
+      "cameraOnMs": 7850784,
+      "cameraOffMs": 5708038,
+      "validStudyMs": 7850784,
+      "totalDuration": 13558822,
+      "duration": 7850784,
+      "timeInCall": 270378352,
+      "durationSeconds": 7850,
+      "durationMinutes": 130,
+      "studyDuration": 7850784,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -52224,6 +53648,22 @@
           "durationMs": 1819,
           "fromTime": "07:37 pm",
           "toTime": "07:37 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290639294,
+          "end": 1793290641265,
+          "durationMs": 1971,
+          "fromTime": "09:47 pm",
+          "toTime": "09:47 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793291780308,
+          "end": 1793291782262,
+          "durationMs": 1954,
+          "fromTime": "10:06 pm",
+          "toTime": "10:06 pm",
           "durationFormatted": "00:00:01"
         }
       ],
@@ -52355,6 +53795,21 @@
         },
         {
           "start": 1793289288629,
+          "end": 1793290639294,
+          "state": "on"
+        },
+        {
+          "start": 1793290639294,
+          "end": 1793290641265,
+          "state": "off"
+        },
+        {
+          "start": 1793290641265,
+          "end": 1793291782262,
+          "state": "on"
+        },
+        {
+          "start": 1793291782262,
           "end": null,
           "state": "on"
         }
@@ -71466,14 +72921,14 @@
       "id": "p_souvik_debnath",
       "name": "Souvik Debnath",
       "isLocal": false,
-      "currentStatus": "present",
-      "cameraStatus": "on",
+      "currentStatus": "left",
+      "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793257114266,
       "joinTime": 1793257114266,
-      "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "leaveTime": 1793271367769,
+      "lastSeen": 1793291876266,
       "rejoinCount": 1,
       "rejoinedAt": 1793278796270,
       "presenceIntervals": [
@@ -71488,6 +72943,13 @@
           "joinTime": 1793278796270,
           "leaveTime": null,
           "durationMs": 0
+        },
+        {
+          "joinTime": 1793264071265,
+          "leaveTime": 1793271367769,
+          "durationMs": 7296504,
+          "durationFormatted": "02:01:36",
+          "leaveFormatted": "04:26 pm"
         }
       ],
       "joinLeaveHistory": [
@@ -71502,20 +72964,25 @@
           "formatted": "06:29 pm",
           "awayMs": 7253493,
           "awayFormatted": "02:00:53"
+        },
+        {
+          "event": "joined",
+          "time": 1793264071265,
+          "formatted": "02:24 pm"
         }
       ],
-      "totalInMeetMs": 26221217,
-      "totalPresentMs": 21710591,
-      "cameraOnMs": 11366059,
+      "totalInMeetMs": 34805011,
+      "totalPresentMs": 23000590,
+      "cameraOnMs": 12656058,
       "cameraOffMs": 10344532,
-      "validStudyMs": 11366059,
-      "totalDuration": 21710591,
-      "duration": 11366059,
-      "timeInCall": 26221217,
-      "durationSeconds": 11366,
-      "durationMinutes": 189,
-      "studyDuration": 11366059,
-      "consecutiveCamOffMs": 0,
+      "validStudyMs": 12656058,
+      "totalDuration": 23000590,
+      "duration": 12656058,
+      "timeInCall": 34805011,
+      "durationSeconds": 12656,
+      "durationMinutes": 210,
+      "studyDuration": 12656058,
+      "consecutiveCamOffMs": 5878100,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
         {
@@ -73697,2938 +75164,13 @@
       ],
       "cameraIntervals": [
         {
-          "start": 1793257114620,
-          "end": 1793257117377,
-          "state": "off"
-        },
-        {
-          "start": 1793257117377,
-          "end": 1793257178264,
-          "state": "on"
-        },
-        {
-          "start": 1793257178264,
-          "end": 1793257184264,
-          "state": "off"
-        },
-        {
-          "start": 1793257184264,
-          "end": 1793257199264,
-          "state": "on"
-        },
-        {
-          "start": 1793257199264,
-          "end": 1793257207265,
-          "state": "off"
-        },
-        {
-          "start": 1793257207265,
-          "end": 1793257329260,
-          "state": "on"
-        },
-        {
-          "start": 1793257329260,
-          "end": 1793257331265,
-          "state": "off"
-        },
-        {
-          "start": 1793257331265,
-          "end": 1793257335261,
-          "state": "on"
-        },
-        {
-          "start": 1793257335261,
-          "end": 1793257339265,
-          "state": "off"
-        },
-        {
-          "start": 1793257339265,
-          "end": 1793257375264,
-          "state": "on"
-        },
-        {
-          "start": 1793257375264,
-          "end": 1793257387267,
-          "state": "off"
-        },
-        {
-          "start": 1793257387267,
-          "end": 1793257899260,
-          "state": "on"
-        },
-        {
-          "start": 1793257899260,
-          "end": 1793257905261,
-          "state": "off"
-        },
-        {
-          "start": 1793257905261,
-          "end": 1793258423316,
-          "state": "on"
-        },
-        {
-          "start": 1793258423316,
-          "end": 1793258469261,
-          "state": "off"
-        },
-        {
-          "start": 1793258469261,
-          "end": 1793258473268,
-          "state": "on"
-        },
-        {
-          "start": 1793258473268,
-          "end": 1793258477264,
-          "state": "off"
-        },
-        {
-          "start": 1793258477264,
-          "end": 1793258481261,
-          "state": "on"
-        },
-        {
-          "start": 1793258481261,
-          "end": 1793258597264,
-          "state": "off"
-        },
-        {
-          "start": 1793258597264,
-          "end": 1793258603266,
-          "state": "on"
-        },
-        {
-          "start": 1793258603266,
-          "end": 1793258653266,
-          "state": "off"
-        },
-        {
-          "start": 1793258653266,
-          "end": 1793258665266,
-          "state": "on"
-        },
-        {
-          "start": 1793258665266,
-          "end": 1793258673261,
-          "state": "off"
-        },
-        {
-          "start": 1793258673261,
-          "end": 1793258677266,
-          "state": "on"
-        },
-        {
-          "start": 1793258677266,
-          "end": 1793258903265,
-          "state": "off"
-        },
-        {
-          "start": 1793258903265,
-          "end": 1793258907262,
-          "state": "on"
-        },
-        {
-          "start": 1793258907262,
-          "end": 1793258909266,
-          "state": "off"
-        },
-        {
-          "start": 1793258909266,
-          "end": 1793259155264,
-          "state": "on"
-        },
-        {
-          "start": 1793259155264,
-          "end": 1793259159363,
-          "state": "off"
-        },
-        {
-          "start": 1793259159363,
-          "end": 1793260095261,
-          "state": "on"
-        },
-        {
-          "start": 1793260095261,
-          "end": 1793260101260,
-          "state": "off"
-        },
-        {
-          "start": 1793260101260,
-          "end": 1793260127264,
-          "state": "on"
-        },
-        {
-          "start": 1793260127264,
-          "end": 1793260129266,
-          "state": "off"
-        },
-        {
-          "start": 1793260129266,
-          "end": 1793260139270,
-          "state": "on"
-        },
-        {
-          "start": 1793260139270,
-          "end": 1793260143261,
-          "state": "off"
-        },
-        {
-          "start": 1793260143261,
-          "end": 1793260147266,
-          "state": "on"
-        },
-        {
-          "start": 1793260147266,
-          "end": 1793260155261,
-          "state": "off"
-        },
-        {
-          "start": 1793260155261,
-          "end": 1793260159266,
-          "state": "on"
-        },
-        {
-          "start": 1793260159266,
-          "end": 1793260165266,
-          "state": "off"
-        },
-        {
-          "start": 1793260165266,
-          "end": 1793260197260,
-          "state": "on"
-        },
-        {
-          "start": 1793260197260,
-          "end": 1793260207265,
-          "state": "off"
-        },
-        {
-          "start": 1793260207265,
-          "end": 1793260215261,
-          "state": "on"
-        },
-        {
-          "start": 1793260215261,
-          "end": 1793260247265,
-          "state": "off"
-        },
-        {
-          "start": 1793260247265,
-          "end": 1793260259265,
-          "state": "on"
-        },
-        {
-          "start": 1793260259265,
-          "end": 1793260269261,
-          "state": "off"
-        },
-        {
-          "start": 1793260269261,
-          "end": 1793260295271,
-          "state": "on"
-        },
-        {
-          "start": 1793260295271,
-          "end": 1793260297269,
-          "state": "off"
-        },
-        {
-          "start": 1793260297269,
-          "end": 1793260311260,
-          "state": "on"
-        },
-        {
-          "start": 1793260311260,
-          "end": 1793260321265,
-          "state": "off"
-        },
-        {
-          "start": 1793260321265,
-          "end": 1793260345269,
-          "state": "on"
-        },
-        {
-          "start": 1793260345269,
-          "end": 1793260349265,
-          "state": "off"
-        },
-        {
-          "start": 1793260349265,
-          "end": 1793260363266,
-          "state": "on"
-        },
-        {
-          "start": 1793260363266,
-          "end": 1793260367264,
-          "state": "off"
-        },
-        {
-          "start": 1793260367264,
-          "end": 1793260385264,
-          "state": "on"
-        },
-        {
-          "start": 1793260385264,
-          "end": 1793260387265,
-          "state": "off"
-        },
-        {
-          "start": 1793260387265,
-          "end": 1793260401261,
-          "state": "on"
-        },
-        {
-          "start": 1793260401261,
-          "end": 1793260409265,
-          "state": "off"
-        },
-        {
-          "start": 1793260409265,
-          "end": 1793260423266,
-          "state": "on"
-        },
-        {
-          "start": 1793260423266,
-          "end": 1793260427265,
-          "state": "off"
-        },
-        {
-          "start": 1793260427265,
-          "end": 1793260431260,
-          "state": "on"
-        },
-        {
-          "start": 1793260431260,
-          "end": 1793260435265,
-          "state": "off"
-        },
-        {
-          "start": 1793260435265,
-          "end": 1793260447268,
-          "state": "on"
-        },
-        {
-          "start": 1793260447268,
-          "end": 1793260451266,
-          "state": "off"
-        },
-        {
-          "start": 1793260451266,
-          "end": 1793260469264,
-          "state": "on"
-        },
-        {
-          "start": 1793260469264,
-          "end": 1793260471266,
-          "state": "off"
-        },
-        {
-          "start": 1793260471266,
-          "end": 1793260475264,
-          "state": "on"
-        },
-        {
-          "start": 1793260475264,
-          "end": 1793260485260,
-          "state": "off"
-        },
-        {
-          "start": 1793260485260,
-          "end": 1793260499264,
-          "state": "on"
-        },
-        {
-          "start": 1793260499264,
-          "end": 1793260501265,
-          "state": "off"
-        },
-        {
-          "start": 1793260501265,
-          "end": 1793260509260,
-          "state": "on"
-        },
-        {
-          "start": 1793260509260,
-          "end": 1793260511265,
-          "state": "off"
-        },
-        {
-          "start": 1793260511265,
-          "end": 1793260779260,
-          "state": "on"
-        },
-        {
-          "start": 1793260779260,
-          "end": 1793260781265,
-          "state": "off"
-        },
-        {
-          "start": 1793260781265,
-          "end": 1793260789265,
-          "state": "on"
-        },
-        {
-          "start": 1793260789265,
-          "end": 1793260795266,
-          "state": "off"
-        },
-        {
-          "start": 1793260795266,
-          "end": 1793260835264,
-          "state": "on"
-        },
-        {
-          "start": 1793260835264,
-          "end": 1793260839261,
-          "state": "off"
-        },
-        {
-          "start": 1793260839261,
-          "end": 1793260847265,
-          "state": "on"
-        },
-        {
-          "start": 1793260847265,
-          "end": 1793260849265,
-          "state": "off"
-        },
-        {
-          "start": 1793260849265,
-          "end": 1793260857261,
-          "state": "on"
-        },
-        {
-          "start": 1793260857261,
-          "end": 1793260859265,
-          "state": "off"
-        },
-        {
-          "start": 1793260859265,
-          "end": 1793260999780,
-          "state": "on"
-        },
-        {
-          "start": 1793260999780,
-          "end": 1793261001269,
-          "state": "off"
-        },
-        {
-          "start": 1793261001269,
-          "end": 1793261232261,
-          "state": "on"
-        },
-        {
-          "start": 1793261232261,
-          "end": 1793261234264,
-          "state": "off"
-        },
-        {
-          "start": 1793261234264,
-          "end": 1793261300264,
-          "state": "on"
-        },
-        {
-          "start": 1793261300264,
-          "end": 1793261366264,
-          "state": "off"
-        },
-        {
-          "start": 1793261366264,
-          "end": 1793261370261,
-          "state": "on"
-        },
-        {
-          "start": 1793261370261,
-          "end": 1793261372264,
-          "state": "off"
-        },
-        {
-          "start": 1793261372264,
-          "end": 1793261378265,
-          "state": "on"
-        },
-        {
-          "start": 1793261378265,
-          "end": 1793261388260,
-          "state": "off"
-        },
-        {
-          "start": 1793261388260,
-          "end": 1793261392265,
-          "state": "on"
-        },
-        {
-          "start": 1793261392265,
-          "end": 1793261396264,
-          "state": "off"
-        },
-        {
-          "start": 1793261396264,
-          "end": 1793261402264,
-          "state": "on"
-        },
-        {
-          "start": 1793261402264,
-          "end": 1793261404265,
-          "state": "off"
-        },
-        {
-          "start": 1793261404265,
-          "end": 1793261416265,
-          "state": "on"
-        },
-        {
-          "start": 1793261416265,
-          "end": 1793261420265,
-          "state": "off"
-        },
-        {
-          "start": 1793261420265,
-          "end": 1793261442261,
-          "state": "on"
-        },
-        {
-          "start": 1793261442261,
-          "end": 1793261444264,
-          "state": "off"
-        },
-        {
-          "start": 1793261444264,
-          "end": 1793261448262,
-          "state": "on"
-        },
-        {
-          "start": 1793261448262,
-          "end": 1793261454260,
-          "state": "off"
-        },
-        {
-          "start": 1793261454260,
-          "end": 1793261464265,
-          "state": "on"
-        },
-        {
-          "start": 1793261464265,
-          "end": 1793261488265,
-          "state": "off"
-        },
-        {
-          "start": 1793261488265,
-          "end": 1793261494265,
-          "state": "on"
-        },
-        {
-          "start": 1793261494265,
-          "end": 1793261504265,
-          "state": "off"
-        },
-        {
-          "start": 1793261504265,
-          "end": 1793261508260,
-          "state": "on"
-        },
-        {
-          "start": 1793261508260,
-          "end": 1793261580261,
-          "state": "off"
-        },
-        {
-          "start": 1793261580261,
-          "end": 1793261584266,
-          "state": "on"
-        },
-        {
-          "start": 1793261584266,
-          "end": 1793261624266,
-          "state": "off"
-        },
-        {
-          "start": 1793261624266,
-          "end": 1793261628260,
-          "state": "on"
-        },
-        {
-          "start": 1793261628260,
-          "end": 1793261646261,
-          "state": "off"
-        },
-        {
-          "start": 1793261646261,
-          "end": 1793261650266,
-          "state": "on"
-        },
-        {
-          "start": 1793261650266,
-          "end": 1793261678264,
-          "state": "off"
-        },
-        {
-          "start": 1793261678264,
-          "end": 1793261682260,
-          "state": "on"
-        },
-        {
-          "start": 1793261682260,
-          "end": 1793261724260,
-          "state": "off"
-        },
-        {
-          "start": 1793261724260,
-          "end": 1793261728267,
-          "state": "on"
-        },
-        {
-          "start": 1793261728267,
-          "end": 1793261776265,
-          "state": "off"
-        },
-        {
-          "start": 1793261776265,
-          "end": 1793261782265,
-          "state": "on"
-        },
-        {
-          "start": 1793261782265,
-          "end": 1793261804265,
-          "state": "off"
-        },
-        {
-          "start": 1793261804265,
-          "end": 1793261808261,
-          "state": "on"
-        },
-        {
-          "start": 1793261808261,
-          "end": 1793261854265,
-          "state": "off"
-        },
-        {
-          "start": 1793261854265,
-          "end": 1793261858264,
-          "state": "on"
-        },
-        {
-          "start": 1793261858264,
-          "end": 1793261864264,
-          "state": "off"
-        },
-        {
-          "start": 1793261864264,
-          "end": 1793261868260,
-          "state": "on"
-        },
-        {
-          "start": 1793261868260,
-          "end": 1793261878265,
-          "state": "off"
-        },
-        {
-          "start": 1793261878265,
-          "end": 1793261882264,
-          "state": "on"
-        },
-        {
-          "start": 1793261882264,
-          "end": 1793262056265,
-          "state": "off"
-        },
-        {
-          "start": 1793262056265,
-          "end": 1793262060260,
-          "state": "on"
-        },
-        {
-          "start": 1793262060260,
-          "end": 1793262132260,
-          "state": "off"
-        },
-        {
-          "start": 1793262132260,
-          "end": 1793262150266,
-          "state": "on"
-        },
-        {
-          "start": 1793262150266,
-          "end": 1793262162261,
-          "state": "off"
-        },
-        {
-          "start": 1793262162261,
-          "end": 1793262168261,
-          "state": "on"
-        },
-        {
-          "start": 1793262168261,
-          "end": 1793262172265,
-          "state": "off"
-        },
-        {
-          "start": 1793262172265,
-          "end": 1793262176266,
-          "state": "on"
-        },
-        {
-          "start": 1793262176266,
-          "end": 1793262440265,
-          "state": "off"
-        },
-        {
-          "start": 1793262440265,
-          "end": 1793262442265,
-          "state": "on"
-        },
-        {
-          "start": 1793262442265,
-          "end": 1793262592265,
-          "state": "off"
-        },
-        {
-          "start": 1793262592265,
-          "end": 1793262594260,
-          "state": "on"
-        },
-        {
-          "start": 1793262594260,
-          "end": 1793262596267,
-          "state": "off"
-        },
-        {
-          "start": 1793262596267,
-          "end": 1793262598265,
-          "state": "on"
-        },
-        {
-          "start": 1793262598265,
-          "end": 1793262604267,
-          "state": "off"
-        },
-        {
-          "start": 1793262604267,
-          "end": 1793262606261,
-          "state": "on"
-        },
-        {
-          "start": 1793262606261,
-          "end": 1793262636260,
-          "state": "off"
-        },
-        {
-          "start": 1793262636260,
-          "end": 1793262638265,
-          "state": "on"
-        },
-        {
-          "start": 1793262638265,
-          "end": 1793262640265,
-          "state": "off"
-        },
-        {
-          "start": 1793262640265,
-          "end": 1793262642261,
-          "state": "on"
-        },
-        {
-          "start": 1793262642261,
-          "end": 1793262660261,
-          "state": "off"
-        },
-        {
-          "start": 1793262660261,
-          "end": 1793262662264,
-          "state": "on"
-        },
-        {
-          "start": 1793262662264,
-          "end": 1793262682266,
-          "state": "off"
-        },
-        {
-          "start": 1793262682266,
-          "end": 1793262684260,
-          "state": "on"
-        },
-        {
-          "start": 1793262684260,
-          "end": 1793262692264,
-          "state": "off"
-        },
-        {
-          "start": 1793262692264,
-          "end": 1793262696266,
-          "state": "on"
-        },
-        {
-          "start": 1793262696266,
-          "end": 1793262700267,
-          "state": "off"
-        },
-        {
-          "start": 1793262700267,
-          "end": 1793262702260,
-          "state": "on"
-        },
-        {
-          "start": 1793262702260,
-          "end": 1793262712265,
-          "state": "off"
-        },
-        {
-          "start": 1793262712265,
-          "end": 1793262714261,
-          "state": "on"
-        },
-        {
-          "start": 1793262714261,
-          "end": 1793262716265,
-          "state": "off"
-        },
-        {
-          "start": 1793262716265,
-          "end": 1793262718267,
-          "state": "on"
-        },
-        {
-          "start": 1793262718267,
-          "end": 1793262720261,
-          "state": "off"
-        },
-        {
-          "start": 1793262720261,
-          "end": 1793262722267,
-          "state": "on"
-        },
-        {
-          "start": 1793262722267,
-          "end": 1793262724265,
-          "state": "off"
-        },
-        {
-          "start": 1793262724265,
-          "end": 1793262726261,
-          "state": "on"
-        },
-        {
-          "start": 1793262726261,
-          "end": 1793262734264,
-          "state": "off"
-        },
-        {
-          "start": 1793262734264,
-          "end": 1793262736265,
-          "state": "on"
-        },
-        {
-          "start": 1793262736265,
-          "end": 1793262740264,
-          "state": "off"
-        },
-        {
-          "start": 1793262740264,
-          "end": 1793262742265,
-          "state": "on"
-        },
-        {
-          "start": 1793262742265,
-          "end": 1793262752265,
-          "state": "off"
-        },
-        {
-          "start": 1793262752265,
-          "end": 1793262756261,
-          "state": "on"
-        },
-        {
-          "start": 1793262756261,
-          "end": 1793262762261,
-          "state": "off"
-        },
-        {
-          "start": 1793262762261,
-          "end": 1793262764264,
-          "state": "on"
-        },
-        {
-          "start": 1793262764264,
-          "end": 1793262766265,
-          "state": "off"
-        },
-        {
-          "start": 1793262766265,
-          "end": 1793262768262,
-          "state": "on"
-        },
-        {
-          "start": 1793262768262,
-          "end": 1793262774260,
-          "state": "off"
-        },
-        {
-          "start": 1793262774260,
-          "end": 1793262780260,
-          "state": "on"
-        },
-        {
-          "start": 1793262780260,
-          "end": 1793262790265,
-          "state": "off"
-        },
-        {
-          "start": 1793262790265,
-          "end": 1793262792261,
-          "state": "on"
-        },
-        {
-          "start": 1793262792261,
-          "end": 1793262864260,
-          "state": "off"
-        },
-        {
-          "start": 1793262864260,
-          "end": 1793262866265,
-          "state": "on"
-        },
-        {
-          "start": 1793262866265,
-          "end": 1793262886265,
-          "state": "off"
-        },
-        {
-          "start": 1793262886265,
-          "end": 1793263038261,
-          "state": "on"
-        },
-        {
-          "start": 1793263038261,
-          "end": 1793263040264,
-          "state": "off"
-        },
-        {
-          "start": 1793263040264,
-          "end": 1793263202265,
-          "state": "on"
-        },
-        {
-          "start": 1793263202265,
-          "end": 1793263204265,
-          "state": "off"
-        },
-        {
-          "start": 1793263204265,
-          "end": 1793263212263,
-          "state": "on"
-        },
-        {
-          "start": 1793263212263,
-          "end": 1793263218261,
-          "state": "off"
-        },
-        {
-          "start": 1793263218261,
-          "end": 1793263306265,
-          "state": "on"
-        },
-        {
-          "start": 1793263306265,
-          "end": 1793263316264,
-          "state": "off"
-        },
-        {
-          "start": 1793263316264,
-          "end": 1793263326261,
-          "state": "on"
-        },
-        {
-          "start": 1793263326261,
-          "end": 1793263340264,
-          "state": "off"
-        },
-        {
-          "start": 1793263340264,
-          "end": 1793263421260,
-          "state": "on"
-        },
-        {
-          "start": 1793263421260,
-          "end": 1793263471268,
-          "state": "off"
-        },
-        {
-          "start": 1793263471268,
-          "end": 1793263491378,
-          "state": "on"
-        },
-        {
-          "start": 1793263491378,
-          "end": 1793263493264,
-          "state": "off"
-        },
-        {
-          "start": 1793263493264,
-          "end": 1793263723265,
-          "state": "on"
-        },
-        {
-          "start": 1793263723265,
-          "end": 1793263725261,
-          "state": "off"
-        },
-        {
-          "start": 1793263725261,
-          "end": 1793263735265,
-          "state": "on"
-        },
-        {
-          "start": 1793263735265,
-          "end": 1793263741265,
-          "state": "off"
-        },
-        {
-          "start": 1793263741265,
-          "end": 1793263797260,
-          "state": "on"
-        },
-        {
-          "start": 1793263797260,
-          "end": 1793263803261,
-          "state": "off"
-        },
-        {
-          "start": 1793263803261,
-          "end": 1793264057265,
-          "state": "on"
-        },
-        {
-          "start": 1793264057265,
-          "end": 1793264059265,
-          "state": "off"
-        },
-        {
-          "start": 1793264059265,
-          "end": 1793264071265,
-          "state": "on"
-        },
-        {
           "start": 1793264071265,
-          "end": 1793278797265,
-          "state": "off"
-        },
-        {
-          "start": 1793278797265,
-          "end": 1793278819375,
-          "state": "on"
-        },
-        {
-          "start": 1793278819375,
-          "end": 1793278821266,
-          "state": "off"
-        },
-        {
-          "start": 1793278821266,
-          "end": 1793278863266,
-          "state": "on"
-        },
-        {
-          "start": 1793278863266,
-          "end": 1793278865266,
-          "state": "off"
-        },
-        {
-          "start": 1793278865266,
-          "end": 1793278883410,
-          "state": "on"
-        },
-        {
-          "start": 1793278883410,
-          "end": 1793278885261,
-          "state": "off"
-        },
-        {
-          "start": 1793278885261,
-          "end": 1793278889266,
-          "state": "on"
-        },
-        {
-          "start": 1793278889266,
-          "end": 1793278893265,
-          "state": "off"
-        },
-        {
-          "start": 1793278893265,
-          "end": 1793278903262,
-          "state": "on"
-        },
-        {
-          "start": 1793278903262,
-          "end": 1793278905265,
-          "state": "off"
-        },
-        {
-          "start": 1793278905265,
-          "end": 1793278951261,
-          "state": "on"
-        },
-        {
-          "start": 1793278951261,
-          "end": 1793278955303,
-          "state": "off"
-        },
-        {
-          "start": 1793278955303,
-          "end": 1793279068261,
-          "state": "on"
-        },
-        {
-          "start": 1793279068261,
-          "end": 1793279070265,
-          "state": "off"
-        },
-        {
-          "start": 1793279070265,
-          "end": 1793279120331,
-          "state": "on"
-        },
-        {
-          "start": 1793279120331,
-          "end": 1793279122260,
-          "state": "off"
-        },
-        {
-          "start": 1793279122260,
-          "end": 1793279138265,
-          "state": "on"
-        },
-        {
-          "start": 1793279138265,
-          "end": 1793279148266,
-          "state": "off"
-        },
-        {
-          "start": 1793279148266,
-          "end": 1793279174267,
-          "state": "on"
-        },
-        {
-          "start": 1793279174267,
-          "end": 1793279178265,
-          "state": "off"
-        },
-        {
-          "start": 1793279178265,
-          "end": 1793279192256,
-          "state": "on"
-        },
-        {
-          "start": 1793279192256,
-          "end": 1793279200260,
-          "state": "off"
-        },
-        {
-          "start": 1793279200260,
-          "end": 1793279214265,
-          "state": "on"
-        },
-        {
-          "start": 1793279214265,
-          "end": 1793279222266,
-          "state": "off"
-        },
-        {
-          "start": 1793279222266,
-          "end": 1793279280771,
-          "state": "on"
-        },
-        {
-          "start": 1793279280771,
-          "end": 1793279282774,
-          "state": "off"
-        },
-        {
-          "start": 1793279282774,
-          "end": 1793279296771,
-          "state": "on"
-        },
-        {
-          "start": 1793279296771,
-          "end": 1793279302776,
-          "state": "off"
-        },
-        {
-          "start": 1793279302776,
-          "end": 1793279310775,
-          "state": "on"
-        },
-        {
-          "start": 1793279310775,
-          "end": 1793279322770,
-          "state": "off"
-        },
-        {
-          "start": 1793279322770,
-          "end": 1793279382790,
-          "state": "on"
-        },
-        {
-          "start": 1793279382790,
-          "end": 1793279390770,
-          "state": "off"
-        },
-        {
-          "start": 1793279390770,
-          "end": 1793279428794,
-          "state": "on"
-        },
-        {
-          "start": 1793279428794,
-          "end": 1793279430781,
-          "state": "off"
-        },
-        {
-          "start": 1793279430781,
-          "end": 1793279452771,
-          "state": "on"
-        },
-        {
-          "start": 1793279452771,
-          "end": 1793279456775,
-          "state": "off"
-        },
-        {
-          "start": 1793279456775,
-          "end": 1793279470774,
-          "state": "on"
-        },
-        {
-          "start": 1793279470774,
-          "end": 1793279472786,
-          "state": "off"
-        },
-        {
-          "start": 1793279472786,
-          "end": 1793279520777,
-          "state": "on"
-        },
-        {
-          "start": 1793279520777,
-          "end": 1793279522774,
-          "state": "off"
-        },
-        {
-          "start": 1793279522774,
-          "end": 1793279624768,
-          "state": "on"
-        },
-        {
-          "start": 1793279624768,
-          "end": 1793279626770,
-          "state": "off"
-        },
-        {
-          "start": 1793279626770,
-          "end": 1793279654768,
-          "state": "on"
-        },
-        {
-          "start": 1793279654768,
-          "end": 1793279656770,
-          "state": "off"
-        },
-        {
-          "start": 1793279656770,
-          "end": 1793279692771,
-          "state": "on"
-        },
-        {
-          "start": 1793279692771,
-          "end": 1793279694289,
-          "state": "off"
-        },
-        {
-          "start": 1793279694289,
-          "end": 1793279698768,
-          "state": "on"
-        },
-        {
-          "start": 1793279698768,
-          "end": 1793279700769,
-          "state": "off"
-        },
-        {
-          "start": 1793279700769,
-          "end": 1793279790770,
-          "state": "on"
-        },
-        {
-          "start": 1793279790770,
-          "end": 1793279792771,
-          "state": "off"
-        },
-        {
-          "start": 1793279792771,
-          "end": 1793279810773,
-          "state": "on"
-        },
-        {
-          "start": 1793279810773,
-          "end": 1793279812772,
-          "state": "off"
-        },
-        {
-          "start": 1793279812772,
-          "end": 1793280012265,
-          "state": "on"
-        },
-        {
-          "start": 1793280012265,
-          "end": 1793280018265,
-          "state": "off"
-        },
-        {
-          "start": 1793280018265,
-          "end": 1793280132265,
-          "state": "on"
-        },
-        {
-          "start": 1793280132265,
-          "end": 1793280134266,
-          "state": "off"
-        },
-        {
-          "start": 1793280134266,
-          "end": 1793280140265,
-          "state": "on"
-        },
-        {
-          "start": 1793280140265,
-          "end": 1793280144297,
-          "state": "off"
-        },
-        {
-          "start": 1793280144297,
-          "end": 1793280152267,
-          "state": "on"
-        },
-        {
-          "start": 1793280152267,
-          "end": 1793280162265,
-          "state": "off"
-        },
-        {
-          "start": 1793280162265,
-          "end": 1793280174265,
-          "state": "on"
-        },
-        {
-          "start": 1793280174265,
-          "end": 1793280184260,
-          "state": "off"
-        },
-        {
-          "start": 1793280184260,
-          "end": 1793280196261,
-          "state": "on"
-        },
-        {
-          "start": 1793280196261,
-          "end": 1793280202261,
-          "state": "off"
-        },
-        {
-          "start": 1793280202261,
-          "end": 1793280216265,
-          "state": "on"
-        },
-        {
-          "start": 1793280216265,
-          "end": 1793280222264,
-          "state": "off"
-        },
-        {
-          "start": 1793280222264,
-          "end": 1793280276265,
-          "state": "on"
-        },
-        {
-          "start": 1793280276265,
-          "end": 1793280280260,
-          "state": "off"
-        },
-        {
-          "start": 1793280280260,
-          "end": 1793280290266,
-          "state": "on"
-        },
-        {
-          "start": 1793280290266,
-          "end": 1793280298261,
-          "state": "off"
-        },
-        {
-          "start": 1793280298261,
-          "end": 1793280308485,
-          "state": "on"
-        },
-        {
-          "start": 1793280308485,
-          "end": 1793280312266,
-          "state": "off"
-        },
-        {
-          "start": 1793280312266,
-          "end": 1793280322262,
-          "state": "on"
-        },
-        {
-          "start": 1793280322262,
-          "end": 1793280334261,
-          "state": "off"
-        },
-        {
-          "start": 1793280334261,
-          "end": 1793280458267,
-          "state": "on"
-        },
-        {
-          "start": 1793280458267,
-          "end": 1793280460261,
-          "state": "off"
-        },
-        {
-          "start": 1793280460261,
-          "end": 1793280490261,
-          "state": "on"
-        },
-        {
-          "start": 1793280490261,
-          "end": 1793280492265,
-          "state": "off"
-        },
-        {
-          "start": 1793280492265,
-          "end": 1793280496262,
-          "state": "on"
-        },
-        {
-          "start": 1793280496262,
-          "end": 1793280498264,
-          "state": "off"
-        },
-        {
-          "start": 1793280498264,
-          "end": 1793280535262,
-          "state": "on"
-        },
-        {
-          "start": 1793280535262,
-          "end": 1793280539267,
-          "state": "off"
-        },
-        {
-          "start": 1793280539267,
-          "end": 1793280563266,
-          "state": "on"
-        },
-        {
-          "start": 1793280563266,
-          "end": 1793280565390,
-          "state": "off"
-        },
-        {
-          "start": 1793280565390,
-          "end": 1793280571267,
-          "state": "on"
-        },
-        {
-          "start": 1793280571267,
-          "end": 1793280575271,
-          "state": "off"
-        },
-        {
-          "start": 1793280575271,
-          "end": 1793280717270,
-          "state": "on"
-        },
-        {
-          "start": 1793280717270,
-          "end": 1793280719263,
-          "state": "off"
-        },
-        {
-          "start": 1793280719263,
-          "end": 1793280737270,
-          "state": "on"
-        },
-        {
-          "start": 1793280737270,
-          "end": 1793280739261,
-          "state": "off"
-        },
-        {
-          "start": 1793280739261,
-          "end": 1793280793264,
-          "state": "on"
-        },
-        {
-          "start": 1793280793264,
-          "end": 1793280795265,
-          "state": "off"
-        },
-        {
-          "start": 1793280795265,
-          "end": 1793280838263,
-          "state": "on"
-        },
-        {
-          "start": 1793280838263,
-          "end": 1793280840253,
-          "state": "off"
-        },
-        {
-          "start": 1793280840253,
-          "end": 1793280862262,
-          "state": "on"
-        },
-        {
-          "start": 1793280862262,
-          "end": 1793280864265,
-          "state": "off"
-        },
-        {
-          "start": 1793280864265,
-          "end": 1793280906268,
-          "state": "on"
-        },
-        {
-          "start": 1793280906268,
-          "end": 1793280926267,
-          "state": "off"
-        },
-        {
-          "start": 1793280926267,
-          "end": 1793280950347,
-          "state": "on"
-        },
-        {
-          "start": 1793280950347,
-          "end": 1793280954265,
-          "state": "off"
-        },
-        {
-          "start": 1793280954265,
-          "end": 1793280974260,
-          "state": "on"
-        },
-        {
-          "start": 1793280974260,
-          "end": 1793280976260,
-          "state": "off"
-        },
-        {
-          "start": 1793280976260,
-          "end": 1793281018252,
-          "state": "on"
-        },
-        {
-          "start": 1793281018252,
-          "end": 1793281020265,
-          "state": "off"
-        },
-        {
-          "start": 1793281020265,
-          "end": 1793281044461,
-          "state": "on"
-        },
-        {
-          "start": 1793281044461,
-          "end": 1793281053265,
-          "state": "off"
-        },
-        {
-          "start": 1793281053265,
-          "end": 1793281065266,
-          "state": "on"
-        },
-        {
-          "start": 1793281065266,
-          "end": 1793281067258,
-          "state": "off"
-        },
-        {
-          "start": 1793281067258,
-          "end": 1793281107264,
-          "state": "on"
-        },
-        {
-          "start": 1793281107264,
-          "end": 1793281111261,
-          "state": "off"
-        },
-        {
-          "start": 1793281111261,
-          "end": 1793281117261,
-          "state": "on"
-        },
-        {
-          "start": 1793281117261,
-          "end": 1793281119255,
-          "state": "off"
-        },
-        {
-          "start": 1793281119255,
-          "end": 1793281125284,
-          "state": "on"
-        },
-        {
-          "start": 1793281125284,
-          "end": 1793281131265,
-          "state": "off"
-        },
-        {
-          "start": 1793281131265,
-          "end": 1793281143303,
-          "state": "on"
-        },
-        {
-          "start": 1793281143303,
-          "end": 1793281149265,
-          "state": "off"
-        },
-        {
-          "start": 1793281149265,
-          "end": 1793281319267,
-          "state": "on"
-        },
-        {
-          "start": 1793281319267,
-          "end": 1793281323268,
-          "state": "off"
-        },
-        {
-          "start": 1793281323268,
-          "end": 1793281327262,
-          "state": "on"
-        },
-        {
-          "start": 1793281327262,
-          "end": 1793281335265,
-          "state": "off"
-        },
-        {
-          "start": 1793281335265,
-          "end": 1793281359267,
-          "state": "on"
-        },
-        {
-          "start": 1793281359267,
-          "end": 1793281377393,
-          "state": "off"
-        },
-        {
-          "start": 1793281377393,
-          "end": 1793281409270,
-          "state": "on"
-        },
-        {
-          "start": 1793281409270,
-          "end": 1793281415268,
-          "state": "off"
-        },
-        {
-          "start": 1793281415268,
-          "end": 1793281427275,
-          "state": "on"
-        },
-        {
-          "start": 1793281427275,
-          "end": 1793281429263,
-          "state": "off"
-        },
-        {
-          "start": 1793281429263,
-          "end": 1793281435261,
-          "state": "on"
-        },
-        {
-          "start": 1793281435261,
-          "end": 1793281461267,
-          "state": "off"
-        },
-        {
-          "start": 1793281461267,
-          "end": 1793281615261,
-          "state": "on"
-        },
-        {
-          "start": 1793281615261,
-          "end": 1793281617264,
-          "state": "off"
-        },
-        {
-          "start": 1793281617264,
-          "end": 1793281621261,
-          "state": "on"
-        },
-        {
-          "start": 1793281621261,
-          "end": 1793281625266,
-          "state": "off"
-        },
-        {
-          "start": 1793281625266,
-          "end": 1793281773265,
-          "state": "on"
-        },
-        {
-          "start": 1793281773265,
-          "end": 1793281776259,
-          "state": "off"
-        },
-        {
-          "start": 1793281776259,
-          "end": 1793281782265,
-          "state": "on"
-        },
-        {
-          "start": 1793281782265,
-          "end": 1793281792261,
-          "state": "off"
-        },
-        {
-          "start": 1793281792261,
-          "end": 1793281817267,
-          "state": "on"
-        },
-        {
-          "start": 1793281817267,
-          "end": 1793281819623,
-          "state": "off"
-        },
-        {
-          "start": 1793281819623,
-          "end": 1793281837333,
-          "state": "on"
-        },
-        {
-          "start": 1793281837333,
-          "end": 1793281841266,
-          "state": "off"
-        },
-        {
-          "start": 1793281841266,
-          "end": 1793281845267,
-          "state": "on"
-        },
-        {
-          "start": 1793281845267,
-          "end": 1793281847256,
-          "state": "off"
-        },
-        {
-          "start": 1793281847256,
-          "end": 1793281851265,
-          "state": "on"
-        },
-        {
-          "start": 1793281851265,
-          "end": 1793281861260,
-          "state": "off"
-        },
-        {
-          "start": 1793281861260,
-          "end": 1793281865265,
-          "state": "on"
-        },
-        {
-          "start": 1793281865265,
-          "end": 1793281867261,
-          "state": "off"
-        },
-        {
-          "start": 1793281867261,
-          "end": 1793281871266,
-          "state": "on"
-        },
-        {
-          "start": 1793281871266,
-          "end": 1793281881265,
-          "state": "off"
-        },
-        {
-          "start": 1793281881265,
-          "end": 1793281885372,
-          "state": "on"
-        },
-        {
-          "start": 1793281885372,
-          "end": 1793281887255,
-          "state": "off"
-        },
-        {
-          "start": 1793281887255,
-          "end": 1793281891261,
-          "state": "on"
-        },
-        {
-          "start": 1793281891261,
-          "end": 1793281903262,
-          "state": "off"
-        },
-        {
-          "start": 1793281903262,
-          "end": 1793281913266,
-          "state": "on"
-        },
-        {
-          "start": 1793281913266,
-          "end": 1793281923265,
-          "state": "off"
-        },
-        {
-          "start": 1793281923265,
-          "end": 1793281933261,
-          "state": "on"
-        },
-        {
-          "start": 1793281933261,
-          "end": 1793281943271,
-          "state": "off"
-        },
-        {
-          "start": 1793281943271,
-          "end": 1793281947266,
-          "state": "on"
-        },
-        {
-          "start": 1793281947266,
-          "end": 1793281949329,
-          "state": "off"
-        },
-        {
-          "start": 1793281949329,
-          "end": 1793281953367,
-          "state": "on"
-        },
-        {
-          "start": 1793281953367,
-          "end": 1793281963263,
-          "state": "off"
-        },
-        {
-          "start": 1793281963263,
-          "end": 1793281967266,
-          "state": "on"
-        },
-        {
-          "start": 1793281967266,
-          "end": 1793281969307,
-          "state": "off"
-        },
-        {
-          "start": 1793281969307,
-          "end": 1793281973257,
-          "state": "on"
-        },
-        {
-          "start": 1793281973257,
-          "end": 1793281983264,
-          "state": "off"
-        },
-        {
-          "start": 1793281983264,
-          "end": 1793281987261,
-          "state": "on"
-        },
-        {
-          "start": 1793281987261,
-          "end": 1793281989265,
-          "state": "off"
-        },
-        {
-          "start": 1793281989265,
-          "end": 1793281993261,
-          "state": "on"
-        },
-        {
-          "start": 1793281993261,
-          "end": 1793282005338,
-          "state": "off"
-        },
-        {
-          "start": 1793282005338,
-          "end": 1793282013265,
-          "state": "on"
-        },
-        {
-          "start": 1793282013265,
-          "end": 1793282025265,
-          "state": "off"
-        },
-        {
-          "start": 1793282025265,
-          "end": 1793282035263,
-          "state": "on"
-        },
-        {
-          "start": 1793282035263,
-          "end": 1793282045257,
-          "state": "off"
-        },
-        {
-          "start": 1793282045257,
-          "end": 1793282049260,
-          "state": "on"
-        },
-        {
-          "start": 1793282049260,
-          "end": 1793282051389,
-          "state": "off"
-        },
-        {
-          "start": 1793282051389,
-          "end": 1793282055256,
-          "state": "on"
-        },
-        {
-          "start": 1793282055256,
-          "end": 1793282065261,
-          "state": "off"
-        },
-        {
-          "start": 1793282065261,
-          "end": 1793282075420,
-          "state": "on"
-        },
-        {
-          "start": 1793282075420,
-          "end": 1793282085308,
-          "state": "off"
-        },
-        {
-          "start": 1793282085308,
-          "end": 1793282089302,
-          "state": "on"
-        },
-        {
-          "start": 1793282089302,
-          "end": 1793282091265,
-          "state": "off"
-        },
-        {
-          "start": 1793282091265,
-          "end": 1793282095170,
-          "state": "on"
-        },
-        {
-          "start": 1793282095170,
-          "end": 1793282105260,
-          "state": "off"
-        },
-        {
-          "start": 1793282105260,
-          "end": 1793282109265,
-          "state": "on"
-        },
-        {
-          "start": 1793282109265,
-          "end": 1793282111265,
-          "state": "off"
-        },
-        {
-          "start": 1793282111265,
-          "end": 1793282115265,
-          "state": "on"
-        },
-        {
-          "start": 1793282115265,
-          "end": 1793282127266,
-          "state": "off"
-        },
-        {
-          "start": 1793282127266,
-          "end": 1793282135335,
-          "state": "on"
-        },
-        {
-          "start": 1793282135335,
-          "end": 1793282147270,
-          "state": "off"
-        },
-        {
-          "start": 1793282147270,
-          "end": 1793282151265,
-          "state": "on"
-        },
-        {
-          "start": 1793282151265,
-          "end": 1793282153266,
-          "state": "off"
-        },
-        {
-          "start": 1793282153266,
-          "end": 1793282157265,
-          "state": "on"
-        },
-        {
-          "start": 1793282157265,
-          "end": 1793282167261,
-          "state": "off"
-        },
-        {
-          "start": 1793282167261,
-          "end": 1793282171267,
-          "state": "on"
-        },
-        {
-          "start": 1793282171267,
-          "end": 1793282193256,
-          "state": "off"
-        },
-        {
-          "start": 1793282193256,
-          "end": 1793282197254,
-          "state": "on"
-        },
-        {
-          "start": 1793282197254,
-          "end": 1793282207266,
-          "state": "off"
-        },
-        {
-          "start": 1793282207266,
-          "end": 1793282211265,
-          "state": "on"
-        },
-        {
-          "start": 1793282211265,
-          "end": 1793282213265,
-          "state": "off"
-        },
-        {
-          "start": 1793282213265,
-          "end": 1793282217265,
-          "state": "on"
-        },
-        {
-          "start": 1793282217265,
-          "end": 1793282229265,
-          "state": "off"
-        },
-        {
-          "start": 1793282229265,
-          "end": 1793282239293,
-          "state": "on"
-        },
-        {
-          "start": 1793282239293,
-          "end": 1793282249266,
-          "state": "off"
-        },
-        {
-          "start": 1793282249266,
-          "end": 1793282257261,
-          "state": "on"
-        },
-        {
-          "start": 1793282257261,
-          "end": 1793282309278,
-          "state": "off"
-        },
-        {
-          "start": 1793282309278,
-          "end": 1793282313265,
-          "state": "on"
-        },
-        {
-          "start": 1793282313265,
-          "end": 1793282315265,
-          "state": "off"
-        },
-        {
-          "start": 1793282315265,
-          "end": 1793282319265,
-          "state": "on"
-        },
-        {
-          "start": 1793282319265,
-          "end": 1793282331265,
-          "state": "off"
-        },
-        {
-          "start": 1793282331265,
-          "end": 1793282339272,
-          "state": "on"
-        },
-        {
-          "start": 1793282339272,
-          "end": 1793282351267,
-          "state": "off"
-        },
-        {
-          "start": 1793282351267,
-          "end": 1793282369265,
-          "state": "on"
-        },
-        {
-          "start": 1793282369265,
-          "end": 1793282375283,
-          "state": "off"
-        },
-        {
-          "start": 1793282375283,
-          "end": 1793282385257,
-          "state": "on"
-        },
-        {
-          "start": 1793282385257,
-          "end": 1793282387265,
-          "state": "off"
-        },
-        {
-          "start": 1793282387265,
-          "end": 1793284987261,
-          "state": "on"
-        },
-        {
-          "start": 1793284987261,
-          "end": 1793284989267,
-          "state": "off"
-        },
-        {
-          "start": 1793284989267,
-          "end": 1793285033268,
-          "state": "on"
-        },
-        {
-          "start": 1793285033268,
-          "end": 1793285047261,
-          "state": "off"
-        },
-        {
-          "start": 1793285047261,
-          "end": 1793285069266,
-          "state": "on"
-        },
-        {
-          "start": 1793285069266,
-          "end": 1793285079265,
-          "state": "off"
-        },
-        {
-          "start": 1793285079265,
-          "end": 1793285085267,
-          "state": "on"
-        },
-        {
-          "start": 1793285085267,
-          "end": 1793285149358,
-          "state": "off"
-        },
-        {
-          "start": 1793285149358,
-          "end": 1793285157266,
-          "state": "on"
-        },
-        {
-          "start": 1793285157266,
-          "end": 1793285213266,
-          "state": "off"
-        },
-        {
-          "start": 1793285213266,
-          "end": 1793285217364,
-          "state": "on"
-        },
-        {
-          "start": 1793285217364,
-          "end": 1793285223265,
-          "state": "off"
-        },
-        {
-          "start": 1793285223265,
-          "end": 1793285231390,
-          "state": "on"
-        },
-        {
-          "start": 1793285231390,
-          "end": 1793285296775,
-          "state": "off"
-        },
-        {
-          "start": 1793285296775,
-          "end": 1793285300776,
-          "state": "on"
-        },
-        {
-          "start": 1793285300776,
-          "end": 1793285302770,
-          "state": "off"
-        },
-        {
-          "start": 1793285302770,
-          "end": 1793285314771,
-          "state": "on"
-        },
-        {
-          "start": 1793285314771,
-          "end": 1793285316770,
-          "state": "off"
-        },
-        {
-          "start": 1793285316770,
-          "end": 1793285322775,
-          "state": "on"
-        },
-        {
-          "start": 1793285322775,
-          "end": 1793285350779,
-          "state": "off"
-        },
-        {
-          "start": 1793285350779,
-          "end": 1793285356770,
-          "state": "on"
-        },
-        {
-          "start": 1793285356770,
-          "end": 1793285402266,
-          "state": "off"
-        },
-        {
-          "start": 1793285402266,
-          "end": 1793285412265,
-          "state": "on"
-        },
-        {
-          "start": 1793285412265,
-          "end": 1793285470261,
-          "state": "off"
-        },
-        {
-          "start": 1793285470261,
-          "end": 1793285476262,
-          "state": "on"
-        },
-        {
-          "start": 1793285476262,
-          "end": 1793285484266,
-          "state": "off"
-        },
-        {
-          "start": 1793285484266,
-          "end": 1793285490305,
-          "state": "on"
-        },
-        {
-          "start": 1793285490305,
-          "end": 1793285492258,
-          "state": "off"
-        },
-        {
-          "start": 1793285492258,
-          "end": 1793285498258,
-          "state": "on"
-        },
-        {
-          "start": 1793285498258,
-          "end": 1793285514265,
-          "state": "off"
-        },
-        {
-          "start": 1793285514265,
-          "end": 1793285526296,
-          "state": "on"
-        },
-        {
-          "start": 1793285526296,
-          "end": 1793285640265,
-          "state": "off"
-        },
-        {
-          "start": 1793285640265,
-          "end": 1793285646265,
-          "state": "on"
-        },
-        {
-          "start": 1793285646265,
-          "end": 1793285670253,
-          "state": "off"
-        },
-        {
-          "start": 1793285670253,
-          "end": 1793285676266,
-          "state": "on"
-        },
-        {
-          "start": 1793285676266,
-          "end": 1793285748772,
-          "state": "off"
-        },
-        {
-          "start": 1793285748772,
-          "end": 1793285754775,
-          "state": "on"
-        },
-        {
-          "start": 1793285754775,
-          "end": 1793285767315,
-          "state": "off"
-        },
-        {
-          "start": 1793285767315,
-          "end": 1793285775265,
-          "state": "on"
-        },
-        {
-          "start": 1793285775265,
-          "end": 1793285777311,
-          "state": "off"
-        },
-        {
-          "start": 1793285777311,
-          "end": 1793285783267,
-          "state": "on"
-        },
-        {
-          "start": 1793285783267,
-          "end": 1793285841266,
-          "state": "off"
-        },
-        {
-          "start": 1793285841266,
-          "end": 1793285847265,
-          "state": "on"
-        },
-        {
-          "start": 1793285847265,
-          "end": 1793285855265,
-          "state": "off"
-        },
-        {
-          "start": 1793285855265,
-          "end": 1793285861266,
-          "state": "on"
-        },
-        {
-          "start": 1793285861266,
-          "end": 1793285885265,
-          "state": "off"
-        },
-        {
-          "start": 1793285885265,
-          "end": 1793285889265,
-          "state": "on"
-        },
-        {
-          "start": 1793285889265,
-          "end": 1793285895265,
-          "state": "off"
-        },
-        {
-          "start": 1793285895265,
-          "end": 1793285898264,
-          "state": "on"
-        },
-        {
-          "start": 1793285898264,
-          "end": 1793287618261,
-          "state": "off"
-        },
-        {
-          "start": 1793287618261,
-          "end": 1793287634264,
-          "state": "on"
-        },
-        {
-          "start": 1793287634264,
-          "end": 1793287638278,
-          "state": "off"
-        },
-        {
-          "start": 1793287638278,
-          "end": 1793287657264,
-          "state": "on"
-        },
-        {
-          "start": 1793287657264,
-          "end": 1793287659264,
-          "state": "off"
-        },
-        {
-          "start": 1793287659264,
-          "end": 1793287719266,
-          "state": "on"
-        },
-        {
-          "start": 1793287719266,
-          "end": 1793287725282,
-          "state": "off"
-        },
-        {
-          "start": 1793287725282,
-          "end": 1793287729262,
-          "state": "on"
-        },
-        {
-          "start": 1793287729262,
-          "end": 1793287731269,
-          "state": "off"
-        },
-        {
-          "start": 1793287731269,
-          "end": 1793287747264,
-          "state": "on"
-        },
-        {
-          "start": 1793287747264,
-          "end": 1793287757337,
-          "state": "off"
-        },
-        {
-          "start": 1793287757337,
-          "end": 1793287769412,
-          "state": "on"
-        },
-        {
-          "start": 1793287769412,
-          "end": 1793287771264,
-          "state": "off"
-        },
-        {
-          "start": 1793287771264,
-          "end": 1793287779267,
-          "state": "on"
-        },
-        {
-          "start": 1793287779267,
-          "end": 1793287787472,
-          "state": "off"
-        },
-        {
-          "start": 1793287787472,
-          "end": 1793287793266,
-          "state": "on"
-        },
-        {
-          "start": 1793287793266,
-          "end": 1793287795261,
-          "state": "off"
-        },
-        {
-          "start": 1793287795261,
-          "end": 1793287803266,
-          "state": "on"
-        },
-        {
-          "start": 1793287803266,
-          "end": 1793287805267,
-          "state": "off"
-        },
-        {
-          "start": 1793287805267,
-          "end": 1793287818265,
-          "state": "on"
-        },
-        {
-          "start": 1793287818265,
-          "end": 1793287828261,
-          "state": "off"
-        },
-        {
-          "start": 1793287828261,
-          "end": 1793287837261,
-          "state": "on"
-        },
-        {
-          "start": 1793287837261,
-          "end": 1793288881261,
-          "state": "off"
-        },
-        {
-          "start": 1793288881261,
-          "end": 1793288935261,
-          "state": "on"
-        },
-        {
-          "start": 1793288935261,
-          "end": 1793288937265,
-          "state": "off"
-        },
-        {
-          "start": 1793288937265,
-          "end": 1793288943265,
-          "state": "on"
-        },
-        {
-          "start": 1793288943265,
-          "end": 1793288945266,
-          "state": "off"
-        },
-        {
-          "start": 1793288945266,
-          "end": 1793289037261,
-          "state": "on"
-        },
-        {
-          "start": 1793289037261,
-          "end": 1793289041270,
-          "state": "off"
-        },
-        {
-          "start": 1793289041270,
-          "end": 1793289051367,
-          "state": "on"
-        },
-        {
-          "start": 1793289051367,
-          "end": 1793289073256,
-          "state": "off"
-        },
-        {
-          "start": 1793289073256,
-          "end": 1793289083314,
-          "state": "on"
-        },
-        {
-          "start": 1793289083314,
-          "end": 1793289089290,
-          "state": "off"
-        },
-        {
-          "start": 1793289089290,
-          "end": 1793289123264,
-          "state": "on"
-        },
-        {
-          "start": 1793289123264,
-          "end": 1793289125349,
-          "state": "off"
-        },
-        {
-          "start": 1793289125349,
-          "end": 1793289143266,
-          "state": "on"
-        },
-        {
-          "start": 1793289143266,
-          "end": 1793289151260,
-          "state": "off"
-        },
-        {
-          "start": 1793289151260,
-          "end": 1793289167268,
-          "state": "on"
-        },
-        {
-          "start": 1793289167268,
-          "end": 1793289169392,
-          "state": "off"
-        },
-        {
-          "start": 1793289169392,
-          "end": 1793289177267,
-          "state": "on"
-        },
-        {
-          "start": 1793289177267,
-          "end": 1793289179262,
-          "state": "off"
-        },
-        {
-          "start": 1793289179262,
-          "end": 1793289195271,
-          "state": "on"
-        },
-        {
-          "start": 1793289195271,
-          "end": 1793289197623,
-          "state": "off"
-        },
-        {
-          "start": 1793289197623,
-          "end": 1793289203277,
-          "state": "on"
-        },
-        {
-          "start": 1793289203277,
-          "end": 1793289207273,
-          "state": "off"
-        },
-        {
-          "start": 1793289207273,
-          "end": 1793289211267,
-          "state": "on"
-        },
-        {
-          "start": 1793289211267,
-          "end": 1793289221265,
-          "state": "off"
-        },
-        {
-          "start": 1793289221265,
-          "end": 1793289225267,
-          "state": "on"
-        },
-        {
-          "start": 1793289225267,
-          "end": 1793289227266,
-          "state": "off"
-        },
-        {
-          "start": 1793289227266,
-          "end": 1793289231287,
-          "state": "on"
-        },
-        {
-          "start": 1793289231287,
-          "end": 1793289233516,
-          "state": "off"
-        },
-        {
-          "start": 1793289233516,
-          "end": 1793289255291,
-          "state": "on"
-        },
-        {
-          "start": 1793289255291,
-          "end": 1793289257266,
-          "state": "off"
-        },
-        {
-          "start": 1793289257266,
-          "end": 1793289273266,
-          "state": "on"
-        },
-        {
-          "start": 1793289273266,
-          "end": 1793289275270,
-          "state": "off"
-        },
-        {
-          "start": 1793289275270,
-          "end": 1793289293266,
-          "state": "on"
-        },
-        {
-          "start": 1793289293266,
-          "end": 1793289299266,
-          "state": "off"
-        },
-        {
-          "start": 1793289299266,
-          "end": 1793289323331,
-          "state": "on"
-        },
-        {
-          "start": 1793289323331,
-          "end": 1793289325350,
-          "state": "off"
-        },
-        {
-          "start": 1793289325350,
-          "end": 1793289335270,
-          "state": "on"
-        },
-        {
-          "start": 1793289335270,
-          "end": 1793289341266,
-          "state": "off"
-        },
-        {
-          "start": 1793289341266,
-          "end": 1793289355268,
-          "state": "on"
-        },
-        {
-          "start": 1793289355268,
-          "end": 1793289359267,
-          "state": "off"
-        },
-        {
-          "start": 1793289359267,
-          "end": 1793289375867,
-          "state": "on"
-        },
-        {
-          "start": 1793289375867,
-          "end": 1793289395771,
-          "state": "off"
-        },
-        {
-          "start": 1793289395771,
-          "end": 1793289399782,
-          "state": "on"
-        },
-        {
-          "start": 1793289399782,
-          "end": 1793289413768,
-          "state": "off"
-        },
-        {
-          "start": 1793289413768,
-          "end": 1793289417793,
-          "state": "on"
-        },
-        {
-          "start": 1793289417793,
-          "end": 1793289424386,
-          "state": "off"
-        },
-        {
-          "start": 1793289424386,
-          "end": 1793289429795,
-          "state": "on"
-        },
-        {
-          "start": 1793289429795,
-          "end": 1793289433772,
-          "state": "off"
-        },
-        {
-          "start": 1793289433772,
-          "end": 1793289441768,
-          "state": "on"
-        },
-        {
-          "start": 1793289441768,
-          "end": 1793289455822,
-          "state": "off"
-        },
-        {
-          "start": 1793289455822,
-          "end": 1793289461803,
-          "state": "on"
-        },
-        {
-          "start": 1793289461803,
-          "end": 1793289465768,
-          "state": "off"
-        },
-        {
-          "start": 1793289465768,
-          "end": 1793289473779,
-          "state": "on"
-        },
-        {
-          "start": 1793289473779,
-          "end": 1793289481781,
-          "state": "off"
-        },
-        {
-          "start": 1793289481781,
-          "end": 1793289499941,
-          "state": "on"
-        },
-        {
-          "start": 1793289499941,
-          "end": 1793289502061,
-          "state": "off"
-        },
-        {
-          "start": 1793289502061,
-          "end": 1793289521837,
-          "state": "on"
-        },
-        {
-          "start": 1793289521837,
-          "end": 1793289523792,
-          "state": "off"
-        },
-        {
-          "start": 1793289523792,
-          "end": 1793289543899,
-          "state": "on"
-        },
-        {
-          "start": 1793289543899,
-          "end": 1793289545912,
-          "state": "off"
-        },
-        {
-          "start": 1793289545912,
-          "end": 1793289565789,
-          "state": "on"
-        },
-        {
-          "start": 1793289565789,
-          "end": 1793289571783,
-          "state": "off"
-        },
-        {
-          "start": 1793289571783,
-          "end": 1793289595924,
-          "state": "on"
-        },
-        {
-          "start": 1793289595924,
-          "end": 1793289599876,
-          "state": "off"
-        },
-        {
-          "start": 1793289599876,
-          "end": 1793289605773,
-          "state": "on"
-        },
-        {
-          "start": 1793289605773,
-          "end": 1793289609769,
-          "state": "off"
-        },
-        {
-          "start": 1793289609769,
-          "end": 1793289639788,
-          "state": "on"
-        },
-        {
-          "start": 1793289639788,
-          "end": 1793289641993,
-          "state": "off"
-        },
-        {
-          "start": 1793289641993,
-          "end": 1793289645797,
-          "state": "on"
-        },
-        {
-          "start": 1793289645797,
-          "end": 1793289649771,
-          "state": "off"
-        },
-        {
-          "start": 1793289649771,
-          "end": 1793289671911,
-          "state": "on"
-        },
-        {
-          "start": 1793289671911,
-          "end": 1793289679986,
-          "state": "off"
-        },
-        {
-          "start": 1793289679986,
-          "end": 1793289693265,
-          "state": "on"
-        },
-        {
-          "start": 1793289693265,
-          "end": 1793289701266,
-          "state": "off"
-        },
-        {
-          "start": 1793289701266,
-          "end": 1793289725266,
-          "state": "on"
-        },
-        {
-          "start": 1793289725266,
-          "end": 1793289747387,
-          "state": "off"
-        },
-        {
-          "start": 1793289747387,
-          "end": 1793289751587,
-          "state": "on"
-        },
-        {
-          "start": 1793289751587,
-          "end": 1793289761266,
-          "state": "off"
-        },
-        {
-          "start": 1793289761266,
-          "end": 1793289765265,
-          "state": "on"
-        },
-        {
-          "start": 1793289765265,
-          "end": 1793289767266,
-          "state": "off"
-        },
-        {
-          "start": 1793289767266,
-          "end": 1793289777267,
-          "state": "on"
-        },
-        {
-          "start": 1793289777267,
-          "end": 1793289783265,
-          "state": "off"
-        },
-        {
-          "start": 1793289783265,
-          "end": 1793289795267,
-          "state": "on"
-        },
-        {
-          "start": 1793289795267,
-          "end": 1793289797324,
-          "state": "off"
-        },
-        {
-          "start": 1793289797324,
-          "end": 1793289823368,
-          "state": "on"
-        },
-        {
-          "start": 1793289823368,
-          "end": 1793289825265,
-          "state": "off"
-        },
-        {
-          "start": 1793289825265,
-          "end": 1793289923323,
-          "state": "on"
-        },
-        {
-          "start": 1793289923323,
-          "end": 1793289931334,
-          "state": "off"
-        },
-        {
-          "start": 1793289931334,
-          "end": 1793289945266,
-          "state": "on"
-        },
-        {
-          "start": 1793289945266,
-          "end": 1793289947267,
-          "state": "off"
-        },
-        {
-          "start": 1793289947267,
-          "end": 1793289977267,
-          "state": "on"
-        },
-        {
-          "start": 1793289977267,
-          "end": 1793289979261,
-          "state": "off"
-        },
-        {
-          "start": 1793289979261,
-          "end": 1793290005266,
-          "state": "on"
-        },
-        {
-          "start": 1793290005266,
-          "end": 1793290009261,
-          "state": "off"
-        },
-        {
-          "start": 1793290009261,
-          "end": 1793290079266,
-          "state": "on"
-        },
-        {
-          "start": 1793290079266,
-          "end": 1793290289266,
-          "state": "off"
-        },
-        {
-          "start": 1793290289266,
           "end": null,
-          "state": "on"
+          "state": "off"
         }
       ],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "on",
+      "rawCameraStatus": "off",
       "manualCamOverride": false,
       "isHost": false,
       "isExempt": false
@@ -76644,7 +75186,7 @@
       "firstSeen": 1793257114266,
       "joinTime": 1793257114266,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 3,
       "rejoinedAt": 1793284571258,
       "presenceIntervals": [
@@ -76701,17 +75243,17 @@
           "awayFormatted": "00:28:04"
         }
       ],
-      "totalInMeetMs": 28577358,
-      "totalPresentMs": 16326450,
-      "cameraOnMs": 12942230,
+      "totalInMeetMs": 31248626,
+      "totalPresentMs": 17616449,
+      "cameraOnMs": 14232229,
       "cameraOffMs": 3384220,
-      "validStudyMs": 12942230,
-      "totalDuration": 16326450,
-      "duration": 12942230,
-      "timeInCall": 28577358,
-      "durationSeconds": 12942,
-      "durationMinutes": 215,
-      "studyDuration": 12942230,
+      "validStudyMs": 14232229,
+      "totalDuration": 17616449,
+      "duration": 14232229,
+      "timeInCall": 31248626,
+      "durationSeconds": 14232,
+      "durationMinutes": 237,
+      "studyDuration": 14232229,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -78526,14 +77068,14 @@
       "id": "p_shalu_kumari",
       "name": "Shalu Kumari",
       "isLocal": false,
-      "currentStatus": "present",
-      "cameraStatus": "on",
+      "currentStatus": "left",
+      "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793258393403,
       "joinTime": 1793258393403,
-      "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "leaveTime": 1793291465279,
+      "lastSeen": 1793291465279,
       "rejoinCount": 1,
       "rejoinedAt": 1793289689701,
       "presenceIntervals": [
@@ -78564,19 +77106,19 @@
           "awayFormatted": "08:27:42"
         }
       ],
-      "totalInMeetMs": 1733139,
-      "totalPresentMs": 1732492,
-      "cameraOnMs": 1224107,
-      "cameraOffMs": 508385,
-      "validStudyMs": 1224107,
-      "totalDuration": 1732492,
-      "duration": 1224107,
-      "timeInCall": 1733139,
-      "durationSeconds": 1224,
-      "durationMinutes": 20,
-      "studyDuration": 1224107,
-      "consecutiveCamOffMs": 0,
-      "cameraOffCurrentStart": null,
+      "totalInMeetMs": 2609440,
+      "totalPresentMs": 2611504,
+      "cameraOnMs": 2021243,
+      "cameraOffMs": 590261,
+      "validStudyMs": 2021243,
+      "totalDuration": 2611504,
+      "duration": 2021243,
+      "timeInCall": 2609440,
+      "durationSeconds": 2021,
+      "durationMinutes": 33,
+      "studyDuration": 2021243,
+      "consecutiveCamOffMs": 1019,
+      "cameraOffCurrentStart": 1793291465279,
       "cameraOffIntervals": [
         {
           "start": 1793258456264,
@@ -78977,6 +77519,150 @@
           "fromTime": "09:45 pm",
           "toTime": "09:46 pm",
           "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793290642261,
+          "end": 1793290644260,
+          "durationMs": 1999,
+          "fromTime": "09:47 pm",
+          "toTime": "09:47 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290734266,
+          "end": 1793290748267,
+          "durationMs": 14001,
+          "fromTime": "09:48 pm",
+          "toTime": "09:49 pm",
+          "durationFormatted": "00:00:14"
+        },
+        {
+          "start": 1793290838266,
+          "end": 1793290840261,
+          "durationMs": 1995,
+          "fromTime": "09:50 pm",
+          "toTime": "09:50 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290867956,
+          "end": 1793290871822,
+          "durationMs": 3866,
+          "fromTime": "09:51 pm",
+          "toTime": "09:51 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793290877768,
+          "end": 1793290883777,
+          "durationMs": 6009,
+          "fromTime": "09:51 pm",
+          "toTime": "09:51 pm",
+          "durationFormatted": "00:00:06"
+        },
+        {
+          "start": 1793290888076,
+          "end": 1793290889771,
+          "durationMs": 1695,
+          "fromTime": "09:51 pm",
+          "toTime": "09:51 pm",
+          "durationFormatted": "00:00:01"
+        },
+        {
+          "start": 1793290905771,
+          "end": 1793290908019,
+          "durationMs": 2248,
+          "fromTime": "09:51 pm",
+          "toTime": "09:51 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793290986267,
+          "end": 1793290994266,
+          "durationMs": 7999,
+          "fromTime": "09:53 pm",
+          "toTime": "09:53 pm",
+          "durationFormatted": "00:00:07"
+        },
+        {
+          "start": 1793291014776,
+          "end": 1793291018770,
+          "durationMs": 3994,
+          "fromTime": "09:53 pm",
+          "toTime": "09:53 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793291079778,
+          "end": 1793291081855,
+          "durationMs": 2077,
+          "fromTime": "09:54 pm",
+          "toTime": "09:54 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793291095772,
+          "end": 1793291099768,
+          "durationMs": 3996,
+          "fromTime": "09:54 pm",
+          "toTime": "09:54 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793291103778,
+          "end": 1793291113780,
+          "durationMs": 10002,
+          "fromTime": "09:55 pm",
+          "toTime": "09:55 pm",
+          "durationFormatted": "00:00:10"
+        },
+        {
+          "start": 1793291155775,
+          "end": 1793291175114,
+          "durationMs": 19339,
+          "fromTime": "09:55 pm",
+          "toTime": "09:56 pm",
+          "durationFormatted": "00:00:19"
+        },
+        {
+          "start": 1793291175773,
+          "end": 1793291179799,
+          "durationMs": 4026,
+          "fromTime": "09:56 pm",
+          "toTime": "09:56 pm",
+          "durationFormatted": "00:00:04"
+        },
+        {
+          "start": 1793291233261,
+          "end": 1793291235419,
+          "durationMs": 2158,
+          "fromTime": "09:57 pm",
+          "toTime": "09:57 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793291241268,
+          "end": 1793291245262,
+          "durationMs": 3994,
+          "fromTime": "09:57 pm",
+          "toTime": "09:57 pm",
+          "durationFormatted": "00:00:03"
+        },
+        {
+          "start": 1793291355265,
+          "end": 1793291357266,
+          "durationMs": 2001,
+          "fromTime": "09:59 pm",
+          "toTime": "09:59 pm",
+          "durationFormatted": "00:00:02"
+        },
+        {
+          "start": 1793291465279,
+          "end": 1793291470427,
+          "durationMs": 5148,
+          "fromTime": "10:01 pm",
+          "toTime": "10:01 pm",
+          "durationFormatted": "00:00:05"
         }
       ],
       "cameraIntervals": [
@@ -79482,12 +78168,187 @@
         },
         {
           "start": 1793290562309,
-          "end": null,
+          "end": 1793290642261,
           "state": "on"
+        },
+        {
+          "start": 1793290642261,
+          "end": 1793290644260,
+          "state": "off"
+        },
+        {
+          "start": 1793290644260,
+          "end": 1793290734266,
+          "state": "on"
+        },
+        {
+          "start": 1793290734266,
+          "end": 1793290748267,
+          "state": "off"
+        },
+        {
+          "start": 1793290748267,
+          "end": 1793290838266,
+          "state": "on"
+        },
+        {
+          "start": 1793290838266,
+          "end": 1793290840261,
+          "state": "off"
+        },
+        {
+          "start": 1793290840261,
+          "end": 1793290867956,
+          "state": "on"
+        },
+        {
+          "start": 1793290867956,
+          "end": 1793290871822,
+          "state": "off"
+        },
+        {
+          "start": 1793290871822,
+          "end": 1793290877768,
+          "state": "on"
+        },
+        {
+          "start": 1793290877768,
+          "end": 1793290883777,
+          "state": "off"
+        },
+        {
+          "start": 1793290883777,
+          "end": 1793290888076,
+          "state": "on"
+        },
+        {
+          "start": 1793290888076,
+          "end": 1793290889771,
+          "state": "off"
+        },
+        {
+          "start": 1793290889771,
+          "end": 1793290905771,
+          "state": "on"
+        },
+        {
+          "start": 1793290905771,
+          "end": 1793290908019,
+          "state": "off"
+        },
+        {
+          "start": 1793290908019,
+          "end": 1793290986267,
+          "state": "on"
+        },
+        {
+          "start": 1793290986267,
+          "end": 1793290994266,
+          "state": "off"
+        },
+        {
+          "start": 1793290994266,
+          "end": 1793291014776,
+          "state": "on"
+        },
+        {
+          "start": 1793291014776,
+          "end": 1793291018770,
+          "state": "off"
+        },
+        {
+          "start": 1793291018770,
+          "end": 1793291079778,
+          "state": "on"
+        },
+        {
+          "start": 1793291079778,
+          "end": 1793291081855,
+          "state": "off"
+        },
+        {
+          "start": 1793291081855,
+          "end": 1793291095772,
+          "state": "on"
+        },
+        {
+          "start": 1793291095772,
+          "end": 1793291099768,
+          "state": "off"
+        },
+        {
+          "start": 1793291099768,
+          "end": 1793291103778,
+          "state": "on"
+        },
+        {
+          "start": 1793291103778,
+          "end": 1793291113780,
+          "state": "off"
+        },
+        {
+          "start": 1793291113780,
+          "end": 1793291155775,
+          "state": "on"
+        },
+        {
+          "start": 1793291155775,
+          "end": 1793291163779,
+          "state": "off"
+        },
+        {
+          "start": 1793291163779,
+          "end": 1793291175773,
+          "state": "on"
+        },
+        {
+          "start": 1793291175773,
+          "end": 1793291179799,
+          "state": "off"
+        },
+        {
+          "start": 1793291179799,
+          "end": 1793291233261,
+          "state": "on"
+        },
+        {
+          "start": 1793291233261,
+          "end": 1793291235419,
+          "state": "off"
+        },
+        {
+          "start": 1793291235419,
+          "end": 1793291241268,
+          "state": "on"
+        },
+        {
+          "start": 1793291241268,
+          "end": 1793291245262,
+          "state": "off"
+        },
+        {
+          "start": 1793291245262,
+          "end": 1793291355265,
+          "state": "on"
+        },
+        {
+          "start": 1793291355265,
+          "end": 1793291357266,
+          "state": "off"
+        },
+        {
+          "start": 1793291357266,
+          "end": 1793291465279,
+          "state": "on"
+        },
+        {
+          "start": 1793291465279,
+          "end": null,
+          "state": "off"
         }
       ],
       "videoDetectionMode": "off",
-      "rawCameraStatus": "on",
+      "rawCameraStatus": "off",
       "manualCamOverride": false,
       "isHost": false,
       "isExempt": false
@@ -80607,7 +79468,7 @@
       "firstSeen": 1793265099281,
       "joinTime": 1793265099281,
       "leaveTime": null,
-      "lastSeen": 1793290586267,
+      "lastSeen": 1793291876266,
       "rejoinCount": 1,
       "rejoinedAt": 1793275448275,
       "presenceIntervals": [
@@ -80636,17 +79497,17 @@
           "awayFormatted": "00:48:40"
         }
       ],
-      "totalInMeetMs": 40630402,
-      "totalPresentMs": 16601470,
-      "cameraOnMs": 14865667,
+      "totalInMeetMs": 43301672,
+      "totalPresentMs": 17891469,
+      "cameraOnMs": 16155666,
       "cameraOffMs": 1735803,
-      "validStudyMs": 14865667,
-      "totalDuration": 16601470,
-      "duration": 14865667,
-      "timeInCall": 40630402,
-      "durationSeconds": 14865,
-      "durationMinutes": 247,
-      "studyDuration": 14865667,
+      "validStudyMs": 16155666,
+      "totalDuration": 17891469,
+      "duration": 16155666,
+      "timeInCall": 43301672,
+      "durationSeconds": 16155,
+      "durationMinutes": 269,
+      "studyDuration": 16155666,
       "consecutiveCamOffMs": 0,
       "cameraOffCurrentStart": null,
       "cameraOffIntervals": [
@@ -86930,19 +85791,24 @@
       "id": "p_mouthwika",
       "name": "Mouthwika",
       "isLocal": false,
-      "currentStatus": "left",
+      "currentStatus": "present",
       "cameraStatus": "off",
       "pendingStatus": null,
       "pendingTicks": 0,
       "firstSeen": 1793281498275,
       "joinTime": 1793281498275,
-      "leaveTime": 1793281530258,
-      "lastSeen": 1793281530258,
-      "rejoinCount": 0,
-      "rejoinedAt": null,
+      "leaveTime": null,
+      "lastSeen": 1793291876266,
+      "rejoinCount": 1,
+      "rejoinedAt": 1793290977892,
       "presenceIntervals": [
         {
           "joinTime": 1793281498275,
+          "leaveTime": null,
+          "durationMs": 0
+        },
+        {
+          "joinTime": 1793290977892,
           "leaveTime": null,
           "durationMs": 0
         }
@@ -86952,21 +85818,28 @@
           "event": "joined",
           "time": 1793281498275,
           "formatted": "07:14 pm"
+        },
+        {
+          "event": "rejoined",
+          "time": 1793290977892,
+          "formatted": "09:52 pm",
+          "awayMs": 9447634,
+          "awayFormatted": "02:37:27"
         }
       ],
-      "totalInMeetMs": 31983,
-      "totalPresentMs": 32943,
-      "cameraOnMs": 0,
-      "cameraOffMs": 32943,
-      "validStudyMs": 0,
-      "totalDuration": 32943,
-      "duration": 0,
-      "timeInCall": 31983,
-      "durationSeconds": 0,
+      "totalInMeetMs": 11373073,
+      "totalPresentMs": 932147,
+      "cameraOnMs": 1113,
+      "cameraOffMs": 931034,
+      "validStudyMs": 1113,
+      "totalDuration": 932147,
+      "duration": 1113,
+      "timeInCall": 11373073,
+      "durationSeconds": 1,
       "durationMinutes": 0,
-      "studyDuration": 0,
-      "consecutiveCamOffMs": 32943,
-      "cameraOffCurrentStart": null,
+      "studyDuration": 1113,
+      "consecutiveCamOffMs": 428893,
+      "cameraOffCurrentStart": 1793291448266,
       "cameraOffIntervals": [
         {
           "start": 1793281498275,
@@ -86975,11 +85848,37 @@
           "fromTime": "07:14 pm",
           "toTime": "07:15 pm",
           "durationFormatted": "00:00:29"
+        },
+        {
+          "start": 1793290977892,
+          "end": 1793291170828,
+          "durationMs": 192936,
+          "fromTime": "09:52 pm",
+          "toTime": "09:56 pm",
+          "durationFormatted": "00:03:12"
+        },
+        {
+          "start": 1793291448266,
+          "end": 1793291470427,
+          "durationMs": 22161,
+          "fromTime": "10:00 pm",
+          "toTime": "10:01 pm",
+          "durationFormatted": "00:00:22"
         }
       ],
       "cameraIntervals": [
         {
           "start": 1793281498275,
+          "end": 1793291447373,
+          "state": "off"
+        },
+        {
+          "start": 1793291447373,
+          "end": 1793291448266,
+          "state": "on"
+        },
+        {
+          "start": 1793291448266,
           "end": null,
           "state": "off"
         }
