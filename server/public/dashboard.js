@@ -145,6 +145,13 @@ function showToast(msg) {
 function mergeSessionState(incoming) {
   if (!incoming) return;
 
+  // If session ID changed (e.g. Master Reset or loaded session), FULLY REPLACE state!
+  if (incoming.sessionId && state.sessionId && incoming.sessionId !== state.sessionId) {
+    state = JSON.parse(JSON.stringify(incoming));
+    state.participants = incoming.participants || {};
+    return;
+  }
+
   state.sessionId = incoming.sessionId || state.sessionId;
   state.meetingCode = incoming.meetingCode || state.meetingCode;
   state.meetingTitle = incoming.meetingTitle || state.meetingTitle;
@@ -255,8 +262,9 @@ function initWebSocket() {
       const data = JSON.parse(event.data);
       if (data.type === 'ACTION_RESET') {
         if (data.session) {
-          state = data.session;
-          scheduleRenderUI();
+          state = JSON.parse(JSON.stringify(data.session));
+          state.participants = {};
+          renderUI();
         }
       } else if (data.type === 'ACTION_STOP') {
         state.isTracking = false;

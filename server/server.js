@@ -519,8 +519,14 @@ app.post('/api/session/sync', (req, res) => {
   const data = req.body;
   if (!data) return res.status(400).json({ error: 'No data provided' });
 
-  // Adopt incoming session ID if server currently has no active tracking or participants
+  // If server was reset or server has a newer session ID, REJECT stale pre-reset session sync!
   if (data.sessionId && data.sessionId !== currentSession.sessionId) {
+    const dataTs = parseInt(String(data.sessionId).replace('session_', ''), 10) || 0;
+    const currentTs = parseInt(String(currentSession.sessionId).replace('session_', ''), 10) || 0;
+    if (dataTs < currentTs || currentSession.lastResetAt) {
+      // In-flight sync from an older pre-reset session: Return fresh zeroed session to update client!
+      return res.json({ success: true, session: currentSession });
+    }
     if (!currentSession.isTracking && Object.keys(currentSession.participants || {}).length === 0) {
       currentSession.sessionId = data.sessionId;
     }
@@ -545,6 +551,12 @@ app.post('/api/session/sync', (req, res) => {
     if (data.currentPauseStart !== undefined) currentSession.currentPauseStart = data.currentPauseStart;
   }
 
+  // If session is NOT tracking and NOT started (freshly reset or idle), DO NOT populate ghost participants from routine heartbeats!
+  if (!currentSession.isTracking && !currentSession.startedAt && !data.isExplicitAction) {
+    currentSession.lastUpdated = Date.now();
+    return res.json({ success: true, session: currentSession });
+  }
+
   currentSession.lastUpdated = Date.now();
 
   // Aliases for paired companion devices to real students
@@ -564,6 +576,29 @@ app.post('/api/session/sync', (req, res) => {
       const mappedKey = STABLE_KEY_ALIASES[key] || key;
       if (badKeys.includes(mappedKey)) continue;
       if (currentSession.deletedParticipants && (currentSession.deletedParticipants.includes(mappedKey) || (p.name && currentSession.deletedParticipants.includes(p.name.toLowerCase())))) continue;
+
+      // STALE PARTICIPANT RE-INJECTION PROTECTION:
+      // If session was reset, discard any participant who was not seen after reset!
+      // And zero-out any pre-reset accumulated hours so timers strictly start at 00:00:00!
+      if (currentSession.lastResetAt) {
+        const pLastSeen = toEpochMs(p.lastSeen) || 0;
+        if (pLastSeen < currentSession.lastResetAt) {
+          continue;
+        }
+        const pFirstSeen = toEpochMs(p.firstSeen) || 0;
+        if (pFirstSeen < currentSession.lastResetAt) {
+          p.firstSeen = currentSession.lastResetAt;
+          p.joinTime = currentSession.lastResetAt;
+          p.cameraOnMs = 0;
+          p.cameraOffMs = 0;
+          p.validStudyMs = 0;
+          p.totalPresentMs = 0;
+          p.totalInMeetMs = 0;
+          p.cameraOffIntervals = [];
+          p.cameraIntervals = [];
+        }
+      }
+
       const isLocal = p.isLocal || mappedKey === 'local_host' || mappedKey === 'p_andaleeb_gull' ||
                       (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
       const validName = isLocal ? (p.name && p.name.toLowerCase().includes('andaleeb') ? 'Host (Andaleeb Gull)' : 'Host (You)') : cleanParticipantName(p.name, false);
@@ -866,6 +901,7 @@ app.post('/api/session/action', (req, res) => {
       pauseHistory: [],
       targetDurationHours: 12,
       participants: {},
+      deletedParticipants: [],
       notes: ''
     };
     persistCurrentSession();

@@ -1039,6 +1039,9 @@
 
   function resetSession(autoStart = false) {
     const now = Date.now();
+    lastUserControlActionTime = now;
+    deletedParticipants.clear();
+
     const cleanSession = {
       sessionId: 'session_' + now,
       meetingCode: extractMeetingCode(),
@@ -1052,48 +1055,30 @@
       currentPauseStart: null,
       pauseHistory: [],
       targetDurationHours: config.targetHours || 12,
-      participants: {}
+      participants: {} // STRICTLY EMPTY! All previous participants are cleared!
     };
-
-    // Reset all participants in current session to clean 0
-    Object.values(session.participants || {}).forEach(p => {
-      p.firstSeen = now;
-      p.joinTime = now;
-      p.leaveTime = null;
-      p.lastSeen = now;
-      p.rejoinCount = 0;
-      p.rejoinedAt = null;
-      p.presenceIntervals = [{ joinTime: now, leaveTime: null, durationMs: 0 }];
-      p.joinLeaveHistory = [{ event: 'joined', time: now, formatted: formatTimeOnly(now) }];
-      p.totalInMeetMs = 0;
-      p.totalPresentMs = 0;
-      p.cameraOnMs = 0;
-      p.cameraOffMs = 0;
-      p.validStudyMs = 0;
-      p.totalDuration = 0;
-      p.duration = 0;
-      p.timeInCall = 0;
-      p.durationSeconds = 0;
-      p.durationMinutes = 0;
-      p.studyDuration = 0;
-      p.consecutiveCamOffMs = 0;
-      p.cameraOffCurrentStart = (autoStart && p.cameraStatus === 'off') ? now : null;
-      p.cameraOffIntervals = [];
-      p.cameraIntervals = autoStart ? [{ start: now, end: null, state: p.cameraStatus }] : [];
-      cleanSession.participants[p.id] = p;
-    });
 
     session = cleanSession;
     lastTickTime = now;
 
-    // Tell server to reset
+    renderControls();
+    updateHudUI();
+    saveSession();
+
+    // Tell server to archive and reset
     chrome.runtime.sendMessage({
       type: 'SERVER_ACTION',
       serverUrl: getServerBaseUrl(),
       action: 'reset',
-      payload: { meetingCode: session.meetingCode }
-    }, () => {
+      payload: { meetingCode: session.meetingCode, isExplicitAction: true }
+    }, (resp) => {
       const _ignored = chrome.runtime.lastError;
+      if (resp && resp.data && resp.data.session) {
+        session.sessionId = resp.data.session.sessionId;
+        session.participants = {};
+        saveSession();
+        updateHudUI();
+      }
       if (autoStart) {
         chrome.runtime.sendMessage({
           type: 'SERVER_ACTION',
@@ -1103,10 +1088,7 @@
       }
     });
 
-    saveSession();
-    renderControls();
-    updateHudUI();
-    console.log('[Cockroach Tracker] 🔄 Session reset to 00:00:00.');
+    console.log('[Cockroach Tracker] 🔄 Session reset to 00:00:00. All participants and timers cleared.');
   }
 
   // FIXED PAUSE / RESUME ENGINE (ZERO BACK-COUNTING, ZERO JUMPING)
@@ -1841,6 +1823,13 @@
       }
     }
 
+    // If session is NOT tracking and NOT started (idle / freshly reset session),
+    // DO NOT scan and populate participants into session.participants!
+    if (!session.isTracking && !session.startedAt) {
+      updateHudUI();
+      return;
+    }
+
     const activeDetected = scanParticipantsInMeeting();
 
     // ALWAYS MAINTAIN ALL DETECTED PARTICIPANTS IN session.participants
@@ -2102,6 +2091,28 @@
   function adoptServerSession(serverSess) {
     if (!serverSess) return;
 
+    // IF SESSION ID CHANGED (e.g. Master Reset on server or session loaded):
+    // FULLY REPLACE local participants so old participants from previous marathon are completely cleared!
+    if (serverSess.sessionId && serverSess.sessionId !== session.sessionId) {
+      console.log(`[Cockroach Tracker] 🔄 Adopting new session ID from server: ${serverSess.sessionId}`);
+      session.sessionId = serverSess.sessionId;
+      session.meetingCode = serverSess.meetingCode || session.meetingCode;
+      session.startedAt = serverSess.startedAt;
+      session.stoppedAt = serverSess.stoppedAt;
+      session.isTracking = !!serverSess.isTracking;
+      session.isPaused = !!serverSess.isPaused;
+      session.totalPausedMs = serverSess.totalPausedMs || 0;
+      session.currentPauseStart = serverSess.currentPauseStart;
+      session.pauseHistory = serverSess.pauseHistory || [];
+      session.targetDurationHours = serverSess.targetDurationHours || 12;
+      session.participants = JSON.parse(JSON.stringify(serverSess.participants || {}));
+      deletedParticipants.clear();
+      renderControls();
+      updateHudUI();
+      saveSession();
+      return;
+    }
+
     if (serverSess.deletedParticipants && Array.isArray(serverSess.deletedParticipants)) {
       serverSess.deletedParticipants.forEach(dp => {
         deletedParticipants.add(dp.toLowerCase());
@@ -2227,6 +2238,29 @@
       renderControls();
       updateHudUI();
       saveSession();
+    } else if (event.type === 'ACTION_RESET') {
+      lastUserControlActionTime = Date.now();
+      session = {
+        sessionId: event.session?.sessionId || ('session_' + Date.now()),
+        meetingCode: event.session?.meetingCode || extractMeetingCode(),
+        meetingTitle: 'Cockroach Library 12-Hour Study Marathon',
+        startedAt: null,
+        stoppedAt: null,
+        lastUpdated: Date.now(),
+        isTracking: false,
+        isPaused: false,
+        totalPausedMs: 0,
+        currentPauseStart: null,
+        pauseHistory: [],
+        targetDurationHours: config.targetHours || 12,
+        participants: {}
+      };
+      deletedParticipants.clear();
+      renderControls();
+      updateHudUI();
+      saveSession();
+      console.log('[Cockroach Tracker] 🔄 ACTION_RESET received from server. All participants cleared.');
+      return;
     } else if (event.type === 'PARTICIPANT_DELETED') {
       const pid = event.participantId;
       if (pid) deletedParticipants.add(pid.toLowerCase());
