@@ -126,57 +126,55 @@ function cleanParticipantName(raw, isLocal = false) {
   let s = String(raw).replace(/[\r\n\t]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
   if (!s) return isLocal ? 'Host (You)' : null;
 
-  // 1. Strip Google Meet Material Icon ligatures
   s = s.replace(/\b(?:keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz|videocam_off|screen_share|closed_caption|hand_raise|call_end)\b/gi, '').trim();
 
-  // 2. Extract clean name from Pin/Unpin action strings (English & Hindi)
+  if (/^(?:paired\s+with|audio\s+paired\s+with|audio\s+paired|companion\s+mode|peering|पेयर\s+किया\s+गया)\b/i.test(s) ||
+      /\b(?:paired\s+with|audio\s+paired\s+with|companion\s+mode)\b/i.test(s)) {
+    return null;
+  }
+
+  if (/^(?:open|close|toggle|show|hide)\s+(?:the\s+)?(?:people|chat|activities|info|panel|sidebar|participants?|roster|controls?|details?|call)\b/i.test(s) ||
+      /^(?:open|close)\s+(?:the\s+)?panel\b/i.test(s) ||
+      /^(?:people|chat|activities|info|host\s+controls?)\s+panel\b/i.test(s)) {
+    return null;
+  }
+
+  if (/^(?:send\s+a\s+)?(?:message|in-call\s+messages?|chat)\b/i.test(s) ||
+      /^(?:message|messages|chat)\b/i.test(s)) {
+    return null;
+  }
+
   const pinMatchEn = s.match(/(?:Pin|Unpin)\s+(.+?)\s+(?:to|from)\s+(?:your\s+)?(?:main\s+)?screen/i);
   if (pinMatchEn) s = pinMatchEn[1].trim();
   const pinMatchHi = s.match(/(.+?)\s+को\s+(?:अपनी\s+)?(?:मुख्य\s+)?स्क्रीन\s+पर\s+(?:पिन|अनपिन)\s+करें/i);
   if (pinMatchHi) s = pinMatchHi[1].trim();
   s = s.replace(/^(?:Pin|Unpin)\s+/i, '').trim();
 
-  // 3. Strip Video/Feed descriptions commonly found in Google Meet tile aria-labels
   s = s.replace(/^(?:video\s+feed\s+from|video\s+feed\s+of|video\s+from|video\s+of|video\s+for|feed\s+from)\s+/gi, '').trim();
   s = s.replace(/\s*(?:'s\s+video\s+feed|'s\s+video|'s\s+feed|video\s+feed|video)\s*$/gi, '').trim();
   s = s.replace(/'s\s*$/i, '').trim();
 
-  // 4. Strip status suffixes (common in tile aria-labels and People panel)
   s = s.replace(/,\s*(?:speaking|microphone\s+is\s+muted|microphone\s+muted|mic\s+off|mic\s+on|muted|unmuted|video\s+off|video\s+on|camera\s+off|camera\s+on|meeting\s+host|meeting\s+co-host|host|co-host|you)\s*$/gi, '').trim();
   s = s.replace(/\s*\((?:speaking|muted|unmuted|mic\s+off|mic\s+on|video\s+off|video\s+on|camera\s+off|camera\s+on)\)\s*$/gi, '').trim();
 
-  // 5. Check if local user
   const isYou = /\((?:You)\)/i.test(s) || isLocal || s.toLowerCase() === 'you' || s.toLowerCase() === 'host (you)';
 
-  // 6. Strip multi-device qualifiers and duplicate numbers:
   s = s.replace(/\s*[\(\[]\s*(?:\d+|you|host|meeting\s+host|meeting\s+co-host|co-host|presentation|external|call|phone|mobile|laptop|desktop|tablet|guest|audio|mic|webcam|cam|secondary|device\s*\d*)\s*[\)\]]/gi, '').trim();
   s = s.replace(/\s*-\s*\d+$/i, '').trim();
   s = s.replace(/\s*#\s*\d+$/i, '').trim();
   s = s.replace(/\s+\d+$/i, '').trim();
 
-  // 7. Strip presentation suffixes
   s = s.replace(/\s+is\s+presenting$/i, '').trim();
   s = s.replace(/^presentation\s*(?:from|of|by)?\s*[:\-]?\s*/i, '').trim();
   s = s.replace(/'s\s+presentation$/i, '').trim();
 
-  // 8. Strip unclosed opening parentheses/brackets at the end
   s = s.replace(/\s*[\(\[\{][^\)\]\}]*$/g, '').trim();
-
-  // 9. Strip trailing ellipsis / dots (Google Meet truncation: e.g. "Mohammad Rizwan…" or "Mohammad Rizwan...")
   s = s.replace(/[\u2026\.]+\s*$/, '').trim();
-
-  // 10. Strip leading/trailing punctuation and symbols
   s = s.replace(/^[\s\-_,\.:;•|\(\)\[\]]+|[\s\-_,\.:;•|\(\)\[\]]+$/g, '').trim();
 
   if (!s || s.length === 0) return isYou ? 'Host (You)' : null;
-
-  // Filter pure numbers, timestamps, percentages
   if (/^\d+$/.test(s) || /^\d{1,2}:\d{2}(?::\d{2})?(?:\s*[ap]m)?$/i.test(s) || /^\d+%/i.test(s)) return null;
-
-  // Length check: Must have at least 2 chars, max 45 chars
   if (s.length < 2 || s.length > 45) return isYou ? 'Host (You)' : null;
-
-  // Must contain at least one letter
   if (!/\p{L}/u.test(s)) return null;
 
   const lower = s.toLowerCase();
@@ -200,7 +198,10 @@ function cleanParticipantName(raw, isLocal = false) {
     'microphone is off', 'microphone is on', 'microphone is muted',
     'microphone unmuted', 'speaking', 'silent', 'contributor', 'someone is presenting',
     'others will see your video', 'no one else is here', 'joining info',
-    'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection'
+    'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection',
+    'message', 'messages', 'open the people panel', 'open the panel', 'open panel',
+    'close panel', 'paired with', 'paired with riya', 'paired with souvik debnath',
+    'spam com', 'spam', 'admin', 'moderator', 'report spam', 'report abuse'
   ];
 
   for (const bad of BLACKLIST) {
@@ -212,7 +213,9 @@ function cleanParticipantName(raw, isLocal = false) {
   if (lower.includes('for everyone') || lower.includes('click to') ||
       lower.includes('microphone') || lower.includes('turn off') ||
       lower.includes('turn on') || lower.includes('more options') ||
-      lower.includes('visual effects')) {
+      lower.includes('visual effects') || lower.includes('paired with') ||
+      lower.includes('open the') || lower.includes('close the') ||
+      lower.includes('send a message') || lower.includes('in-call message')) {
     return null;
   }
 
@@ -220,7 +223,6 @@ function cleanParticipantName(raw, isLocal = false) {
     return isYou ? 'Host (You)' : 'Host';
   }
 
-  // 11. Format to clean Title Case
   const isAllUpper = (s === s.toUpperCase());
   const isAllLower = (s === s.toLowerCase());
   if (isAllUpper || isAllLower) {
@@ -292,7 +294,7 @@ function generatePainThemeHtml(session) {
   const rawParticipants = consolidateParticipantsForReport(Object.values(session.participants || {}), session);
   
   // Identify Host
-  const hostParticipant = rawParticipants.find(p => p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host')));
+  const hostParticipant = rawParticipants.find(p => p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull'))));
   if (hostParticipant) {
     finalizeParticipant(hostParticipant, session, now);
     hostParticipant.isExempt = true;
@@ -303,7 +305,7 @@ function generatePainThemeHtml(session) {
     if (!p || !p.name) return false;
     const lower = p.name.toLowerCase();
     if (lower.includes('keep_outline') || lower.includes('turn off') || lower === 'host' || lower === 'pin' || lower === 'unpin') return false;
-    if (p.isLocal || p.id === 'local_host' || lower === 'host' || lower === 'host (you)') return false;
+    if (p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || lower === 'host' || lower === 'host (you)' || lower.includes('andaleeb gull')) return false;
     return true;
   });
 

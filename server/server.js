@@ -25,43 +25,62 @@ function cleanParticipantName(raw, isLocal = false) {
   // 1. Strip Google Meet Material Icon ligatures
   s = s.replace(/\b(?:keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz|videocam_off|screen_share|closed_caption|hand_raise|call_end)\b/gi, '').trim();
 
-  // 2. Extract clean name from Pin/Unpin action strings (English & Hindi)
+  // 2. Reject Companion & Audio Pairing status strings (NEVER a student name)
+  if (/^(?:paired\s+with|audio\s+paired\s+with|audio\s+paired|companion\s+mode|peering|पेयर\s+किया\s+गया)\b/i.test(s) ||
+      /\b(?:paired\s+with|audio\s+paired\s+with|companion\s+mode)\b/i.test(s)) {
+    return null;
+  }
+
+  // 3. Reject Panel Open/Close & Sidebar actions (NEVER a student name)
+  if (/^(?:open|close|toggle|show|hide)\s+(?:the\s+)?(?:people|chat|activities|info|panel|sidebar|participants?|roster|controls?|details?|call)\b/i.test(s) ||
+      /^(?:open|close)\s+(?:the\s+)?panel\b/i.test(s) ||
+      /^(?:people|chat|activities|info|host\s+controls?)\s+panel\b/i.test(s)) {
+    return null;
+  }
+
+  // 4. Reject Chat & Message strings (NEVER a student name)
+  if (/^(?:send\s+a\s+)?(?:message|in-call\s+messages?|chat)\b/i.test(s) ||
+      /^(?:message|messages|chat)\b/i.test(s)) {
+    return null;
+  }
+
+  // 5. Extract clean name from Pin/Unpin action strings (English & Hindi)
   const pinMatchEn = s.match(/(?:Pin|Unpin)\s+(.+?)\s+(?:to|from)\s+(?:your\s+)?(?:main\s+)?screen/i);
   if (pinMatchEn) s = pinMatchEn[1].trim();
   const pinMatchHi = s.match(/(.+?)\s+को\s+(?:अपनी\s+)?(?:मुख्य\s+)?स्क्रीन\s+पर\s+(?:पिन|अनपिन)\s+करें/i);
   if (pinMatchHi) s = pinMatchHi[1].trim();
   s = s.replace(/^(?:Pin|Unpin)\s+/i, '').trim();
 
-  // 3. Strip Video/Feed descriptions commonly found in Google Meet tile aria-labels
+  // 6. Strip Video/Feed descriptions commonly found in Google Meet tile aria-labels
   s = s.replace(/^(?:video\s+feed\s+from|video\s+feed\s+of|video\s+from|video\s+of|video\s+for|feed\s+from)\s+/gi, '').trim();
   s = s.replace(/\s*(?:'s\s+video\s+feed|'s\s+video|'s\s+feed|video\s+feed|video)\s*$/gi, '').trim();
   s = s.replace(/'s\s*$/i, '').trim();
 
-  // 4. Strip status suffixes (common in tile aria-labels and People panel)
+  // 7. Strip status suffixes (common in tile aria-labels and People panel)
   s = s.replace(/,\s*(?:speaking|microphone\s+is\s+muted|microphone\s+muted|mic\s+off|mic\s+on|muted|unmuted|video\s+off|video\s+on|camera\s+off|camera\s+on|meeting\s+host|meeting\s+co-host|host|co-host|you)\s*$/gi, '').trim();
   s = s.replace(/\s*\((?:speaking|muted|unmuted|mic\s+off|mic\s+on|video\s+off|video\s+on|camera\s+off|camera\s+on)\)\s*$/gi, '').trim();
 
-  // 5. Check if local user
+  // 8. Check if local user
   const isYou = /\((?:You)\)/i.test(s) || isLocal || s.toLowerCase() === 'you' || s.toLowerCase() === 'host (you)';
 
-  // 6. Strip multi-device qualifiers and duplicate numbers:
+  // 9. Strip multi-device qualifiers and duplicate numbers:
   s = s.replace(/\s*[\(\[]\s*(?:\d+|you|host|meeting\s+host|meeting\s+co-host|co-host|presentation|external|call|phone|mobile|laptop|desktop|tablet|guest|audio|mic|webcam|cam|secondary|device\s*\d*)\s*[\)\]]/gi, '').trim();
   s = s.replace(/\s*-\s*\d+$/i, '').trim();
   s = s.replace(/\s*#\s*\d+$/i, '').trim();
   s = s.replace(/\s+\d+$/i, '').trim();
 
-  // 7. Strip presentation suffixes
+  // 10. Strip presentation suffixes
   s = s.replace(/\s+is\s+presenting$/i, '').trim();
   s = s.replace(/^presentation\s*(?:from|of|by)?\s*[:\-]?\s*/i, '').trim();
   s = s.replace(/'s\s+presentation$/i, '').trim();
 
-  // 8. Strip unclosed opening parentheses/brackets at the end
+  // 11. Strip unclosed opening parentheses/brackets at the end
   s = s.replace(/\s*[\(\[\{][^\)\]\}]*$/g, '').trim();
 
-  // 9. Strip trailing ellipsis / dots (Google Meet truncation: e.g. "Mohammad Rizwan…" or "Mohammad Rizwan...")
+  // 12. Strip trailing ellipsis / dots (Google Meet truncation: e.g. "Mohammad Rizwan…" or "Mohammad Rizwan...")
   s = s.replace(/[\u2026\.]+\s*$/, '').trim();
 
-  // 10. Strip leading/trailing punctuation and symbols
+  // 13. Strip leading/trailing punctuation and symbols
   s = s.replace(/^[\s\-_,\.:;•|\(\)\[\]]+|[\s\-_,\.:;•|\(\)\[\]]+$/g, '').trim();
 
   if (!s || s.length === 0) return isYou ? 'Host (You)' : null;
@@ -96,7 +115,10 @@ function cleanParticipantName(raw, isLocal = false) {
     'microphone is off', 'microphone is on', 'microphone is muted',
     'microphone unmuted', 'speaking', 'silent', 'contributor', 'someone is presenting',
     'others will see your video', 'no one else is here', 'joining info',
-    'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection'
+    'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection',
+    'message', 'messages', 'open the people panel', 'open the panel', 'open panel',
+    'close panel', 'paired with', 'paired with riya', 'paired with souvik debnath',
+    'spam com', 'spam', 'admin', 'moderator', 'report spam', 'report abuse'
   ];
 
   for (const bad of BLACKLIST) {
@@ -108,7 +130,9 @@ function cleanParticipantName(raw, isLocal = false) {
   if (lower.includes('for everyone') || lower.includes('click to') ||
       lower.includes('microphone') || lower.includes('turn off') ||
       lower.includes('turn on') || lower.includes('more options') ||
-      lower.includes('visual effects')) {
+      lower.includes('visual effects') || lower.includes('paired with') ||
+      lower.includes('open the') || lower.includes('close the') ||
+      lower.includes('send a message') || lower.includes('in-call message')) {
     return null;
   }
 
@@ -116,7 +140,7 @@ function cleanParticipantName(raw, isLocal = false) {
     return isYou ? 'Host (You)' : 'Host';
   }
 
-  // 11. Format to clean Title Case
+  // 14. Format to clean Title Case
   const isAllUpper = (s === s.toUpperCase());
   const isAllLower = (s === s.toLowerCase());
   if (isAllUpper || isAllLower) {
@@ -494,8 +518,32 @@ app.post('/api/session/sync', (req, res) => {
   if (data.meetingTitle) currentSession.meetingTitle = data.meetingTitle;
   if (data.targetDurationHours) currentSession.targetDurationHours = data.targetDurationHours;
 
-  // Master tracking and pause state can ONLY be modified if explicit action flag is passed
-  // (Prevents background extension telemetry heartbeats from fighting or overriding server controls)
+  // Handle pause / resume synchronization seamlessly:
+  // If extension is actively running and reports isPaused change, adopt it immediately!
+  if (typeof data.isPaused === 'boolean' && data.isPaused !== currentSession.isPaused && currentSession.isTracking) {
+    currentSession.isPaused = data.isPaused;
+    const now = Date.now();
+    if (data.isPaused) {
+      currentSession.currentPauseStart = data.currentPauseStart || now;
+      console.log('[Server] Synced PAUSE from extension at', new Date(now).toLocaleTimeString());
+    } else {
+      if (currentSession.currentPauseStart) {
+        const pauseDuration = Math.max(0, now - currentSession.currentPauseStart);
+        currentSession.totalPausedMs = (currentSession.totalPausedMs || 0) + pauseDuration;
+        if (!currentSession.pauseHistory) currentSession.pauseHistory = [];
+        currentSession.pauseHistory.push({
+          pausedAt: currentSession.currentPauseStart,
+          resumedAt: now,
+          durationMs: pauseDuration
+        });
+        currentSession.currentPauseStart = null;
+      }
+      console.log('[Server] Synced RESUME from extension at', new Date(now).toLocaleTimeString());
+    }
+    persistCurrentSession();
+    broadcast({ type: data.isPaused ? 'ACTION_PAUSE' : 'ACTION_RESUME', timestamp: now, session: currentSession });
+  }
+
   if (data.isExplicitAction) {
     if (typeof data.isTracking === 'boolean') currentSession.isTracking = data.isTracking;
     if (typeof data.isPaused === 'boolean') currentSession.isPaused = data.isPaused;
@@ -508,14 +556,23 @@ app.post('/api/session/sync', (req, res) => {
 
   currentSession.lastUpdated = Date.now();
 
+  // Purge bad keys & host duplicate
+  const badKeys = ['p_message', 'p_open_the_people_panel', 'p_paired_with_riya', 'p_paired_with_souvik_debnath', 'p_admin', 'p_spam_com', 'p_andaleeb_gull'];
+  badKeys.forEach(bk => { if (currentSession.participants && currentSession.participants[bk]) delete currentSession.participants[bk]; });
+
   // Merge participants with clean name enforcement and valid study time calculation
   if (data.participants && typeof data.participants === 'object') {
     if (!currentSession.participants) currentSession.participants = {};
     for (const [key, p] of Object.entries(data.participants)) {
-      const isLocal = p.isLocal || key === 'local_host';
-      const validName = cleanParticipantName(p.name, isLocal);
+      if (badKeys.includes(key)) continue;
+      const isLocal = p.isLocal || key === 'local_host' || key === 'p_andaleeb_gull' ||
+                      (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
+      const validName = isLocal ? (p.name && p.name.toLowerCase().includes('andaleeb') ? 'Host (Andaleeb Gull)' : 'Host (You)') : cleanParticipantName(p.name, false);
       if (validName) {
         const stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
+        if (stableKey === 'local_host' && currentSession.participants['p_andaleeb_gull']) {
+          delete currentSession.participants['p_andaleeb_gull'];
+        }
         const existing = currentSession.participants[stableKey] || {};
         
         const camOn = Math.max(p.cameraOnMs !== undefined ? p.cameraOnMs : 0, existing.cameraOnMs || 0, p.validStudyMs || 0, existing.validStudyMs || 0);
@@ -560,27 +617,6 @@ app.post('/api/session/sync', (req, res) => {
             }
           });
         }
-
-        const rejoinCount = Math.max(p.rejoinCount || 0, existing.rejoinCount || 0);
-        const rejoinedAt = p.rejoinedAt || existing.rejoinedAt || null;
-
-        const mergedParticipantObj = {
-          ...existing,
-          ...p,
-          id: stableKey,
-          name: validName,
-          isLocal: isLocal,
-          presenceIntervals: combinedPresenceIntervals.length > 0 ? combinedPresenceIntervals : (p.presenceIntervals || existing.presenceIntervals || []),
-          currentStatus: isPres ? 'present' : 'left',
-          cameraStatus: isCamOn ? 'on' : 'off',
-          rawCameraStatus: isCamOn ? 'on' : 'off',
-          manualCamOverride: isManualCam,
-          leaveTime: leaveTime,
-          videoDetectionMode: isCamOn ? (p.cameraStatus === 'on' ? (p.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off',
-          lastSeen: Math.max(toEpochMs(p.lastSeen) || Date.now(), toEpochMs(existing.lastSeen) || Date.now())
-        };
-
-        const totalInMeetMs = calculateTotalInMeetMs(mergedParticipantObj, Date.now());
 
         currentSession.participants[stableKey] = {
           ...mergedParticipantObj,

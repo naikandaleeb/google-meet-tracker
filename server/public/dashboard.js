@@ -651,7 +651,7 @@ function renderStudentsTable() {
   // ASSIGN DENSE RANK: Equal study durations share the exact same rank!
   // HOST IS 100% EXEMPT FROM COMPETING IN STUDENT RANKS!
   let currentRank = 1;
-  const nonHostStudents = filtered.filter(p => !p.isLocal && p.id !== 'local_host' && !(p.name && p.name.toLowerCase().includes('host')));
+  const nonHostStudents = filtered.filter(p => !p.isLocal && p.id !== 'local_host' && p.id !== 'p_andaleeb_gull' && !(p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull'))));
   
   for (let i = 0; i < nonHostStudents.length; i++) {
     if (i > 0) {
@@ -667,7 +667,7 @@ function renderStudentsTable() {
   }
 
   filtered.forEach(p => {
-    const isHost = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
+    const isHost = p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
     if (isHost) p.rank = 'HOST';
   });
 
@@ -718,7 +718,7 @@ function renderStudentsTable() {
       const tr = document.getElementById(`student-row-${p.id}`);
       if (!tr) return;
 
-      const isHost = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
+      const isHost = p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
       const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
       const camOff = p.cameraOffMs || 0;
       const totMeet = camOn + camOff;
@@ -820,7 +820,7 @@ function renderStudentsTable() {
   }
 
   studentsTbody.innerHTML = filtered.map(p => {
-    const isHost = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
+    const isHost = p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
     const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
     const camOff = p.cameraOffMs || 0;
     const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
@@ -990,7 +990,7 @@ window.openStudentModal = function(id) {
 
   const idEl = document.getElementById('modal-id');
   if (idEl) {
-    const isHost = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
+    const isHost = p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
     idEl.innerText = `ID: ${p.id} • Rank: ${isHost ? 'EXEMPT [HOST]' : `#${p.rank || '-'}`} • First Joined: ${formatIstTime(p.firstSeen || p.joinTime)}`;
   }
 

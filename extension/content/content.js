@@ -70,6 +70,19 @@
     'turn on microphone', 'turn off camera', 'turn on camera'
   ];
 
+  let lastUserPauseActionTime = 0;
+  const knownHostNames = new Set(['host (you)', 'you', 'host', 'host (andaleeb gull)', 'andaleeb gull']);
+
+  function isHostIdentifier(nameOrId) {
+    if (!nameOrId) return false;
+    const s = String(nameOrId).trim().toLowerCase();
+    if (s === 'local_host' || s === 'p_andaleeb_gull' || s === 'p_you' || s === 'p_host__you_') return true;
+    for (const h of knownHostNames) {
+      if (s === h || s.includes(h) || h.includes(s)) return true;
+    }
+    return false;
+  }
+
   function sanitizeStudentName(raw, isLocal = false) {
     if (!raw || typeof raw !== 'string') return isLocal ? 'Host (You)' : null;
     let s = String(raw).replace(/[\r\n\t]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
@@ -78,43 +91,62 @@
     // 1. Strip Google Meet Material Icon ligatures
     s = s.replace(/\b(?:keep_outline|more_vert|mic_off|push_pin|volume_up|more_horiz|videocam_off|screen_share|closed_caption|hand_raise|call_end)\b/gi, '').trim();
 
-    // 2. Extract clean name from Pin/Unpin action strings (English & Hindi)
+    // 2. Reject Companion & Audio Pairing status strings (NEVER a student name)
+    if (/^(?:paired\s+with|audio\s+paired\s+with|audio\s+paired|companion\s+mode|peering|पेयर\s+किया\s+गया)\b/i.test(s) ||
+        /\b(?:paired\s+with|audio\s+paired\s+with|companion\s+mode)\b/i.test(s)) {
+      return null;
+    }
+
+    // 3. Reject Panel Open/Close & Sidebar actions (NEVER a student name)
+    if (/^(?:open|close|toggle|show|hide)\s+(?:the\s+)?(?:people|chat|activities|info|panel|sidebar|participants?|roster|controls?|details?|call)\b/i.test(s) ||
+        /^(?:open|close)\s+(?:the\s+)?panel\b/i.test(s) ||
+        /^(?:people|chat|activities|info|host\s+controls?)\s+panel\b/i.test(s)) {
+      return null;
+    }
+
+    // 4. Reject Chat & Message strings (NEVER a student name)
+    if (/^(?:send\s+a\s+)?(?:message|in-call\s+messages?|chat)\b/i.test(s) ||
+        /^(?:message|messages|chat)\b/i.test(s)) {
+      return null;
+    }
+
+    // 5. Extract clean name from Pin/Unpin action strings (English & Hindi)
     const pinMatchEn = s.match(/(?:Pin|Unpin)\s+(.+?)\s+(?:to|from)\s+(?:your\s+)?(?:main\s+)?screen/i);
     if (pinMatchEn) s = pinMatchEn[1].trim();
     const pinMatchHi = s.match(/(.+?)\s+को\s+(?:अपनी\s+)?(?:मुख्य\s+)?स्क्रीन\s+पर\s+(?:पिन|अनपिन)\s+करें/i);
     if (pinMatchHi) s = pinMatchHi[1].trim();
     s = s.replace(/^(?:Pin|Unpin)\s+/i, '').trim();
 
-    // 3. Strip Video/Feed descriptions commonly found in Google Meet tile aria-labels
+    // 6. Strip Video/Feed descriptions commonly found in Google Meet tile aria-labels
     s = s.replace(/^(?:video\s+feed\s+from|video\s+feed\s+of|video\s+from|video\s+of|video\s+for|feed\s+from)\s+/gi, '').trim();
     s = s.replace(/\s*(?:'s\s+video\s+feed|'s\s+video|'s\s+feed|video\s+feed|video)\s*$/gi, '').trim();
     s = s.replace(/'s\s*$/i, '').trim();
 
-    // 4. Strip status suffixes (common in tile aria-labels and People panel)
+    // 7. Strip status suffixes (common in tile aria-labels and People panel)
     s = s.replace(/,\s*(?:speaking|microphone\s+is\s+muted|microphone\s+muted|mic\s+off|mic\s+on|muted|unmuted|video\s+off|video\s+on|camera\s+off|camera\s+on|meeting\s+host|meeting\s+co-host|host|co-host|you)\s*$/gi, '').trim();
     s = s.replace(/\s*\((?:speaking|muted|unmuted|mic\s+off|mic\s+on|video\s+off|video\s+on|camera\s+off|camera\s+on)\)\s*$/gi, '').trim();
 
-    // 5. Check if local user
+    // 8. Check if local user
     const isYou = /\((?:You)\)/i.test(s) || isLocal || s.toLowerCase() === 'you' || s.toLowerCase() === 'host (you)';
 
-    // 6. Strip multi-device qualifiers and duplicate numbers:
+    // 9. Strip multi-device qualifiers and duplicate numbers:
     s = s.replace(/\s*[\(\[]\s*(?:\d+|you|host|meeting\s+host|meeting\s+co-host|co-host|presentation|external|call|phone|mobile|laptop|desktop|tablet|guest|audio|mic|webcam|cam|secondary|device\s*\d*)\s*[\)\]]/gi, '').trim();
     s = s.replace(/\s*-\s*\d+$/i, '').trim();
     s = s.replace(/\s*#\s*\d+$/i, '').trim();
     s = s.replace(/\s+\d+$/i, '').trim();
 
-    // 7. Strip presentation suffixes
+    // 10. Strip presentation suffixes
     s = s.replace(/\s+is\s+presenting$/i, '').trim();
     s = s.replace(/^presentation\s*(?:from|of|by)?\s*[:\-]?\s*/i, '').trim();
     s = s.replace(/'s\s+presentation$/i, '').trim();
 
-    // 8. Strip unclosed opening parentheses/brackets at the end
+    // 11. Strip unclosed opening parentheses/brackets at the end
     s = s.replace(/\s*[\(\[\{][^\)\]\}]*$/g, '').trim();
 
-    // 9. Strip trailing ellipsis / dots (Google Meet truncation: e.g. "Mohammad Rizwan…" or "Mohammad Rizwan...")
+    // 12. Strip trailing ellipsis / dots (Google Meet truncation: e.g. "Mohammad Rizwan…" or "Mohammad Rizwan...")
     s = s.replace(/[\u2026\.]+\s*$/, '').trim();
 
-    // 10. Strip leading/trailing punctuation and symbols
+    // 13. Strip leading/trailing punctuation and symbols
     s = s.replace(/^[\s\-_,\.:;•|\(\)\[\]]+|[\s\-_,\.:;•|\(\)\[\]]+$/g, '').trim();
 
     if (!s || s.length === 0) return isYou ? 'Host (You)' : null;
@@ -149,7 +181,10 @@
       'microphone is off', 'microphone is on', 'microphone is muted',
       'microphone unmuted', 'speaking', 'silent', 'contributor', 'someone is presenting',
       'others will see your video', 'no one else is here', 'joining info',
-      'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection'
+      'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection',
+      'message', 'messages', 'open the people panel', 'open the panel', 'open panel',
+      'close panel', 'paired with', 'paired with riya', 'paired with souvik debnath',
+      'spam com', 'spam', 'admin', 'moderator', 'report spam', 'report abuse'
     ];
 
     for (const bad of BLACKLIST) {
@@ -161,7 +196,9 @@
     if (lower.includes('for everyone') || lower.includes('click to') ||
         lower.includes('microphone') || lower.includes('turn off') ||
         lower.includes('turn on') || lower.includes('more options') ||
-        lower.includes('visual effects')) {
+        lower.includes('visual effects') || lower.includes('paired with') ||
+        lower.includes('open the') || lower.includes('close the') ||
+        lower.includes('send a message') || lower.includes('in-call message')) {
       return null;
     }
 
@@ -169,7 +206,7 @@
       return isYou ? 'Host (You)' : 'Host';
     }
 
-    // 11. Format to clean Title Case
+    // 14. Format to clean Title Case
     const isAllUpper = (s === s.toUpperCase());
     const isAllLower = (s === s.toLowerCase());
     if (isAllUpper || isAllLower) {
@@ -1070,6 +1107,7 @@
   function toggleSessionPause() {
     if (!session.isTracking) return;
     const now = Date.now();
+    lastUserPauseActionTime = now;
 
     if (session.isPaused) {
       // RESUMING FROM PAUSE
@@ -1481,6 +1519,11 @@
     });
 
     for (const btn of camButtons) {
+      // Check Material icon ligatures
+      const text = (btn.innerText || btn.textContent || '').trim().toLowerCase();
+      if (text.includes('videocam_off')) return 'off';
+      if (text.includes('videocam')) return 'on';
+
       const isMuted = btn.getAttribute('data-is-muted');
       if (isMuted === 'true') return 'off';
       if (isMuted === 'false') return 'on';
@@ -1491,22 +1534,35 @@
       // "Turn off camera" means camera is ON right now!
       if (label.includes('turn off camera') || tooltip.includes('turn off camera') ||
           label.includes('turn off video') || tooltip.includes('turn off video') ||
-          label.includes('कैमरा बंद') || tooltip.includes('कैमरा बंद')) {
+          label.includes('कैमरा बंद') || tooltip.includes('कैमरा बंद') ||
+          label.includes('desactivar cámara') || label.includes('désactiver la caméra')) {
         return 'on';
       }
       // "Turn on camera" means camera is OFF right now!
       if (label.includes('turn on camera') || tooltip.includes('turn on camera') ||
           label.includes('turn on video') || tooltip.includes('turn on video') ||
-          label.includes('कैमरा चालू') || tooltip.includes('कैमरा चालू')) {
+          label.includes('कैमरा चालू') || tooltip.includes('कैमरा चालू') ||
+          label.includes('activar cámara') || label.includes('activer la caméra')) {
         return 'off';
       }
     }
 
-    // 2. Check local self video tile in DOM
-    const selfTiles = document.querySelectorAll('div[data-self-name], div[data-participant-id*="self"], div[jscontroller][data-self-name]');
-    for (const tile of selfTiles) {
-      const v = tile.querySelector('video');
-      if (v && isVideoActive(v)) return 'on';
+    // 2. Check local video element in DOM (self-view is mirrored by default in Meet)
+    const videos = Array.from(document.querySelectorAll('video'));
+    for (const v of videos) {
+      let isLocalVideo = false;
+      if (v.closest('div[data-self-name], div[data-participant-id*="self"], div[aria-label*="(You)" i], div[aria-label*="(आप)" i]')) {
+        isLocalVideo = true;
+      } else {
+        const trans = (v.style && v.style.transform) ? v.style.transform : '';
+        try {
+          const comp = window.getComputedStyle(v).transform;
+          if (trans.includes('-1') || comp.includes('-1')) isLocalVideo = true;
+        } catch (_) {}
+      }
+      if (isLocalVideo && isVideoActive(v)) {
+        return 'on';
+      }
     }
 
     return 'off';
@@ -1516,34 +1572,65 @@
     const detected = new Map();
     const now = Date.now();
 
-    // 1. Local Host
+    // Clean session from bad keys and host duplicates immediately
+    const badKeys = ['p_message', 'p_open_the_people_panel', 'p_paired_with_riya', 'p_paired_with_souvik_debnath', 'p_admin', 'p_spam_com', 'p_andaleeb_gull'];
+    badKeys.forEach(bk => {
+      if (session.participants && session.participants[bk]) {
+        delete session.participants[bk];
+      }
+    });
+
+    if (session.participants) {
+      for (const [pid, pObj] of Object.entries(session.participants)) {
+        if (pid !== 'local_host') {
+          if (isHostIdentifier(pObj.name) || isHostIdentifier(pid) || !sanitizeStudentName(pObj.name)) {
+            delete session.participants[pid];
+          }
+        }
+      }
+    }
+
+    // 1. Local Host identification
     const localCamState = detectLocalCameraStatus();
     let localName = 'Host (You)';
     const selfNameEl = document.querySelector('[data-self-name]');
     if (selfNameEl) {
-      localName = selfNameEl.getAttribute('data-self-name') || selfNameEl.innerText || localName;
+      const sn = selfNameEl.getAttribute('data-self-name') || selfNameEl.innerText;
+      if (sn && sn.trim()) localName = sn.trim();
     }
-    const accountEl = document.querySelector('a[aria-label*="Google Account" i], a[aria-label*="Google खाता" i], button[aria-label*="Google Account" i]');
+    const accountEl = document.querySelector('a[aria-label*="Google Account" i], a[aria-label*="Google खाता" i], button[aria-label*="Google Account" i], button[aria-label*="Google खाता" i]');
     if (accountEl) {
       const label = accountEl.getAttribute('aria-label') || '';
-      const m = label.match(/Google (?:Account|खाata):\s*([^\n\r(]+)/i);
+      const m = label.match(/Google (?:Account|खाता):\s*([^\n\r(]+)/i);
       if (m && m[1].trim()) {
         localName = m[1].trim();
       }
     }
+    // Also check for (You) in roster or DOM to find host real name
+    const youEl = document.querySelector('div[role="listitem"][aria-label*="(You)" i], div[role="listitem"][aria-label*="(आप)" i], [data-participant-id][aria-label*="(You)" i]');
+    if (youEl) {
+      const ya = youEl.getAttribute('aria-label') || '';
+      const yName = ya.split(',')[0].replace(/\s*\((?:You|आप)\)/i, '').trim();
+      if (yName && yName.length >= 2) localName = yName;
+    }
+
     const cleanHostName = sanitizeStudentName(localName, true) || 'Host (You)';
+    if (cleanHostName && cleanHostName !== 'Host (You)') {
+      knownHostNames.add(cleanHostName.toLowerCase());
+    }
 
     detected.set('local_host', {
       id: 'local_host',
-      name: cleanHostName,
+      name: cleanHostName === 'Host (You)' ? 'Host (You)' : `Host (${cleanHostName})`,
       isLocal: true,
+      isHost: true,
+      isExempt: true,
       hasVisibleTile: true,
       cameraStatus: localCamState,
       rawCameraStatus: localCamState
     });
 
     // 2. DIRECT ACTIVE VIDEO MAPPING:
-    // Analyzes live video frames: catches blank/OBS screens while recognizing the 3 official break posters!
     const activeVideoStudents = new Set();
     const videoDetectionModes = new Map();
 
@@ -1552,7 +1639,6 @@
 
       const analysis = analyzeVideoFrame(v);
       if (analysis.isBlank) {
-        // Blank or fake OBS screen -> Camera is OFF (attendance cut)! Do not mark as active video!
         return;
       }
 
@@ -1573,15 +1659,12 @@
       }
 
       if (foundName) {
-        // CRITICAL SAFEGUARD: If the enclosing tile container is showing an avatar or camera off indicator,
-        // this video element is DORMANT / FROZEN from a previous frame! Do NOT mark student as active video!
         if (container && (isTileShowingAvatar(container) || isCameraOffIndicated(container))) {
           return;
         }
 
         const isSelf = container?.hasAttribute('data-self-name') ||
-                       foundName.toLowerCase() === 'you' ||
-                       foundName.toLowerCase() === 'host (you)' ||
+                       isHostIdentifier(foundName) ||
                        (cleanHostName && foundName.toLowerCase() === cleanHostName.toLowerCase());
         if (isSelf) {
           activeVideoStudents.add('local_host');
@@ -1599,26 +1682,18 @@
       }
     });
 
-    // 3. Video Tiles in DOM (Grid and Layout Containers)
+    // 3. Video Tiles in DOM
     const tileSelectors = [
       'div[data-participant-id]',
       'div[data-requested-participant-id]',
       'div[data-allocation-index]',
-      'div[data-self-name]',
-      'div[jscontroller][data-participant-id]'
+      'div[data-self-name]'
     ];
 
     const tileSet = new Set(document.querySelectorAll(tileSelectors.join(',')));
 
-    // Include all video element containers
     document.querySelectorAll('video').forEach(v => {
-      const parent = v.closest('div[data-participant-id], div[data-allocation-index], div[role="region"], div[data-requested-participant-id], div[jscontroller]') || v.parentElement?.parentElement;
-      if (parent) tileSet.add(parent);
-    });
-
-    // Include all tiles identified by Pin/Unpin buttons
-    document.querySelectorAll('button[aria-label*="Pin " i], button[aria-label*="Unpin " i], button[data-tooltip*="Pin " i], button[data-tooltip*="Unpin " i]').forEach(btn => {
-      const parent = btn.closest('div[data-participant-id], div[data-allocation-index], div[role="region"], div[data-requested-participant-id], div[jscontroller]') || btn.parentElement?.parentElement?.parentElement;
+      const parent = v.closest('div[data-participant-id], div[data-allocation-index], div[role="region"], div[data-requested-participant-id], div[data-self-name]');
       if (parent) tileSet.add(parent);
     });
 
@@ -1630,20 +1705,15 @@
       const name = extractTileParticipantName(tile);
       if (!name) return;
 
-      const participantKey = 'p_' + name.toLowerCase().replace(/[^a-z0-9]/g, '_');
-
-      // If tile belongs to local user, sync local_host
       if (tile.hasAttribute('data-self-name') ||
-          (cleanHostName && name.toLowerCase() === cleanHostName.toLowerCase()) ||
-          name.toLowerCase() === 'host (you)' ||
-          name.toLowerCase() === 'you') {
-        return;
+          isHostIdentifier(name) ||
+          (cleanHostName && name.toLowerCase() === cleanHostName.toLowerCase())) {
+        return; // Host is handled via local_host
       }
 
-      if (participantKey === 'p_host__you_' || participantKey === 'p_you' || participantKey === 'local_host') return;
+      const participantKey = 'p_' + name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      if (isHostIdentifier(participantKey)) return;
 
-      // Determine camera status for this specific tile:
-      // Priority 1: If student has active live video (or approved break poster), camera is ON
       let tileCamOn = false;
       let detectionMode = 'off';
 
@@ -1659,9 +1729,6 @@
         detectionMode = tileCamOn ? (videoDetectionModes.get(participantKey) || 'webcam') : 'off';
       }
 
-      // DUAL DEVICE CONSOLIDATION & CAMERA-ON PRIORITY:
-      // If student was already detected on another device/tile (e.g. Phone + Laptop):
-      // THE DEVICE WITH CAMERA ON ALWAYS TAKES PRECEDENCE!
       if (detected.has(participantKey)) {
         const existing = detected.get(participantKey);
         existing.hasVisibleTile = true;
@@ -1686,10 +1753,43 @@
       }
     });
 
-    // 4. People Panel (Roster)
-    const peopleListItems = document.querySelectorAll('div[role="listitem"]');
+    // 4. People Panel (Roster) - Strictly scoped to People container, never Chat!
+    const peopleContainers = document.querySelectorAll('div[aria-label*="People" i], div[aria-label*="लोग" i], aside, [data-tab-id="1"]');
+    const peopleListItems = [];
+    if (peopleContainers.length > 0) {
+      peopleContainers.forEach(c => {
+        if (!c.closest('[aria-label*="Chat" i], [aria-label*="संदेश" i], .in-call-chat, [aria-live="polite"]')) {
+          c.querySelectorAll('div[role="listitem"]').forEach(item => peopleListItems.push(item));
+        }
+      });
+    }
+    if (peopleListItems.length === 0) {
+      document.querySelectorAll('div[role="listitem"]').forEach(item => {
+        if (item.closest('[aria-label*="Chat" i], [aria-label*="संदेश" i], .in-call-chat, [aria-live="polite"]')) return;
+        if (item.querySelector('button[aria-label*="action" i], button[aria-label*="pin" i], button[aria-label*="mute" i], [data-participant-id]')) {
+          peopleListItems.push(item);
+        }
+      });
+    }
+
     peopleListItems.forEach(item => {
       let foundName = null;
+
+      const itemAria = item.getAttribute('aria-label') || '';
+      const isYou = itemAria.includes('(You)') || itemAria.includes('(आप)') ||
+                    (item.innerText && (item.innerText.includes('(You)') || item.innerText.includes('(आप)')));
+
+      if (isYou) {
+        const firstPart = itemAria.split(',')[0].replace(/\s*\((?:You|आप)\)/i, '').trim();
+        const hn = sanitizeStudentName(firstPart) || sanitizeStudentName(item.innerText.split('\n')[0]);
+        if (hn && hn !== 'Host (You)') {
+          knownHostNames.add(hn.toLowerCase());
+          if (detected.has('local_host')) {
+            detected.get('local_host').name = `Host (${hn})`;
+          }
+        }
+        return; // Host is strictly exempt from student roster
+      }
 
       // Check canonical name element in People roster item first
       const canonical = item.querySelector('span.zWGUib, div.zWGUib, span[class*="zWGUib"], div[class*="jT57Ub"], [data-participant-id] span, span.notranslate, div.notranslate');
@@ -1698,12 +1798,9 @@
       }
 
       // Check listitem aria-label (Format: "Rahul Sharma, Meeting host, Microphone muted")
-      if (!foundName) {
-        const itemAria = item.getAttribute('aria-label');
-        if (itemAria) {
-          const firstPart = itemAria.split(',')[0].trim();
-          foundName = sanitizeStudentName(firstPart);
-        }
+      if (!foundName && itemAria) {
+        const firstPart = itemAria.split(',')[0].trim();
+        foundName = sanitizeStudentName(firstPart);
       }
 
       // Fallback: check spans outside of avatar initials and buttons
@@ -1725,21 +1822,16 @@
       }
 
       if (!foundName) return;
-      const participantKey = 'p_' + foundName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      if (isHostIdentifier(foundName)) return;
 
-      if ((cleanHostName && foundName.toLowerCase() === cleanHostName.toLowerCase()) ||
-          foundName.toLowerCase() === 'host (you)' ||
-          foundName.toLowerCase() === 'you') return;
-      if (participantKey === 'p_host__you_' || participantKey === 'p_you') return;
+      const participantKey = 'p_' + foundName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      if (isHostIdentifier(participantKey)) return;
 
       // If already detected in grid tiles:
       if (detected.has(participantKey)) {
-        // Participant is already verified in DOM grid! Keep their tile status.
         return;
       }
 
-      // Participant is only in People panel (not on current grid page):
-      // Inherit their last verified status if activeVideoStudents didn't find them
       let inheritedStatus = activeVideoStudents.has(participantKey) ? 'on' : 'off';
       if (!activeVideoStudents.has(participantKey) && session.participants && session.participants[participantKey]) {
         inheritedStatus = session.participants[participantKey].cameraStatus || 'off';
@@ -2100,7 +2192,7 @@
     session.sessionId = serverSess.sessionId || session.sessionId;
     session.meetingCode = serverSess.meetingCode || session.meetingCode;
     session.isTracking = !!serverSess.isTracking;
-    session.isPaused = !!serverSess.isPaused;
+    if (Date.now() - lastUserPauseActionTime > 4000) { session.isPaused = !!serverSess.isPaused; }
     session.startedAt = serverSess.startedAt;
     session.stoppedAt = serverSess.stoppedAt;
     session.totalPausedMs = serverSess.totalPausedMs || 0;
@@ -2157,7 +2249,7 @@
       if (syncDot) {
         if (response && response.success) {
           syncDot.className = 'cm-dot cm-dot-green';
-          if (response.data && response.data.session) {
+          if (response.data && response.data.session && response.data.session.sessionId !== session.sessionId) {
             adoptServerSession(response.data.session);
           }
         } else {
