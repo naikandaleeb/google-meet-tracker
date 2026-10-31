@@ -551,12 +551,6 @@ app.post('/api/session/sync', (req, res) => {
     if (data.currentPauseStart !== undefined) currentSession.currentPauseStart = data.currentPauseStart;
   }
 
-  // If session is NOT tracking and NOT started (freshly reset or idle), DO NOT populate ghost participants from routine heartbeats!
-  if (!currentSession.isTracking && !currentSession.startedAt && !data.isExplicitAction) {
-    currentSession.lastUpdated = Date.now();
-    return res.json({ success: true, session: currentSession });
-  }
-
   currentSession.lastUpdated = Date.now();
 
   // Aliases for paired companion devices to real students

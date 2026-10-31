@@ -571,8 +571,23 @@
       border-left: 2px solid #ff2a4b;
       border-radius: 4px;
     }
-    .cm-def-name { font-weight: 600; color: #f0f2fa; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .cm-def-time { font-family: monospace; color: #ff6b7d; font-weight: 700; }
+    .cm-def-name { font-weight: 600; color: #f0f2fa; max-width: 130px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cm-def-time { font-family: monospace; color: #ff6b7d; font-weight: 700; margin-left: auto; }
+    .cm-def-del {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      color: #f87171;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 10px;
+      cursor: pointer;
+      margin-left: 6px;
+      transition: all 0.2s;
+    }
+    .cm-def-del:hover {
+      background: rgba(239, 68, 68, 0.5);
+      color: #fff;
+    }
     .cm-no-defaulters { font-size: 10px; color: #00ff88; text-align: center; padding: 4px 0; font-weight: 600; }
     
     .cm-hud-actions { display: flex; gap: 5px; }
@@ -961,7 +976,7 @@
     }, (resp) => {
       const _err = chrome.runtime.lastError;
       if (resp && resp.data && resp.data.session) {
-        adoptServerSession(resp.data.session);
+        adoptServerSession(resp.data.session, true);
       }
     });
   }
@@ -1032,7 +1047,7 @@
     }, (resp) => {
       const _err = chrome.runtime.lastError;
       if (resp && resp.data && resp.data.session) {
-        adoptServerSession(resp.data.session);
+        adoptServerSession(resp.data.session, true);
       }
     });
   }
@@ -1137,7 +1152,7 @@
       }, (resp) => {
         const _err = chrome.runtime.lastError;
         if (resp && resp.data && resp.data.session) {
-          adoptServerSession(resp.data.session);
+          adoptServerSession(resp.data.session, true);
         }
       });
     } else {
@@ -1177,7 +1192,7 @@
       }, (resp) => {
         const _err = chrome.runtime.lastError;
         if (resp && resp.data && resp.data.session) {
-          adoptServerSession(resp.data.session);
+          adoptServerSession(resp.data.session, true);
         }
       });
     }
@@ -1360,12 +1375,55 @@
     return true;
   }
 
-  // ================= SMART CAMERA EVALUATION =================
-  // Strict Google Meet native camera detection:
-  // ONLY real camera off is detected (via Google Meet's native avatar/indicator/stream status).
-  // Zero dark pixel / black screen heuristics that falsely cut attendance!
-  function analyzeVideoFrame(video) {
-    return { isBlank: false, isApprovedPoster: false, mode: 'webcam' };
+  // ================= SMART CAMERA & FULL BLACK SCREEN EVALUATION =================
+  let offscreenCanvas = null;
+  let offscreenCtx = null;
+
+  // Ultra-fast canvas frame analyzer:
+  // Detects if a video element is a FULL BLACK SCREEN (physically covered camera, black tape, closed hardware shutter, black OBS)
+  // Real webcams in dark rooms have light/monitor glow on face or surroundings (maxBrightness >= 25).
+  // A physically covered camera is completely pitch black (avgBrightness < 10 AND maxBrightness < 25).
+  function isFullBlackScreen(video) {
+    if (!video || video.readyState < 2 || !video.videoWidth || !video.videoHeight) {
+      return false;
+    }
+
+    const now = Date.now();
+    if (video._ckLastBlackCheck && (now - video._ckLastBlackCheck.time < 1000)) {
+      return video._ckLastBlackCheck.isBlack;
+    }
+
+    try {
+      if (!offscreenCanvas) {
+        offscreenCanvas = document.createElement('canvas');
+        offscreenCanvas.width = 16;
+        offscreenCanvas.height = 16;
+        offscreenCtx = offscreenCanvas.getContext('2d', { willReadFrequently: true });
+      }
+
+      offscreenCtx.drawImage(video, 0, 0, 16, 16);
+      const imgData = offscreenCtx.getImageData(0, 0, 16, 16);
+      const data = imgData.data;
+      const total = 16 * 16;
+
+      let sumBrightness = 0;
+      let maxBrightness = 0;
+
+      for (let i = 0; i < data.length; i += 4) {
+        const br = (data[i] + data[i + 1] + data[i + 2]) / 3;
+        sumBrightness += br;
+        if (br > maxBrightness) maxBrightness = br;
+      }
+
+      const avgBrightness = sumBrightness / total;
+      // FULL BLACK SCREEN: Entire frame has almost zero light (avg < 10 AND max < 25)
+      const isBlack = (avgBrightness < 10 && maxBrightness < 25);
+
+      video._ckLastBlackCheck = { time: now, isBlack };
+      return isBlack;
+    } catch (_) {
+      return false;
+    }
   }
 
   function evaluateTileCamera(tile) {
@@ -1374,22 +1432,43 @@
     // 1. Presentation tiles are NOT webcams
     if (isPresentationTile(tile)) return 'off';
 
-    // 2. Video element check: if active video is present and streaming -> strictly ON!
+    // 2. Video element check
     const video = tile.querySelector('video');
     if (video && isVideoActive(video)) {
+      // If video is streaming a full black screen (tape/shutter/covered lens/black OBS) -> camera is OFF!
+      if (isFullBlackScreen(video)) {
+        return 'off';
+      }
       return 'on';
     }
 
-    // 3. If there is no active video, check if Meet indicates camera off or shows avatar
-    if (isCameraOffIndicated(tile) || isTileShowingAvatar(tile)) {
-      return 'off';
-    }
+    // 3. Explicit camera OFF indicators in Google Meet DOM
+    if (isCameraOffIndicated(tile)) return 'off';
 
     return 'off';
   }
 
   function detectLocalCameraStatus() {
-    // 1. Check bottom toolbar camera buttons
+    // 1. Check local video element in DOM (self-view is mirrored by default in Meet)
+    const videos = Array.from(document.querySelectorAll('video'));
+    for (const v of videos) {
+      let isLocalVideo = false;
+      if (v.closest('div[data-self-name], div[data-participant-id*="self"], div[aria-label*="(You)" i], div[aria-label*="(आप)" i]')) {
+        isLocalVideo = true;
+      } else {
+        const trans = (v.style && v.style.transform) ? v.style.transform : '';
+        try {
+          const comp = window.getComputedStyle(v).transform;
+          if (trans.includes('-1') || comp.includes('-1')) isLocalVideo = true;
+        } catch (_) {}
+      }
+      if (isLocalVideo && isVideoActive(v)) {
+        if (isFullBlackScreen(v)) return 'off';
+        return 'on';
+      }
+    }
+
+    // 2. Check bottom toolbar camera buttons
     const camButtons = Array.from(document.querySelectorAll(
       'button[aria-label*="camera" i], ' +
       'button[data-tooltip*="camera" i], ' +
@@ -1428,24 +1507,6 @@
           label.includes('कैमरा चालू') || tooltip.includes('कैमरा चालू') ||
           label.includes('activar cámara') || label.includes('activer la caméra')) {
         return 'off';
-      }
-    }
-
-    // 2. Check local video element in DOM (self-view is mirrored by default in Meet)
-    const videos = Array.from(document.querySelectorAll('video'));
-    for (const v of videos) {
-      let isLocalVideo = false;
-      if (v.closest('div[data-self-name], div[data-participant-id*="self"], div[aria-label*="(You)" i], div[aria-label*="(आप)" i]')) {
-        isLocalVideo = true;
-      } else {
-        const trans = (v.style && v.style.transform) ? v.style.transform : '';
-        try {
-          const comp = window.getComputedStyle(v).transform;
-          if (trans.includes('-1') || comp.includes('-1')) isLocalVideo = true;
-        } catch (_) {}
-      }
-      if (isLocalVideo && isVideoActive(v)) {
-        return 'on';
       }
     }
 
@@ -1542,25 +1603,31 @@
 
     document.querySelectorAll('video').forEach(v => {
       if (!isVideoActive(v)) return;
+      // If the video frame is a full black screen (physically covered camera / closed shutter / tape) -> NOT active camera!
+      if (isFullBlackScreen(v)) return;
 
-      // Find participant name by walking up to enclosing tile container
-      let container = v.parentElement;
-      let depth = 0;
-      let foundName = null;
-      while (container && depth < 8 && container !== document.body) {
-        if (!isPresentationTile(container)) {
-          const name = extractTileParticipantName(container);
-          if (name) {
-            foundName = name;
-            break;
+      // Find enclosing tile container using native closest() or parent search
+      const tile = v.closest('div[data-participant-id], div[data-requested-participant-id], div[data-initial-participant-id], div[data-allocation-index], div[data-self-name], div[data-tile-id], div[role="region"], div[role="listitem"]') || v.parentElement;
+      let foundName = extractTileParticipantName(tile);
+
+      if (!foundName) {
+        let p = v.parentElement;
+        let depth = 0;
+        while (p && depth < 12 && p !== document.body) {
+          if (!isPresentationTile(p)) {
+            const n = extractTileParticipantName(p);
+            if (n) {
+              foundName = n;
+              break;
+            }
           }
+          p = p.parentElement;
+          depth++;
         }
-        container = container.parentElement;
-        depth++;
       }
 
       if (foundName) {
-        const isSelf = container?.hasAttribute('data-self-name') ||
+        const isSelf = tile?.hasAttribute('data-self-name') ||
                        isHostIdentifier(foundName) ||
                        (cleanHostName && foundName.toLowerCase() === cleanHostName.toLowerCase());
         if (isSelf) {
@@ -1619,15 +1686,18 @@
       let detectionMode = 'off';
 
       if (activeVideoStudents.has(participantKey)) {
-        tileCamOn = true;
-        detectionMode = videoDetectionModes.get(participantKey) || 'webcam';
-      } else if (isTileShowingAvatar(tile) || isCameraOffIndicated(tile)) {
-        tileCamOn = false;
-        detectionMode = 'off';
+        const vid = tile.querySelector('video');
+        if (vid && isFullBlackScreen(vid)) {
+          tileCamOn = false;
+          detectionMode = 'off';
+        } else {
+          tileCamOn = true;
+          detectionMode = 'webcam';
+        }
       } else {
         const evalStatus = evaluateTileCamera(tile);
         tileCamOn = (evalStatus === 'on');
-        detectionMode = tileCamOn ? (videoDetectionModes.get(participantKey) || 'webcam') : 'off';
+        detectionMode = tileCamOn ? 'webcam' : 'off';
       }
 
       if (detected.has(participantKey)) {
@@ -1777,6 +1847,25 @@
     console.log(`[Cockroach Tracker] Host manual camera override for [${p.name}]: ${newOverride ? 'FORCE ON' : 'AUTO'}`);
   }
 
+  // ================= PARTICIPANT DELETION =================
+  function deleteParticipant(participantId, participantName) {
+    if (participantId) deletedParticipants.add(participantId.toLowerCase());
+    if (participantName) deletedParticipants.add(participantName.toLowerCase());
+    if (session.participants && session.participants[participantId]) {
+      delete session.participants[participantId];
+    }
+    chrome.runtime.sendMessage({
+      type: 'SERVER_ACTION',
+      serverUrl: getServerBaseUrl(),
+      action: 'delete_participant',
+      payload: { participantId }
+    }, () => { const _e = chrome.runtime.lastError; });
+
+    saveSession();
+    updateHudUI();
+    console.log(`[Cockroach Tracker] 🗑️ Deleted participant [${participantName || participantId}] from attendance.`);
+  }
+
   // ================= TOTAL TIME IN MEET CALCULATOR =================
   function calculateTotalInMeetMs(p, now = Date.now()) {
     if (!p) return 0;
@@ -1822,13 +1911,6 @@
           callBadge.className = 'cm-call-badge lobby';
         }
       }
-    }
-
-    // If session is NOT tracking and NOT started (idle / freshly reset session),
-    // DO NOT scan and populate participants into session.participants!
-    if (!session.isTracking && !session.startedAt) {
-      updateHudUI();
-      return;
     }
 
     const activeDetected = scanParticipantsInMeeting();
@@ -2089,8 +2171,12 @@
     chrome.storage.local.set({ [storageKey]: session });
   }
 
-  function adoptServerSession(serverSess) {
+  function adoptServerSession(serverSess, isActionResponse = false) {
     if (!serverSess) return;
+
+    if (isActionResponse) {
+      lastUserControlActionTime = 0;
+    }
 
     // IF SESSION ID CHANGED (e.g. Master Reset on server or session loaded):
     // FULLY REPLACE local participants so old participants from previous marathon are completely cleared!
@@ -2106,7 +2192,12 @@
       session.currentPauseStart = serverSess.currentPauseStart;
       session.pauseHistory = serverSess.pauseHistory || [];
       session.targetDurationHours = serverSess.targetDurationHours || 12;
-      session.participants = JSON.parse(JSON.stringify(serverSess.participants || {}));
+
+      if (serverSess.participants && Object.keys(serverSess.participants).length > 0) {
+        session.participants = JSON.parse(JSON.stringify(serverSess.participants));
+      } else if (serverSess.lastResetAt) {
+        session.participants = {};
+      }
       deletedParticipants.clear();
       renderControls();
       updateHudUI();
@@ -2180,7 +2271,7 @@
     session.meetingCode = serverSess.meetingCode || session.meetingCode;
     session.targetDurationHours = serverSess.targetDurationHours || 12;
 
-    if (!isRecentLocalAction) {
+    if (isActionResponse || !isRecentLocalAction) {
       session.isTracking = !!serverSess.isTracking;
       session.isPaused = !!serverSess.isPaused;
       session.startedAt = serverSess.startedAt;
@@ -2275,7 +2366,7 @@
     }
 
     if (event.session) {
-      adoptServerSession(event.session);
+      adoptServerSession(event.session, true);
     }
   }
 
@@ -2364,9 +2455,21 @@
               <div class="cm-def-item">
                 <span class="cm-def-name">${escapeHtml(d.name)}</span>
                 <span class="cm-def-time">OFF: ${formatHms(offMs)}</span>
+                <button class="cm-def-del" data-id="${escapeHtml(d.id)}" data-name="${escapeHtml(d.name)}" title="Delete ${escapeHtml(d.name)} from attendance">🗑️</button>
               </div>
             `;
           }).join('');
+
+          defListEl.querySelectorAll('.cm-def-del').forEach(btn => {
+            btn.onclick = (e) => {
+              e.stopPropagation();
+              const pid = btn.getAttribute('data-id');
+              const pname = btn.getAttribute('data-name');
+              if (confirm(`Are you sure you want to delete "${pname}" from attendance?`)) {
+                deleteParticipant(pid, pname);
+              }
+            };
+          });
         }
       }
     }
@@ -2453,7 +2556,7 @@
     }, (resp) => {
       const _ignored = chrome.runtime.lastError;
       if (resp && resp.success && resp.session) {
-        adoptServerSession(resp.session);
+        adoptServerSession(resp.session, true);
         console.log('[Cockroach Tracker] Hydrated master session from server:', session.sessionId);
       }
       startEnginesOnce();
