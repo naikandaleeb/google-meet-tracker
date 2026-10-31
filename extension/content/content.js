@@ -1586,9 +1586,13 @@
       knownHostNames.add(cleanHostName.toLowerCase());
     }
 
+    const hostDisplayName = (cleanHostName && cleanHostName !== 'Host (You)')
+      ? (cleanHostName.toLowerCase().includes('andaleeb') ? 'Andaleeb Gull (Host)' : `${cleanHostName} (Host)`)
+      : 'Andaleeb Gull (Host)';
+
     detected.set('local_host', {
       id: 'local_host',
-      name: cleanHostName === 'Host (You)' ? 'Host (You)' : `Host (${cleanHostName})`,
+      name: hostDisplayName,
       isLocal: true,
       isHost: true,
       isExempt: true,

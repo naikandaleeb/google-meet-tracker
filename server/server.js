@@ -595,7 +595,7 @@ app.post('/api/session/sync', (req, res) => {
 
       const isLocal = p.isLocal || mappedKey === 'local_host' || mappedKey === 'p_andaleeb_gull' ||
                       (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
-      const validName = isLocal ? (p.name && p.name.toLowerCase().includes('andaleeb') ? 'Host (Andaleeb Gull)' : 'Host (You)') : cleanParticipantName(p.name, false);
+      const validName = isLocal ? 'Andaleeb Gull (Host)' : cleanParticipantName(p.name, false);
       if (validName) {
         let stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
         if (STABLE_KEY_ALIASES[stableKey]) stableKey = STABLE_KEY_ALIASES[stableKey];
@@ -1120,8 +1120,7 @@ function buildCsvContent(sess) {
   const participants = Object.values(sess.participants || {}).filter(p => {
     if (!p || !p.name) return false;
     const lower = p.name.toLowerCase();
-    if (lower.includes('keep_outline') || lower.includes('turn off') || lower === 'pin' || lower === 'unpin') return false;
-    if (p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || lower === 'host' || lower === 'host (you)' || lower.includes('andaleeb gull')) return false;
+    if (lower.includes('keep_outline') || lower.includes('turn off') || lower === 'pin' || lower === 'unpin' || lower.includes('legal disclaimer') || lower.includes('call control') || lower.includes('more option')) return false;
     return true;
   });
 
@@ -1138,8 +1137,9 @@ function buildCsvContent(sess) {
   participants.forEach(p => {
     const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
     const formattedTime = formatHmsStr(camOn);
-    const upperName = (p.name || 'UNKNOWN').trim().toUpperCase();
-    const safeName = `"${upperName.replace(/"/g, '""')}"`;
+    const isHost = p.isLocal || p.id === 'local_host' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb')));
+    const cleanName = isHost ? 'ANDALEEB GULL (HOST)' : (p.name || 'UNKNOWN').trim().toUpperCase();
+    const safeName = `"${cleanName.replace(/"/g, '""')}"`;
     rows.push([safeName, formattedTime]);
   });
 
