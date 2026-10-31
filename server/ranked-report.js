@@ -284,8 +284,8 @@ function consolidateParticipantsForReport(rawList, session = {}) {
   rawList.forEach(p => {
     if (!p || !p.name) return;
     if (session.deletedParticipants && (session.deletedParticipants.includes(p.id) || (p.name && session.deletedParticipants.includes(p.name.toLowerCase())))) return;
-    const isLocal = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
-    const validName = cleanParticipantName(p.name, isLocal);
+    const isLocal = p.isLocal || p.id === 'local_host' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
+    const validName = isLocal ? 'Andaleeb Gull' : cleanParticipantName(p.name, false);
     if (!validName) return;
 
     const STABLE_KEY_ALIASES = {
@@ -310,8 +310,8 @@ function consolidateParticipantsForReport(rawList, session = {}) {
         id: stableKey,
         name: validName,
         isLocal: isLocal,
-        isHost: isLocal,
-        isExempt: isLocal,
+        isHost: false,
+        isExempt: false,
         currentStatus: isPres ? 'present' : (p.currentStatus || existing.currentStatus),
         cameraStatus: isCamOn ? 'on' : 'off',
         rawCameraStatus: isCamOn ? 'on' : 'off',
@@ -333,8 +333,8 @@ function consolidateParticipantsForReport(rawList, session = {}) {
         id: stableKey,
         name: validName,
         isLocal: isLocal,
-        isHost: isLocal,
-        isExempt: isLocal
+        isHost: false,
+        isExempt: false
       });
     }
   });
@@ -344,28 +344,17 @@ function consolidateParticipantsForReport(rawList, session = {}) {
 function generateRankedAttendanceHtml(session, options = {}) {
   const consolidated = consolidateParticipantsForReport(Object.values(session.participants || {}), session);
   const rawParticipants = consolidated;
-  
-  // HOST IS 100% EXEMPT FROM STUDENT RANKING COMPETITION & PODIUM!
-  const hostParticipant = rawParticipants.find(p => p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull'))));
-  if (hostParticipant) {
-    finalizeParticipant(hostParticipant, session, Date.now());
-    hostParticipant.rank = 'EXEMPT';
-    hostParticipant.isExempt = true;
-  }
 
-  // Filter students (Host is exempt from ranking)
+  // Filter out UI control/artifact strings
   const participants = rawParticipants.filter(p => {
     if (!p || !p.name) return false;
     const lower = p.name.toLowerCase();
-    if (lower.includes('keep_outline') || lower.includes('turn off') || lower === 'pin' || lower === 'unpin') return false;
-    if (p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || lower === 'host' || lower === 'host (you)' || lower.includes('andaleeb gull')) return false;
+    if (lower.includes('keep_outline') || lower.includes('turn off') || lower === 'pin' || lower === 'unpin' || lower.includes('legal disclaimers') || lower.includes('call controls') || lower.includes('more options')) return false;
     return true;
   });
 
-  // Dense ranking ONLY on students (Host is exempt)!
+  // Dense ranking on ALL participants (including Andaleeb Gull)!
   computeDenseRanks(participants, session);
-
-  const exemptedCount = hostParticipant ? 1 : 0;
 
   // 7 Hours Milestone in milliseconds: 7 * 3600 * 1000 = 25200000 ms
   const cutoffMs = 7 * 3600 * 1000;
@@ -1036,7 +1025,7 @@ function generateRankedAttendanceHtml(session, options = {}) {
       <div class="meta-item"><span>Session Status:</span> <strong>${session.isTracking ? (session.isPaused ? 'PAUSED ⏸️' : 'ACTIVE 🟢') : 'FINALIZED ⏹️'}</strong></div>
       <div class="meta-item"><span>Started At:</span> <strong>${session.startedAt ? new Date(session.startedAt).toLocaleTimeString('en-IN') : 'N/A'}</strong></div>
       <div class="meta-item"><span>Total Breaks:</span> <strong>${formatHms(session.totalPausedMs || 0)}</strong></div>
-      <div class="meta-item"><span>Host Exemption:</span> <strong style="color: #10b981;">100% EXEMPT</strong></div>
+      <div class="meta-item"><span>Attendance Mode:</span> <strong style="color: #10b981;">All Participating</strong></div>
     </div>
 
     <!-- 4 KPI Metric Cards (Symmetrical landscape row) -->
@@ -1054,8 +1043,8 @@ function generateRankedAttendanceHtml(session, options = {}) {
         <div class="kpi-box-label">7+ HOURS ACHIEVERS</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-box-num" style="color: #2563eb;">${exemptedCount}</div>
-        <div class="kpi-box-label">EXEMPTED (HOST)</div>
+        <div class="kpi-box-num" style="color: #2563eb;">${rankedList.filter(p => p.currentStatus === 'present').length}</div>
+        <div class="kpi-box-label">CURRENTLY PRESENT</div>
       </div>
     </div>
 
@@ -1119,7 +1108,7 @@ function generateRankedAttendanceHtml(session, options = {}) {
     </table>
 
     <div class="notice-callout-box" style="margin-top: 14px; padding: 10px 14px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; font-size: 11px; color: #166534; line-height: 1.5;">
-      <strong>Official Ranking Rules:</strong> Students with identical valid study duration share identical rank. Host (local_host) is 100% exempt from student ranks and deductions.
+      <strong>Official Ranking Rules:</strong> All participants with identical valid study duration share identical rank. Camera ON time is strictly counted as valid study time.
       <br>
       <span style="color: #475569;">For full second-by-second camera cut breakdowns, presence logs, and break charts, view the <a href="/report?theme=pain&print=true" style="color: #dc2626; font-weight: 700; text-decoration: underline;">Akatsuki Pain Full Dossier</a>.</span>
     </div>

@@ -656,6 +656,8 @@ app.post('/api/session/sync', (req, res) => {
           id: stableKey,
           name: validName,
           isLocal: isLocal,
+          isHost: false,
+          isExempt: false,
           presenceIntervals: combinedPresenceIntervals.length > 0 ? combinedPresenceIntervals : (p.presenceIntervals || existing.presenceIntervals || []),
           currentStatus: isPres ? 'present' : 'left',
           cameraStatus: isCamOn ? 'on' : 'off',

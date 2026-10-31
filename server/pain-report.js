@@ -246,8 +246,8 @@ function consolidateParticipantsForReport(rawList, session = {}) {
   rawList.forEach(p => {
     if (!p || !p.name) return;
     if (session.deletedParticipants && (session.deletedParticipants.includes(p.id) || (p.name && session.deletedParticipants.includes(p.name.toLowerCase())))) return;
-    const isLocal = p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
-    const validName = cleanParticipantName(p.name, isLocal);
+    const isLocal = p.isLocal || p.id === 'local_host' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
+    const validName = isLocal ? 'Andaleeb Gull' : cleanParticipantName(p.name, false);
     if (!validName) return;
 
     const STABLE_KEY_ALIASES = {
@@ -272,8 +272,8 @@ function consolidateParticipantsForReport(rawList, session = {}) {
         id: stableKey,
         name: validName,
         isLocal: isLocal,
-        isHost: isLocal,
-        isExempt: isLocal,
+        isHost: false,
+        isExempt: false,
         currentStatus: isPres ? 'present' : (p.currentStatus || existing.currentStatus),
         cameraStatus: isCamOn ? 'on' : 'off',
         rawCameraStatus: isCamOn ? 'on' : 'off',
@@ -295,8 +295,8 @@ function consolidateParticipantsForReport(rawList, session = {}) {
         id: stableKey,
         name: validName,
         isLocal: isLocal,
-        isHost: isLocal,
-        isExempt: isLocal
+        isHost: false,
+        isExempt: false
       });
     }
   });
@@ -307,19 +307,11 @@ function generatePainThemeHtml(session) {
   const now = Date.now();
   const rawParticipants = consolidateParticipantsForReport(Object.values(session.participants || {}), session);
   
-  // Identify Host
-  const hostParticipant = rawParticipants.find(p => p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull'))));
-  if (hostParticipant) {
-    finalizeParticipant(hostParticipant, session, now);
-    hostParticipant.isExempt = true;
-  }
-
-  // Filter students (Host is exempt from rankings & defaulter lists)
+  // Filter out UI control/artifact strings (all valid participants are ranked!)
   const participants = rawParticipants.filter(p => {
     if (!p || !p.name) return false;
     const lower = p.name.toLowerCase();
-    if (lower.includes('keep_outline') || lower.includes('turn off') || lower === 'host' || lower === 'pin' || lower === 'unpin') return false;
-    if (p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || lower === 'host' || lower === 'host (you)' || lower.includes('andaleeb gull')) return false;
+    if (lower.includes('keep_outline') || lower.includes('turn off') || lower === 'pin' || lower === 'unpin' || lower.includes('legal disclaimers') || lower.includes('call controls') || lower.includes('more options')) return false;
     return true;
   });
 
@@ -470,7 +462,6 @@ function generatePainThemeHtml(session) {
             <div class="student-avatar">${initials}</div>
             <div class="student-info">
               <span class="student-name">${escapeHtml(p.name)}</span>
-              ${p.isLocal ? '<span class="tag-host">HOST</span>' : ''}
               ${idx === 0 && camOn > 0 ? '<span class="tag-champion">AKATSUKI CHAMPION</span>' : ''}
               ${p.manualCamOverride ? '<span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 8px; padding: 1px 4px; border-radius: 4px; margin-left: 4px;">📷 MANUAL ON</span>' : ''}
               ${(p.rejoinCount || 0) > 0 ? `<span class="badge" style="background: rgba(167, 139, 250, 0.2); color: #c4b5fd; border: 1px solid rgba(167, 139, 250, 0.4); font-size: 9px; padding: 1px 4px; border-radius: 4px; margin-left: 4px;">🔄 ${p.rejoinCount} Rejoin${p.rejoinCount > 1 ? 's' : ''}</span>` : ''}

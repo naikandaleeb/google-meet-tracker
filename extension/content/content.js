@@ -1932,6 +1932,8 @@
           id: key,
           name: scanned.name,
           isLocal: scanned.isLocal,
+          isHost: false,
+          isExempt: false,
           currentStatus: 'present',
           cameraStatus: rawStatus,
           pendingStatus: null,
@@ -1971,6 +1973,8 @@
         console.log(`[Cockroach Tracker] 👤 Late Joiner Initiated: [${p.name}] at ${formatTimeOnly(now)} (Camera: ${rawStatus.toUpperCase()})`);
       } else {
         p.name = scanned.name || p.name;
+        p.isHost = false;
+        p.isExempt = false;
         
         // CHECK FOR REJOIN: Did this participant previously leave the call?
         if (p.currentStatus === 'left') {

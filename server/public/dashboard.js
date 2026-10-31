@@ -662,7 +662,6 @@ function renderStudentsTable() {
     if (currentFilter === 'cam-off') return p.cameraStatus === 'off';
     if (currentFilter === 'present') return p.currentStatus === 'present';
     if (currentFilter === 'defaulters') {
-      if (p.isLocal || p.id === 'local_host' || (p.name && p.name.toLowerCase().includes('host'))) return false;
       const tot = p.totalPresentMs || 0;
       const on = p.cameraOnMs || 0;
       const comp = tot > 0 ? (on / tot) * 100 : 100;
