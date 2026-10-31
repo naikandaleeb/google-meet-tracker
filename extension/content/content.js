@@ -1587,15 +1587,15 @@
     }
 
     const hostDisplayName = (cleanHostName && cleanHostName !== 'Host (You)')
-      ? (cleanHostName.toLowerCase().includes('andaleeb') ? 'Andaleeb Gull (Host)' : `${cleanHostName} (Host)`)
-      : 'Andaleeb Gull (Host)';
+      ? (cleanHostName.toLowerCase().includes('andaleeb') ? 'Andaleeb Gull' : cleanHostName)
+      : 'Andaleeb Gull';
 
     detected.set('local_host', {
       id: 'local_host',
       name: hostDisplayName,
       isLocal: true,
-      isHost: true,
-      isExempt: true,
+      isHost: false,
+      isExempt: false,
       hasVisibleTile: true,
       cameraStatus: localCamState,
       rawCameraStatus: localCamState
@@ -1760,7 +1760,7 @@
         if (hn && hn !== 'Host (You)') {
           knownHostNames.add(hn.toLowerCase());
           if (detected.has('local_host')) {
-            detected.get('local_host').name = `Host (${hn})`;
+            detected.get('local_host').name = hn.toLowerCase().includes('andaleeb') ? 'Andaleeb Gull' : hn;
           }
         }
         return; // Host is strictly exempt from student roster
@@ -2443,8 +2443,8 @@
         defListEl.innerHTML = '<div class="cm-no-defaulters">⏸️ Attendance Paused (Break Time)</div>';
       }
     } else {
-      // EXEMPT HOST from Defaulters Watch!
-      const defaulters = presentList.filter(p => !p.isLocal && p.id !== 'local_host' && !(p.name && p.name.toLowerCase().includes('host')) && p.cameraStatus === 'off');
+      // Camera OFF Defaulters Watch for all participants (no exemptions)
+      const defaulters = presentList.filter(p => p.cameraStatus === 'off');
       if (defCountEl) defCountEl.innerText = `${defaulters.length}`;
       if (defListEl) {
         if (defaulters.length === 0) {

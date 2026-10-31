@@ -607,8 +607,8 @@ function renderUI() {
     sessionStartedLabel.innerText = 'Ready to start';
   }
 
-  // Defaulters Alert: EXEMPT HOST completely!
-  const presentStudents = participants.filter(p => p.currentStatus === 'present' && !p.isLocal && p.id !== 'local_host' && !(p.name && p.name.toLowerCase().includes('host')));
+  // Defaulters Alert: includes all present participants
+  const presentStudents = participants.filter(p => p.currentStatus === 'present');
   const defaulters = presentStudents.filter(p => {
     const totMeet = p.totalPresentMs || 0;
     const camOn = p.cameraOnMs || 0;
@@ -681,27 +681,19 @@ function renderStudentsTable() {
   });
 
   // ASSIGN DENSE RANK: Equal study durations share the exact same rank!
-  // HOST IS 100% EXEMPT FROM COMPETING IN STUDENT RANKS!
   let currentRank = 1;
-  const nonHostStudents = filtered.filter(p => !p.isLocal && p.id !== 'local_host' && p.id !== 'p_andaleeb_gull' && !(p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull'))));
-  
-  for (let i = 0; i < nonHostStudents.length; i++) {
+  for (let i = 0; i < filtered.length; i++) {
     if (i > 0) {
-      const prevTime = nonHostStudents[i - 1].validStudyMs !== undefined ? nonHostStudents[i - 1].validStudyMs : (nonHostStudents[i - 1].cameraOnMs || 0);
-      const currTime = nonHostStudents[i].validStudyMs !== undefined ? nonHostStudents[i].validStudyMs : (nonHostStudents[i].cameraOnMs || 0);
+      const prevTime = filtered[i - 1].validStudyMs !== undefined ? filtered[i - 1].validStudyMs : (filtered[i - 1].cameraOnMs || 0);
+      const currTime = filtered[i].validStudyMs !== undefined ? filtered[i].validStudyMs : (filtered[i].cameraOnMs || 0);
       const prevSec = Math.floor(prevTime / 1000);
       const currSec = Math.floor(currTime / 1000);
       if (currSec < prevSec) {
         currentRank++;
       }
     }
-    nonHostStudents[i].rank = currentRank;
+    filtered[i].rank = currentRank;
   }
-
-  filtered.forEach(p => {
-    const isHost = p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
-    if (isHost) p.rank = 'HOST';
-  });
 
   if (filtered.length === 0) {
     const existingEmpty = studentsTbody.querySelector('.empty-row');
@@ -750,7 +742,6 @@ function renderStudentsTable() {
       const tr = document.getElementById(`student-row-${p.id}`);
       if (!tr) return;
 
-      const isHost = p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
       const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
       const camOff = p.cameraOffMs || 0;
       const totMeet = camOn + camOff;
@@ -763,9 +754,7 @@ function renderStudentsTable() {
       const rankCol = tr.querySelector('.td-rank-col');
       if (rankCol) {
         let rankBadge = `<span class="td-rank">#${p.rank}</span>`;
-        if (isHost) {
-          rankBadge = `<span class="badge-exempt-host" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 800;">EXEMPT [HOST]</span>`;
-        } else if (p.rank === 1 && camOn > 0) {
+        if (p.rank === 1 && camOn > 0) {
           rankBadge = `<span class="rank-crown" title="RANK 1 - Shared Top Valid Study Time!">👑 #1</span>`;
         } else if (p.rank === 2 && camOn > 0) {
           rankBadge = `<span class="rank-medal silver">🥈 #2</span>`;
@@ -852,7 +841,6 @@ function renderStudentsTable() {
   }
 
   studentsTbody.innerHTML = filtered.map(p => {
-    const isHost = p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
     const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
     const camOff = p.cameraOffMs || 0;
     const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
@@ -861,11 +849,9 @@ function renderStudentsTable() {
     const isCamOn = p.cameraStatus === 'on';
     const isPresent = p.currentStatus === 'present';
 
-    // Rank Badges: All students sharing Rank 1 get the Crown! Host is marked EXEMPT!
+    // Rank Badges: All students sharing Rank 1 get the Crown!
     let rankBadge = `<span class="td-rank">#${p.rank}</span>`;
-    if (isHost) {
-      rankBadge = `<span class="badge-exempt-host" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 800;">EXEMPT [HOST]</span>`;
-    } else if (p.rank === 1 && camOn > 0) {
+    if (p.rank === 1 && camOn > 0) {
       rankBadge = `<span class="rank-crown" title="RANK 1 - Shared Top Valid Study Time!">👑 #1</span>`;
     } else if (p.rank === 2 && camOn > 0) {
       rankBadge = `<span class="rank-medal silver">🥈 #2</span>`;
@@ -923,8 +909,7 @@ function renderStudentsTable() {
             <div class="student-avatar">${initials}</div>
             <div>
               <span class="student-name-text">${escapeHtml(p.name)}</span>
-              ${isHost ? '<span class="student-local-tag" style="background:#10b981; color:#fff;">HOST (EXEMPT)</span>' : ''}
-              ${!isHost && p.rank === 1 && camOn > 0 ? '<span class="badge-champ">CHAMPION</span>' : ''}
+              ${p.rank === 1 && camOn > 0 ? '<span class="badge-champ">CHAMPION</span>' : ''}
               ${rejoinBadge}
               ${p.videoDetectionMode === 'poster' ? '<span class="badge" style="background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); font-size: 10px; padding: 1px 5px; border-radius: 4px; font-weight: 700; margin-left: 5px;" title="Official Break Poster detected (Camera counted ON)">☕ Break Poster</span>' : ''}
               ${p.videoDetectionMode === 'blank' ? '<span class="badge" style="background: rgba(239, 68, 68, 0.18); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); font-size: 10px; padding: 1px 5px; border-radius: 4px; font-weight: 700; margin-left: 5px;" title="Blank or OBS screen detected - attendance cut!">⚠️ Blank/OBS</span>' : ''}
@@ -960,19 +945,17 @@ function renderStudentsTable() {
         <td>
           <div style="display: flex; gap: 6px; align-items: center;">
             <button class="btn-details" onclick="openStudentModal('${escapeHtml(p.id)}')">Breakdown</button>
-            ${!isHost ? `
-              <button class="btn-cam-override ${p.manualCamOverride ? 'active' : ''}" 
-                      onclick="toggleParticipantCameraOverride('${escapeHtml(p.id)}')" 
-                      title="${p.manualCamOverride ? 'Revert to automatic camera detection' : 'Host Override: Force Camera ON'}">
-                ${p.manualCamOverride ? '↺ Auto' : '📷 Force ON'}
-              </button>
-              <button class="btn-delete-student" 
-                      onclick="deleteParticipantPrompt('${escapeHtml(p.id)}')" 
-                      title="Permanently delete ${escapeHtml(p.name)} from attendance"
-                      style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 4px; padding: 3px 8px; font-size: 11px; cursor: pointer; transition: all 0.2s;">
-                🗑️
-              </button>
-            ` : ''}
+            <button class="btn-cam-override ${p.manualCamOverride ? 'active' : ''}" 
+                    onclick="toggleParticipantCameraOverride('${escapeHtml(p.id)}')" 
+                    title="${p.manualCamOverride ? 'Revert to automatic camera detection' : 'Host Override: Force Camera ON'}">
+              ${p.manualCamOverride ? '↺ Auto' : '📷 Force ON'}
+            </button>
+            <button class="btn-delete-student" 
+                    onclick="deleteParticipantPrompt('${escapeHtml(p.id)}')" 
+                    title="Permanently delete ${escapeHtml(p.name)} from attendance"
+                    style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 4px; padding: 3px 8px; font-size: 11px; cursor: pointer; transition: all 0.2s;">
+              🗑️
+            </button>
           </div>
         </td>
       </tr>
@@ -1055,8 +1038,7 @@ window.openStudentModal = function(id) {
 
   const idEl = document.getElementById('modal-id');
   if (idEl) {
-    const isHost = p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
-    idEl.innerText = `ID: ${p.id} • Rank: ${isHost ? 'EXEMPT [HOST]' : `#${p.rank || '-'}`} • First Joined: ${formatIstTime(p.firstSeen || p.joinTime)}`;
+    idEl.innerText = `ID: ${p.id} • Rank: #${p.rank || '-'} • First Joined: ${formatIstTime(p.firstSeen || p.joinTime)}`;
   }
 
   const meetEl = document.getElementById('modal-total-meet') || document.getElementById('modal-total-time');
@@ -1180,17 +1162,12 @@ window.openStudentModal = function(id) {
 
   const modalDeleteBtn = document.getElementById('modal-btn-delete-student');
   if (modalDeleteBtn) {
-    const isHost = p.isLocal || p.id === 'local_host' || p.id === 'p_andaleeb_gull' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
-    if (isHost) {
-      modalDeleteBtn.style.display = 'none';
-    } else {
-      modalDeleteBtn.style.display = 'inline-block';
-      modalDeleteBtn.onclick = () => {
-        deleteParticipantPrompt(p.id, () => {
-          studentModal.style.display = 'none';
-        });
-      };
-    }
+    modalDeleteBtn.style.display = 'inline-block';
+    modalDeleteBtn.onclick = () => {
+      deleteParticipantPrompt(p.id, () => {
+        studentModal.style.display = 'none';
+      });
+    };
   }
 
   studentModal.style.display = 'flex';

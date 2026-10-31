@@ -304,8 +304,8 @@ function cleanAllSessionParticipants(sess) {
   const cleaned = {};
   for (const [k, p] of Object.entries(sess.participants)) {
     if (!p) continue;
-    const isLocal = p.isLocal || k === 'local_host' || (p.name && p.name.toLowerCase().includes('host'));
-    const validName = cleanParticipantName(p.name, isLocal);
+    const isLocal = p.isLocal || k === 'local_host' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
+    const validName = isLocal ? 'Andaleeb Gull' : cleanParticipantName(p.name, false);
     if (!validName) continue;
 
     const stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
@@ -360,8 +360,8 @@ function cleanAllSessionParticipants(sess) {
         id: stableKey,
         name: validName,
         isLocal: isLocal,
-        isHost: isLocal,
-        isExempt: isLocal,
+        isHost: false,
+        isExempt: false,
         currentStatus: isPres ? 'present' : (p.currentStatus || existing.currentStatus),
         cameraStatus: isCamOn ? 'on' : 'off',
         rawCameraStatus: isCamOn ? 'on' : 'off',
@@ -388,8 +388,8 @@ function cleanAllSessionParticipants(sess) {
         id: stableKey,
         name: validName,
         isLocal: isLocal,
-        isHost: isLocal,
-        isExempt: isLocal
+        isHost: false,
+        isExempt: false
       };
       finalizeParticipant(candidate, sess, now);
       cleaned[stableKey] = candidate;
@@ -560,7 +560,7 @@ app.post('/api/session/sync', (req, res) => {
   };
 
   // Purge bad keys & host duplicate
-  const badKeys = ['p_message', 'p_open_the_people_panel', 'p_admin', 'p_spam_com', 'p_andaleeb_gull'];
+  const badKeys = ['p_message', 'p_open_the_people_panel', 'p_admin', 'p_spam_com', 'p_legal_disclaimers', 'p_call_controls', 'p_arrow_drop_down'];
   badKeys.forEach(bk => { if (currentSession.participants && currentSession.participants[bk]) delete currentSession.participants[bk]; });
 
   // Merge participants with clean name enforcement and valid study time calculation
@@ -593,9 +593,9 @@ app.post('/api/session/sync', (req, res) => {
         }
       }
 
-      const isLocal = p.isLocal || mappedKey === 'local_host' || mappedKey === 'p_andaleeb_gull' ||
+      const isLocal = p.isLocal || mappedKey === 'local_host' ||
                       (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
-      const validName = isLocal ? 'Andaleeb Gull (Host)' : cleanParticipantName(p.name, false);
+      const validName = isLocal ? 'Andaleeb Gull' : cleanParticipantName(p.name, false);
       if (validName) {
         let stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
         if (STABLE_KEY_ALIASES[stableKey]) stableKey = STABLE_KEY_ALIASES[stableKey];
@@ -1137,8 +1137,8 @@ function buildCsvContent(sess) {
   participants.forEach(p => {
     const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
     const formattedTime = formatHmsStr(camOn);
-    const isHost = p.isLocal || p.id === 'local_host' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb')));
-    const cleanName = isHost ? 'ANDALEEB GULL (HOST)' : (p.name || 'UNKNOWN').trim().toUpperCase();
+    const isLocalHost = p.isLocal || p.id === 'local_host' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb')));
+    const cleanName = isLocalHost ? 'ANDALEEB GULL' : (p.name || 'UNKNOWN').trim().toUpperCase();
     const safeName = `"${cleanName.replace(/"/g, '""')}"`;
     rows.push([safeName, formattedTime]);
   });
