@@ -1144,7 +1144,8 @@ function buildCsvContent(sess) {
   participants.forEach(p => {
     const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
     const formattedTime = formatHmsStr(camOn);
-    const safeName = `"${(p.name || 'Unknown').replace(/"/g, '""')}"`;
+    const upperName = (p.name || 'UNKNOWN').trim().toUpperCase();
+    const safeName = `"${upperName.replace(/"/g, '""')}"`;
     rows.push([safeName, formattedTime]);
   });
 

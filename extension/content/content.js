@@ -1273,9 +1273,15 @@
   }
 
   // Detects if Google Meet is showing an avatar (profile picture or initial circle) in the tile
-  // If an avatar is visible in the tile, the participant's camera is 100% OFF!
+  // If an avatar is visible in the tile and NO active video is streaming, camera is 100% OFF!
   function isTileShowingAvatar(tile) {
     if (!tile) return false;
+
+    // If tile contains an active video streaming, it is definitively NOT showing an avatar!
+    const video = tile.querySelector('video');
+    if (video && isVideoActive(video)) {
+      return false;
+    }
 
     // 1. Google Account Profile Image
     const profileImgs = tile.querySelectorAll('img[src*="googleusercontent.com"], img[src*="gstatic.com"], img[class*="avatar" i], img[data-image-avatar]');
@@ -1286,11 +1292,11 @@
     }
 
     // 2. Center Initial Circle or Avatar Container
-    const avatarContainers = tile.querySelectorAll('div[data-avatar-container], div[class*="avatar" i], div[role="img"], div[aria-label*="avatar" i], span[class*="avatar" i]');
+    const avatarContainers = tile.querySelectorAll('div[data-avatar-container], div[class*="avatar" i], div[aria-label*="avatar" i], span[class*="avatar" i]');
     for (const el of avatarContainers) {
       if (isElementVisible(el) && el.offsetWidth >= 22 && el.offsetHeight >= 22) {
         const lbl = (el.getAttribute('aria-label') || '').toLowerCase();
-        if (!lbl.includes('mic') && !lbl.includes('audio') && !lbl.includes('mute')) {
+        if (!lbl.includes('mic') && !lbl.includes('audio') && !lbl.includes('mute') && !lbl.includes('pin')) {
           return true;
         }
       }
@@ -1330,12 +1336,12 @@
     if (video.srcObject && typeof video.srcObject.getVideoTracks === 'function') {
       const tracks = video.srcObject.getVideoTracks();
       if (tracks && tracks.length > 0) {
-        // If all tracks are disabled, ended, or muted -> camera is OFF
-        const allInactive = tracks.every(t => !t.enabled || t.readyState === 'ended' || t.muted);
+        // If all tracks are explicitly disabled or ended -> camera is OFF
+        const allInactive = tracks.every(t => !t.enabled || t.readyState === 'ended');
         if (allInactive) return false;
 
-        // Must have at least one active, enabled, unmuted live track
-        const hasLive = tracks.some(t => t.enabled && t.readyState === 'live' && !t.muted);
+        // Must have at least one active, enabled live track
+        const hasLive = tracks.some(t => t.enabled && t.readyState === 'live');
         if (!hasLive) return false;
       }
     }
@@ -1368,19 +1374,15 @@
     // 1. Presentation tiles are NOT webcams
     if (isPresentationTile(tile)) return 'off';
 
-    // 2. Explicit camera OFF indicators in Google Meet DOM
-    if (isCameraOffIndicated(tile)) return 'off';
-
-    // 3. If tile is showing Google Profile Avatar or initial circle -> Camera is 100% OFF!
-    if (isTileShowingAvatar(tile)) return 'off';
-
-    // 4. Video element check
+    // 2. Video element check: if active video is present and streaming -> strictly ON!
     const video = tile.querySelector('video');
-    if (!video) return 'off';
-
-    // 5. If video is actively streaming frames:
-    if (isVideoActive(video)) {
+    if (video && isVideoActive(video)) {
       return 'on';
+    }
+
+    // 3. If there is no active video, check if Meet indicates camera off or shows avatar
+    if (isCameraOffIndicated(tile) || isTileShowingAvatar(tile)) {
+      return 'off';
     }
 
     return 'off';
@@ -1558,25 +1560,21 @@
       }
 
       if (foundName) {
-        if (container && (isTileShowingAvatar(container) || isCameraOffIndicated(container))) {
-          return;
-        }
-
         const isSelf = container?.hasAttribute('data-self-name') ||
                        isHostIdentifier(foundName) ||
                        (cleanHostName && foundName.toLowerCase() === cleanHostName.toLowerCase());
         if (isSelf) {
           activeVideoStudents.add('local_host');
-          videoDetectionModes.set('local_host', analysis.mode);
+          videoDetectionModes.set('local_host', 'webcam');
           if (detected.has('local_host')) {
             detected.get('local_host').cameraStatus = 'on';
             detected.get('local_host').rawCameraStatus = 'on';
-            detected.get('local_host').videoDetectionMode = analysis.mode;
+            detected.get('local_host').videoDetectionMode = 'webcam';
           }
         } else {
           const pKey = 'p_' + foundName.toLowerCase().replace(/[^a-z0-9]/g, '_');
           activeVideoStudents.add(pKey);
-          videoDetectionModes.set(pKey, analysis.mode);
+          videoDetectionModes.set(pKey, 'webcam');
         }
       }
     });
@@ -1585,8 +1583,11 @@
     const tileSelectors = [
       'div[data-participant-id]',
       'div[data-requested-participant-id]',
+      'div[data-initial-participant-id]',
       'div[data-allocation-index]',
-      'div[data-self-name]'
+      'div[data-self-name]',
+      'div[data-tile-id]',
+      'div[role="region"][aria-label]'
     ];
 
     const tileSet = new Set(document.querySelectorAll(tileSelectors.join(',')));
