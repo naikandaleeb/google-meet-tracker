@@ -1130,9 +1130,15 @@
       }
       lastTickTime = now;
 
-      // When resuming, restart cameraOffCurrentStart for participants whose camera is still off
+      // When resuming, restart camera intervals for present ON participants, and cameraOffCurrentStart for OFF
       Object.values(session.participants || {}).forEach(p => {
-        if (p.cameraStatus === 'off' && p.currentStatus === 'present') {
+        if (p.currentStatus === 'present' && p.cameraStatus === 'on') {
+          if (!p.cameraIntervals) p.cameraIntervals = [];
+          const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+          if (!last || last.end) {
+            p.cameraIntervals.push({ start: now, end: null, state: 'on' });
+          }
+        } else if (p.cameraStatus === 'off' && p.currentStatus === 'present') {
           p.cameraOffCurrentStart = now;
         } else {
           p.cameraOffCurrentStart = null;
@@ -1160,8 +1166,12 @@
       session.isPaused = true;
       session.currentPauseStart = now;
 
-      // Freeze & close any ongoing camera OFF intervals so break time is NEVER deducted as camera off!
+      // Freeze & close any ongoing camera intervals & camera OFF intervals so break time is NEVER counted!
       Object.values(session.participants || {}).forEach(p => {
+        if (p.cameraIntervals && p.cameraIntervals.length > 0) {
+          const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+          if (last && !last.end) last.end = now;
+        }
         if (p.cameraOffCurrentStart) {
           const offDur = Math.max(0, now - p.cameraOffCurrentStart);
           if (offDur >= 1000) {
@@ -2300,6 +2310,28 @@
     }
 
     if (controlChanged) {
+      if (session.isPaused) {
+        // Paused on server: close open camera intervals
+        const pauseTs = toEpochMs(session.currentPauseStart) || Date.now();
+        Object.values(session.participants || {}).forEach(p => {
+          if (p.cameraIntervals && p.cameraIntervals.length > 0) {
+            const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+            if (last && !last.end) last.end = pauseTs;
+          }
+        });
+      } else if (session.isTracking && !session.isPaused) {
+        // Resumed on server: re-open intervals for present ON participants
+        const resumeTs = Date.now();
+        Object.values(session.participants || {}).forEach(p => {
+          if (p.currentStatus === 'present' && p.cameraStatus === 'on') {
+            if (!p.cameraIntervals) p.cameraIntervals = [];
+            const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+            if (!last || last.end) {
+              p.cameraIntervals.push({ start: resumeTs, end: null, state: 'on' });
+            }
+          }
+        });
+      }
       console.log(`[Cockroach Tracker] Master tracking state synced from server: isTracking=${session.isTracking}, isPaused=${session.isPaused}`);
       renderControls();
       updateHudUI();

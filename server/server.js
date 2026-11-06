@@ -185,15 +185,55 @@ function toEpochMs(ts) {
   return isNaN(parsed) ? null : parsed;
 }
 
-function calculateTotalInMeetMs(p, sessionStartedAt, now = Date.now()) {
+function getEffectiveNow(sess, now = Date.now()) {
+  if (!sess) return now;
+  if (sess.isPaused && sess.currentPauseStart) {
+    return Math.min(now, toEpochMs(sess.currentPauseStart));
+  }
+  if (sess.stoppedAt) {
+    return Math.min(now, toEpochMs(sess.stoppedAt));
+  }
+  return now;
+}
+
+function getOverlappingPauseMs(intStart, intEnd, sess, now = Date.now()) {
+  if (!sess) return 0;
+  let pausedMs = 0;
+  if (Array.isArray(sess.pauseHistory)) {
+    sess.pauseHistory.forEach(ph => {
+      const pStart = toEpochMs(ph.pausedAt);
+      const pEnd = toEpochMs(ph.resumedAt) || (pStart + (ph.durationMs || 0));
+      if (pStart && pEnd && pEnd > pStart) {
+        const oStart = Math.max(intStart, pStart);
+        const oEnd = Math.min(intEnd, pEnd);
+        if (oEnd > oStart) {
+          pausedMs += (oEnd - oStart);
+        }
+      }
+    });
+  }
+  if (sess.isPaused && sess.currentPauseStart) {
+    const pStart = toEpochMs(sess.currentPauseStart);
+    const pEnd = Math.max(pStart, now);
+    const oStart = Math.max(intStart, pStart);
+    const oEnd = Math.min(intEnd, pEnd);
+    if (oEnd > oStart) {
+      pausedMs += (oEnd - oStart);
+    }
+  }
+  return pausedMs;
+}
+
+function calculateTotalInMeetMs(p, sessionStartedAt, now = Date.now(), sess = currentSession) {
   if (!p) return 0;
-  const maxSessionMs = Math.max(0, now - (toEpochMs(sessionStartedAt) || toEpochMs(currentSession?.startedAt) || (now - 6 * 3600000)));
+  const effectiveNow = getEffectiveNow(sess, now);
+  const maxSessionMs = Math.max(0, effectiveNow - (toEpochMs(sessionStartedAt) || toEpochMs(sess?.startedAt) || (effectiveNow - 6 * 3600000)));
 
   if (Array.isArray(p.presenceIntervals) && p.presenceIntervals.length > 0) {
     const sorted = p.presenceIntervals
       .map(int => ({
-        start: toEpochMs(int.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sessionStartedAt) || now,
-        end: toEpochMs(int.leaveTime) || (p.currentStatus === 'present' ? now : (toEpochMs(p.lastSeen) || now))
+        start: toEpochMs(int.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sessionStartedAt) || effectiveNow,
+        end: toEpochMs(int.leaveTime) || (p.currentStatus === 'present' ? effectiveNow : (toEpochMs(p.lastSeen) || effectiveNow))
       }))
       .filter(i => i.end >= i.start)
       .sort((a, b) => a.start - b.start);
@@ -216,12 +256,13 @@ function calculateTotalInMeetMs(p, sessionStartedAt, now = Date.now()) {
 
   const st = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sessionStartedAt);
   if (!st) return Math.min(p.totalPresentMs || 0, maxSessionMs);
-  const en = toEpochMs(p.leaveTime) || (p.currentStatus === 'present' ? now : (toEpochMs(p.lastSeen) || now));
+  const en = toEpochMs(p.leaveTime) || (p.currentStatus === 'present' ? effectiveNow : (toEpochMs(p.lastSeen) || effectiveNow));
   return Math.min(Math.max(0, en - st), maxSessionMs);
 }
 
-function getParticipantNaturalCamOnMs(p, totalInMeetMs, now = Date.now()) {
+function getParticipantNaturalCamOnMs(p, totalInMeetMs, now = Date.now(), sess = currentSession) {
   if (!p) return 0;
+  const effectiveNow = getEffectiveNow(sess, now);
   let dur = 0;
   let hasIntervals = false;
   if (p.cameraIntervals && Array.isArray(p.cameraIntervals) && p.cameraIntervals.length > 0) {
@@ -229,9 +270,11 @@ function getParticipantNaturalCamOnMs(p, totalInMeetMs, now = Date.now()) {
     p.cameraIntervals.forEach(int => {
       if (int.state === 'on') {
         const start = toEpochMs(int.start);
-        const end = int.end ? toEpochMs(int.end) : (p.cameraStatus === 'on' && p.currentStatus === 'present' ? now : (toEpochMs(p.leaveTime) || toEpochMs(p.lastSeen) || start));
+        const end = int.end ? toEpochMs(int.end) : (p.cameraStatus === 'on' && p.currentStatus === 'present' ? effectiveNow : (toEpochMs(p.leaveTime) || toEpochMs(p.lastSeen) || start));
         if (start && end && end >= start) {
-          dur += (end - start);
+          const raw = end - start;
+          const pauseOverlap = getOverlappingPauseMs(start, end, sess, now);
+          dur += Math.max(0, raw - pauseOverlap);
         }
       }
     });
@@ -244,24 +287,21 @@ function getParticipantNaturalCamOnMs(p, totalInMeetMs, now = Date.now()) {
   return Math.min(rawCam, totalInMeetMs !== undefined ? totalInMeetMs : rawCam);
 }
 
-function finalizeParticipant(p, sess = {}, now = Date.now()) {
+function finalizeParticipant(p, sess = currentSession, now = Date.now()) {
   if (!p) return;
 
-  const joinTs = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sess.startedAt) || now;
+  const effectiveNow = getEffectiveNow(sess, now);
+  const joinTs = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sess?.startedAt) || effectiveNow;
   const leaveTs = toEpochMs(p.leaveTime) || (p.currentStatus === 'left' ? toEpochMs(p.lastSeen) : null);
-  const sessionStopTs = toEpochMs(sess.stoppedAt);
-  const pauseStartTs = sess.isPaused ? toEpochMs(sess.currentPauseStart) : null;
-  
-  // Effective end time: if participant left, use leaveTime; else if session stopped, use stoppedAt; else if session paused, use currentPauseStart; else now
-  const effectiveEndTime = leaveTs || sessionStopTs || pauseStartTs || now;
+  const effectiveEndTime = leaveTs || effectiveNow;
 
   p.joinTime = joinTs;
   p.firstSeen = joinTs;
   p.leaveTime = leaveTs;
   p.lastSeen = toEpochMs(p.lastSeen) || effectiveEndTime;
 
-  const totalInMeetMs = calculateTotalInMeetMs(p, sess.startedAt, now);
-  const camOn = getParticipantNaturalCamOnMs(p, totalInMeetMs, now);
+  const totalInMeetMs = calculateTotalInMeetMs(p, sess?.startedAt, now, sess);
+  const camOn = getParticipantNaturalCamOnMs(p, totalInMeetMs, now, sess);
   const camOff = Math.max(0, totalInMeetMs - camOn);
   const manualAdj = p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0);
   const validStudy = Math.max(0, camOn + manualAdj);
@@ -818,8 +858,12 @@ app.post('/api/session/action', (req, res) => {
       currentSession.isPaused = true;
       currentSession.currentPauseStart = now;
 
-      // Close open camera OFF intervals so break time is NOT counted as camera off
+      // Close open camera OFF intervals & open camera intervals so break time is NOT counted as study time
       Object.values(currentSession.participants || {}).forEach(p => {
+        if (p.cameraIntervals && p.cameraIntervals.length > 0) {
+          const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+          if (last && !last.end) last.end = now;
+        }
         if (p.cameraOffCurrentStart) {
           const offDur = Math.max(0, now - p.cameraOffCurrentStart);
           if (offDur >= 1000) {
@@ -835,8 +879,7 @@ app.post('/api/session/action', (req, res) => {
           }
           p.cameraOffCurrentStart = null;
         }
-        const totalIntervalsOff = (p.cameraOffIntervals || []).reduce((sum, int) => sum + (int.durationMs || 0), 0);
-        p.cameraOffMs = Math.max(p.cameraOffMs || 0, totalIntervalsOff);
+        finalizeParticipant(p, currentSession, now);
       });
 
       persistCurrentSession();
@@ -864,13 +907,18 @@ app.post('/api/session/action', (req, res) => {
       currentSession.currentPauseStart = null;
     }
 
-    // Restart cameraOffCurrentStart for participants whose camera is still off
+    // Restart camera intervals for participants whose camera is ON, and cameraOffCurrentStart for OFF
     Object.values(currentSession.participants || {}).forEach(p => {
-      if (p.cameraStatus === 'off' && p.currentStatus === 'present') {
+      if (p.currentStatus === 'present' && (p.cameraStatus === 'on' || p.manualCamOverride === true)) {
+        if (!p.cameraIntervals) p.cameraIntervals = [];
+        const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+        if (!last || last.end) {
+          p.cameraIntervals.push({ start: now, end: null, state: 'on' });
+        }
+      } else if (p.currentStatus === 'present' && p.cameraStatus === 'off') {
         p.cameraOffCurrentStart = now;
-      } else {
-        p.cameraOffCurrentStart = null;
       }
+      finalizeParticipant(p, currentSession, now);
     });
 
     persistCurrentSession();
