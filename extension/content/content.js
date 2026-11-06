@@ -2238,10 +2238,18 @@
         if (!localP) {
           session.participants[id] = { ...sp };
         } else {
-          localP.cameraOnMs = Math.max(localP.cameraOnMs || 0, sp.cameraOnMs || 0);
-          localP.cameraOffMs = Math.max(localP.cameraOffMs || 0, sp.cameraOffMs || 0);
-          localP.validStudyMs = Math.max(localP.validStudyMs || 0, sp.validStudyMs || 0);
-          localP.totalPresentMs = Math.max(localP.totalPresentMs || 0, sp.totalPresentMs || 0);
+          if (sp.studyAdjustmentMs !== undefined && sp.studyAdjustmentMs !== localP.studyAdjustmentMs) {
+            localP.studyAdjustmentMs = sp.studyAdjustmentMs;
+            localP.cameraOnMs = sp.cameraOnMs;
+            localP.validStudyMs = sp.validStudyMs;
+            localP.cameraOffMs = sp.cameraOffMs;
+            localP.totalPresentMs = sp.totalPresentMs;
+          } else {
+            localP.cameraOnMs = Math.max(localP.cameraOnMs || 0, sp.cameraOnMs || 0);
+            localP.cameraOffMs = Math.max(localP.cameraOffMs || 0, sp.cameraOffMs || 0);
+            localP.validStudyMs = Math.max(localP.validStudyMs || 0, sp.validStudyMs || 0);
+            localP.totalPresentMs = Math.max(localP.totalPresentMs || 0, sp.totalPresentMs || 0);
+          }
           localP.firstSeen = Math.min(toEpochMs(localP.firstSeen) || Date.now(), toEpochMs(sp.firstSeen) || Date.now());
           localP.joinTime = Math.min(toEpochMs(localP.joinTime) || Date.now(), toEpochMs(sp.joinTime) || Date.now());
           if (sp.presenceIntervals && Array.isArray(sp.presenceIntervals) && (!localP.presenceIntervals || localP.presenceIntervals.length === 0)) {

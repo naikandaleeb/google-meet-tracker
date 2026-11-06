@@ -174,8 +174,13 @@ function mergeSessionState(incoming) {
       if (!existing) {
         state.participants[id] = { ...inc };
       } else {
-        // Monotonic progression: Never let network latency cause timers to jerk backwards!
-        const maxOn = Math.max(existing.cameraOnMs || 0, inc.cameraOnMs || 0);
+        // Adjustment-aware progression:
+        let maxOn = inc.cameraOnMs || 0;
+        if (inc.studyAdjustmentMs !== undefined && inc.studyAdjustmentMs !== existing.studyAdjustmentMs) {
+          maxOn = inc.cameraOnMs || 0;
+        } else {
+          maxOn = Math.max(existing.cameraOnMs || 0, inc.cameraOnMs || 0);
+        }
         const maxOff = Math.max(existing.cameraOffMs || 0, inc.cameraOffMs || 0);
         const combinedOff = [...(existing.cameraOffIntervals || [])];
         if (inc.cameraOffIntervals && Array.isArray(inc.cameraOffIntervals)) {
@@ -203,7 +208,7 @@ function mergeSessionState(incoming) {
           cameraStatus: isCamOn ? 'on' : 'off',
           leaveTime: !isPres ? (inc.leaveTime || existing.leaveTime || Date.now()) : null,
           cameraOnMs: maxOn,
-          cameraOffMs: maxOff,
+          cameraOffMs: accurateOff,
           validStudyMs: maxOn,
           totalPresentMs: tot,
           totalDuration: tot,
@@ -495,6 +500,13 @@ if (btnExportCsv) {
 if (btnExportJson) {
   btnExportJson.addEventListener('click', () => {
     window.location.href = '/api/session/export/json';
+  });
+}
+
+const btnAdjustAll = document.getElementById('btn-adjust-all');
+if (btnAdjustAll) {
+  btnAdjustAll.addEventListener('click', () => {
+    promptBulkAdjustTime();
   });
 }
 
@@ -942,8 +954,20 @@ function renderStudentsTable() {
           </span>
         </td>
         <td>
-          <div style="display: flex; gap: 6px; align-items: center;">
+          <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
             <button class="btn-details" onclick="openStudentModal('${escapeHtml(p.id)}')">Breakdown</button>
+            <button class="btn-add-time" 
+                    onclick="promptAdjustTime('${escapeHtml(p.id)}', 'add')" 
+                    title="Add time to net valid study time for ${escapeHtml(p.name)}" 
+                    style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; border-radius: 4px; padding: 3px 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+              +⏱️ Add
+            </button>
+            <button class="btn-cut-time" 
+                    onclick="promptAdjustTime('${escapeHtml(p.id)}', 'cut')" 
+                    title="Cut / Deduct study time from ${escapeHtml(p.name)}" 
+                    style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 4px; padding: 3px 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+              -✂️ Cut
+            </button>
             <button class="btn-cam-override ${p.manualCamOverride ? 'active' : ''}" 
                     onclick="toggleParticipantCameraOverride('${escapeHtml(p.id)}')" 
                     title="${p.manualCamOverride ? 'Revert to automatic camera detection' : 'Host Override: Force Camera ON'}">
@@ -961,6 +985,85 @@ function renderStudentsTable() {
     `;
   }).join('');
 }
+
+// Manual Study Time Adjustment (Add or Cut Time)
+window.adjustParticipantTime = async function(id, minutes, actionType) {
+  const p = state.participants?.[id];
+  const name = p ? p.name : id;
+  const delta = actionType === 'cut' ? -Math.abs(minutes) : Math.abs(minutes);
+  try {
+    const res = await fetch('/api/participant/adjust-time', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ participantId: id, minutes: delta })
+    });
+    const result = await res.json();
+    if (result.success && result.participant) {
+      state.participants[id] = result.participant;
+      showToast(`${actionType === 'add' ? '➕ Added' : '✂️ Cut'} ${Math.abs(minutes)}m study time for "${name}".`);
+      scheduleRenderUI();
+      const modal = document.getElementById('student-modal');
+      if (modal && modal.style.display !== 'none') {
+        openStudentModal(id);
+      }
+    } else {
+      alert('Failed to adjust time: ' + (result.error || 'Unknown error'));
+    }
+  } catch (err) {
+    alert('Error adjusting time: ' + err.message);
+  }
+};
+
+window.promptAdjustTime = function(id, actionType) {
+  const p = state.participants?.[id];
+  const name = p ? p.name : id;
+  const verb = actionType === 'add' ? 'ADD to' : 'CUT / DEDUCT from';
+  const valStr = prompt(`⏱️ Enter minutes to ${verb} net valid study time for "${name}":\n(e.g. 15 for 15 mins, 60 for 1 hr)`, '15');
+  if (!valStr) return;
+  const minVal = parseFloat(valStr);
+  if (isNaN(minVal) || minVal <= 0) {
+    alert('Please enter a valid positive number of minutes.');
+    return;
+  }
+  adjustParticipantTime(id, minVal, actionType);
+};
+
+window.promptBulkAdjustTime = async function() {
+  const pCount = Object.keys(state.participants || {}).length;
+  if (pCount === 0) {
+    alert('No participants in current session to adjust.');
+    return;
+  }
+  const valStr = prompt(`⏱️ BULK TIME ADJUSTMENT for ALL ${pCount} participants:\n\nEnter minutes to adjust:\n• Positive number (e.g. 151) to ADD time\n• Negative number (e.g. -30) to CUT time\n\nExample: 151 adds 2 hr 31 min to everyone.`, '151');
+  if (!valStr) return;
+  const minVal = parseFloat(valStr);
+  if (isNaN(minVal) || minVal === 0) {
+    alert('Please enter a non-zero number of minutes.');
+    return;
+  }
+  if (!confirm(`Are you sure you want to ${minVal > 0 ? 'ADD' : 'CUT'} ${Math.abs(minVal)} minutes (${(Math.abs(minVal)/60).toFixed(2)} hours) for ALL ${pCount} participants?`)) {
+    return;
+  }
+  try {
+    const res = await fetch('/api/session/adjust-all-time', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ minutes: minVal })
+    });
+    const result = await res.json();
+    if (result.success) {
+      if (result.session && result.session.participants) {
+        state.participants = result.session.participants;
+      }
+      showToast(`⏱️ Successfully ${minVal > 0 ? 'added' : 'cut'} ${Math.abs(minVal)}m for all ${result.count || pCount} participants!`);
+      scheduleRenderUI();
+    } else {
+      alert('Failed to bulk adjust: ' + (result.error || 'Unknown error'));
+    }
+  } catch (err) {
+    alert('Error bulk adjusting time: ' + err.message);
+  }
+};
 
 // Permanently Delete Participant from Attendance
 window.deleteParticipantPrompt = async function(id, callback) {
@@ -1158,6 +1261,47 @@ window.openStudentModal = function(id) {
   }
 
   if (logContainer) logContainer.innerHTML = html;
+
+  // Manual Adjustment Panel wiring
+  const adjustTag = document.getElementById('modal-adjust-history-tag');
+  if (adjustTag) {
+    const adj = p.studyAdjustmentMs || 0;
+    if (adj !== 0) {
+      const sign = adj >= 0 ? '+' : '-';
+      adjustTag.innerText = `Adjusted: ${sign}${formatHms(Math.abs(adj))}`;
+      adjustTag.style.color = adj >= 0 ? '#10b981' : '#f43f5e';
+    } else {
+      adjustTag.innerText = 'Adjusted: None';
+      adjustTag.style.color = '#94a3b8';
+    }
+  }
+
+  const addBtn = document.getElementById('modal-btn-add-time');
+  const cutBtn = document.getElementById('modal-btn-cut-time');
+  const inputMin = document.getElementById('modal-adjust-minutes');
+  if (inputMin) inputMin.value = '';
+
+  if (addBtn) {
+    addBtn.onclick = () => {
+      const val = parseFloat(inputMin?.value);
+      if (isNaN(val) || val <= 0) {
+        alert('Please enter a valid positive number of minutes to add.');
+        return;
+      }
+      adjustParticipantTime(p.id, val, 'add');
+    };
+  }
+
+  if (cutBtn) {
+    cutBtn.onclick = () => {
+      const val = parseFloat(inputMin?.value);
+      if (isNaN(val) || val <= 0) {
+        alert('Please enter a valid positive number of minutes to cut.');
+        return;
+      }
+      adjustParticipantTime(p.id, val, 'cut');
+    };
+  }
 
   const modalDeleteBtn = document.getElementById('modal-btn-delete-student');
   if (modalDeleteBtn) {

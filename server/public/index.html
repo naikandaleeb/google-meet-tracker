@@ -62,6 +62,9 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
           JSON
         </button>
+        <button class="btn btn-action" id="btn-adjust-all" title="Add or cut study time for ALL participants in bulk" style="background: rgba(99, 102, 241, 0.2); border: 1px solid #6366f1; color: #a5b4fc;">
+          ⏱️ Bulk Adjust Time
+        </button>
         <button class="btn btn-danger-outline" id="btn-reset-session" title="Archive & Start New Session">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
           Reset / New
@@ -449,6 +452,20 @@
             <div class="mstat">
               <div class="mstat-label">Rejoins Count</div>
               <div class="mstat-val" id="modal-rejoins-count" style="color: #a78bfa;">0</div>
+            </div>
+          </div>
+
+          <!-- Manual Time Adjustment Panel -->
+          <div class="manual-adjust-box" style="margin: 14px 0; padding: 12px 14px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-weight: 700; font-size: 13px; color: #f1f5f9;">⏱️ Manual Study Time Adjustment:</span>
+              <span id="modal-adjust-history-tag" style="font-size: 11px; color: #94a3b8; font-family: monospace;">Adjusted: None</span>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <input type="number" id="modal-adjust-minutes" placeholder="Minutes (e.g. 15)" min="1" max="720" style="width: 140px; padding: 6px 10px; border-radius: 6px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 12px;">
+              <button class="btn btn-sm" id="modal-btn-add-time" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; font-weight: 700;">➕ Add Time</button>
+              <button class="btn btn-sm" id="modal-btn-cut-time" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; font-weight: 700;">✂️ Cut Time</button>
+              <div style="font-size: 11px; color: #94a3b8; margin-left: 4px;">Directly modifies net valid study time.</div>
             </div>
           </div>
 

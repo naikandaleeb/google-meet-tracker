@@ -362,6 +362,8 @@ function cleanAllSessionParticipants(sess) {
         isLocal: isLocal,
         isHost: false,
         isExempt: false,
+        studyAdjustmentMs: existing.studyAdjustmentMs !== undefined ? existing.studyAdjustmentMs : (p.studyAdjustmentMs || 0),
+        timeAdjustments: existing.timeAdjustments || p.timeAdjustments || [],
         currentStatus: isPres ? 'present' : (p.currentStatus || existing.currentStatus),
         cameraStatus: isCamOn ? 'on' : 'off',
         rawCameraStatus: isCamOn ? 'on' : 'off',
@@ -389,7 +391,9 @@ function cleanAllSessionParticipants(sess) {
         name: validName,
         isLocal: isLocal,
         isHost: false,
-        isExempt: false
+        isExempt: false,
+        studyAdjustmentMs: p.studyAdjustmentMs || 0,
+        timeAdjustments: p.timeAdjustments || []
       };
       finalizeParticipant(candidate, sess, now);
       cleaned[stableKey] = candidate;
@@ -604,7 +608,24 @@ app.post('/api/session/sync', (req, res) => {
         }
         const existing = currentSession.participants[stableKey] || {};
         
-        const camOn = Math.max(p.cameraOnMs !== undefined ? p.cameraOnMs : 0, existing.cameraOnMs || 0, p.validStudyMs || 0, existing.validStudyMs || 0);
+        // Intelligent adjustment-aware study time merging:
+        const existingAdj = existing.studyAdjustmentMs || 0;
+        const incomingAdj = p.studyAdjustmentMs || 0;
+        let camOn = p.cameraOnMs !== undefined ? p.cameraOnMs : 0;
+
+        if (existingAdj !== 0) {
+          if (incomingAdj === existingAdj) {
+            camOn = Math.max(camOn, existing.cameraOnMs || 0);
+          } else {
+            const incomingBase = Math.max(0, camOn - incomingAdj);
+            const existingBase = Math.max(0, (existing.cameraOnMs || 0) - existingAdj);
+            const baseCamOn = Math.max(incomingBase, existingBase);
+            camOn = Math.max(0, baseCamOn + existingAdj);
+          }
+        } else {
+          camOn = Math.max(camOn, existing.cameraOnMs || 0, p.validStudyMs || 0, existing.validStudyMs || 0);
+        }
+
         const camOff = Math.max(p.cameraOffMs !== undefined ? p.cameraOffMs : 0, existing.cameraOffMs || 0);
         const totMeet = Math.max(p.totalPresentMs || 0, existing.totalPresentMs || 0, camOn + camOff);
         
@@ -678,6 +699,8 @@ app.post('/api/session/sync', (req, res) => {
           cameraOnMs: camOn,
           cameraOffMs: accurateCamOff,
           validStudyMs: camOn, // Strictly: Camera ON time = Valid Study Time
+          studyAdjustmentMs: existingAdj,
+          timeAdjustments: existing.timeAdjustments || p.timeAdjustments || [],
           totalInMeetMs: totalInMeetMs,
           timeInCall: totalInMeetMs,
           totalDuration: totMeet,
@@ -961,6 +984,63 @@ app.post('/api/session/action', (req, res) => {
     return res.json({ success: true, session: currentSession });
   }
 
+  if (action === 'adjust_participant_time') {
+    const { participantId, minutes, adjustmentMs, reason } = payload || {};
+    let deltaMs = typeof adjustmentMs === 'number' ? adjustmentMs : (Math.round(parseFloat(minutes || 0) * 60 * 1000));
+    let p = currentSession.participants?.[participantId];
+    if (!p && currentSession.participants) {
+      const fk = Object.keys(currentSession.participants).find(k => k === participantId || k.toLowerCase() === (participantId || '').toLowerCase());
+      if (fk) p = currentSession.participants[fk];
+    }
+    if (p && deltaMs !== 0) {
+      p.studyAdjustmentMs = (p.studyAdjustmentMs || 0) + deltaMs;
+      p.cameraOnMs = Math.max(0, (p.cameraOnMs || 0) + deltaMs);
+      p.validStudyMs = Math.max(0, (p.validStudyMs || 0) + deltaMs);
+      if (deltaMs < 0) p.cameraOffMs = (p.cameraOffMs || 0) + Math.abs(deltaMs);
+      p.duration = p.validStudyMs;
+      p.studyDuration = p.validStudyMs;
+      p.durationSeconds = Math.floor(p.validStudyMs / 1000);
+      p.durationMinutes = Math.floor(p.validStudyMs / 60000);
+      const tot = Math.max(p.totalPresentMs || 0, p.cameraOnMs + (p.cameraOffMs || 0));
+      p.totalPresentMs = tot;
+      p.totalDuration = tot;
+      p.timeInCall = Math.max(p.timeInCall || 0, tot);
+      p.totalInMeetMs = Math.max(p.totalInMeetMs || 0, tot);
+      if (!p.timeAdjustments) p.timeAdjustments = [];
+      p.timeAdjustments.push({ timestamp: Date.now(), deltaMs, reason: reason || (deltaMs >= 0 ? 'Action Add' : 'Action Cut') });
+      persistCurrentSession();
+      broadcast({ type: 'PARTICIPANT_TIME_ADJUSTED', participantId: p.id, deltaMs, participant: p, session: currentSession });
+    }
+    return res.json({ success: true, participant: p, session: currentSession });
+  }
+
+  if (action === 'adjust_all_time') {
+    const { minutes, adjustmentMs, reason } = payload || {};
+    let deltaMs = typeof adjustmentMs === 'number' ? adjustmentMs : (Math.round(parseFloat(minutes || 0) * 60 * 1000));
+    if (currentSession.participants && deltaMs !== 0) {
+      Object.values(currentSession.participants).forEach(p => {
+        p.studyAdjustmentMs = (p.studyAdjustmentMs || 0) + deltaMs;
+        p.cameraOnMs = Math.max(0, (p.cameraOnMs || 0) + deltaMs);
+        p.validStudyMs = Math.max(0, (p.validStudyMs || 0) + deltaMs);
+        if (deltaMs < 0) p.cameraOffMs = (p.cameraOffMs || 0) + Math.abs(deltaMs);
+        p.duration = p.validStudyMs;
+        p.studyDuration = p.validStudyMs;
+        p.durationSeconds = Math.floor(p.validStudyMs / 1000);
+        p.durationMinutes = Math.floor(p.validStudyMs / 60000);
+        const tot = Math.max(p.totalPresentMs || 0, p.cameraOnMs + (p.cameraOffMs || 0));
+        p.totalPresentMs = tot;
+        p.totalDuration = tot;
+        p.timeInCall = Math.max(p.timeInCall || 0, tot);
+        p.totalInMeetMs = Math.max(p.totalInMeetMs || 0, tot);
+        if (!p.timeAdjustments) p.timeAdjustments = [];
+        p.timeAdjustments.push({ timestamp: Date.now(), deltaMs, reason: reason || (deltaMs >= 0 ? 'Bulk Action Add' : 'Bulk Action Cut') });
+      });
+      persistCurrentSession();
+      broadcast({ type: 'SESSION_TIME_ADJUSTED_ALL', deltaMs, count: Object.keys(currentSession.participants).length, session: currentSession });
+    }
+    return res.json({ success: true, session: currentSession });
+  }
+
   res.status(400).json({ error: 'Unknown action' });
 });
 
@@ -1077,6 +1157,138 @@ app.post(['/api/participant/override', '/api/participant-override'], (req, res) 
 
   console.log(`[Server] Manual camera override for [${p.name}] set to: ${isOverrideOn ? 'FORCE ON' : 'AUTO'}`);
   res.json({ success: true, participant: p, manualCamOverride: isOverrideOn });
+});
+
+// Manual Study Time Adjustment Endpoint (Add or Cut time for a specific participant)
+app.post(['/api/participant/adjust-time', '/api/participant-adjust-time'], (req, res) => {
+  const { participantId, minutes, adjustmentMs, reason } = req.body || {};
+  if (!participantId) return res.status(400).json({ error: 'Missing participantId' });
+
+  let deltaMs = 0;
+  if (typeof adjustmentMs === 'number') {
+    deltaMs = adjustmentMs;
+  } else if (typeof minutes === 'number' || !isNaN(parseFloat(minutes))) {
+    deltaMs = Math.round(parseFloat(minutes) * 60 * 1000);
+  } else {
+    return res.status(400).json({ error: 'Missing or invalid minutes or adjustmentMs' });
+  }
+
+  if (!currentSession.participants) currentSession.participants = {};
+  let targetKey = participantId;
+  let p = currentSession.participants[targetKey];
+  if (!p) {
+    const foundKey = Object.keys(currentSession.participants).find(k => k === participantId || k.toLowerCase() === participantId.toLowerCase() || (currentSession.participants[k] && currentSession.participants[k].name.toLowerCase() === participantId.toLowerCase()));
+    if (foundKey) {
+      targetKey = foundKey;
+      p = currentSession.participants[foundKey];
+    }
+  }
+
+  if (!p) {
+    return res.status(404).json({ error: 'Participant not found in current session' });
+  }
+
+  p.studyAdjustmentMs = (p.studyAdjustmentMs || 0) + deltaMs;
+  p.cameraOnMs = Math.max(0, (p.cameraOnMs || 0) + deltaMs);
+  p.validStudyMs = Math.max(0, (p.validStudyMs || 0) + deltaMs);
+
+  if (deltaMs < 0) {
+    p.cameraOffMs = (p.cameraOffMs || 0) + Math.abs(deltaMs);
+  }
+
+  p.duration = p.validStudyMs;
+  p.studyDuration = p.validStudyMs;
+  p.durationSeconds = Math.floor(p.validStudyMs / 1000);
+  p.durationMinutes = Math.floor(p.validStudyMs / 60000);
+
+  const totalMeet = Math.max(p.totalPresentMs || 0, p.cameraOnMs + (p.cameraOffMs || 0));
+  p.totalPresentMs = totalMeet;
+  p.totalDuration = totalMeet;
+  p.timeInCall = Math.max(p.timeInCall || 0, totalMeet);
+  p.totalInMeetMs = Math.max(p.totalInMeetMs || 0, totalMeet);
+
+  if (!p.timeAdjustments) p.timeAdjustments = [];
+  p.timeAdjustments.push({
+    timestamp: Date.now(),
+    deltaMs: deltaMs,
+    deltaMinutes: parseFloat((deltaMs / 60000).toFixed(1)),
+    reason: reason || (deltaMs >= 0 ? 'Manual Add' : 'Manual Cut')
+  });
+
+  currentSession.lastUpdated = Date.now();
+  persistCurrentSession();
+
+  broadcast({
+    type: 'PARTICIPANT_TIME_ADJUSTED',
+    participantId: targetKey,
+    deltaMs: deltaMs,
+    participant: p,
+    session: currentSession
+  });
+
+  console.log(`[Server] ⏱️ Manually adjusted study time for [${p.name}] (${targetKey}) by ${deltaMs >= 0 ? '+' : ''}${(deltaMs / 60000).toFixed(1)} mins (New Study: ${formatHmsStr(p.validStudyMs)})`);
+  res.json({ success: true, participant: p, deltaMs, session: currentSession });
+});
+
+// Bulk Study Time Adjustment Endpoint (Add or Cut time for ALL participants in ongoing attendance)
+app.post(['/api/session/adjust-all-time', '/api/session-adjust-all-time'], (req, res) => {
+  const { minutes, adjustmentMs, reason } = req.body || {};
+  let deltaMs = 0;
+  if (typeof adjustmentMs === 'number') {
+    deltaMs = adjustmentMs;
+  } else if (typeof minutes === 'number' || !isNaN(parseFloat(minutes))) {
+    deltaMs = Math.round(parseFloat(minutes) * 60 * 1000);
+  } else {
+    return res.status(400).json({ error: 'Missing or invalid minutes or adjustmentMs' });
+  }
+
+  if (!currentSession.participants) currentSession.participants = {};
+  const participants = Object.values(currentSession.participants);
+  if (participants.length === 0) {
+    return res.status(400).json({ error: 'No participants in current session to adjust' });
+  }
+
+  participants.forEach(p => {
+    p.studyAdjustmentMs = (p.studyAdjustmentMs || 0) + deltaMs;
+    p.cameraOnMs = Math.max(0, (p.cameraOnMs || 0) + deltaMs);
+    p.validStudyMs = Math.max(0, (p.validStudyMs || 0) + deltaMs);
+
+    if (deltaMs < 0) {
+      p.cameraOffMs = (p.cameraOffMs || 0) + Math.abs(deltaMs);
+    }
+
+    p.duration = p.validStudyMs;
+    p.studyDuration = p.validStudyMs;
+    p.durationSeconds = Math.floor(p.validStudyMs / 1000);
+    p.durationMinutes = Math.floor(p.validStudyMs / 60000);
+
+    const totalMeet = Math.max(p.totalPresentMs || 0, p.cameraOnMs + (p.cameraOffMs || 0));
+    p.totalPresentMs = totalMeet;
+    p.totalDuration = totalMeet;
+    p.timeInCall = Math.max(p.timeInCall || 0, totalMeet);
+    p.totalInMeetMs = Math.max(p.totalInMeetMs || 0, totalMeet);
+
+    if (!p.timeAdjustments) p.timeAdjustments = [];
+    p.timeAdjustments.push({
+      timestamp: Date.now(),
+      deltaMs: deltaMs,
+      deltaMinutes: parseFloat((deltaMs / 60000).toFixed(1)),
+      reason: reason || (deltaMs >= 0 ? 'Bulk Manual Add' : 'Bulk Manual Cut')
+    });
+  });
+
+  currentSession.lastUpdated = Date.now();
+  persistCurrentSession();
+
+  broadcast({
+    type: 'SESSION_TIME_ADJUSTED_ALL',
+    deltaMs: deltaMs,
+    count: participants.length,
+    session: currentSession
+  });
+
+  console.log(`[Server] ⏱️ Bulk adjusted study time for ALL ${participants.length} participants by ${deltaMs >= 0 ? '+' : ''}${(deltaMs / 60000).toFixed(1)} mins`);
+  res.json({ success: true, count: participants.length, deltaMs, session: currentSession });
 });
 
 // List archived sessions
