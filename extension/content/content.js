@@ -2238,8 +2238,10 @@
         if (!localP) {
           session.participants[id] = { ...sp };
         } else {
-          if (sp.studyAdjustmentMs !== undefined && sp.studyAdjustmentMs !== localP.studyAdjustmentMs) {
-            localP.studyAdjustmentMs = sp.studyAdjustmentMs;
+          const isCorrupt = (localP.cameraOnMs || 0) > 24 * 3600000 || (localP.validStudyMs || 0) > 24 * 3600000;
+          if (isCorrupt || (sp.manualAdjustmentMs !== undefined && sp.manualAdjustmentMs !== localP.manualAdjustmentMs) || (sp.studyAdjustmentMs !== undefined && sp.studyAdjustmentMs !== localP.studyAdjustmentMs)) {
+            localP.manualAdjustmentMs = sp.manualAdjustmentMs !== undefined ? sp.manualAdjustmentMs : sp.studyAdjustmentMs;
+            localP.studyAdjustmentMs = localP.manualAdjustmentMs;
             localP.cameraOnMs = sp.cameraOnMs;
             localP.validStudyMs = sp.validStudyMs;
             localP.cameraOffMs = sp.cameraOffMs;

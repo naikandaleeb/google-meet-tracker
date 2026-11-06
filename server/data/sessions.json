@@ -1,5 +1,6758 @@
 [
   {
+    "sessionId": "session_1793957957633",
+    "meetingCode": "mfy-ghna-cfj",
+    "meetingTitle": "Cockroach Library 12-Hour Study Marathon",
+    "startedAt": 1793957994704,
+    "stoppedAt": null,
+    "lastUpdated": 1793977708936,
+    "lastResetAt": null,
+    "isTracking": true,
+    "isPaused": false,
+    "totalPausedMs": 0,
+    "currentPauseStart": null,
+    "pauseHistory": [],
+    "targetDurationHours": 12,
+    "participants": {
+      "local_host": {
+        "id": "local_host",
+        "name": "Andaleeb Gull",
+        "isLocal": true,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          }
+        ],
+        "totalInMeetMs": 19749954,
+        "totalPresentMs": 1224886368,
+        "cameraOnMs": 1206486343,
+        "cameraOffMs": 18400025,
+        "validStudyMs": 1206486343,
+        "totalDuration": 1224886368,
+        "duration": 1206486343,
+        "timeInCall": 19749954,
+        "durationSeconds": 1206486,
+        "durationMinutes": 20108,
+        "studyDuration": 1206486343,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793957999406,
+            "end": 1793958009407,
+            "durationMs": 10001,
+            "fromTime": "03:09 pm",
+            "toTime": "03:10 pm",
+            "durationFormatted": "00:00:10"
+          },
+          {
+            "start": 1793966668322,
+            "end": 1793966676508,
+            "durationMs": 8186,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:08"
+          },
+          {
+            "start": 1793975725936,
+            "end": 1793975746979,
+            "durationMs": 21043,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:21"
+          },
+          {
+            "start": 1793977352903,
+            "end": 1793977358861,
+            "durationMs": 5958,
+            "fromTime": "08:32 pm",
+            "toTime": "08:32 pm",
+            "durationFormatted": "00:00:05"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793957999406,
+            "state": "on"
+          },
+          {
+            "start": 1793957999406,
+            "end": 1793958009407,
+            "state": "off"
+          },
+          {
+            "start": 1793958009407,
+            "end": 1793966668322,
+            "state": "on"
+          },
+          {
+            "start": 1793966668322,
+            "end": 1793975723085,
+            "state": "off"
+          },
+          {
+            "start": 1793975723085,
+            "end": 1793975725936,
+            "state": "on"
+          },
+          {
+            "start": 1793975725936,
+            "end": 1793975746979,
+            "state": "off"
+          },
+          {
+            "start": 1793975746979,
+            "end": 1793977352903,
+            "state": "on"
+          },
+          {
+            "start": 1793977352903,
+            "end": 1793977358861,
+            "state": "off"
+          },
+          {
+            "start": 1793977358861,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_gurjassneet": {
+        "id": "p_gurjassneet",
+        "name": "Gurjassneet",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": 1793965128683,
+        "lastSeen": 1793965128683,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          }
+        ],
+        "totalInMeetMs": 7169701,
+        "totalPresentMs": 1215410682,
+        "cameraOnMs": 1201465170,
+        "cameraOffMs": 13945512,
+        "validStudyMs": 1201465170,
+        "totalDuration": 1215410682,
+        "duration": 1201465170,
+        "timeInCall": 7169701,
+        "durationSeconds": 1201465,
+        "durationMinutes": 20024,
+        "studyDuration": 1201465170,
+        "consecutiveCamOffMs": 100307,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793960775376,
+            "end": 1793960779375,
+            "durationMs": 3999,
+            "fromTime": "03:56 pm",
+            "toTime": "03:56 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793962109377,
+            "end": 1793962153377,
+            "durationMs": 44000,
+            "fromTime": "04:18 pm",
+            "toTime": "04:19 pm",
+            "durationFormatted": "00:00:44"
+          },
+          {
+            "start": 1793962154973,
+            "end": 1793962350696,
+            "durationMs": 195723,
+            "fromTime": "04:19 pm",
+            "toTime": "04:22 pm",
+            "durationFormatted": "00:03:15"
+          },
+          {
+            "start": 1793963764430,
+            "end": 1793963909386,
+            "durationMs": 144956,
+            "fromTime": "04:46 pm",
+            "toTime": "04:48 pm",
+            "durationFormatted": "00:02:24"
+          },
+          {
+            "start": 1793965029376,
+            "end": 1793965166261,
+            "durationMs": 136885,
+            "fromTime": "05:07 pm",
+            "toTime": "05:09 pm",
+            "durationFormatted": "00:02:16"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793960773377,
+            "state": "on"
+          },
+          {
+            "start": 1793960773377,
+            "end": 1793960774375,
+            "state": "off"
+          },
+          {
+            "start": 1793960774375,
+            "end": 1793960775376,
+            "state": "on"
+          },
+          {
+            "start": 1793960775376,
+            "end": 1793960779375,
+            "state": "off"
+          },
+          {
+            "start": 1793960779375,
+            "end": 1793962109377,
+            "state": "on"
+          },
+          {
+            "start": 1793962109377,
+            "end": 1793962153377,
+            "state": "off"
+          },
+          {
+            "start": 1793962153377,
+            "end": 1793962154973,
+            "state": "on"
+          },
+          {
+            "start": 1793962154973,
+            "end": 1793963449386,
+            "state": "off"
+          },
+          {
+            "start": 1793963449386,
+            "end": 1793963764430,
+            "state": "on"
+          },
+          {
+            "start": 1793963764430,
+            "end": 1793963909386,
+            "state": "off"
+          },
+          {
+            "start": 1793963909386,
+            "end": 1793965029376,
+            "state": "on"
+          },
+          {
+            "start": 1793965029376,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_tuba_mashkoor": {
+        "id": "p_tuba_mashkoor",
+        "name": "Tuba Mashkoor",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 3,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793963526652,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793964577805,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793963526652,
+            "formatted": "04:42 pm",
+            "awayMs": 216020,
+            "awayFormatted": "00:03:36"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793964577805,
+            "formatted": "04:59 pm",
+            "awayMs": 295429,
+            "awayFormatted": "00:04:55"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 49037313,
+        "totalPresentMs": 1215523919,
+        "cameraOnMs": 1205976185,
+        "cameraOffMs": 9547734,
+        "validStudyMs": 1205976185,
+        "totalDuration": 1215523919,
+        "duration": 1205976185,
+        "timeInCall": 49037313,
+        "durationSeconds": 1205976,
+        "durationMinutes": 20099,
+        "studyDuration": 1205976185,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793961328744,
+            "end": 1793961332377,
+            "durationMs": 3633,
+            "fromTime": "04:05 pm",
+            "toTime": "04:05 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793963310283,
+            "end": 1793963533507,
+            "durationMs": 223224,
+            "fromTime": "04:38 pm",
+            "toTime": "04:42 pm",
+            "durationFormatted": "00:03:43"
+          },
+          {
+            "start": 1793964577805,
+            "end": 1793964585376,
+            "durationMs": 7571,
+            "fromTime": "04:59 pm",
+            "toTime": "04:59 pm",
+            "durationFormatted": "00:00:07"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793961328744,
+            "state": "on"
+          },
+          {
+            "start": 1793961328744,
+            "end": 1793961332377,
+            "state": "off"
+          },
+          {
+            "start": 1793961332377,
+            "end": 1793963310283,
+            "state": "on"
+          },
+          {
+            "start": 1793963310283,
+            "end": 1793963533507,
+            "state": "off"
+          },
+          {
+            "start": 1793963533507,
+            "end": 1793964585376,
+            "state": "on"
+          },
+          {
+            "start": 1793964585376,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_its_hardikkk": {
+        "id": "p_its_hardikkk",
+        "name": "Its_hardikkk",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": 1793976693927,
+        "lastSeen": 1793976693927,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 10518954,
+            "awayFormatted": "02:55:18"
+          }
+        ],
+        "totalInMeetMs": 19693880,
+        "totalPresentMs": 1214616538,
+        "cameraOnMs": 1204020348,
+        "cameraOffMs": 10596190,
+        "validStudyMs": 1204020348,
+        "totalDuration": 1214616538,
+        "duration": 1204020348,
+        "timeInCall": 19693880,
+        "durationSeconds": 1204020,
+        "durationMinutes": 20067,
+        "studyDuration": 1204020348,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793958992685,
+            "end": 1793959006384,
+            "durationMs": 13699,
+            "fromTime": "03:26 pm",
+            "toTime": "03:26 pm",
+            "durationFormatted": "00:00:13"
+          },
+          {
+            "start": 1793963434051,
+            "end": 1793963441376,
+            "durationMs": 7325,
+            "fromTime": "04:40 pm",
+            "toTime": "04:40 pm",
+            "durationFormatted": "00:00:07"
+          },
+          {
+            "start": 1793963507377,
+            "end": 1793963517376,
+            "durationMs": 9999,
+            "fromTime": "04:41 pm",
+            "toTime": "04:41 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793963871867,
+            "end": 1793963875376,
+            "durationMs": 3509,
+            "fromTime": "04:47 pm",
+            "toTime": "04:47 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793965125621,
+            "end": 1793965164912,
+            "durationMs": 39291,
+            "fromTime": "05:08 pm",
+            "toTime": "05:09 pm",
+            "durationFormatted": "00:00:39"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958992685,
+            "state": "on"
+          },
+          {
+            "start": 1793958992685,
+            "end": 1793959006384,
+            "state": "off"
+          },
+          {
+            "start": 1793959006384,
+            "end": 1793963434051,
+            "state": "on"
+          },
+          {
+            "start": 1793963434051,
+            "end": 1793963441376,
+            "state": "off"
+          },
+          {
+            "start": 1793963441376,
+            "end": 1793963507377,
+            "state": "on"
+          },
+          {
+            "start": 1793963507377,
+            "end": 1793963517376,
+            "state": "off"
+          },
+          {
+            "start": 1793963517376,
+            "end": 1793963871867,
+            "state": "on"
+          },
+          {
+            "start": 1793963871867,
+            "end": 1793963875376,
+            "state": "off"
+          },
+          {
+            "start": 1793963875376,
+            "end": 1793965125621,
+            "state": "on"
+          },
+          {
+            "start": 1793965125621,
+            "end": 1793965164912,
+            "state": "off"
+          },
+          {
+            "start": 1793965164912,
+            "end": 1793965216038,
+            "state": "on"
+          },
+          {
+            "start": 1793965216038,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_adesh_yadav": {
+        "id": "p_adesh_yadav",
+        "name": "Adesh Yadav",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 2,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793961698468,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793961698468,
+            "formatted": "04:11 pm",
+            "awayMs": 1300964,
+            "awayFormatted": "00:21:40"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 37734366,
+        "totalPresentMs": 1216167700,
+        "cameraOnMs": 1204399057,
+        "cameraOffMs": 11768643,
+        "validStudyMs": 1204399057,
+        "totalDuration": 1216167700,
+        "duration": 1204399057,
+        "timeInCall": 37734366,
+        "durationSeconds": 1204399,
+        "durationMinutes": 20073,
+        "studyDuration": 1204399057,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958046375,
+            "durationMs": 51735,
+            "fromTime": "03:09 pm",
+            "toTime": "03:10 pm",
+            "durationFormatted": "00:00:51"
+          },
+          {
+            "start": 1793959687377,
+            "end": 1793959795376,
+            "durationMs": 107999,
+            "fromTime": "03:38 pm",
+            "toTime": "03:39 pm",
+            "durationFormatted": "00:01:47"
+          },
+          {
+            "start": 1793960397027,
+            "end": 1793961701401,
+            "durationMs": 1304374,
+            "fromTime": "03:49 pm",
+            "toTime": "04:11 pm",
+            "durationFormatted": "00:21:44"
+          },
+          {
+            "start": 1793964478374,
+            "end": 1793964480193,
+            "durationMs": 1819,
+            "fromTime": "04:57 pm",
+            "toTime": "04:58 pm",
+            "durationFormatted": "00:00:01"
+          },
+          {
+            "start": 1793964483376,
+            "end": 1793964832783,
+            "durationMs": 349407,
+            "fromTime": "04:58 pm",
+            "toTime": "05:03 pm",
+            "durationFormatted": "00:05:49"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958046375,
+            "state": "off"
+          },
+          {
+            "start": 1793958046375,
+            "end": 1793959687377,
+            "state": "on"
+          },
+          {
+            "start": 1793959687377,
+            "end": 1793959795376,
+            "state": "off"
+          },
+          {
+            "start": 1793959795376,
+            "end": 1793960397027,
+            "state": "on"
+          },
+          {
+            "start": 1793960397027,
+            "end": 1793961701401,
+            "state": "off"
+          },
+          {
+            "start": 1793961701401,
+            "end": 1793964478374,
+            "state": "on"
+          },
+          {
+            "start": 1793964478374,
+            "end": 1793964480193,
+            "state": "off"
+          },
+          {
+            "start": 1793964480193,
+            "end": 1793964483376,
+            "state": "on"
+          },
+          {
+            "start": 1793964483376,
+            "end": 1793965123379,
+            "state": "off"
+          },
+          {
+            "start": 1793965123379,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_nitish_singh_rajput": {
+        "id": "p_nitish_singh_rajput",
+        "name": "Nitish Singh Rajput",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": 1793976010930,
+        "lastSeen": 1793976010930,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 18327886,
+        "totalPresentMs": 1215404968,
+        "cameraOnMs": 1203789996,
+        "cameraOffMs": 11614972,
+        "validStudyMs": 1203789996,
+        "totalDuration": 1215404968,
+        "duration": 1203789996,
+        "timeInCall": 18327886,
+        "durationSeconds": 1203789,
+        "durationMinutes": 20063,
+        "studyDuration": 1203789996,
+        "consecutiveCamOffMs": 282131,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793960817770,
+            "end": 1793960856491,
+            "durationMs": 38721,
+            "fromTime": "03:56 pm",
+            "toTime": "03:57 pm",
+            "durationFormatted": "00:00:38"
+          },
+          {
+            "start": 1793961377368,
+            "end": 1793961524111,
+            "durationMs": 146743,
+            "fromTime": "04:06 pm",
+            "toTime": "04:08 pm",
+            "durationFormatted": "00:02:26"
+          },
+          {
+            "start": 1793962590128,
+            "end": 1793962602376,
+            "durationMs": 12248,
+            "fromTime": "04:26 pm",
+            "toTime": "04:26 pm",
+            "durationFormatted": "00:00:12"
+          },
+          {
+            "start": 1793965067585,
+            "end": 1793965166261,
+            "durationMs": 98676,
+            "fromTime": "05:07 pm",
+            "toTime": "05:09 pm",
+            "durationFormatted": "00:01:38"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975812182,
+            "durationMs": 77190,
+            "fromTime": "08:05 pm",
+            "toTime": "08:06 pm",
+            "durationFormatted": "00:01:17"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793960817770,
+            "state": "on"
+          },
+          {
+            "start": 1793960817770,
+            "end": 1793960977743,
+            "state": "off"
+          },
+          {
+            "start": 1793960977743,
+            "end": 1793961377368,
+            "state": "on"
+          },
+          {
+            "start": 1793961377368,
+            "end": 1793961524111,
+            "state": "off"
+          },
+          {
+            "start": 1793961524111,
+            "end": 1793962590128,
+            "state": "on"
+          },
+          {
+            "start": 1793962590128,
+            "end": 1793962602376,
+            "state": "off"
+          },
+          {
+            "start": 1793962602376,
+            "end": 1793965067585,
+            "state": "on"
+          },
+          {
+            "start": 1793965067585,
+            "end": 1793965544263,
+            "state": "off"
+          },
+          {
+            "start": 1793965544263,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_prachi_tiwari": {
+        "id": "p_prachi_tiwari",
+        "name": "Prachi Tiwari",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 21723898,
+        "totalPresentMs": 1051238312,
+        "cameraOnMs": 1025305006,
+        "cameraOffMs": 25933306,
+        "validStudyMs": 1025305006,
+        "totalDuration": 1051238312,
+        "duration": 1025305006,
+        "timeInCall": 21723898,
+        "durationSeconds": 1025305,
+        "durationMinutes": 17088,
+        "studyDuration": 1025305006,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_yashi_raj": {
+        "id": "p_yashi_raj",
+        "name": "Yashi Raj",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 21723898,
+        "totalPresentMs": 1215818312,
+        "cameraOnMs": 1206505006,
+        "cameraOffMs": 9313306,
+        "validStudyMs": 1206505006,
+        "totalDuration": 1215818312,
+        "duration": 1206505006,
+        "timeInCall": 21723898,
+        "durationSeconds": 1206505,
+        "durationMinutes": 20108,
+        "studyDuration": 1206505006,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_soobiya": {
+        "id": "p_soobiya",
+        "name": "Soobiya",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 2,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793966568899,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793966568899,
+            "formatted": "05:32 pm",
+            "awayMs": 158519,
+            "awayFormatted": "00:02:38"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 32863935,
+        "totalPresentMs": 1215816632,
+        "cameraOnMs": 1206340172,
+        "cameraOffMs": 9476460,
+        "validStudyMs": 1206340172,
+        "totalDuration": 1215816632,
+        "duration": 1206340172,
+        "timeInCall": 32863935,
+        "durationSeconds": 1206340,
+        "durationMinutes": 20105,
+        "studyDuration": 1206340172,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793961610867,
+            "end": 1793961612447,
+            "durationMs": 1580,
+            "fromTime": "04:10 pm",
+            "toTime": "04:10 pm",
+            "durationFormatted": "00:00:01"
+          },
+          {
+            "start": 1793966408816,
+            "end": 1793966572376,
+            "durationMs": 163560,
+            "fromTime": "05:30 pm",
+            "toTime": "05:32 pm",
+            "durationFormatted": "00:02:43"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975736978,
+            "durationMs": 1986,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:01"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793961610867,
+            "state": "on"
+          },
+          {
+            "start": 1793961610867,
+            "end": 1793961612447,
+            "state": "off"
+          },
+          {
+            "start": 1793961612447,
+            "end": 1793966408816,
+            "state": "on"
+          },
+          {
+            "start": 1793966408816,
+            "end": 1793966572376,
+            "state": "off"
+          },
+          {
+            "start": 1793966572376,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975736978,
+            "state": "off"
+          },
+          {
+            "start": 1793975736978,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_aadi_singh": {
+        "id": "p_aadi_singh",
+        "name": "Aadi Singh",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 21723898,
+        "totalPresentMs": 1215818312,
+        "cameraOnMs": 1206505006,
+        "cameraOffMs": 9313306,
+        "validStudyMs": 1206505006,
+        "totalDuration": 1215818312,
+        "duration": 1206505006,
+        "timeInCall": 21723898,
+        "durationSeconds": 1206505,
+        "durationMinutes": 20108,
+        "studyDuration": 1206505006,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_aditya_raj_singh": {
+        "id": "p_aditya_raj_singh",
+        "name": "Aditya Raj Singh",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 2,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793963548484,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793963548484,
+            "formatted": "04:42 pm",
+            "awayMs": 114433,
+            "awayFormatted": "00:01:54"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 35884353,
+        "totalPresentMs": 1215818604,
+        "cameraOnMs": 1206318091,
+        "cameraOffMs": 9500513,
+        "validStudyMs": 1206318091,
+        "totalDuration": 1215818604,
+        "duration": 1206318091,
+        "timeInCall": 35884353,
+        "durationSeconds": 1206318,
+        "durationMinutes": 20105,
+        "studyDuration": 1206318091,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958015375,
+            "durationMs": 20735,
+            "fromTime": "03:09 pm",
+            "toTime": "03:10 pm",
+            "durationFormatted": "00:00:20"
+          },
+          {
+            "start": 1793963432903,
+            "end": 1793963599375,
+            "durationMs": 166472,
+            "fromTime": "04:40 pm",
+            "toTime": "04:43 pm",
+            "durationFormatted": "00:02:46"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958015375,
+            "state": "off"
+          },
+          {
+            "start": 1793958015375,
+            "end": 1793963432903,
+            "state": "on"
+          },
+          {
+            "start": 1793963432903,
+            "end": 1793963599375,
+            "state": "off"
+          },
+          {
+            "start": 1793963599375,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_ketan_sachdeva": {
+        "id": "p_ketan_sachdeva",
+        "name": "Ketan Sachdeva",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 21723900,
+        "totalPresentMs": 1215818312,
+        "cameraOnMs": 1206505006,
+        "cameraOffMs": 9313306,
+        "validStudyMs": 1206505006,
+        "totalDuration": 1215818312,
+        "duration": 1206505006,
+        "timeInCall": 21723900,
+        "durationSeconds": 1206505,
+        "durationMinutes": 20108,
+        "studyDuration": 1206505006,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_souvik_debnath": {
+        "id": "p_souvik_debnath",
+        "name": "Souvik Debnath",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 3,
+        "rejoinedAt": 1793976766231,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793963793722,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793976766231,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793963793722,
+            "formatted": "04:46 pm",
+            "awayMs": 261753,
+            "awayFormatted": "00:04:21"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9314614,
+            "awayFormatted": "02:35:14"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793976766231,
+            "formatted": "08:22 pm",
+            "awayMs": 77304,
+            "awayFormatted": "00:01:17"
+          }
+        ],
+        "totalInMeetMs": 36581821,
+        "totalPresentMs": 1215244923,
+        "cameraOnMs": 1204943775,
+        "cameraOffMs": 10301148,
+        "validStudyMs": 1204943775,
+        "totalDuration": 1215244923,
+        "duration": 1204943775,
+        "timeInCall": 36581821,
+        "durationSeconds": 1204943,
+        "durationMinutes": 20082,
+        "studyDuration": 1204943775,
+        "consecutiveCamOffMs": 905046,
+        "cameraOffCurrentStart": 1793977582002,
+        "cameraOffIntervals": [
+          {
+            "start": 1793963793722,
+            "end": 1793963886375,
+            "durationMs": 92653,
+            "fromTime": "04:46 pm",
+            "toTime": "04:48 pm",
+            "durationFormatted": "00:01:32"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793976766231,
+            "end": 1793976786300,
+            "durationMs": 20069,
+            "fromTime": "08:22 pm",
+            "toTime": "08:23 pm",
+            "durationFormatted": "00:00:20"
+          },
+          {
+            "start": 1793977582002,
+            "end": 1793977675201,
+            "durationMs": 93199,
+            "fromTime": "08:36 pm",
+            "toTime": "08:37 pm",
+            "durationFormatted": "00:01:33"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793963886375,
+            "state": "on"
+          },
+          {
+            "start": 1793963886375,
+            "end": 1793975738405,
+            "state": "on"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_kamran_sidiq": {
+        "id": "p_kamran_sidiq",
+        "name": "Kamran Sidiq",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": 1793966667192,
+        "lastSeen": 1793966667192,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          }
+        ],
+        "totalInMeetMs": 8708210,
+        "totalPresentMs": 1215406691,
+        "cameraOnMs": 1204546913,
+        "cameraOffMs": 10859778,
+        "validStudyMs": 1204546913,
+        "totalDuration": 1215406691,
+        "duration": 1204546913,
+        "timeInCall": 8708210,
+        "durationSeconds": 1204546,
+        "durationMinutes": 20075,
+        "studyDuration": 1204546913,
+        "consecutiveCamOffMs": 4189,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793962893928,
+            "end": 1793962934376,
+            "durationMs": 40448,
+            "fromTime": "04:31 pm",
+            "toTime": "04:32 pm",
+            "durationFormatted": "00:00:40"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793962893928,
+            "state": "on"
+          },
+          {
+            "start": 1793962893928,
+            "end": 1793962934376,
+            "state": "off"
+          },
+          {
+            "start": 1793962934376,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_ashi": {
+        "id": "p_ashi",
+        "name": "Ashi",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": 1793959457369,
+        "lastSeen": 1793959457369,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          }
+        ],
+        "totalInMeetMs": 1498387,
+        "totalPresentMs": 1215411882,
+        "cameraOnMs": 1195920000,
+        "cameraOffMs": 19491882,
+        "validStudyMs": 1195920000,
+        "totalDuration": 1215411882,
+        "duration": 1195920000,
+        "timeInCall": 1498387,
+        "durationSeconds": 1195920,
+        "durationMinutes": 19932,
+        "studyDuration": 1195920000,
+        "consecutiveCamOffMs": 1462339,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958314906,
+            "durationMs": 320266,
+            "fromTime": "03:09 pm",
+            "toTime": "03:15 pm",
+            "durationFormatted": "00:05:20"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_shivang_patel": {
+        "id": "p_shivang_patel",
+        "name": "Shivang Patel",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": 1793958776376,
+        "lastSeen": 1793958776376,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          }
+        ],
+        "totalInMeetMs": 817394,
+        "totalPresentMs": 1215411686,
+        "cameraOnMs": 1196248000,
+        "cameraOffMs": 19163686,
+        "validStudyMs": 1196248000,
+        "totalDuration": 1215411686,
+        "duration": 1196248000,
+        "timeInCall": 817394,
+        "durationSeconds": 1196248,
+        "durationMinutes": 19937,
+        "studyDuration": 1196248000,
+        "consecutiveCamOffMs": 437001,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958012375,
+            "durationMs": 17735,
+            "fromTime": "03:09 pm",
+            "toTime": "03:10 pm",
+            "durationFormatted": "00:00:17"
+          },
+          {
+            "start": 1793958340571,
+            "end": 1793958687316,
+            "durationMs": 346745,
+            "fromTime": "03:15 pm",
+            "toTime": "03:21 pm",
+            "durationFormatted": "00:05:46"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958012375,
+            "state": "off"
+          },
+          {
+            "start": 1793958012375,
+            "end": 1793958340571,
+            "state": "on"
+          },
+          {
+            "start": 1793958340571,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_fazdhaaa": {
+        "id": "p_fazdhaaa",
+        "name": "Fazdhaaa",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 21723900,
+        "totalPresentMs": 1215828145,
+        "cameraOnMs": 1203780301,
+        "cameraOffMs": 12047844,
+        "validStudyMs": 1203780301,
+        "totalDuration": 1215828145,
+        "duration": 1203780301,
+        "timeInCall": 21723900,
+        "durationSeconds": 1203780,
+        "durationMinutes": 20063,
+        "studyDuration": 1203780301,
+        "consecutiveCamOffMs": 1035039,
+        "cameraOffCurrentStart": 1793977582002,
+        "cameraOffIntervals": [
+          {
+            "start": 1793964958726,
+            "end": 1793965166261,
+            "durationMs": 207535,
+            "fromTime": "05:05 pm",
+            "toTime": "05:09 pm",
+            "durationFormatted": "00:03:27"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793976635937,
+            "end": 1793976667022,
+            "durationMs": 31085,
+            "fromTime": "08:20 pm",
+            "toTime": "08:21 pm",
+            "durationFormatted": "00:00:31"
+          },
+          {
+            "start": 1793977582002,
+            "end": 1793977675201,
+            "durationMs": 93199,
+            "fromTime": "08:36 pm",
+            "toTime": "08:37 pm",
+            "durationFormatted": "00:01:33"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793964958726,
+            "state": "on"
+          },
+          {
+            "start": 1793964958726,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": 1793976635937,
+            "state": "on"
+          },
+          {
+            "start": 1793976635937,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_om_keshri_gupta": {
+        "id": "p_om_keshri_gupta",
+        "name": "Om Keshri Gupta",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9769616,
+            "awayFormatted": "02:42:49"
+          }
+        ],
+        "totalInMeetMs": 21723900,
+        "totalPresentMs": 1215111748,
+        "cameraOnMs": 1205786174,
+        "cameraOffMs": 9325574,
+        "validStudyMs": 1205786174,
+        "totalDuration": 1215111748,
+        "duration": 1205786174,
+        "timeInCall": 21723900,
+        "durationSeconds": 1205786,
+        "durationMinutes": 20096,
+        "studyDuration": 1205786174,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793957999406,
+            "end": 1793958020990,
+            "durationMs": 21584,
+            "fromTime": "03:09 pm",
+            "toTime": "03:10 pm",
+            "durationFormatted": "00:00:21"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793957999406,
+            "state": "on"
+          },
+          {
+            "start": 1793957999406,
+            "end": 1793958020990,
+            "state": "off"
+          },
+          {
+            "start": 1793958020990,
+            "end": 1793975738405,
+            "state": "on"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p____": {
+        "id": "p____",
+        "name": "मगध",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": 1793959099517,
+        "lastSeen": 1793959099517,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          }
+        ],
+        "totalInMeetMs": 1140535,
+        "totalPresentMs": 1215409898,
+        "cameraOnMs": 1197022346,
+        "cameraOffMs": 18387552,
+        "validStudyMs": 1197022346,
+        "totalDuration": 1215409898,
+        "duration": 1197022346,
+        "timeInCall": 1140535,
+        "durationSeconds": 1197022,
+        "durationMinutes": 19950,
+        "studyDuration": 1197022346,
+        "consecutiveCamOffMs": 2141,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793959098970,
+            "state": "on"
+          },
+          {
+            "start": 1793959098970,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_anuk_suryavamshi": {
+        "id": "p_anuk_suryavamshi",
+        "name": "Anuk Suryavamshi",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9924594,
+            "awayFormatted": "02:45:24"
+          }
+        ],
+        "totalInMeetMs": 21723900,
+        "totalPresentMs": 1215469333,
+        "cameraOnMs": 1198898139,
+        "cameraOffMs": 16571194,
+        "validStudyMs": 1198898139,
+        "totalDuration": 1215469333,
+        "duration": 1198898139,
+        "timeInCall": 21723900,
+        "durationSeconds": 1198898,
+        "durationMinutes": 19981,
+        "studyDuration": 1198898139,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793958053376,
+            "end": 1793958314906,
+            "durationMs": 261530,
+            "fromTime": "03:10 pm",
+            "toTime": "03:15 pm",
+            "durationFormatted": "00:04:21"
+          },
+          {
+            "start": 1793960896771,
+            "end": 1793960952775,
+            "durationMs": 56004,
+            "fromTime": "03:58 pm",
+            "toTime": "03:59 pm",
+            "durationFormatted": "00:00:56"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975812182,
+            "durationMs": 77190,
+            "fromTime": "08:05 pm",
+            "toTime": "08:06 pm",
+            "durationFormatted": "00:01:17"
+          },
+          {
+            "start": 1793977393006,
+            "end": 1793977504879,
+            "durationMs": 111873,
+            "fromTime": "08:33 pm",
+            "toTime": "08:35 pm",
+            "durationFormatted": "00:01:51"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958053376,
+            "state": "on"
+          },
+          {
+            "start": 1793958053376,
+            "end": 1793958778413,
+            "state": "off"
+          },
+          {
+            "start": 1793958778413,
+            "end": 1793960896771,
+            "state": "on"
+          },
+          {
+            "start": 1793960896771,
+            "end": 1793976742928,
+            "state": "off"
+          },
+          {
+            "start": 1793976742928,
+            "end": 1793977393006,
+            "state": "on"
+          },
+          {
+            "start": 1793977393006,
+            "end": 1793977504879,
+            "state": "off"
+          },
+          {
+            "start": 1793977504879,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_zeenat_perween": {
+        "id": "p_zeenat_perween",
+        "name": "Zeenat Perween",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 21723900,
+        "totalPresentMs": 1216468633,
+        "cameraOnMs": 1201439465,
+        "cameraOffMs": 15029168,
+        "validStudyMs": 1201439465,
+        "totalDuration": 1216468633,
+        "duration": 1201439465,
+        "timeInCall": 21723900,
+        "durationSeconds": 1201439,
+        "durationMinutes": 20023,
+        "studyDuration": 1201439465,
+        "consecutiveCamOffMs": 58998,
+        "cameraOffCurrentStart": 1793977641986,
+        "cameraOffIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958314906,
+            "durationMs": 320266,
+            "fromTime": "03:09 pm",
+            "toTime": "03:15 pm",
+            "durationFormatted": "00:05:20"
+          },
+          {
+            "start": 1793958829864,
+            "end": 1793958855040,
+            "durationMs": 25176,
+            "fromTime": "03:23 pm",
+            "toTime": "03:24 pm",
+            "durationFormatted": "00:00:25"
+          },
+          {
+            "start": 1793960549956,
+            "end": 1793960856491,
+            "durationMs": 306535,
+            "fromTime": "03:52 pm",
+            "toTime": "03:57 pm",
+            "durationFormatted": "00:05:06"
+          },
+          {
+            "start": 1793964808377,
+            "end": 1793964811376,
+            "durationMs": 2999,
+            "fromTime": "05:03 pm",
+            "toTime": "05:03 pm",
+            "durationFormatted": "00:00:02"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793975966998,
+            "end": 1793975989950,
+            "durationMs": 22952,
+            "fromTime": "08:09 pm",
+            "toTime": "08:09 pm",
+            "durationFormatted": "00:00:22"
+          },
+          {
+            "start": 1793977641986,
+            "end": 1793977675201,
+            "durationMs": 33215,
+            "fromTime": "08:37 pm",
+            "toTime": "08:37 pm",
+            "durationFormatted": "00:00:33"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958821384,
+            "state": "off"
+          },
+          {
+            "start": 1793958821384,
+            "end": 1793958829864,
+            "state": "on"
+          },
+          {
+            "start": 1793958829864,
+            "end": 1793958905376,
+            "state": "off"
+          },
+          {
+            "start": 1793958905376,
+            "end": 1793960549956,
+            "state": "on"
+          },
+          {
+            "start": 1793960549956,
+            "end": 1793964626512,
+            "state": "off"
+          },
+          {
+            "start": 1793964626512,
+            "end": 1793964808377,
+            "state": "on"
+          },
+          {
+            "start": 1793964808377,
+            "end": 1793964811376,
+            "state": "off"
+          },
+          {
+            "start": 1793964811376,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": 1793975966998,
+            "state": "on"
+          },
+          {
+            "start": 1793975966998,
+            "end": 1793975989950,
+            "state": "off"
+          },
+          {
+            "start": 1793975989950,
+            "end": 1793977641986,
+            "state": "on"
+          },
+          {
+            "start": 1793977641986,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_swapnil": {
+        "id": "p_swapnil",
+        "name": "Swapnil",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 21723900,
+        "totalPresentMs": 1215818312,
+        "cameraOnMs": 1206505006,
+        "cameraOffMs": 9313306,
+        "validStudyMs": 1206505006,
+        "totalDuration": 1215818312,
+        "duration": 1206505006,
+        "timeInCall": 21723900,
+        "durationSeconds": 1206505,
+        "durationMinutes": 20108,
+        "studyDuration": 1206505006,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_sriman_samudrala": {
+        "id": "p_sriman_samudrala",
+        "name": "Sriman Samudrala",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": 1793966667192,
+        "lastSeen": 1793966667192,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          }
+        ],
+        "totalInMeetMs": 8708210,
+        "totalPresentMs": 1215401377,
+        "cameraOnMs": 1204553504,
+        "cameraOffMs": 10847873,
+        "validStudyMs": 1204553504,
+        "totalDuration": 1215401377,
+        "duration": 1204553504,
+        "timeInCall": 8708210,
+        "durationSeconds": 1204553,
+        "durationMinutes": 20075,
+        "studyDuration": 1204553504,
+        "consecutiveCamOffMs": 4189,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793960573896,
+            "end": 1793960594251,
+            "durationMs": 20355,
+            "fromTime": "03:52 pm",
+            "toTime": "03:53 pm",
+            "durationFormatted": "00:00:20"
+          },
+          {
+            "start": 1793961016492,
+            "end": 1793961020835,
+            "durationMs": 4343,
+            "fromTime": "04:00 pm",
+            "toTime": "04:00 pm",
+            "durationFormatted": "00:00:04"
+          },
+          {
+            "start": 1793961054530,
+            "end": 1793961058375,
+            "durationMs": 3845,
+            "fromTime": "04:00 pm",
+            "toTime": "04:00 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793960573896,
+            "state": "on"
+          },
+          {
+            "start": 1793960573896,
+            "end": 1793960594251,
+            "state": "off"
+          },
+          {
+            "start": 1793960594251,
+            "end": 1793961016492,
+            "state": "on"
+          },
+          {
+            "start": 1793961016492,
+            "end": 1793961020835,
+            "state": "off"
+          },
+          {
+            "start": 1793961020835,
+            "end": 1793961054530,
+            "state": "on"
+          },
+          {
+            "start": 1793961054530,
+            "end": 1793961058375,
+            "state": "off"
+          },
+          {
+            "start": 1793961058375,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_anshiii_patel": {
+        "id": "p_anshiii_patel",
+        "name": "Anshiii Patel",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 21723900,
+        "totalPresentMs": 1215857847,
+        "cameraOnMs": 1205871537,
+        "cameraOffMs": 9986310,
+        "validStudyMs": 1205871537,
+        "totalDuration": 1215857847,
+        "duration": 1205871537,
+        "timeInCall": 21723900,
+        "durationSeconds": 1205871,
+        "durationMinutes": 20097,
+        "studyDuration": 1205871537,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958007410,
+            "durationMs": 12770,
+            "fromTime": "03:09 pm",
+            "toTime": "03:10 pm",
+            "durationFormatted": "00:00:12"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793976819926,
+            "end": 1793976843652,
+            "durationMs": 23726,
+            "fromTime": "08:23 pm",
+            "toTime": "08:24 pm",
+            "durationFormatted": "00:00:23"
+          },
+          {
+            "start": 1793976919982,
+            "end": 1793976971662,
+            "durationMs": 51680,
+            "fromTime": "08:25 pm",
+            "toTime": "08:26 pm",
+            "durationFormatted": "00:00:51"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958007410,
+            "state": "off"
+          },
+          {
+            "start": 1793958007410,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": 1793976819926,
+            "state": "on"
+          },
+          {
+            "start": 1793976819926,
+            "end": 1793976912988,
+            "state": "off"
+          },
+          {
+            "start": 1793976912988,
+            "end": 1793976916986,
+            "state": "on"
+          },
+          {
+            "start": 1793976916986,
+            "end": 1793976917981,
+            "state": "off"
+          },
+          {
+            "start": 1793976917981,
+            "end": 1793976919982,
+            "state": "on"
+          },
+          {
+            "start": 1793976919982,
+            "end": 1793977464003,
+            "state": "off"
+          },
+          {
+            "start": 1793977464003,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_amrit_raj": {
+        "id": "p_amrit_raj",
+        "name": "Amrit raj",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 21723900,
+        "totalPresentMs": 1215818312,
+        "cameraOnMs": 1206505006,
+        "cameraOffMs": 9313306,
+        "validStudyMs": 1206505006,
+        "totalDuration": 1215818312,
+        "duration": 1206505006,
+        "timeInCall": 21723900,
+        "durationSeconds": 1206505,
+        "durationMinutes": 20108,
+        "studyDuration": 1206505006,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_priya_singh": {
+        "id": "p_priya_singh",
+        "name": "Priya Singh",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": 1793977550980,
+        "lastSeen": 1793977550980,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 21407986,
+        "totalPresentMs": 1215699320,
+        "cameraOnMs": 1206344036,
+        "cameraOffMs": 9355284,
+        "validStudyMs": 1206344036,
+        "totalDuration": 1215699320,
+        "duration": 1206344036,
+        "timeInCall": 21407986,
+        "durationSeconds": 1206344,
+        "durationMinutes": 20105,
+        "studyDuration": 1206344036,
+        "consecutiveCamOffMs": 41978,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793977509988,
+            "end": 1793977553283,
+            "durationMs": 43295,
+            "fromTime": "08:35 pm",
+            "toTime": "08:35 pm",
+            "durationFormatted": "00:00:43"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": 1793977509988,
+            "state": "on"
+          },
+          {
+            "start": 1793977509988,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_sahil_hussain": {
+        "id": "p_sahil_hussain",
+        "name": "Sahil Hussain",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 17630617,
+            "awayFormatted": "04:53:50"
+          }
+        ],
+        "totalInMeetMs": 21723900,
+        "totalPresentMs": 1215580798,
+        "cameraOnMs": 1197837033,
+        "cameraOffMs": 17743765,
+        "validStudyMs": 1197837033,
+        "totalDuration": 1215580798,
+        "duration": 1197837033,
+        "timeInCall": 21723900,
+        "durationSeconds": 1197837,
+        "durationMinutes": 19963,
+        "studyDuration": 1197837033,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_adriti": {
+        "id": "p_adriti",
+        "name": "Adriti",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 11363610,
+            "awayFormatted": "03:09:23"
+          }
+        ],
+        "totalInMeetMs": 21723900,
+        "totalPresentMs": 1215727343,
+        "cameraOnMs": 1199780263,
+        "cameraOffMs": 15947080,
+        "validStudyMs": 1199780263,
+        "totalDuration": 1215727343,
+        "duration": 1199780263,
+        "timeInCall": 21723900,
+        "durationSeconds": 1199780,
+        "durationMinutes": 19996,
+        "studyDuration": 1199780263,
+        "consecutiveCamOffMs": 62001,
+        "cameraOffCurrentStart": 1793977638995,
+        "cameraOffIntervals": [
+          {
+            "start": 1793959119757,
+            "end": 1793959153376,
+            "durationMs": 33619,
+            "fromTime": "03:28 pm",
+            "toTime": "03:29 pm",
+            "durationFormatted": "00:00:33"
+          },
+          {
+            "start": 1793959184496,
+            "end": 1793959212487,
+            "durationMs": 27991,
+            "fromTime": "03:29 pm",
+            "toTime": "03:30 pm",
+            "durationFormatted": "00:00:27"
+          },
+          {
+            "start": 1793959272747,
+            "end": 1793959358392,
+            "durationMs": 85645,
+            "fromTime": "03:31 pm",
+            "toTime": "03:32 pm",
+            "durationFormatted": "00:01:25"
+          },
+          {
+            "start": 1793959925091,
+            "end": 1793959940376,
+            "durationMs": 15285,
+            "fromTime": "03:42 pm",
+            "toTime": "03:42 pm",
+            "durationFormatted": "00:00:15"
+          },
+          {
+            "start": 1793959964117,
+            "end": 1793960013376,
+            "durationMs": 49259,
+            "fromTime": "03:42 pm",
+            "toTime": "03:43 pm",
+            "durationFormatted": "00:00:49"
+          },
+          {
+            "start": 1793960109842,
+            "end": 1793960145383,
+            "durationMs": 35541,
+            "fromTime": "03:45 pm",
+            "toTime": "03:45 pm",
+            "durationFormatted": "00:00:35"
+          },
+          {
+            "start": 1793960817770,
+            "end": 1793960856491,
+            "durationMs": 38721,
+            "fromTime": "03:56 pm",
+            "toTime": "03:57 pm",
+            "durationFormatted": "00:00:38"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975812182,
+            "durationMs": 77190,
+            "fromTime": "08:05 pm",
+            "toTime": "08:06 pm",
+            "durationFormatted": "00:01:17"
+          },
+          {
+            "start": 1793976025351,
+            "end": 1793976098934,
+            "durationMs": 73583,
+            "fromTime": "08:10 pm",
+            "toTime": "08:11 pm",
+            "durationFormatted": "00:01:13"
+          },
+          {
+            "start": 1793976118926,
+            "end": 1793976221933,
+            "durationMs": 103007,
+            "fromTime": "08:11 pm",
+            "toTime": "08:13 pm",
+            "durationFormatted": "00:01:43"
+          },
+          {
+            "start": 1793977194991,
+            "end": 1793977215439,
+            "durationMs": 20448,
+            "fromTime": "08:29 pm",
+            "toTime": "08:30 pm",
+            "durationFormatted": "00:00:20"
+          },
+          {
+            "start": 1793977638995,
+            "end": 1793977675201,
+            "durationMs": 36206,
+            "fromTime": "08:37 pm",
+            "toTime": "08:37 pm",
+            "durationFormatted": "00:00:36"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793959119757,
+            "state": "on"
+          },
+          {
+            "start": 1793959119757,
+            "end": 1793959153376,
+            "state": "off"
+          },
+          {
+            "start": 1793959153376,
+            "end": 1793959184496,
+            "state": "on"
+          },
+          {
+            "start": 1793959184496,
+            "end": 1793959212487,
+            "state": "off"
+          },
+          {
+            "start": 1793959212487,
+            "end": 1793959272747,
+            "state": "on"
+          },
+          {
+            "start": 1793959272747,
+            "end": 1793959358392,
+            "state": "off"
+          },
+          {
+            "start": 1793959358392,
+            "end": 1793959925091,
+            "state": "on"
+          },
+          {
+            "start": 1793959925091,
+            "end": 1793959940376,
+            "state": "off"
+          },
+          {
+            "start": 1793959940376,
+            "end": 1793959964117,
+            "state": "on"
+          },
+          {
+            "start": 1793959964117,
+            "end": 1793960013376,
+            "state": "off"
+          },
+          {
+            "start": 1793960013376,
+            "end": 1793960109842,
+            "state": "on"
+          },
+          {
+            "start": 1793960109842,
+            "end": 1793960145383,
+            "state": "off"
+          },
+          {
+            "start": 1793960145383,
+            "end": 1793960817770,
+            "state": "on"
+          },
+          {
+            "start": 1793960817770,
+            "end": 1793975987388,
+            "state": "off"
+          },
+          {
+            "start": 1793975987388,
+            "end": 1793976025351,
+            "state": "on"
+          },
+          {
+            "start": 1793976025351,
+            "end": 1793976098934,
+            "state": "off"
+          },
+          {
+            "start": 1793976098934,
+            "end": 1793976118926,
+            "state": "on"
+          },
+          {
+            "start": 1793976118926,
+            "end": 1793976221933,
+            "state": "off"
+          },
+          {
+            "start": 1793976221933,
+            "end": 1793977194991,
+            "state": "on"
+          },
+          {
+            "start": 1793977194991,
+            "end": 1793977333096,
+            "state": "off"
+          },
+          {
+            "start": 1793977333096,
+            "end": 1793977638995,
+            "state": "on"
+          },
+          {
+            "start": 1793977638995,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_vanya_narula": {
+        "id": "p_vanya_narula",
+        "name": "Vanya Narula",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 2,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793963896584,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793963896584,
+            "formatted": "04:48 pm",
+            "awayMs": 212209,
+            "awayFormatted": "00:03:32"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 35536256,
+        "totalPresentMs": 1215929445,
+        "cameraOnMs": 1205328079,
+        "cameraOffMs": 10601366,
+        "validStudyMs": 1205328079,
+        "totalDuration": 1215929445,
+        "duration": 1205328079,
+        "timeInCall": 35536256,
+        "durationSeconds": 1205328,
+        "durationMinutes": 20088,
+        "studyDuration": 1205328079,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958314906,
+            "durationMs": 320266,
+            "fromTime": "03:09 pm",
+            "toTime": "03:15 pm",
+            "durationFormatted": "00:05:20"
+          },
+          {
+            "start": 1793963896584,
+            "end": 1793963916000,
+            "durationMs": 19416,
+            "fromTime": "04:48 pm",
+            "toTime": "04:48 pm",
+            "durationFormatted": "00:00:19"
+          },
+          {
+            "start": 1793964291376,
+            "end": 1793964571596,
+            "durationMs": 280220,
+            "fromTime": "04:54 pm",
+            "toTime": "04:59 pm",
+            "durationFormatted": "00:04:40"
+          },
+          {
+            "start": 1793965364378,
+            "end": 1793965372378,
+            "durationMs": 8000,
+            "fromTime": "05:12 pm",
+            "toTime": "05:12 pm",
+            "durationFormatted": "00:00:08"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975751986,
+            "durationMs": 16994,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:16"
+          },
+          {
+            "start": 1793976131945,
+            "end": 1793976165935,
+            "durationMs": 33990,
+            "fromTime": "08:12 pm",
+            "toTime": "08:12 pm",
+            "durationFormatted": "00:00:33"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958606376,
+            "state": "off"
+          },
+          {
+            "start": 1793958606376,
+            "end": 1793963916000,
+            "state": "on"
+          },
+          {
+            "start": 1793963916000,
+            "end": 1793964291376,
+            "state": "on"
+          },
+          {
+            "start": 1793964291376,
+            "end": 1793964571596,
+            "state": "off"
+          },
+          {
+            "start": 1793964571596,
+            "end": 1793965364378,
+            "state": "on"
+          },
+          {
+            "start": 1793965364378,
+            "end": 1793965372378,
+            "state": "off"
+          },
+          {
+            "start": 1793965372378,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975751986,
+            "state": "off"
+          },
+          {
+            "start": 1793975751986,
+            "end": 1793976131945,
+            "state": "on"
+          },
+          {
+            "start": 1793976131945,
+            "end": 1793976165935,
+            "state": "off"
+          },
+          {
+            "start": 1793976165935,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_maga_chublek": {
+        "id": "p_maga_chublek",
+        "name": "Maga Chublek",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793957958982,
+        "joinTime": 1793957958982,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 4,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793957958982,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793958171983,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793959942940,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793961034694,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793957958982,
+            "formatted": "03:09 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793958171983,
+            "formatted": "03:12 pm",
+            "awayMs": 53580,
+            "awayFormatted": "00:00:53"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793959942940,
+            "formatted": "03:42 pm",
+            "awayMs": 280562,
+            "awayFormatted": "00:04:40"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793961034694,
+            "formatted": "04:00 pm",
+            "awayMs": 42277,
+            "awayFormatted": "00:00:42"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 75701109,
+        "totalPresentMs": 1215902829,
+        "cameraOnMs": 1205619625,
+        "cameraOffMs": 10283204,
+        "validStudyMs": 1205619625,
+        "totalDuration": 1215902829,
+        "duration": 1205619625,
+        "timeInCall": 75701109,
+        "durationSeconds": 1205619,
+        "durationMinutes": 20093,
+        "studyDuration": 1205619625,
+        "consecutiveCamOffMs": 49997,
+        "cameraOffCurrentStart": 1793977650991,
+        "cameraOffIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958175807,
+            "durationMs": 181167,
+            "fromTime": "03:09 pm",
+            "toTime": "03:12 pm",
+            "durationFormatted": "00:03:01"
+          },
+          {
+            "start": 1793958179490,
+            "end": 1793958188429,
+            "durationMs": 8939,
+            "fromTime": "03:12 pm",
+            "toTime": "03:13 pm",
+            "durationFormatted": "00:00:08"
+          },
+          {
+            "start": 1793958491899,
+            "end": 1793958547379,
+            "durationMs": 55480,
+            "fromTime": "03:18 pm",
+            "toTime": "03:19 pm",
+            "durationFormatted": "00:00:55"
+          },
+          {
+            "start": 1793959645649,
+            "end": 1793959952887,
+            "durationMs": 307238,
+            "fromTime": "03:37 pm",
+            "toTime": "03:42 pm",
+            "durationFormatted": "00:05:07"
+          },
+          {
+            "start": 1793960708600,
+            "end": 1793960748482,
+            "durationMs": 39882,
+            "fromTime": "03:55 pm",
+            "toTime": "03:55 pm",
+            "durationFormatted": "00:00:39"
+          },
+          {
+            "start": 1793960918750,
+            "end": 1793961007161,
+            "durationMs": 88411,
+            "fromTime": "03:58 pm",
+            "toTime": "04:00 pm",
+            "durationFormatted": "00:01:28"
+          },
+          {
+            "start": 1793964157428,
+            "end": 1793964160375,
+            "durationMs": 2947,
+            "fromTime": "04:52 pm",
+            "toTime": "04:52 pm",
+            "durationFormatted": "00:00:02"
+          },
+          {
+            "start": 1793964161845,
+            "end": 1793964164078,
+            "durationMs": 2233,
+            "fromTime": "04:52 pm",
+            "toTime": "04:52 pm",
+            "durationFormatted": "00:00:02"
+          },
+          {
+            "start": 1793964183850,
+            "end": 1793964275375,
+            "durationMs": 91525,
+            "fromTime": "04:53 pm",
+            "toTime": "04:54 pm",
+            "durationFormatted": "00:01:31"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793976776927,
+            "end": 1793976779929,
+            "durationMs": 3002,
+            "fromTime": "08:22 pm",
+            "toTime": "08:22 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793976785085,
+            "end": 1793976787472,
+            "durationMs": 2387,
+            "fromTime": "08:23 pm",
+            "toTime": "08:23 pm",
+            "durationFormatted": "00:00:02"
+          },
+          {
+            "start": 1793977484019,
+            "end": 1793977498025,
+            "durationMs": 14006,
+            "fromTime": "08:34 pm",
+            "toTime": "08:34 pm",
+            "durationFormatted": "00:00:14"
+          },
+          {
+            "start": 1793977650991,
+            "end": 1793977675201,
+            "durationMs": 24210,
+            "fromTime": "08:37 pm",
+            "toTime": "08:37 pm",
+            "durationFormatted": "00:00:24"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793957994640,
+            "end": 1793958175807,
+            "state": "off"
+          },
+          {
+            "start": 1793958175807,
+            "end": 1793958179490,
+            "state": "on"
+          },
+          {
+            "start": 1793958179490,
+            "end": 1793958188429,
+            "state": "off"
+          },
+          {
+            "start": 1793958188429,
+            "end": 1793958491899,
+            "state": "on"
+          },
+          {
+            "start": 1793958491899,
+            "end": 1793958547379,
+            "state": "off"
+          },
+          {
+            "start": 1793958547379,
+            "end": 1793959645649,
+            "state": "on"
+          },
+          {
+            "start": 1793959645649,
+            "end": 1793959952887,
+            "state": "off"
+          },
+          {
+            "start": 1793959952887,
+            "end": 1793960708600,
+            "state": "on"
+          },
+          {
+            "start": 1793960708600,
+            "end": 1793960748482,
+            "state": "off"
+          },
+          {
+            "start": 1793960748482,
+            "end": 1793960918750,
+            "state": "on"
+          },
+          {
+            "start": 1793960918750,
+            "end": 1793961040257,
+            "state": "off"
+          },
+          {
+            "start": 1793961040257,
+            "end": 1793964157428,
+            "state": "on"
+          },
+          {
+            "start": 1793964157428,
+            "end": 1793964160375,
+            "state": "off"
+          },
+          {
+            "start": 1793964160375,
+            "end": 1793964161845,
+            "state": "on"
+          },
+          {
+            "start": 1793964161845,
+            "end": 1793964164078,
+            "state": "off"
+          },
+          {
+            "start": 1793964164078,
+            "end": 1793964183850,
+            "state": "on"
+          },
+          {
+            "start": 1793964183850,
+            "end": 1793964275375,
+            "state": "off"
+          },
+          {
+            "start": 1793964275375,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": 1793976773218,
+            "state": "on"
+          },
+          {
+            "start": 1793976773218,
+            "end": 1793976774165,
+            "state": "off"
+          },
+          {
+            "start": 1793976774165,
+            "end": 1793976776927,
+            "state": "on"
+          },
+          {
+            "start": 1793976776927,
+            "end": 1793976779929,
+            "state": "off"
+          },
+          {
+            "start": 1793976779929,
+            "end": 1793976785085,
+            "state": "on"
+          },
+          {
+            "start": 1793976785085,
+            "end": 1793976787472,
+            "state": "off"
+          },
+          {
+            "start": 1793976787472,
+            "end": 1793977484019,
+            "state": "on"
+          },
+          {
+            "start": 1793977484019,
+            "end": 1793977498025,
+            "state": "off"
+          },
+          {
+            "start": 1793977498025,
+            "end": 1793977650991,
+            "state": "on"
+          },
+          {
+            "start": 1793977650991,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_shaista_naz": {
+        "id": "p_shaista_naz",
+        "name": "Shaista naz",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793958127277,
+        "joinTime": 1793958127277,
+        "leaveTime": 1793960072394,
+        "lastSeen": 1793960072394,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793960055374,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793958127277,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793960055374,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793958127277,
+            "formatted": "03:12 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793960055374,
+            "formatted": "03:44 pm",
+            "awayMs": 1924000,
+            "awayFormatted": "00:32:04"
+          }
+        ],
+        "totalInMeetMs": 1962137,
+        "totalPresentMs": 1215279245,
+        "cameraOnMs": 1195920000,
+        "cameraOffMs": 19359245,
+        "validStudyMs": 1195920000,
+        "totalDuration": 1215279245,
+        "duration": 1195920000,
+        "timeInCall": 1962137,
+        "durationSeconds": 1195920,
+        "durationMinutes": 19932,
+        "studyDuration": 1195920000,
+        "consecutiveCamOffMs": 25735,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [
+          {
+            "start": 1793958127277,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_ayan_sd": {
+        "id": "p_ayan_sd",
+        "name": "Ayan Sd",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793958789852,
+        "joinTime": 1793958789852,
+        "leaveTime": 1793958987998,
+        "lastSeen": 1793958987998,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793958789852,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793958789852,
+            "formatted": "03:23 pm"
+          }
+        ],
+        "totalInMeetMs": 198146,
+        "totalPresentMs": 1214616669,
+        "cameraOnMs": 1195933998,
+        "cameraOffMs": 18682671,
+        "validStudyMs": 1195933998,
+        "totalDuration": 1214616669,
+        "duration": 1195933998,
+        "timeInCall": 198146,
+        "durationSeconds": 1195933,
+        "durationMinutes": 19932,
+        "studyDuration": 1195933998,
+        "consecutiveCamOffMs": 23624,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793958789852,
+            "end": 1793958855040,
+            "durationMs": 65188,
+            "fromTime": "03:23 pm",
+            "toTime": "03:24 pm",
+            "durationFormatted": "00:01:05"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793958789852,
+            "end": 1793958951376,
+            "state": "off"
+          },
+          {
+            "start": 1793958951376,
+            "end": 1793958965375,
+            "state": "on"
+          },
+          {
+            "start": 1793958965375,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_suwaiba_sadaf": {
+        "id": "p_suwaiba_sadaf",
+        "name": "Suwaiba Sadaf",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793959091050,
+        "joinTime": 1793959091050,
+        "leaveTime": 1793959134378,
+        "lastSeen": 1793959134378,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793959091050,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793959091050,
+            "formatted": "03:28 pm"
+          }
+        ],
+        "totalInMeetMs": 43328,
+        "totalPresentMs": 1214315472,
+        "cameraOnMs": 1195920000,
+        "cameraOffMs": 18395472,
+        "validStudyMs": 1195920000,
+        "totalDuration": 1214315472,
+        "duration": 1195920000,
+        "timeInCall": 43328,
+        "durationSeconds": 1195920,
+        "durationMinutes": 19932,
+        "studyDuration": 1195920000,
+        "consecutiveCamOffMs": 45002,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [
+          {
+            "start": 1793959091050,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_anurag_yadav": {
+        "id": "p_anurag_yadav",
+        "name": "Anurag Yadav",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793959248190,
+        "joinTime": 1793959248190,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 2,
+        "rejoinedAt": 1793976659224,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793959248190,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793959485302,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793976659224,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793959248190,
+            "formatted": "03:30 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793959485302,
+            "formatted": "03:34 pm",
+            "awayMs": 224927,
+            "awayFormatted": "00:03:44"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793976659224,
+            "formatted": "08:20 pm",
+            "awayMs": 9992032,
+            "awayFormatted": "02:46:32"
+          }
+        ],
+        "totalInMeetMs": 37734107,
+        "totalPresentMs": 1214322843,
+        "cameraOnMs": 1204085922,
+        "cameraOffMs": 10236921,
+        "validStudyMs": 1204085922,
+        "totalDuration": 1214322843,
+        "duration": 1204085922,
+        "timeInCall": 37734107,
+        "durationSeconds": 1204085,
+        "durationMinutes": 20068,
+        "studyDuration": 1204085922,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793959248190,
+            "end": 1793959489374,
+            "durationMs": 241184,
+            "fromTime": "03:30 pm",
+            "toTime": "03:34 pm",
+            "durationFormatted": "00:04:01"
+          },
+          {
+            "start": 1793964438375,
+            "end": 1793964439377,
+            "durationMs": 1002,
+            "fromTime": "04:57 pm",
+            "toTime": "04:57 pm",
+            "durationFormatted": "00:00:01"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793976659224,
+            "end": 1793976661927,
+            "durationMs": 2703,
+            "fromTime": "08:20 pm",
+            "toTime": "08:21 pm",
+            "durationFormatted": "00:00:02"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793959248190,
+            "end": 1793959489374,
+            "state": "off"
+          },
+          {
+            "start": 1793959489374,
+            "end": 1793964438375,
+            "state": "on"
+          },
+          {
+            "start": 1793964438375,
+            "end": 1793964439377,
+            "state": "off"
+          },
+          {
+            "start": 1793964439377,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793976661927,
+            "state": "off"
+          },
+          {
+            "start": 1793976661927,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_yusra_naaz": {
+        "id": "p_yusra_naaz",
+        "name": "Yusra Naaz",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793959430959,
+        "joinTime": 1793959430959,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793959430959,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793959430959,
+            "formatted": "03:33 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 20251931,
+        "totalPresentMs": 1214382190,
+        "cameraOnMs": 1204939654,
+        "cameraOffMs": 9442536,
+        "validStudyMs": 1204939654,
+        "totalDuration": 1214382190,
+        "duration": 1204939654,
+        "timeInCall": 20251931,
+        "durationSeconds": 1204939,
+        "durationMinutes": 20082,
+        "studyDuration": 1204939654,
+        "consecutiveCamOffMs": 118992,
+        "cameraOffCurrentStart": 1793977582002,
+        "cameraOffIntervals": [
+          {
+            "start": 1793959430959,
+            "end": 1793959434393,
+            "durationMs": 3434,
+            "fromTime": "03:33 pm",
+            "toTime": "03:33 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793959604594,
+            "end": 1793959609451,
+            "durationMs": 4857,
+            "fromTime": "03:36 pm",
+            "toTime": "03:36 pm",
+            "durationFormatted": "00:00:04"
+          },
+          {
+            "start": 1793966327376,
+            "end": 1793966330384,
+            "durationMs": 3008,
+            "fromTime": "05:28 pm",
+            "toTime": "05:28 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975736978,
+            "durationMs": 1986,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:01"
+          },
+          {
+            "start": 1793977595503,
+            "end": 1793977598755,
+            "durationMs": 3252,
+            "fromTime": "08:36 pm",
+            "toTime": "08:36 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793977582002,
+            "end": 1793977675201,
+            "durationMs": 93199,
+            "fromTime": "08:36 pm",
+            "toTime": "08:37 pm",
+            "durationFormatted": "00:01:33"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793959430959,
+            "end": 1793959434393,
+            "state": "off"
+          },
+          {
+            "start": 1793959434393,
+            "end": 1793959604594,
+            "state": "on"
+          },
+          {
+            "start": 1793959604594,
+            "end": 1793959610376,
+            "state": "off"
+          },
+          {
+            "start": 1793959610376,
+            "end": 1793966327376,
+            "state": "on"
+          },
+          {
+            "start": 1793966327376,
+            "end": 1793966330384,
+            "state": "off"
+          },
+          {
+            "start": 1793966330384,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975736978,
+            "state": "off"
+          },
+          {
+            "start": 1793975736978,
+            "end": 1793977577991,
+            "state": "on"
+          },
+          {
+            "start": 1793977577991,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_muttaqi_nadaf": {
+        "id": "p_muttaqi_nadaf",
+        "name": "Muttaqi Nadaf",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793959455144,
+        "joinTime": 1793959455144,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 2,
+        "rejoinedAt": 1793976282364,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793959455144,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793976282364,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793959455144,
+            "formatted": "03:34 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793976282364,
+            "formatted": "08:14 pm",
+            "awayMs": 45437,
+            "awayFormatted": "00:00:45"
+          }
+        ],
+        "totalInMeetMs": 21654323,
+        "totalPresentMs": 1214316277,
+        "cameraOnMs": 1204920667,
+        "cameraOffMs": 9395610,
+        "validStudyMs": 1204920667,
+        "totalDuration": 1214316277,
+        "duration": 1204920667,
+        "timeInCall": 21654323,
+        "durationSeconds": 1204920,
+        "durationMinutes": 20082,
+        "studyDuration": 1204920667,
+        "consecutiveCamOffMs": 75001,
+        "cameraOffCurrentStart": 1793977625992,
+        "cameraOffIntervals": [
+          {
+            "start": 1793959455144,
+            "end": 1793959459447,
+            "durationMs": 4303,
+            "fromTime": "03:34 pm",
+            "toTime": "03:34 pm",
+            "durationFormatted": "00:00:04"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793976282364,
+            "end": 1793976284342,
+            "durationMs": 1978,
+            "fromTime": "08:14 pm",
+            "toTime": "08:14 pm",
+            "durationFormatted": "00:00:01"
+          },
+          {
+            "start": 1793977625992,
+            "end": 1793977675201,
+            "durationMs": 49209,
+            "fromTime": "08:37 pm",
+            "toTime": "08:37 pm",
+            "durationFormatted": "00:00:49"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793959455144,
+            "end": 1793959459447,
+            "state": "off"
+          },
+          {
+            "start": 1793959459447,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": 1793976285263,
+            "state": "on"
+          },
+          {
+            "start": 1793976285263,
+            "end": 1793977625992,
+            "state": "on"
+          },
+          {
+            "start": 1793977625992,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_rahul": {
+        "id": "p_rahul",
+        "name": "Rahul",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793959550091,
+        "joinTime": 1793959550091,
+        "leaveTime": 1793962034376,
+        "lastSeen": 1793962034376,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793959550091,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793959550091,
+            "formatted": "03:35 pm"
+          }
+        ],
+        "totalInMeetMs": 2484285,
+        "totalPresentMs": 1213856431,
+        "cameraOnMs": 1195920000,
+        "cameraOffMs": 17936431,
+        "validStudyMs": 1195920000,
+        "totalDuration": 1213856431,
+        "duration": 1195920000,
+        "timeInCall": 2484285,
+        "durationSeconds": 1195920,
+        "durationMinutes": 19932,
+        "studyDuration": 1195920000,
+        "consecutiveCamOffMs": 2486001,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793959550091,
+            "end": 1793959606180,
+            "durationMs": 56089,
+            "fromTime": "03:35 pm",
+            "toTime": "03:36 pm",
+            "durationFormatted": "00:00:56"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793959550091,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_eram_hayat": {
+        "id": "p_eram_hayat",
+        "name": "Eram Hayat",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793960078069,
+        "joinTime": 1793960078069,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 2,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793960078069,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793965977642,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793960078069,
+            "formatted": "03:44 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793965977642,
+            "formatted": "05:22 pm",
+            "awayMs": 472693,
+            "awayFormatted": "00:07:52"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 31336123,
+        "totalPresentMs": 1213745169,
+        "cameraOnMs": 1203886655,
+        "cameraOffMs": 9858514,
+        "validStudyMs": 1203886655,
+        "totalDuration": 1213745169,
+        "duration": 1203886655,
+        "timeInCall": 31336123,
+        "durationSeconds": 1203886,
+        "durationMinutes": 20064,
+        "studyDuration": 1203886655,
+        "consecutiveCamOffMs": 55003,
+        "cameraOffCurrentStart": 1793977646002,
+        "cameraOffIntervals": [
+          {
+            "start": 1793960078069,
+            "end": 1793960081376,
+            "durationMs": 3307,
+            "fromTime": "03:44 pm",
+            "toTime": "03:44 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793965503790,
+            "end": 1793965513101,
+            "durationMs": 9311,
+            "fromTime": "05:15 pm",
+            "toTime": "05:15 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793977646002,
+            "end": 1793977675201,
+            "durationMs": 29199,
+            "fromTime": "08:37 pm",
+            "toTime": "08:37 pm",
+            "durationFormatted": "00:00:29"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793960078069,
+            "end": 1793960081376,
+            "state": "off"
+          },
+          {
+            "start": 1793960081376,
+            "end": 1793965503790,
+            "state": "on"
+          },
+          {
+            "start": 1793965503790,
+            "end": 1793965981377,
+            "state": "off"
+          },
+          {
+            "start": 1793965981377,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": 1793977646002,
+            "state": "on"
+          },
+          {
+            "start": 1793977646002,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_kunwar_aditya_pratap_sinhji_deo": {
+        "id": "p_kunwar_aditya_pratap_sinhji_deo",
+        "name": "Kunwar Aditya Pratap Sinhji Deo",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793960181973,
+        "joinTime": 1793960181973,
+        "leaveTime": 1793961813377,
+        "lastSeen": 1793961813377,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793960181973,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793960181973,
+            "formatted": "03:46 pm"
+          }
+        ],
+        "totalInMeetMs": 1631404,
+        "totalPresentMs": 1213224549,
+        "cameraOnMs": 1195920000,
+        "cameraOffMs": 17304549,
+        "validStudyMs": 1195920000,
+        "totalDuration": 1213224549,
+        "duration": 1195920000,
+        "timeInCall": 1631404,
+        "durationSeconds": 1195920,
+        "durationMinutes": 19932,
+        "studyDuration": 1195920000,
+        "consecutiveCamOffMs": 1633003,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793960181973,
+            "end": 1793960264101,
+            "durationMs": 82128,
+            "fromTime": "03:46 pm",
+            "toTime": "03:47 pm",
+            "durationFormatted": "00:01:22"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793960181973,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_harsh_gupta": {
+        "id": "p_harsh_gupta",
+        "name": "Harsh Gupta",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793960623681,
+        "joinTime": 1793960623681,
+        "leaveTime": 1793966667192,
+        "lastSeen": 1793966667192,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793965492430,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793960623681,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793965492430,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793960623681,
+            "formatted": "03:53 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793965492430,
+            "formatted": "05:14 pm",
+            "awayMs": 4272054,
+            "awayFormatted": "01:11:12"
+          }
+        ],
+        "totalInMeetMs": 7218273,
+        "totalPresentMs": 1215609104,
+        "cameraOnMs": 1197476067,
+        "cameraOffMs": 18133037,
+        "validStudyMs": 1197476067,
+        "totalDuration": 1215609104,
+        "duration": 1197476067,
+        "timeInCall": 7218273,
+        "durationSeconds": 1197476,
+        "durationMinutes": 19957,
+        "studyDuration": 1197476067,
+        "consecutiveCamOffMs": 27006,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793960623681,
+            "end": 1793960673369,
+            "durationMs": 49688,
+            "fromTime": "03:53 pm",
+            "toTime": "03:54 pm",
+            "durationFormatted": "00:00:49"
+          },
+          {
+            "start": 1793961170582,
+            "end": 1793965508937,
+            "durationMs": 4338355,
+            "fromTime": "04:02 pm",
+            "toTime": "05:15 pm",
+            "durationFormatted": "01:12:18"
+          },
+          {
+            "start": 1793966501376,
+            "end": 1793966558376,
+            "durationMs": 57000,
+            "fromTime": "05:31 pm",
+            "toTime": "05:32 pm",
+            "durationFormatted": "00:00:57"
+          },
+          {
+            "start": 1793966640375,
+            "end": 1793966673040,
+            "durationMs": 32665,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:32"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793960623681,
+            "end": 1793960673369,
+            "state": "off"
+          },
+          {
+            "start": 1793960673369,
+            "end": 1793961170582,
+            "state": "on"
+          },
+          {
+            "start": 1793961170582,
+            "end": 1793965525911,
+            "state": "off"
+          },
+          {
+            "start": 1793965525911,
+            "end": 1793966501376,
+            "state": "on"
+          },
+          {
+            "start": 1793966501376,
+            "end": 1793966558376,
+            "state": "off"
+          },
+          {
+            "start": 1793966558376,
+            "end": 1793966640375,
+            "state": "on"
+          },
+          {
+            "start": 1793966640375,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_mohammad_gulam_goush": {
+        "id": "p_mohammad_gulam_goush",
+        "name": "Mohammad Gulam Goush",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793961037958,
+        "joinTime": 1793961037958,
+        "leaveTime": 1793962627377,
+        "lastSeen": 1793962627377,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793961037958,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793961037958,
+            "formatted": "04:00 pm"
+          }
+        ],
+        "totalInMeetMs": 1589419,
+        "totalPresentMs": 1212367402,
+        "cameraOnMs": 1197138725,
+        "cameraOffMs": 15228677,
+        "validStudyMs": 1197138725,
+        "totalDuration": 1212367402,
+        "duration": 1197138725,
+        "timeInCall": 1589419,
+        "durationSeconds": 1197138,
+        "durationMinutes": 19952,
+        "studyDuration": 1197138725,
+        "consecutiveCamOffMs": 367003,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793961037958,
+            "end": 1793961074378,
+            "durationMs": 36420,
+            "fromTime": "04:00 pm",
+            "toTime": "04:01 pm",
+            "durationFormatted": "00:00:36"
+          },
+          {
+            "start": 1793962262271,
+            "end": 1793962350696,
+            "durationMs": 88425,
+            "fromTime": "04:21 pm",
+            "toTime": "04:22 pm",
+            "durationFormatted": "00:01:28"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793961037958,
+            "end": 1793961042384,
+            "state": "off"
+          },
+          {
+            "start": 1793961042384,
+            "end": 1793962262271,
+            "state": "on"
+          },
+          {
+            "start": 1793962262271,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_yusuf_khan": {
+        "id": "p_yusuf_khan",
+        "name": "Yusuf khan",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793961064204,
+        "joinTime": 1793961064204,
+        "leaveTime": 1793977331987,
+        "lastSeen": 1793977331987,
+        "rejoinCount": 2,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793961064204,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793963278083,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793961064204,
+            "formatted": "04:01 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793963278083,
+            "formatted": "04:37 pm",
+            "awayMs": 1284702,
+            "awayFormatted": "00:21:24"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 31918682,
+        "totalPresentMs": 1212479878,
+        "cameraOnMs": 1199210892,
+        "cameraOffMs": 13268986,
+        "validStudyMs": 1199210892,
+        "totalDuration": 1212479878,
+        "duration": 1199210892,
+        "timeInCall": 31918682,
+        "durationSeconds": 1199210,
+        "durationMinutes": 19986,
+        "studyDuration": 1199210892,
+        "consecutiveCamOffMs": 1603188,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793961064204,
+            "end": 1793961118103,
+            "durationMs": 53899,
+            "fromTime": "04:01 pm",
+            "toTime": "04:01 pm",
+            "durationFormatted": "00:00:53"
+          },
+          {
+            "start": 1793963656445,
+            "end": 1793963661984,
+            "durationMs": 5539,
+            "fromTime": "04:44 pm",
+            "toTime": "04:44 pm",
+            "durationFormatted": "00:00:05"
+          },
+          {
+            "start": 1793965315290,
+            "end": 1793965360889,
+            "durationMs": 45599,
+            "fromTime": "05:11 pm",
+            "toTime": "05:12 pm",
+            "durationFormatted": "00:00:45"
+          },
+          {
+            "start": 1793965493523,
+            "end": 1793965497377,
+            "durationMs": 3854,
+            "fromTime": "05:14 pm",
+            "toTime": "05:14 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793965554146,
+            "end": 1793965556376,
+            "durationMs": 2230,
+            "fromTime": "05:15 pm",
+            "toTime": "05:15 pm",
+            "durationFormatted": "00:00:02"
+          },
+          {
+            "start": 1793965789687,
+            "end": 1793965793165,
+            "durationMs": 3478,
+            "fromTime": "05:19 pm",
+            "toTime": "05:19 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975812182,
+            "durationMs": 77190,
+            "fromTime": "08:05 pm",
+            "toTime": "08:06 pm",
+            "durationFormatted": "00:01:17"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793961064204,
+            "end": 1793963343736,
+            "state": "off"
+          },
+          {
+            "start": 1793963343736,
+            "end": 1793963656445,
+            "state": "on"
+          },
+          {
+            "start": 1793963656445,
+            "end": 1793963661984,
+            "state": "off"
+          },
+          {
+            "start": 1793963661984,
+            "end": 1793965315290,
+            "state": "on"
+          },
+          {
+            "start": 1793965315290,
+            "end": 1793965328430,
+            "state": "off"
+          },
+          {
+            "start": 1793965328430,
+            "end": 1793965493523,
+            "state": "on"
+          },
+          {
+            "start": 1793965493523,
+            "end": 1793965497377,
+            "state": "off"
+          },
+          {
+            "start": 1793965497377,
+            "end": 1793965554146,
+            "state": "on"
+          },
+          {
+            "start": 1793965554146,
+            "end": 1793965556376,
+            "state": "off"
+          },
+          {
+            "start": 1793965556376,
+            "end": 1793965789687,
+            "state": "on"
+          },
+          {
+            "start": 1793965789687,
+            "end": 1793965793165,
+            "state": "off"
+          },
+          {
+            "start": 1793965793165,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_ayushi_prepares": {
+        "id": "p_ayushi_prepares",
+        "name": "Ayushi Prepares",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793961594792,
+        "joinTime": 1793961594792,
+        "leaveTime": 1793961844375,
+        "lastSeen": 1793961844375,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793961594792,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793961594792,
+            "formatted": "04:09 pm"
+          }
+        ],
+        "totalInMeetMs": 249583,
+        "totalPresentMs": 1211811730,
+        "cameraOnMs": 1195920000,
+        "cameraOffMs": 15891730,
+        "validStudyMs": 1195920000,
+        "totalDuration": 1211811730,
+        "duration": 1195920000,
+        "timeInCall": 249583,
+        "durationSeconds": 1195920,
+        "durationMinutes": 19932,
+        "studyDuration": 1195920000,
+        "consecutiveCamOffMs": 250999,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [
+          {
+            "start": 1793961594792,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_ranveer_brahikar": {
+        "id": "p_ranveer_brahikar",
+        "name": "Ranveer Brahikar",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793962358160,
+        "joinTime": 1793962358160,
+        "leaveTime": 1793962362549,
+        "lastSeen": 1793962382960,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793962358160,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793962358160,
+            "formatted": "04:22 pm"
+          }
+        ],
+        "totalInMeetMs": 24800,
+        "totalPresentMs": 1211048362,
+        "cameraOnMs": 1195920000,
+        "cameraOffMs": 15128362,
+        "validStudyMs": 1195920000,
+        "totalDuration": 1211048362,
+        "duration": 1195920000,
+        "timeInCall": 24800,
+        "durationSeconds": 1195920,
+        "durationMinutes": 19932,
+        "studyDuration": 1195920000,
+        "consecutiveCamOffMs": 6171,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [
+          {
+            "start": 1793962358160,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_aneesh_kanagalekar": {
+        "id": "p_aneesh_kanagalekar",
+        "name": "ANEESH kanagalekar",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793963489544,
+        "joinTime": 1793963489544,
+        "leaveTime": 1793966667192,
+        "lastSeen": 1793966667192,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793963489544,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793963489544,
+            "formatted": "04:41 pm"
+          }
+        ],
+        "totalInMeetMs": 3177648,
+        "totalPresentMs": 1209913710,
+        "cameraOnMs": 1199091548,
+        "cameraOffMs": 10822162,
+        "validStudyMs": 1199091548,
+        "totalDuration": 1209913710,
+        "duration": 1199091548,
+        "timeInCall": 3177648,
+        "durationSeconds": 1199091,
+        "durationMinutes": 19984,
+        "studyDuration": 1199091548,
+        "consecutiveCamOffMs": 4189,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793963489544,
+            "end": 1793963492376,
+            "durationMs": 2832,
+            "fromTime": "04:41 pm",
+            "toTime": "04:41 pm",
+            "durationFormatted": "00:00:02"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793963489544,
+            "end": 1793963492376,
+            "state": "off"
+          },
+          {
+            "start": 1793963492376,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_rishi_raj": {
+        "id": "p_rishi_raj",
+        "name": "Rishi raj",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793963986001,
+        "joinTime": 1793963986001,
+        "leaveTime": 1793964003375,
+        "lastSeen": 1793964003375,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793963986001,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793963986001,
+            "formatted": "04:49 pm"
+          }
+        ],
+        "totalInMeetMs": 17374,
+        "totalPresentMs": 1209420521,
+        "cameraOnMs": 1195920000,
+        "cameraOffMs": 13500521,
+        "validStudyMs": 1195920000,
+        "totalDuration": 1209420521,
+        "duration": 1195920000,
+        "timeInCall": 17374,
+        "durationSeconds": 1195920,
+        "durationMinutes": 19932,
+        "studyDuration": 1195920000,
+        "consecutiveCamOffMs": 19000,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [],
+        "cameraIntervals": [
+          {
+            "start": 1793963986001,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_archi": {
+        "id": "p_archi",
+        "name": "Archi",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793964342710,
+        "joinTime": 1793964342710,
+        "leaveTime": 1793977333096,
+        "lastSeen": 1793977333096,
+        "rejoinCount": 2,
+        "rejoinedAt": 1793975734992,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793964342710,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793965311737,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793964342710,
+            "formatted": "04:55 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793965311737,
+            "formatted": "05:11 pm",
+            "awayMs": 203221,
+            "awayFormatted": "00:03:23"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm",
+            "awayMs": 9067800,
+            "awayFormatted": "02:31:07"
+          }
+        ],
+        "totalInMeetMs": 26609849,
+        "totalPresentMs": 1209443164,
+        "cameraOnMs": 1198423641,
+        "cameraOffMs": 11019523,
+        "validStudyMs": 1198423641,
+        "totalDuration": 1209443164,
+        "duration": 1198423641,
+        "timeInCall": 26609849,
+        "durationSeconds": 1198423,
+        "durationMinutes": 19973,
+        "studyDuration": 1198423641,
+        "consecutiveCamOffMs": 480796,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793964342710,
+            "end": 1793964383376,
+            "durationMs": 40666,
+            "fromTime": "04:55 pm",
+            "toTime": "04:56 pm",
+            "durationFormatted": "00:00:40"
+          },
+          {
+            "start": 1793964539551,
+            "end": 1793964832783,
+            "durationMs": 293232,
+            "fromTime": "04:58 pm",
+            "toTime": "05:03 pm",
+            "durationFormatted": "00:04:53"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793966676508,
+            "durationMs": 9316,
+            "fromTime": "05:34 pm",
+            "toTime": "05:34 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793975734992,
+            "end": 1793975745991,
+            "durationMs": 10999,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:10"
+          },
+          {
+            "start": 1793976852982,
+            "end": 1793976907232,
+            "durationMs": 54250,
+            "fromTime": "08:24 pm",
+            "toTime": "08:25 pm",
+            "durationFormatted": "00:00:54"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793964342710,
+            "end": 1793964383376,
+            "state": "off"
+          },
+          {
+            "start": 1793964383376,
+            "end": 1793964539551,
+            "state": "on"
+          },
+          {
+            "start": 1793964539551,
+            "end": 1793965424080,
+            "state": "off"
+          },
+          {
+            "start": 1793965424080,
+            "end": 1793966667192,
+            "state": "on"
+          },
+          {
+            "start": 1793966667192,
+            "end": 1793975745991,
+            "state": "off"
+          },
+          {
+            "start": 1793975745991,
+            "end": 1793976852982,
+            "state": "on"
+          },
+          {
+            "start": 1793976852982,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_saj_bharti": {
+        "id": "p_saj_bharti",
+        "name": "Saj Bharti",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793975734992,
+        "joinTime": 1793975734992,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm"
+          }
+        ],
+        "totalInMeetMs": 1973950,
+        "totalPresentMs": 1207180563,
+        "cameraOnMs": 1197091096,
+        "cameraOffMs": 10089467,
+        "validStudyMs": 1197091096,
+        "totalDuration": 1207180563,
+        "duration": 1197091096,
+        "timeInCall": 1973950,
+        "durationSeconds": 1197091,
+        "durationMinutes": 19951,
+        "studyDuration": 1197091096,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793975818003,
+            "end": 1793975858123,
+            "durationMs": 40120,
+            "fromTime": "08:06 pm",
+            "toTime": "08:07 pm",
+            "durationFormatted": "00:00:40"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": 1793975818003,
+            "state": "on"
+          },
+          {
+            "start": 1793975818003,
+            "end": 1793976563937,
+            "state": "off"
+          },
+          {
+            "start": 1793976563937,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_imtiyaz_ansari_immu": {
+        "id": "p_imtiyaz_ansari_immu",
+        "name": "Imtiyaz Ansari Immu",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793975734992,
+        "joinTime": 1793975734992,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 1,
+        "rejoinedAt": 1793977333096,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          },
+          {
+            "joinTime": 1793977333096,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm"
+          },
+          {
+            "event": "rejoined",
+            "time": 1793977333096,
+            "formatted": "08:32 pm",
+            "awayMs": 747184,
+            "awayFormatted": "00:12:27"
+          }
+        ],
+        "totalInMeetMs": 2349796,
+        "totalPresentMs": 1206410909,
+        "cameraOnMs": 1196768934,
+        "cameraOffMs": 9641975,
+        "validStudyMs": 1196768934,
+        "totalDuration": 1206410909,
+        "duration": 1196768934,
+        "timeInCall": 2349796,
+        "durationSeconds": 1196768,
+        "durationMinutes": 19946,
+        "studyDuration": 1196768934,
+        "consecutiveCamOffMs": 337985,
+        "cameraOffCurrentStart": 1793977582002,
+        "cameraOffIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793977333096,
+            "end": 1793977553283,
+            "durationMs": 220187,
+            "fromTime": "08:32 pm",
+            "toTime": "08:35 pm",
+            "durationFormatted": "00:03:40"
+          },
+          {
+            "start": 1793977580928,
+            "end": 1793977588466,
+            "durationMs": 7538,
+            "fromTime": "08:36 pm",
+            "toTime": "08:36 pm",
+            "durationFormatted": "00:00:07"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_tanvi": {
+        "id": "p_tanvi",
+        "name": "Tanvi",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "on",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793975734992,
+        "joinTime": 1793975734992,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm"
+          }
+        ],
+        "totalInMeetMs": 1973950,
+        "totalPresentMs": 1207141023,
+        "cameraOnMs": 1197837033,
+        "cameraOffMs": 9303990,
+        "validStudyMs": 1197837033,
+        "totalDuration": 1207141023,
+        "duration": 1197837033,
+        "timeInCall": 1973950,
+        "durationSeconds": 1197837,
+        "durationMinutes": 19963,
+        "studyDuration": 1197837033,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "on",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_parnavi_hedaoo": {
+        "id": "p_parnavi_hedaoo",
+        "name": "Parnavi Hedaoo",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793975734992,
+        "joinTime": 1793975734992,
+        "leaveTime": 1793975985984,
+        "lastSeen": 1793975985984,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm"
+          }
+        ],
+        "totalInMeetMs": 250992,
+        "totalPresentMs": 1205472996,
+        "cameraOnMs": 1196096004,
+        "cameraOffMs": 9376992,
+        "validStudyMs": 1196096004,
+        "totalDuration": 1205472996,
+        "duration": 1196096004,
+        "timeInCall": 250992,
+        "durationSeconds": 1196096,
+        "durationMinutes": 19934,
+        "studyDuration": 1196096004,
+        "consecutiveCamOffMs": 73002,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          },
+          {
+            "start": 1793975914218,
+            "end": 1793977553283,
+            "durationMs": 1639065,
+            "fromTime": "08:08 pm",
+            "toTime": "08:35 pm",
+            "durationFormatted": "00:27:19"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": 1793975914218,
+            "state": "on"
+          },
+          {
+            "start": 1793975914218,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_mouthwika": {
+        "id": "p_mouthwika",
+        "name": "Mouthwika",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793975734992,
+        "joinTime": 1793975734992,
+        "leaveTime": 1793976307926,
+        "lastSeen": 1793976307926,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm"
+          }
+        ],
+        "totalInMeetMs": 572934,
+        "totalPresentMs": 1205794938,
+        "cameraOnMs": 1196490948,
+        "cameraOffMs": 9303990,
+        "validStudyMs": 1196490948,
+        "totalDuration": 1205794938,
+        "duration": 1196490948,
+        "timeInCall": 572934,
+        "durationSeconds": 1196490,
+        "durationMinutes": 19941,
+        "studyDuration": 1196490948,
+        "consecutiveCamOffMs": 0,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "durationMs": 3413,
+            "fromTime": "08:05 pm",
+            "toTime": "08:05 pm",
+            "durationFormatted": "00:00:03"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793975738405,
+            "state": "off"
+          },
+          {
+            "start": 1793975738405,
+            "end": null,
+            "state": "on"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_charchit_saxena": {
+        "id": "p_charchit_saxena",
+        "name": "Charchit saxena",
+        "isLocal": false,
+        "currentStatus": "present",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793975734992,
+        "joinTime": 1793975734992,
+        "leaveTime": null,
+        "lastSeen": 1793977699985,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793975734992,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793975734992,
+            "formatted": "08:05 pm"
+          }
+        ],
+        "totalInMeetMs": 1973951,
+        "totalPresentMs": 1207155983,
+        "cameraOnMs": 1195935998,
+        "cameraOffMs": 11219985,
+        "validStudyMs": 1195935998,
+        "totalDuration": 1207155983,
+        "duration": 1195935998,
+        "timeInCall": 1973951,
+        "durationSeconds": 1195935,
+        "durationMinutes": 19932,
+        "studyDuration": 1195935998,
+        "consecutiveCamOffMs": 102994,
+        "cameraOffCurrentStart": 1793977597991,
+        "cameraOffIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793975812182,
+            "durationMs": 77190,
+            "fromTime": "08:05 pm",
+            "toTime": "08:06 pm",
+            "durationFormatted": "00:01:17"
+          },
+          {
+            "start": 1793977597991,
+            "end": 1793977675201,
+            "durationMs": 77210,
+            "fromTime": "08:36 pm",
+            "toTime": "08:37 pm",
+            "durationFormatted": "00:01:17"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793975734992,
+            "end": 1793977553825,
+            "state": "off"
+          },
+          {
+            "start": 1793977553825,
+            "end": 1793977597991,
+            "state": "on"
+          },
+          {
+            "start": 1793977597991,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_chandu_uggina": {
+        "id": "p_chandu_uggina",
+        "name": "Chandu Uggina",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793976123940,
+        "joinTime": 1793976123940,
+        "leaveTime": 1793976846927,
+        "lastSeen": 1793976846927,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793976123940,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793976123940,
+            "formatted": "08:12 pm"
+          }
+        ],
+        "totalInMeetMs": 722987,
+        "totalPresentMs": 1205944001,
+        "cameraOnMs": 1196550939,
+        "cameraOffMs": 9393062,
+        "validStudyMs": 1196550939,
+        "totalDuration": 1205944001,
+        "duration": 1196550939,
+        "timeInCall": 722987,
+        "durationSeconds": 1196550,
+        "durationMinutes": 19942,
+        "studyDuration": 1196550939,
+        "consecutiveCamOffMs": 34001,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793976123940,
+            "end": 1793976125926,
+            "durationMs": 1986,
+            "fromTime": "08:12 pm",
+            "toTime": "08:12 pm",
+            "durationFormatted": "00:00:01"
+          },
+          {
+            "start": 1793976141488,
+            "end": 1793976197929,
+            "durationMs": 56441,
+            "fromTime": "08:12 pm",
+            "toTime": "08:13 pm",
+            "durationFormatted": "00:00:56"
+          },
+          {
+            "start": 1793976813971,
+            "end": 1793976843652,
+            "durationMs": 29681,
+            "fromTime": "08:23 pm",
+            "toTime": "08:24 pm",
+            "durationFormatted": "00:00:29"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793976123940,
+            "end": 1793976125926,
+            "state": "off"
+          },
+          {
+            "start": 1793976125926,
+            "end": 1793976141488,
+            "state": "on"
+          },
+          {
+            "start": 1793976141488,
+            "end": 1793976197929,
+            "state": "off"
+          },
+          {
+            "start": 1793976197929,
+            "end": 1793976813971,
+            "state": "on"
+          },
+          {
+            "start": 1793976813971,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_sandeep_yadav": {
+        "id": "p_sandeep_yadav",
+        "name": "Sandeep Yadav",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793976275068,
+        "joinTime": 1793976275068,
+        "leaveTime": 1793977333096,
+        "lastSeen": 1793977333096,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793976275068,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793976275068,
+            "formatted": "08:14 pm"
+          }
+        ],
+        "totalInMeetMs": 1058028,
+        "totalPresentMs": 1206287306,
+        "cameraOnMs": 1195970002,
+        "cameraOffMs": 10317304,
+        "validStudyMs": 1195970002,
+        "totalDuration": 1206287306,
+        "duration": 1195970002,
+        "timeInCall": 1058028,
+        "durationSeconds": 1195970,
+        "durationMinutes": 19932,
+        "studyDuration": 1195970002,
+        "consecutiveCamOffMs": 399113,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793976275068,
+            "end": 1793976284342,
+            "durationMs": 9274,
+            "fromTime": "08:14 pm",
+            "toTime": "08:14 pm",
+            "durationFormatted": "00:00:09"
+          },
+          {
+            "start": 1793976934982,
+            "end": 1793976971662,
+            "durationMs": 36680,
+            "fromTime": "08:25 pm",
+            "toTime": "08:26 pm",
+            "durationFormatted": "00:00:36"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793976275068,
+            "end": 1793976884986,
+            "state": "off"
+          },
+          {
+            "start": 1793976884986,
+            "end": 1793976934982,
+            "state": "on"
+          },
+          {
+            "start": 1793976934982,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": [],
+        "manualAdjustmentMs": 0
+      },
+      "p_akhil": {
+        "id": "p_akhil",
+        "name": "Akhil",
+        "isLocal": false,
+        "currentStatus": "left",
+        "cameraStatus": "off",
+        "pendingStatus": null,
+        "pendingTicks": 0,
+        "firstSeen": 1793977333096,
+        "joinTime": 1793977333096,
+        "leaveTime": 1793977553825,
+        "lastSeen": 1793977580929,
+        "rejoinCount": 0,
+        "rejoinedAt": null,
+        "presenceIntervals": [
+          {
+            "joinTime": 1793977333096,
+            "leaveTime": null,
+            "durationMs": 0
+          }
+        ],
+        "joinLeaveHistory": [
+          {
+            "event": "joined",
+            "time": 1793977333096,
+            "formatted": "08:32 pm"
+          }
+        ],
+        "totalInMeetMs": 247833,
+        "totalPresentMs": 220187,
+        "cameraOnMs": 0,
+        "cameraOffMs": 220187,
+        "validStudyMs": 0,
+        "totalDuration": 220187,
+        "duration": 0,
+        "timeInCall": 247833,
+        "durationSeconds": 0,
+        "durationMinutes": 0,
+        "studyDuration": 0,
+        "consecutiveCamOffMs": 218993,
+        "cameraOffCurrentStart": null,
+        "cameraOffIntervals": [
+          {
+            "start": 1793977333096,
+            "end": 1793977553283,
+            "durationMs": 220187,
+            "fromTime": "08:32 pm",
+            "toTime": "08:35 pm",
+            "durationFormatted": "00:03:40"
+          }
+        ],
+        "cameraIntervals": [
+          {
+            "start": 1793977333096,
+            "end": null,
+            "state": "off"
+          }
+        ],
+        "videoDetectionMode": "off",
+        "isHost": false,
+        "isExempt": false,
+        "rawCameraStatus": "off",
+        "manualCamOverride": false,
+        "manualAdjustmentMs": 0,
+        "studyAdjustmentMs": 0,
+        "timeAdjustments": []
+      }
+    },
+    "deletedParticipants": [
+      "p_professional",
+      "professional",
+      "p_cosy_home",
+      "cosy home",
+      "p_nature",
+      "nature",
+      "p_stylised",
+      "stylised",
+      "p_hair",
+      "hair",
+      "p_costumes",
+      "costumes",
+      "p_characters",
+      "characters",
+      "p_funny",
+      "funny",
+      "p_fantasy",
+      "fantasy",
+      "p_new",
+      "new",
+      "p_styles",
+      "styles",
+      "p_calendar",
+      "calendar",
+      "p_riya",
+      "riya",
+      "p_framing",
+      "framing",
+      "p_studio_look",
+      "studio look",
+      "p_blur_and_personal",
+      "blur and personal",
+      "p_studio_lighting",
+      "studio lighting",
+      "p_accessories",
+      "accessories"
+    ],
+    "notes": "",
+    "archivedAt": 1793977718036
+  },
+  {
     "sessionId": "session_1793956914590",
     "meetingCode": "mfy-ghna-cfj",
     "meetingTitle": "Cockroach Library 12-Hour Study Marathon",
