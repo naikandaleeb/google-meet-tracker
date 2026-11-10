@@ -142,11 +142,16 @@ function showToast(msg) {
 }
 
 // WebSocket Setup
-function mergeSessionState(incoming) {
+function mergeSessionState(incoming, forceReplace = false) {
   if (!incoming) return;
 
-  // If session ID changed (e.g. Master Reset or loaded session), FULLY REPLACE state!
+  // If session ID changed (e.g. Master Reset or loaded session), check timestamp order unless forced
   if (incoming.sessionId && state.sessionId && incoming.sessionId !== state.sessionId) {
+    const incTs = parseInt(String(incoming.sessionId).replace('session_', ''), 10) || 0;
+    const curTs = parseInt(String(state.sessionId).replace('session_', ''), 10) || 0;
+    if (!forceReplace && incTs > 0 && curTs > 0 && incTs < curTs) {
+      return; // Reject stale pre-reset session payload
+    }
     state = JSON.parse(JSON.stringify(incoming));
     state.participants = incoming.participants || {};
     return;
@@ -157,6 +162,7 @@ function mergeSessionState(incoming) {
   state.meetingTitle = incoming.meetingTitle || state.meetingTitle;
   state.startedAt = incoming.startedAt !== undefined ? incoming.startedAt : state.startedAt;
   state.stoppedAt = incoming.stoppedAt !== undefined ? incoming.stoppedAt : state.stoppedAt;
+  state.lastResetAt = incoming.lastResetAt !== undefined ? incoming.lastResetAt : state.lastResetAt;
   state.isTracking = typeof incoming.isTracking === 'boolean' ? incoming.isTracking : state.isTracking;
   state.isPaused = typeof incoming.isPaused === 'boolean' ? incoming.isPaused : state.isPaused;
   state.totalPausedMs = typeof incoming.totalPausedMs === 'number' ? incoming.totalPausedMs : state.totalPausedMs;
@@ -165,7 +171,6 @@ function mergeSessionState(incoming) {
   state.targetDurationHours = incoming.targetDurationHours || state.targetDurationHours;
   state.lastUpdated = incoming.lastUpdated || Date.now();
 
-  // Merge participants MONOTONICALLY so timers NEVER jump backwards!
   if (incoming.participants) {
     if (!state.participants) state.participants = {};
 
@@ -174,32 +179,16 @@ function mergeSessionState(incoming) {
       if (!existing) {
         state.participants[id] = { ...inc };
       } else {
-        // Adjustment-aware progression:
-        let maxOn = inc.cameraOnMs || 0;
-        if (inc.studyAdjustmentMs !== undefined && inc.studyAdjustmentMs !== existing.studyAdjustmentMs) {
-          maxOn = inc.cameraOnMs || 0;
-        } else {
-          maxOn = Math.max(existing.cameraOnMs || 0, inc.cameraOnMs || 0);
-        }
-        const maxOff = Math.max(existing.cameraOffMs || 0, inc.cameraOffMs || 0);
-        const combinedOff = [...(existing.cameraOffIntervals || [])];
-        if (inc.cameraOffIntervals && Array.isArray(inc.cameraOffIntervals)) {
-          inc.cameraOffIntervals.forEach(newInt => {
-            const newStart = toEpochMs(newInt.start) || 0;
-            if (!combinedOff.some(ex => Math.abs((toEpochMs(ex.start) || 0) - newStart) < 2000)) {
-              combinedOff.push(newInt);
-            }
-          });
-        }
-        const totOffMs = combinedOff.reduce((s, i) => s + (i.durationMs || 0), 0);
-        const accurateOff = Math.max(maxOff, totOffMs);
-        const tot = maxOn + accurateOff;
-        const maxTotalMeet = Math.max(existing.totalInMeetMs || 0, inc.totalInMeetMs || 0, tot);
-        const rejoinCnt = Math.max(existing.rejoinCount || 0, inc.rejoinCount || 0);
+        const adj = inc.manualAdjustmentMs !== undefined ? inc.manualAdjustmentMs : (inc.studyAdjustmentMs !== undefined ? inc.studyAdjustmentMs : (existing.manualAdjustmentMs || existing.studyAdjustmentMs || 0));
+        const camOn = inc.cameraOnMs !== undefined ? inc.cameraOnMs : (existing.cameraOnMs || 0);
+        const camOff = inc.cameraOffMs !== undefined ? inc.cameraOffMs : (existing.cameraOffMs || 0);
+        const validStudy = inc.validStudyMs !== undefined ? inc.validStudyMs : Math.max(0, camOn + adj);
+        const totMeet = inc.totalPresentMs !== undefined ? inc.totalPresentMs : (camOn + camOff);
+        const totalInMeet = inc.totalInMeetMs !== undefined ? inc.totalInMeetMs : Math.max(totMeet, camOn + camOff);
 
         const incomingStatus = inc.currentStatus || existing.currentStatus || 'present';
         const isPres = (incomingStatus === 'present');
-        const isCamOn = isPres && (inc.cameraStatus === 'on' || (existing.cameraStatus === 'on' && inc.cameraStatus !== 'off'));
+        const isCamOn = inc.cameraStatus ? (isPres && inc.cameraStatus === 'on') : (isPres && existing.cameraStatus === 'on');
 
         state.participants[id] = {
           ...existing,
@@ -207,22 +196,21 @@ function mergeSessionState(incoming) {
           currentStatus: incomingStatus,
           cameraStatus: isCamOn ? 'on' : 'off',
           leaveTime: !isPres ? (inc.leaveTime || existing.leaveTime || Date.now()) : null,
-          cameraOnMs: maxOn,
-          cameraOffMs: accurateOff,
-          validStudyMs: maxOn,
-          totalPresentMs: tot,
-          totalDuration: tot,
-          duration: maxOn,
-          timeInCall: maxTotalMeet,
-          totalInMeetMs: maxTotalMeet,
-          rejoinCount: rejoinCnt,
-          rejoinedAt: inc.rejoinedAt || existing.rejoinedAt || null,
-          presenceIntervals: inc.presenceIntervals || existing.presenceIntervals || [],
-          joinLeaveHistory: inc.joinLeaveHistory || existing.joinLeaveHistory || [],
-          cameraOffCurrentStart: (!state.isTracking || state.isPaused || !isPres) ? null : (inc.cameraOffCurrentStart !== undefined ? inc.cameraOffCurrentStart : existing.cameraOffCurrentStart),
-          cameraOffIntervals: combinedOff,
-          cameraOffMs: accurateOff,
-          videoDetectionMode: isCamOn ? (inc.cameraStatus === 'on' ? (inc.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off'
+          cameraOnMs: camOn,
+          cameraOffMs: camOff,
+          manualAdjustmentMs: adj,
+          studyAdjustmentMs: adj,
+          validStudyMs: validStudy,
+          totalPresentMs: totMeet,
+          totalDuration: totalInMeet,
+          duration: validStudy,
+          studyDuration: validStudy,
+          timeInCall: totalInMeet,
+          totalInMeetMs: totalInMeet,
+          cameraOffCurrentStart: (!state.isTracking || state.isPaused || !isPres || isCamOn) ? null : (inc.cameraOffCurrentStart !== undefined ? inc.cameraOffCurrentStart : existing.cameraOffCurrentStart),
+          cameraOffIntervals: inc.cameraOffIntervals || existing.cameraOffIntervals || [],
+          cameraIntervals: inc.cameraIntervals || existing.cameraIntervals || [],
+          videoDetectionMode: isCamOn ? (inc.videoDetectionMode || existing.videoDetectionMode || 'webcam') : 'off'
         };
       }
     }
@@ -276,28 +264,32 @@ function initWebSocket() {
         state.isPaused = false;
         state.stoppedAt = data.timestamp || (data.session && data.session.stoppedAt) || Date.now();
         state.currentPauseStart = null;
-        if (data.session) mergeSessionState(data.session);
+        if (data.session) mergeSessionState(data.session, true);
         scheduleRenderUI();
       } else if (data.type === 'ACTION_PAUSE') {
         state.isPaused = true;
         state.currentPauseStart = data.timestamp || (data.session && data.session.currentPauseStart) || Date.now();
-        if (data.session) mergeSessionState(data.session);
+        if (data.session) mergeSessionState(data.session, true);
         scheduleRenderUI();
       } else if (data.type === 'ACTION_RESUME') {
         state.isPaused = false;
         state.currentPauseStart = null;
-        if (data.session) mergeSessionState(data.session);
+        if (data.session) mergeSessionState(data.session, true);
         scheduleRenderUI();
       } else if (data.type === 'ACTION_START') {
-        state.isTracking = true;
-        state.isPaused = false;
-        state.stoppedAt = null;
-        state.currentPauseStart = null;
-        if (data.session) mergeSessionState(data.session);
-        scheduleRenderUI();
-      } else if (data.type === 'INIT' || data.type === 'SESSION_UPDATE') {
         if (data.session) {
-          mergeSessionState(data.session);
+          state = JSON.parse(JSON.stringify(data.session));
+          state.participants = data.session.participants || {};
+        } else {
+          state.isTracking = true;
+          state.isPaused = false;
+          state.stoppedAt = null;
+          state.currentPauseStart = null;
+        }
+        renderUI();
+      } else if (data.type === 'INIT' || data.type === 'SESSION_UPDATE' || data.type === 'SESSION_TIME_ADJUSTED_ALL' || data.type === 'PARTICIPANT_TIME_ADJUSTED') {
+        if (data.session) {
+          mergeSessionState(data.session, data.type === 'INIT');
           scheduleRenderUI();
         }
       } else if (data.type === 'PARTICIPANT_OVERRIDE') {
@@ -336,11 +328,7 @@ async function fetchCurrentSession(force = false) {
     const res = await fetch('/api/session/current');
     if (res.ok) {
       const incoming = await res.json();
-      if (state.sessionId && incoming.sessionId !== state.sessionId) {
-        state = incoming;
-      } else {
-        mergeSessionState(incoming);
-      }
+      mergeSessionState(incoming, force);
       scheduleRenderUI();
     }
   } catch (e) {
@@ -359,29 +347,20 @@ async function sendAction(action, payload = {}) {
     const result = await res.json();
     if (result.success) {
       if (action === 'start') {
-        state.isTracking = true;
-        state.isPaused = false;
-        state.stoppedAt = null;
-        state.currentPauseStart = null;
-        showToast('▶️ Attendance tracking STARTED! Live timers running.');
+        showToast(payload.resetFirst ? '🆕 Fresh Attendance STARTED at 00:00:00!' : '▶️ Attendance tracking STARTED! Live timers running.');
       } else if (action === 'stop') {
-        state.isTracking = false;
-        state.isPaused = false;
         showToast('⏹️ Attendance FINALIZED & FROZEN! Results remain visible.');
       } else if (action === 'pause') {
-        state.isPaused = true;
         showToast('⏸️ Study session paused for break!');
       } else if (action === 'resume') {
-        state.isTracking = true;
-        state.isPaused = false;
-        state.stoppedAt = null;
-        state.currentPauseStart = null;
         showToast('▶️ Study session resumed! Timers active.');
       } else if (action === 'reset') {
-        state = result.session;
         showToast('🔄 Session ARCHIVED & RESET to 00:00:00!');
       }
-      if (result.session) state = result.session;
+      if (result.session) {
+        state = JSON.parse(JSON.stringify(result.session));
+        state.participants = result.session.participants || {};
+      }
       renderUI();
     }
   } catch (err) {
@@ -392,6 +371,16 @@ async function sendAction(action, payload = {}) {
 // Event Listeners for Controls
 if (btnMasterStart) {
   btnMasterStart.addEventListener('click', () => {
+    if (state.stoppedAt && state.startedAt) {
+      const activeMs = calculateActiveStudyMs(state, Date.now());
+      const startFresh = confirm(
+        `A previous finalized attendance session exists (${formatHms(activeMs)}).\n\n` +
+        `• Click OK to RESET TO 00:00:00 and start a FRESH study marathon.\n` +
+        `• Click CANCEL to RESUME the previous session.`
+      );
+      sendAction('start', startFresh ? { resetFirst: true } : {});
+      return;
+    }
     sendAction('start');
   });
 }
@@ -642,6 +631,35 @@ function renderUI() {
   renderStudentsTable();
 }
 
+function buildOffBreakdownHtml(p, now = Date.now()) {
+  const camOff = p.cameraOffMs || 0;
+  const offIntervals = p.cameraOffIntervals || [];
+  const snippets = [];
+
+  if (state.isTracking && !state.isPaused && p.currentStatus === 'present' && p.cameraStatus === 'off' && p.cameraOffCurrentStart) {
+    const liveCutMs = Math.max(0, now - p.cameraOffCurrentStart);
+    const from = formatTimeOnly(p.cameraOffCurrentStart);
+    snippets.push(`<div class="off-snippet ongoing-off" style="color: #ff4d6d; font-weight: 700; border-left: 2px solid #ff4d6d;" title="Camera is OFF right now!">🔴 LIVE OFF: ${from} - Now (${formatHms(liveCutMs)} cut)</div>`);
+  }
+
+  if (offIntervals.length > 0) {
+    const recent = offIntervals.slice(-2);
+    recent.forEach(int => {
+      const from = int.fromTime || (int.start ? formatTimeOnly(int.start) : '');
+      const to = int.toTime || (int.end ? formatTimeOnly(int.end) : 'Now');
+      const dur = int.durationFormatted || formatHms(int.durationMs || 0);
+      snippets.push(`<div class="off-snippet" title="Camera OFF period - deducted from attendance">⚠️ ${from} - ${to} (${dur} cut)</div>`);
+    });
+    if (offIntervals.length > 2) {
+      snippets.push(`<div class="text-dim text-xs">+${offIntervals.length - 2} more camera cuts</div>`);
+    }
+  }
+
+  if (snippets.length > 0) return snippets.join('');
+  if (camOff > 0) return `<span class="text-crimson font-mono" style="font-size: 11px;">Deducted: -${formatHms(camOff)}</span>`;
+  return '<span class="text-emerald" style="font-size: 11px;">🟢 100% Cam ON</span>';
+}
+
 // ================= RENDER STUDENTS TABLE (DENSE RANKING & EQUAL DURATION SHARED RANKS) =================
 function renderStudentsTable() {
   const now = Date.now();
@@ -649,21 +667,22 @@ function renderStudentsTable() {
     return p.name && !p.name.toLowerCase().includes('keep_outline');
   });
 
-  // Calculate dynamic active time for all participants
+  // Preserve separate cameraOnMs vs manualAdjustmentMs vs validStudyMs
   participants.forEach(p => {
-    const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs !== undefined ? p.cameraOnMs : (p.duration || 0));
+    const naturalOn = p.cameraOnMs !== undefined ? p.cameraOnMs : 0;
+    const adj = p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0);
+    const netStudy = p.validStudyMs !== undefined ? p.validStudyMs : Math.max(0, naturalOn + adj);
     const camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : 0;
-    const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff)
+    const totMeet = (p.totalPresentMs && p.totalPresentMs >= naturalOn + camOff)
       ? p.totalPresentMs
-      : (camOn + camOff);
+      : (naturalOn + camOff);
 
-    p.validStudyMs = camOn;
-    p.cameraOnMs = camOn;
+    p.validStudyMs = netStudy;
     p.cameraOffMs = camOff;
     p.totalPresentMs = totMeet;
-    p.totalDuration = totMeet;
-    p.duration = camOn;
-    p.timeInCall = totMeet;
+    p.totalDuration = Math.max(totMeet, p.totalInMeetMs || 0);
+    p.duration = netStudy;
+    p.timeInCall = p.totalInMeetMs || totMeet;
   });
 
   let filtered = participants.filter(p => {
@@ -826,13 +845,12 @@ function renderStudentsTable() {
         if (statusBadge.innerText !== statusStr) statusBadge.innerText = statusStr;
       }
 
-      // Update ongoing cut if cam is off
-      if (p.cameraStatus === 'off' && p.cameraOffCurrentStart) {
-        const liveOffEl = tr.querySelector('.ongoing-off');
-        const liveCutMs = Math.max(0, now - p.cameraOffCurrentStart);
-        const from = formatTimeOnly(p.cameraOffCurrentStart);
-        if (liveOffEl) {
-          liveOffEl.innerText = `🔴 LIVE OFF: ${from} - Now (${formatHms(liveCutMs)} cut)`;
+      // Update intervals/off-breakdown column cleanly (adds/removes LIVE OFF immediately on transition!)
+      const intervalsCol = tr.querySelector('.intervals-col');
+      if (intervalsCol) {
+        const expectedOffHtml = buildOffBreakdownHtml(p, now);
+        if (intervalsCol.innerHTML !== expectedOffHtml) {
+          intervalsCol.innerHTML = expectedOffHtml;
         }
       }
 
@@ -854,7 +872,7 @@ function renderStudentsTable() {
   studentsTbody.innerHTML = filtered.map(p => {
     const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
     const camOff = p.cameraOffMs || 0;
-    const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
+    const totMeet = (p.totalPresentMs && p.totalPresentMs >= (p.cameraOnMs || 0) + camOff) ? p.totalPresentMs : ((p.cameraOnMs || 0) + camOff);
     const totalInMeet = p.totalInMeetMs || totMeet;
     const compliance = totMeet > 0 ? Math.min(100, (camOn / totMeet) * 100) : (camOn > 0 ? 100 : 0);
     const isCamOn = p.cameraStatus === 'on';
@@ -870,38 +888,7 @@ function renderStudentsTable() {
       rankBadge = `<span class="rank-medal bronze">🥉 #3</span>`;
     }
 
-    // Camera Off Breakdown Snippets
-    const offIntervals = p.cameraOffIntervals || [];
-    let snippets = [];
-
-    // If camera is currently OFF right now, show LIVE ongoing OFF badge
-    if (p.cameraStatus === 'off' && p.cameraOffCurrentStart) {
-      const liveCutMs = Math.max(0, now - p.cameraOffCurrentStart);
-      const from = formatTimeOnly(p.cameraOffCurrentStart);
-      snippets.push(`<div class="off-snippet ongoing-off" style="color: #ff4d6d; font-weight: 700; border-left: 2px solid #ff4d6d;" title="Camera is OFF right now!">🔴 LIVE OFF: ${from} - Now (${formatHms(liveCutMs)} cut)</div>`);
-    }
-
-    if (offIntervals.length > 0) {
-      const recent = offIntervals.slice(-2);
-      recent.forEach(int => {
-        const from = int.fromTime || (int.start ? formatTimeOnly(int.start) : '');
-        const to = int.toTime || (int.end ? formatTimeOnly(int.end) : 'Now');
-        const dur = int.durationFormatted || formatHms(int.durationMs || 0);
-        snippets.push(`<div class="off-snippet" title="Camera OFF period - deducted from attendance">⚠️ ${from} - ${to} (${dur} cut)</div>`);
-      });
-      if (offIntervals.length > 2) {
-        snippets.push(`<div class="text-dim text-xs">+${offIntervals.length - 2} more camera cuts</div>`);
-      }
-    }
-
-    let offBreakdownHtml = snippets.join('');
-    if (!offBreakdownHtml) {
-      if (camOff > 0) {
-        offBreakdownHtml = `<span class="text-crimson font-mono" style="font-size: 11px;">Deducted: -${formatHms(camOff)}</span>`;
-      } else {
-        offBreakdownHtml = '<span class="text-emerald" style="font-size: 11px;">🟢 100% Cam ON</span>';
-      }
-    }
+    const offBreakdownHtml = buildOffBreakdownHtml(p, now);
 
     let barColor = 'var(--accent-emerald)';
     if (compliance < 70) barColor = 'var(--accent-crimson)';
@@ -1028,41 +1015,112 @@ window.promptAdjustTime = function(id, actionType) {
   adjustParticipantTime(id, minVal, actionType);
 };
 
-window.promptBulkAdjustTime = async function() {
+let isBulkAdjustInFlight = false;
+
+window.executeBulkAdjustTime = async function(totalMinutes) {
+  if (isBulkAdjustInFlight) return;
   const pCount = Object.keys(state.participants || {}).length;
   if (pCount === 0) {
     alert('No participants in current session to adjust.');
     return;
   }
-  const valStr = prompt(`⏱️ BULK TIME ADJUSTMENT for ALL ${pCount} participants:\n\nEnter minutes to adjust:\n• Positive number (e.g. 151) to ADD time\n• Negative number (e.g. -30) to CUT time\n\nExample: 151 adds 2 hr 31 min to everyone.`, '151');
-  if (!valStr) return;
-  const minVal = parseFloat(valStr);
-  if (isNaN(minVal) || minVal === 0) {
-    alert('Please enter a non-zero number of minutes.');
+  if (!state.startedAt) {
+    alert('Please click Start Attendance first before adjusting study times.');
     return;
   }
-  if (!confirm(`Are you sure you want to ${minVal > 0 ? 'ADD' : 'CUT'} ${Math.abs(minVal)} minutes (${(Math.abs(minVal)/60).toFixed(2)} hours) for ALL ${pCount} participants?`)) {
+  if (!totalMinutes || isNaN(totalMinutes) || totalMinutes === 0) {
+    alert('Please enter at least 1 minute or 1 hour.');
     return;
   }
+
+  const addBtn = document.getElementById('bulk-btn-add');
+  const cutBtn = document.getElementById('bulk-btn-cut');
+  const bulkModal = document.getElementById('bulk-adjust-modal');
+
+  isBulkAdjustInFlight = true;
+  if (addBtn) addBtn.disabled = true;
+  if (cutBtn) cutBtn.disabled = true;
+
   try {
     const res = await fetch('/api/session/adjust-all-time', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ minutes: minVal })
+      body: JSON.stringify({ minutes: totalMinutes })
     });
     const result = await res.json();
     if (result.success) {
       if (result.session && result.session.participants) {
-        state.participants = result.session.participants;
+        mergeSessionState(result.session, true);
       }
-      showToast(`⏱️ Successfully ${minVal > 0 ? 'added' : 'cut'} ${Math.abs(minVal)}m for all ${result.count || pCount} participants!`);
-      scheduleRenderUI();
+      if (bulkModal) bulkModal.style.display = 'none';
+      const absMins = Math.abs(totalMinutes);
+      const hrs = Math.floor(absMins / 60);
+      const mins = Math.round(absMins % 60);
+      showToast(`⏱️ ${totalMinutes > 0 ? 'Added' : 'Cut'} ${hrs}h ${mins}m ONCE for all ${result.count || pCount} participants!`);
+      renderUI();
     } else {
       alert('Failed to bulk adjust: ' + (result.error || 'Unknown error'));
     }
   } catch (err) {
     alert('Error bulk adjusting time: ' + err.message);
+  } finally {
+    isBulkAdjustInFlight = false;
+    if (addBtn) addBtn.disabled = false;
+    if (cutBtn) cutBtn.disabled = false;
   }
+};
+
+window.promptBulkAdjustTime = function() {
+  const pCount = Object.keys(state.participants || {}).length;
+  if (pCount === 0) {
+    alert('No participants in current session to adjust.');
+    return;
+  }
+  if (!state.startedAt) {
+    alert('Please click Start Attendance first before adjusting study times.');
+    return;
+  }
+
+  const modal = document.getElementById('bulk-adjust-modal');
+  const sub = document.getElementById('bulk-adjust-sub');
+  const hoursInput = document.getElementById('bulk-adjust-hours');
+  const minsInput = document.getElementById('bulk-adjust-minutes');
+  const addBtn = document.getElementById('bulk-btn-add');
+  const cutBtn = document.getElementById('bulk-btn-cut');
+  const closeBtn = document.getElementById('btn-close-bulk-modal');
+
+  if (!modal) return;
+  if (sub) sub.innerText = `Applies cleanly ONCE to Net Valid Study Time for all ${pCount} participants`;
+  if (hoursInput) hoursInput.value = '0';
+  if (minsInput) minsInput.value = '0';
+
+  const getTotalMinutes = () => {
+    const h = parseFloat(hoursInput?.value || '0') || 0;
+    const m = parseFloat(minsInput?.value || '0') || 0;
+    return Math.round((h * 60 + m) * 100) / 100;
+  };
+
+  if (addBtn) {
+    addBtn.onclick = () => {
+      const total = getTotalMinutes();
+      if (total <= 0) { alert('Enter hours or minutes > 0 to add.'); return; }
+      if (confirm(`ADD ${total} minutes (${(total / 60).toFixed(2)} hrs) ONCE to ALL ${pCount} participants?`)) {
+        executeBulkAdjustTime(total);
+      }
+    };
+  }
+  if (cutBtn) {
+    cutBtn.onclick = () => {
+      const total = getTotalMinutes();
+      if (total <= 0) { alert('Enter hours or minutes > 0 to cut.'); return; }
+      if (confirm(`CUT ${total} minutes (${(total / 60).toFixed(2)} hrs) ONCE from ALL ${pCount} participants?`)) {
+        executeBulkAdjustTime(-total);
+      }
+    };
+  }
+  if (closeBtn) closeBtn.onclick = () => { modal.style.display = 'none'; };
+  modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+  modal.style.display = 'flex';
 };
 
 // Permanently Delete Participant from Attendance
@@ -1129,11 +1187,13 @@ window.openStudentModal = function(id) {
   const p = state.participants?.[id];
   if (!p) return;
 
-  const camOn = p.cameraOnMs || 0;
+  const naturalOn = p.cameraOnMs || 0;
+  const adj = p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0);
+  const camOn = p.validStudyMs !== undefined ? p.validStudyMs : Math.max(0, naturalOn + adj);
   const camOff = p.cameraOffMs || 0;
-  const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff) ? p.totalPresentMs : (camOn + camOff);
+  const totMeet = (p.totalPresentMs && p.totalPresentMs >= naturalOn + camOff) ? p.totalPresentMs : (naturalOn + camOff);
   const totalInMeet = p.totalInMeetMs || totMeet;
-  const compliance = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) + '%' : (camOn > 0 ? '100.0%' : '0.0%');
+  const compliance = totMeet > 0 ? Math.min(100, (camOn / totMeet) * 100).toFixed(1) + '%' : (camOn > 0 ? '100.0%' : '0.0%');
 
   const nameEl = document.getElementById('modal-name');
   if (nameEl) nameEl.innerText = p.name;
@@ -1789,20 +1849,23 @@ window.addEventListener('DOMContentLoaded', () => {
         const curBreakMs = Math.max(0, now - state.currentPauseStart);
         if (currentBreakTimer) currentBreakTimer.innerText = `Break: ${formatHms(curBreakMs)}`;
         if (dashAttendanceBadge) dashAttendanceBadge.innerText = `PAUSED ⏸️ (${formatHms(curBreakMs)})`;
-      } else if (!state.isPaused) {
-        // Smoothly tick each active participant's camera timer in real-time
+      } else if (!state.isPaused && state.isTracking && !state.stoppedAt) {
+        // Smoothly tick each active participant's camera timer while preserving manualAdjustmentMs
         let hasPresent = false;
         Object.values(state.participants || {}).forEach(p => {
           if (p.currentStatus === 'present') {
             hasPresent = true;
+            const adj = p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0);
             if (p.cameraStatus === 'on') {
               p.cameraOnMs = (p.cameraOnMs || 0) + 1000;
-              p.validStudyMs = p.cameraOnMs;
               p.consecutiveCamOffMs = 0;
             } else {
               p.cameraOffMs = (p.cameraOffMs || 0) + 1000;
               p.consecutiveCamOffMs = (p.consecutiveCamOffMs || 0) + 1000;
             }
+            p.validStudyMs = Math.max(0, (p.cameraOnMs || 0) + adj);
+            p.duration = p.validStudyMs;
+            p.studyDuration = p.validStudyMs;
             p.totalPresentMs = (p.cameraOnMs || 0) + (p.cameraOffMs || 0);
             p.totalInMeetMs = (p.totalInMeetMs || p.totalPresentMs || 0) + 1000;
           }

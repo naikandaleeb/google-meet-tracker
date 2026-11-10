@@ -99,21 +99,20 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
     }
   }
 
-  // Accurately reconcile camOff with total intervals duration
-  const totalIntervalsOffMs = (p.cameraOffIntervals || []).reduce((sum, int) => sum + (int.durationMs || 0), 0);
-  camOff = Math.max(camOff, totalIntervalsOffMs);
-
   const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff)
     ? p.totalPresentMs
     : (camOn + camOff);
 
-  const validStudy = camOn;
-  const totalInMeet = calculateTotalInMeetMs(p, now);
+  const manualAdj = p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0);
+  const validStudy = p.validStudyMs !== undefined ? p.validStudyMs : Math.max(0, camOn + manualAdj);
+  const totalInMeet = p.totalInMeetMs || totMeet;
 
   p.cameraOnMs = camOn;
   p.cameraOffMs = camOff;
   p.totalPresentMs = totMeet;
   p.validStudyMs = validStudy;
+  p.manualAdjustmentMs = manualAdj;
+  p.studyAdjustmentMs = manualAdj;
   p.totalInMeetMs = totalInMeet;
 
   p.totalDuration = totMeet;
@@ -261,8 +260,10 @@ function consolidateParticipantsForReport(rawList, session = {}) {
     if (existing) {
       // DUAL DEVICE MERGE: Consolidate into single row with Camera ON taking precedence!
       const isCamOn = (p.cameraStatus === 'on' || existing.cameraStatus === 'on');
-      const maxOn = Math.max(p.cameraOnMs || 0, existing.cameraOnMs || 0, p.validStudyMs || 0, existing.validStudyMs || 0);
+      const maxOn = Math.max(p.cameraOnMs || 0, existing.cameraOnMs || 0);
       const maxOff = Math.max(p.cameraOffMs || 0, existing.cameraOffMs || 0);
+      const manualAdj = existing.manualAdjustmentMs !== undefined ? existing.manualAdjustmentMs : (p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (existing.studyAdjustmentMs || p.studyAdjustmentMs || 0));
+      const validStudy = Math.max(0, maxOn + manualAdj);
       const isPres = (p.currentStatus === 'present' || existing.currentStatus === 'present');
       const joinTs = Math.min(toEpochMs(p.joinTime) || now, toEpochMs(existing.joinTime) || now, toEpochMs(p.firstSeen) || now, toEpochMs(existing.firstSeen) || now);
 
@@ -277,9 +278,11 @@ function consolidateParticipantsForReport(rawList, session = {}) {
         currentStatus: isPres ? 'present' : (p.currentStatus || existing.currentStatus),
         cameraStatus: isCamOn ? 'on' : 'off',
         rawCameraStatus: isCamOn ? 'on' : 'off',
+        manualAdjustmentMs: manualAdj,
+        studyAdjustmentMs: manualAdj,
         cameraOnMs: maxOn,
         cameraOffMs: maxOff,
-        validStudyMs: maxOn,
+        validStudyMs: validStudy,
         totalPresentMs: Math.max(existing.totalPresentMs || 0, p.totalPresentMs || 0, maxOn + maxOff),
         firstSeen: joinTs,
         joinTime: joinTs,
@@ -367,9 +370,9 @@ function generatePainThemeHtml(session) {
   let totalDeductedMs = 0;
 
   participants.forEach(p => {
-    const camOn = p.cameraOnMs || 0;
-    const totMeet = Math.max(p.totalPresentMs || 0, camOn);
-    const camOff = Math.max(0, totMeet - camOn);
+    const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
+    const camOff = p.cameraOffMs || 0;
+    const totMeet = Math.max(p.totalPresentMs || 0, camOn + camOff);
     totalPresenceMs += totMeet;
     totalCamOnMs += camOn;
     totalDeductedMs += camOff;
@@ -384,27 +387,29 @@ function generatePainThemeHtml(session) {
 
   participants.forEach(p => {
     const tot = p.totalPresentMs || 0;
-    const on = p.cameraOnMs || 0;
+    const on = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
     const comp = tot > 0 ? (on / tot) * 100 : 0;
     if (comp >= 90) eliteCount++;
     else if (comp >= 75) warningCount++;
     else defaulterCount++;
   });
 
-  // SORT STRICTLY BY VALID STUDY TIME (CAMERA ON TIME) DESCENDING!
-  // Top student with highest Camera ON time is RANK 1!
+  // SORT STRICTLY BY VALID STUDY TIME DESCENDING!
+  // Top student with highest Valid Study time is RANK 1!
   const sorted = [...participants].sort((a, b) => {
-    const onDiff = (b.cameraOnMs || 0) - (a.cameraOnMs || 0);
+    const aTime = a.validStudyMs !== undefined ? a.validStudyMs : (a.cameraOnMs || 0);
+    const bTime = b.validStudyMs !== undefined ? b.validStudyMs : (b.cameraOnMs || 0);
+    const onDiff = bTime - aTime;
     if (onDiff !== 0) return onDiff;
     return (b.totalPresentMs || 0) - (a.totalPresentMs || 0);
   });
 
   // Generate Table Rows HTML
   const rowsHtml = sorted.map((p, idx) => {
-    const camOn = p.cameraOnMs || 0;
-    const totMeet = Math.max(p.totalPresentMs || 0, camOn);
-    const camOff = p.cameraOffMs || Math.max(0, totMeet - camOn);
-    const comp = totMeet > 0 ? ((camOn / totMeet) * 100).toFixed(1) : '0.0';
+    const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
+    const camOff = p.cameraOffMs !== undefined ? p.cameraOffMs : 0;
+    const totMeet = Math.max(p.totalPresentMs || 0, camOn + camOff);
+    const comp = totMeet > 0 ? Math.min(100, (camOn / totMeet) * 100).toFixed(1) : '0.0';
     const isCamOn = p.cameraStatus === 'on';
     const isPresent = p.currentStatus === 'present';
     const numComp = parseFloat(comp);

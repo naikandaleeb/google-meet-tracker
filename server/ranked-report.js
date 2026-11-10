@@ -107,21 +107,20 @@ function finalizeParticipant(p, sess = {}, now = Date.now()) {
     }
   }
 
-  // Accurately reconcile camOff with total intervals duration
-  const totalIntervalsOffMs = (p.cameraOffIntervals || []).reduce((sum, int) => sum + (int.durationMs || 0), 0);
-  camOff = Math.max(camOff, totalIntervalsOffMs);
-
   const totMeet = (p.totalPresentMs && p.totalPresentMs >= camOn + camOff)
     ? p.totalPresentMs
     : (camOn + camOff);
 
-  const validStudy = camOn;
-  const totalInMeet = calculateTotalInMeetMs(p, now);
+  const manualAdj = p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0);
+  const validStudy = p.validStudyMs !== undefined ? p.validStudyMs : Math.max(0, camOn + manualAdj);
+  const totalInMeet = p.totalInMeetMs || totMeet;
 
   p.cameraOnMs = camOn;
   p.cameraOffMs = camOff;
   p.totalPresentMs = totMeet;
   p.validStudyMs = validStudy;
+  p.manualAdjustmentMs = manualAdj;
+  p.studyAdjustmentMs = manualAdj;
   p.totalInMeetMs = totalInMeet;
 
   p.totalDuration = totMeet;
@@ -299,8 +298,10 @@ function consolidateParticipantsForReport(rawList, session = {}) {
     if (existing) {
       // DUAL DEVICE MERGE: Consolidate into single row with Camera ON taking precedence!
       const isCamOn = (p.cameraStatus === 'on' || existing.cameraStatus === 'on');
-      const maxOn = Math.max(p.cameraOnMs || 0, existing.cameraOnMs || 0, p.validStudyMs || 0, existing.validStudyMs || 0);
+      const maxOn = Math.max(p.cameraOnMs || 0, existing.cameraOnMs || 0);
       const maxOff = Math.max(p.cameraOffMs || 0, existing.cameraOffMs || 0);
+      const manualAdj = existing.manualAdjustmentMs !== undefined ? existing.manualAdjustmentMs : (p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (existing.studyAdjustmentMs || p.studyAdjustmentMs || 0));
+      const validStudy = Math.max(0, maxOn + manualAdj);
       const isPres = (p.currentStatus === 'present' || existing.currentStatus === 'present');
       const joinTs = Math.min(toEpochMs(p.joinTime) || now, toEpochMs(existing.joinTime) || now, toEpochMs(p.firstSeen) || now, toEpochMs(existing.firstSeen) || now);
 
@@ -315,9 +316,11 @@ function consolidateParticipantsForReport(rawList, session = {}) {
         currentStatus: isPres ? 'present' : (p.currentStatus || existing.currentStatus),
         cameraStatus: isCamOn ? 'on' : 'off',
         rawCameraStatus: isCamOn ? 'on' : 'off',
+        manualAdjustmentMs: manualAdj,
+        studyAdjustmentMs: manualAdj,
         cameraOnMs: maxOn,
         cameraOffMs: maxOff,
-        validStudyMs: maxOn,
+        validStudyMs: validStudy,
         totalPresentMs: Math.max(existing.totalPresentMs || 0, p.totalPresentMs || 0, maxOn + maxOff),
         firstSeen: joinTs,
         joinTime: joinTs,

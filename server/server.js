@@ -120,7 +120,11 @@ function cleanParticipantName(raw, isLocal = false) {
     'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection',
     'message', 'messages', 'open the people panel', 'open the panel', 'open panel',
     'close panel', 'paired with',
-    'spam com', 'spam', 'admin', 'moderator', 'report spam', 'report abuse'
+    'spam com', 'spam', 'admin', 'moderator', 'report spam', 'report abuse',
+    'styles', 'framing', 'studio look', 'studio lighting', 'accessories', 'hair',
+    'costumes', 'characters', 'funny', 'stylised', 'nature', 'professional',
+    'blur and personal', 'cosy home', 'fantasy', 'calendar', 'new',
+    'call feature notifications and actions'
   ];
 
   for (const bad of BLACKLIST) {
@@ -187,6 +191,10 @@ function toEpochMs(ts) {
 
 function getEffectiveNow(sess, now = Date.now()) {
   if (!sess) return now;
+  const startedAt = toEpochMs(sess.startedAt);
+  if (!startedAt && !sess.isTracking && !sess.stoppedAt) {
+    return 0; // Fresh / Reset idle state before attendance started: zero elapsed time
+  }
   if (sess.isPaused && sess.currentPauseStart) {
     return Math.min(now, toEpochMs(sess.currentPauseStart));
   }
@@ -197,7 +205,7 @@ function getEffectiveNow(sess, now = Date.now()) {
 }
 
 function getOverlappingPauseMs(intStart, intEnd, sess, now = Date.now()) {
-  if (!sess) return 0;
+  if (!sess || !intEnd || intEnd <= intStart) return 0;
   let pausedMs = 0;
   if (Array.isArray(sess.pauseHistory)) {
     sess.pauseHistory.forEach(ph => {
@@ -224,17 +232,55 @@ function getOverlappingPauseMs(intStart, intEnd, sess, now = Date.now()) {
   return pausedMs;
 }
 
+function sanitizeCameraIntervals(intervals, sess, p, effectiveNow) {
+  if (!Array.isArray(intervals) || intervals.length === 0 || !effectiveNow) return [];
+  const sessStart = toEpochMs(sess?.startedAt) || 0;
+  const leaveBound = p?.currentStatus === 'left' ? (toEpochMs(p.leaveTime) || toEpochMs(p.lastSeen) || effectiveNow) : effectiveNow;
+  const upperBound = Math.min(effectiveNow, leaveBound);
+
+  const valid = [];
+  for (let i = 0; i < intervals.length; i++) {
+    const int = intervals[i];
+    if (!int || !int.state) continue;
+    let start = toEpochMs(int.start);
+    if (!start) continue;
+    if (sessStart > 0 && start < sessStart) start = sessStart;
+    let end = int.end ? toEpochMs(int.end) : null;
+    if (end !== null && end < start) continue; // Discard inverted corrupted intervals
+    if (end === null) {
+      const next = intervals[i + 1];
+      if (next && toEpochMs(next.start) && toEpochMs(next.start) >= start) {
+        end = Math.min(toEpochMs(next.start), upperBound);
+      } else {
+        end = upperBound;
+      }
+    } else {
+      end = Math.min(end, upperBound);
+    }
+    if (end >= start) {
+      valid.push({ start, end, state: int.state, isClosed: !!int.end });
+    }
+  }
+  return valid;
+}
+
 function calculateTotalInMeetMs(p, sessionStartedAt, now = Date.now(), sess = currentSession) {
   if (!p) return 0;
   const effectiveNow = getEffectiveNow(sess, now);
-  const maxSessionMs = Math.max(0, effectiveNow - (toEpochMs(sessionStartedAt) || toEpochMs(sess?.startedAt) || (effectiveNow - 6 * 3600000)));
+  const sessStart = toEpochMs(sessionStartedAt) || toEpochMs(sess?.startedAt);
+  if (!sessStart || !effectiveNow || effectiveNow <= sessStart) return 0;
+
+  const maxSessionMs = Math.max(0, effectiveNow - sessStart);
+  const leaveCap = p.currentStatus === 'left' ? (toEpochMs(p.leaveTime) || toEpochMs(p.lastSeen) || effectiveNow) : effectiveNow;
+  const upperCap = Math.min(effectiveNow, leaveCap);
 
   if (Array.isArray(p.presenceIntervals) && p.presenceIntervals.length > 0) {
     const sorted = p.presenceIntervals
-      .map(int => ({
-        start: toEpochMs(int.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sessionStartedAt) || effectiveNow,
-        end: toEpochMs(int.leaveTime) || (p.currentStatus === 'present' ? effectiveNow : (toEpochMs(p.lastSeen) || effectiveNow))
-      }))
+      .map(int => {
+        const s = Math.max(sessStart, toEpochMs(int.joinTime) || toEpochMs(p.firstSeen) || sessStart);
+        const e = Math.min(upperCap, toEpochMs(int.leaveTime) || (p.currentStatus === 'present' ? upperCap : (toEpochMs(p.lastSeen) || upperCap)));
+        return { start: s, end: e };
+      })
       .filter(i => i.end >= i.start)
       .sort((a, b) => a.start - b.start);
 
@@ -249,49 +295,85 @@ function calculateTotalInMeetMs(p, sessionStartedAt, now = Date.now(), sess = cu
           merged.push({ start: curr.start, end: curr.end });
         }
       }
-      const unionMs = merged.reduce((sum, int) => sum + (int.end - int.start), 0);
+      const unionMs = merged.reduce((sum, int) => {
+        const raw = int.end - int.start;
+        const paused = getOverlappingPauseMs(int.start, int.end, sess, now);
+        return sum + Math.max(0, raw - paused);
+      }, 0);
       return Math.min(unionMs, maxSessionMs);
     }
   }
 
-  const st = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sessionStartedAt);
-  if (!st) return Math.min(p.totalPresentMs || 0, maxSessionMs);
-  const en = toEpochMs(p.leaveTime) || (p.currentStatus === 'present' ? effectiveNow : (toEpochMs(p.lastSeen) || effectiveNow));
-  return Math.min(Math.max(0, en - st), maxSessionMs);
+  const st = Math.max(sessStart, toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || sessStart);
+  if (upperCap <= st) return 0;
+  const raw = upperCap - st;
+  const paused = getOverlappingPauseMs(st, upperCap, sess, now);
+  return Math.min(Math.max(0, raw - paused), maxSessionMs);
+}
+
+function getParticipantNaturalCamStats(p, totalInMeetMs, now = Date.now(), sess = currentSession) {
+  if (!p || !toEpochMs(sess?.startedAt)) return { camOn: 0, camOff: 0 };
+  const effectiveNow = getEffectiveNow(sess, now);
+  if (!effectiveNow) return { camOn: 0, camOff: 0 };
+
+  const cleanInts = sanitizeCameraIntervals(p.cameraIntervals, sess, p, effectiveNow);
+  if (cleanInts.length > 0) {
+    let durOn = 0;
+    let durOff = 0;
+    cleanInts.forEach(int => {
+      const raw = int.end - int.start;
+      const pauseOverlap = getOverlappingPauseMs(int.start, int.end, sess, now);
+      const net = Math.max(0, raw - pauseOverlap);
+      if (int.state === 'on') durOn += net;
+      else durOff += net;
+    });
+
+    const bound = totalInMeetMs !== undefined ? Math.max(totalInMeetMs, durOn) : durOn;
+    const camOn = Math.min(durOn, bound);
+    // Keep camOff strictly from genuine OFF intervals (bounded so camOn + camOff never exceeds totalInMeetMs if totalInMeetMs is authoritative)
+    const camOff = totalInMeetMs !== undefined ? Math.min(durOff, Math.max(0, totalInMeetMs - camOn)) : durOff;
+    return { camOn, camOff };
+  }
+
+  const camOn = Math.min(p.cameraOnMs || 0, totalInMeetMs !== undefined ? totalInMeetMs : (p.cameraOnMs || 0));
+  const camOff = totalInMeetMs !== undefined ? Math.max(0, Math.min(p.cameraOffMs || 0, totalInMeetMs - camOn)) : (p.cameraOffMs || 0);
+  return { camOn, camOff };
 }
 
 function getParticipantNaturalCamOnMs(p, totalInMeetMs, now = Date.now(), sess = currentSession) {
-  if (!p) return 0;
-  const effectiveNow = getEffectiveNow(sess, now);
-  let dur = 0;
-  let hasIntervals = false;
-  if (p.cameraIntervals && Array.isArray(p.cameraIntervals) && p.cameraIntervals.length > 0) {
-    hasIntervals = true;
-    p.cameraIntervals.forEach(int => {
-      if (int.state === 'on') {
-        const start = toEpochMs(int.start);
-        const end = int.end ? toEpochMs(int.end) : (p.cameraStatus === 'on' && p.currentStatus === 'present' ? effectiveNow : (toEpochMs(p.leaveTime) || toEpochMs(p.lastSeen) || start));
-        if (start && end && end >= start) {
-          const raw = end - start;
-          const pauseOverlap = getOverlappingPauseMs(start, end, sess, now);
-          dur += Math.max(0, raw - pauseOverlap);
-        }
-      }
-    });
-  }
-
-  if (hasIntervals) {
-    return Math.min(dur, totalInMeetMs !== undefined ? totalInMeetMs : dur);
-  }
-  const rawCam = p.cameraOnMs || 0;
-  return Math.min(rawCam, totalInMeetMs !== undefined ? totalInMeetMs : rawCam);
+  return getParticipantNaturalCamStats(p, totalInMeetMs, now, sess).camOn;
 }
 
 function finalizeParticipant(p, sess = currentSession, now = Date.now()) {
   if (!p) return;
 
+  const isStarted = !!toEpochMs(sess?.startedAt);
+  const manualAdj = isStarted ? (p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0)) : 0;
+
+  if (!isStarted) {
+    // Session has not started yet (e.g., Fresh Reset / Ready state): all timers MUST remain strictly 00:00:00
+    p.cameraOnMs = 0;
+    p.cameraOffMs = 0;
+    p.totalPresentMs = 0;
+    p.validStudyMs = 0;
+    p.manualAdjustmentMs = 0;
+    p.studyAdjustmentMs = 0;
+    p.totalInMeetMs = 0;
+    p.totalDuration = 0;
+    p.duration = 0;
+    p.timeInCall = 0;
+    p.durationSeconds = 0;
+    p.durationMinutes = 0;
+    p.studyDuration = 0;
+    p.cameraOffCurrentStart = null;
+    p.consecutiveCamOffMs = 0;
+    p.cameraOffIntervals = [];
+    p.cameraIntervals = [];
+    return p;
+  }
+
   const effectiveNow = getEffectiveNow(sess, now);
-  const joinTs = toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sess?.startedAt) || effectiveNow;
+  const joinTs = Math.max(toEpochMs(sess.startedAt), toEpochMs(p.joinTime) || toEpochMs(p.firstSeen) || toEpochMs(sess.startedAt));
   const leaveTs = toEpochMs(p.leaveTime) || (p.currentStatus === 'left' ? toEpochMs(p.lastSeen) : null);
   const effectiveEndTime = leaveTs || effectiveNow;
 
@@ -300,15 +382,14 @@ function finalizeParticipant(p, sess = currentSession, now = Date.now()) {
   p.leaveTime = leaveTs;
   p.lastSeen = toEpochMs(p.lastSeen) || effectiveEndTime;
 
-  const totalInMeetMs = calculateTotalInMeetMs(p, sess?.startedAt, now, sess);
-  const camOn = getParticipantNaturalCamOnMs(p, totalInMeetMs, now, sess);
-  const camOff = Math.max(0, totalInMeetMs - camOn);
-  const manualAdj = p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0);
+  const rawInMeetMs = calculateTotalInMeetMs(p, sess.startedAt, now, sess);
+  const { camOn, camOff } = getParticipantNaturalCamStats(p, rawInMeetMs, now, sess);
+  const totalInMeetMs = Math.max(rawInMeetMs, camOn + camOff);
   const validStudy = Math.max(0, camOn + manualAdj);
 
   p.cameraOnMs = camOn;
   p.cameraOffMs = camOff;
-  p.totalPresentMs = totalInMeetMs;
+  p.totalPresentMs = camOn + camOff;
   p.validStudyMs = validStudy;
   p.manualAdjustmentMs = manualAdj;
   p.studyAdjustmentMs = manualAdj;
@@ -328,19 +409,20 @@ function finalizeParticipant(p, sess = currentSession, now = Date.now()) {
 function cleanAllSessionParticipants(sess) {
   if (!sess || !sess.participants) return;
   const now = Date.now();
+  const isStarted = !!toEpochMs(sess.startedAt);
   const cleaned = {};
   for (const [k, p] of Object.entries(sess.participants)) {
     if (!p) continue;
     const isLocal = p.isLocal || k === 'local_host' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
     const validName = isLocal ? 'Andaleeb Gull' : cleanParticipantName(p.name, false);
     if (!validName) continue;
+    if (!isStarted && p.currentStatus === 'left') continue; // Drop stale ghosts if session hasn't started
 
     const stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
     const existing = cleaned[stableKey];
 
     if (existing) {
       // DUAL DEVICE MERGE: Consolidate multiple devices into ONE canonical participant!
-      // The device with Camera ON ALWAYS takes precedence!
       const isPres = (p.currentStatus === 'present' || (existing.currentStatus === 'present' && p.currentStatus !== 'left'));
       const isCamOn = isPres && (p.cameraStatus === 'on' || existing.cameraStatus === 'on');
       const maxOn = Math.max(p.cameraOnMs || 0, existing.cameraOnMs || 0);
@@ -351,7 +433,6 @@ function cleanAllSessionParticipants(sess) {
       const lastSeen = Math.max(toEpochMs(p.lastSeen) || now, toEpochMs(existing.lastSeen) || now);
       const leaveTime = isPres ? null : (p.leaveTime || existing.leaveTime || lastSeen);
 
-      // Safe merge of cameraOffIntervals
       const combinedOffIntervals = [...(existing.cameraOffIntervals || [])];
       if (Array.isArray(p.cameraOffIntervals)) {
         p.cameraOffIntervals.forEach(newInt => {
@@ -361,18 +442,22 @@ function cleanAllSessionParticipants(sess) {
         });
       }
 
-      // Safe merge of presenceIntervals
       const combinedPresenceIntervals = [...(existing.presenceIntervals || [])];
       if (Array.isArray(p.presenceIntervals)) {
         p.presenceIntervals.forEach(newInt => {
           const newJoin = toEpochMs(newInt.joinTime) || 0;
-          if (!combinedPresenceIntervals.some(ex => Math.abs((toEpochMs(ex.joinTime) || 0) - newJoin) < 2000)) {
+          const match = combinedPresenceIntervals.find(ex => Math.abs((toEpochMs(ex.joinTime) || 0) - newJoin) < 2000);
+          if (match) {
+            if (newInt.leaveTime && !match.leaveTime) {
+              match.leaveTime = newInt.leaveTime;
+              match.durationMs = newInt.durationMs || Math.max(0, toEpochMs(newInt.leaveTime) - (toEpochMs(match.joinTime) || newJoin));
+            }
+          } else {
             combinedPresenceIntervals.push(newInt);
           }
         });
       }
 
-      // Safe merge of joinLeaveHistory
       const combinedHistory = [...(existing.joinLeaveHistory || [])];
       if (Array.isArray(p.joinLeaveHistory)) {
         p.joinLeaveHistory.forEach(newEv => {
@@ -382,6 +467,10 @@ function cleanAllSessionParticipants(sess) {
           }
         });
       }
+
+      const combinedCamIntervals = (Array.isArray(p.cameraIntervals) && p.cameraIntervals.length >= (existing.cameraIntervals || []).length)
+        ? p.cameraIntervals
+        : (existing.cameraIntervals || []);
 
       const merged = {
         ...existing,
@@ -405,8 +494,10 @@ function cleanAllSessionParticipants(sess) {
         firstSeen: joinTs,
         joinTime: joinTs,
         lastSeen: lastSeen,
+        leaveTime: leaveTime,
         rejoinCount: Math.max(p.rejoinCount || 0, existing.rejoinCount || 0),
         rejoinedAt: p.rejoinedAt || existing.rejoinedAt || null,
+        cameraIntervals: combinedCamIntervals,
         cameraOffIntervals: combinedOffIntervals,
         presenceIntervals: combinedPresenceIntervals,
         joinLeaveHistory: combinedHistory
@@ -422,7 +513,8 @@ function cleanAllSessionParticipants(sess) {
         isLocal: isLocal,
         isHost: false,
         isExempt: false,
-        studyAdjustmentMs: p.studyAdjustmentMs || 0,
+        manualAdjustmentMs: p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0),
+        studyAdjustmentMs: p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0),
         timeAdjustments: p.timeAdjustments || []
       };
       finalizeParticipant(candidate, sess, now);
@@ -557,11 +649,11 @@ app.post('/api/session/sync', (req, res) => {
   if (data.sessionId && data.sessionId !== currentSession.sessionId) {
     const dataTs = parseInt(String(data.sessionId).replace('session_', ''), 10) || 0;
     const currentTs = parseInt(String(currentSession.sessionId).replace('session_', ''), 10) || 0;
-    if (dataTs < currentTs || currentSession.lastResetAt) {
+    if (dataTs < currentTs || (currentSession.lastResetAt && data.isTracking)) {
       // In-flight sync from an older pre-reset session: Return fresh zeroed session to update client!
       return res.json({ success: true, session: currentSession });
     }
-    if (!currentSession.isTracking && Object.keys(currentSession.participants || {}).length === 0) {
+    if (!currentSession.isTracking && !currentSession.lastResetAt && Object.keys(currentSession.participants || {}).length === 0) {
       currentSession.sessionId = data.sessionId;
     }
   }
@@ -597,6 +689,8 @@ app.post('/api/session/sync', (req, res) => {
   const badKeys = ['p_message', 'p_open_the_people_panel', 'p_admin', 'p_spam_com', 'p_legal_disclaimers', 'p_call_controls', 'p_arrow_drop_down'];
   badKeys.forEach(bk => { if (currentSession.participants && currentSession.participants[bk]) delete currentSession.participants[bk]; });
 
+  const isSessionStarted = !!toEpochMs(currentSession.startedAt);
+
   // Merge participants with clean name enforcement and valid study time calculation
   if (data.participants && typeof data.participants === 'object') {
     if (!currentSession.participants) currentSession.participants = {};
@@ -606,8 +700,6 @@ app.post('/api/session/sync', (req, res) => {
       if (currentSession.deletedParticipants && (currentSession.deletedParticipants.includes(mappedKey) || (p.name && currentSession.deletedParticipants.includes(p.name.toLowerCase())))) continue;
 
       // STALE PARTICIPANT RE-INJECTION PROTECTION:
-      // If session was reset, discard any participant who was not seen after reset!
-      // And zero-out any pre-reset accumulated hours so timers strictly start at 00:00:00!
       if (currentSession.lastResetAt) {
         const pLastSeen = toEpochMs(p.lastSeen) || 0;
         if (pLastSeen < currentSession.lastResetAt) {
@@ -637,16 +729,65 @@ app.post('/api/session/sync', (req, res) => {
           delete currentSession.participants['p_andaleeb_gull'];
         }
         const existing = currentSession.participants[stableKey] || {};
-        
-        // Decoupled clean adjustment tracking:
-        const existingAdj = existing.manualAdjustmentMs !== undefined ? existing.manualAdjustmentMs : (existing.studyAdjustmentMs || 0);
-
-        // Accurate Presence & Left Status Transition
         const isPres = p.currentStatus ? (p.currentStatus === 'present') : (existing.currentStatus === 'present');
         const isManualCam = (p.manualCamOverride === true || existing.manualCamOverride === true);
         const isCamOn = isManualCam || (isPres && (p.cameraStatus === 'on' || (existing.cameraStatus === 'on' && p.cameraStatus !== 'off')));
-        const joinTs = Math.min(toEpochMs(p.joinTime) || Date.now(), toEpochMs(existing.joinTime) || Date.now(), toEpochMs(p.firstSeen) || Date.now(), toEpochMs(existing.firstSeen) || Date.now());
-        const leaveTime = isPres ? null : (p.leaveTime || existing.leaveTime || p.lastSeen || Date.now());
+
+        // If attendance has NOT started yet (Fresh Reset / Ready state), only track live presence & camera badges at 00:00:00!
+        if (!isSessionStarted) {
+          if (!isPres) {
+            delete currentSession.participants[stableKey];
+            continue;
+          }
+          const nowTs = Date.now();
+          currentSession.participants[stableKey] = {
+            ...existing,
+            id: stableKey,
+            name: validName,
+            isLocal: isLocal,
+            isHost: false,
+            isExempt: false,
+            currentStatus: 'present',
+            cameraStatus: isCamOn ? 'on' : 'off',
+            rawCameraStatus: isCamOn ? 'on' : 'off',
+            manualCamOverride: isManualCam,
+            videoDetectionMode: isCamOn ? (p.videoDetectionMode || 'webcam') : 'off',
+            firstSeen: nowTs,
+            joinTime: nowTs,
+            lastSeen: nowTs,
+            leaveTime: null,
+            rejoinCount: 0,
+            rejoinedAt: null,
+            presenceIntervals: [{ joinTime: nowTs, leaveTime: null, durationMs: 0 }],
+            joinLeaveHistory: [{ event: 'joined', time: nowTs, formatted: new Date(nowTs).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }) }],
+            cameraIntervals: [],
+            cameraOffIntervals: [],
+            cameraOffCurrentStart: null,
+            consecutiveCamOffMs: 0,
+            cameraOnMs: 0,
+            cameraOffMs: 0,
+            validStudyMs: 0,
+            manualAdjustmentMs: 0,
+            studyAdjustmentMs: 0,
+            timeAdjustments: [],
+            totalPresentMs: 0,
+            totalInMeetMs: 0,
+            timeInCall: 0,
+            totalDuration: 0,
+            duration: 0,
+            studyDuration: 0,
+            durationSeconds: 0,
+            durationMinutes: 0
+          };
+          continue;
+        }
+
+        // Decoupled clean adjustment tracking:
+        const existingAdj = existing.manualAdjustmentMs !== undefined ? existing.manualAdjustmentMs : (existing.studyAdjustmentMs || 0);
+        const nowTs = Date.now();
+        const sessStartTs = toEpochMs(currentSession.startedAt) || nowTs;
+        const joinTs = Math.max(sessStartTs, Math.min(toEpochMs(p.joinTime) || nowTs, toEpochMs(existing.joinTime) || nowTs, toEpochMs(p.firstSeen) || nowTs, toEpochMs(existing.firstSeen) || nowTs));
+        const leaveTime = isPres ? null : (p.leaveTime || existing.leaveTime || p.lastSeen || nowTs);
 
         // Merge cameraOffIntervals safely
         const combinedOffIntervals = [...(existing.cameraOffIntervals || [])];
@@ -658,21 +799,66 @@ app.post('/api/session/sync', (req, res) => {
           });
         }
 
-        // Merge cameraIntervals safely
+        // Merge cameraIntervals safely (only adopt longer/newer list when actively tracking)
         const combinedCameraIntervals = [...(existing.cameraIntervals || [])];
-        if (p.cameraIntervals && Array.isArray(p.cameraIntervals) && p.cameraIntervals.length >= combinedCameraIntervals.length) {
-          combinedCameraIntervals.splice(0, combinedCameraIntervals.length, ...p.cameraIntervals);
+        if (p.cameraIntervals && Array.isArray(p.cameraIntervals)) {
+          const validIncoming = p.cameraIntervals.filter(int => {
+            if (!int || !int.state) return false;
+            const s = toEpochMs(int.start);
+            const e = int.end ? toEpochMs(int.end) : null;
+            return s && s >= sessStartTs - 2000 && (e === null || e >= s);
+          });
+          if (validIncoming.length >= combinedCameraIntervals.length) {
+            combinedCameraIntervals.splice(0, combinedCameraIntervals.length, ...validIncoming.map(int => ({ ...int })));
+          }
+        }
+        // Close open intervals if session is paused or participant left
+        if (combinedCameraIntervals.length > 0) {
+          const lastInt = combinedCameraIntervals[combinedCameraIntervals.length - 1];
+          if (currentSession.isPaused && currentSession.currentPauseStart && lastInt && !lastInt.end) {
+            const pTs = toEpochMs(currentSession.currentPauseStart);
+            if (pTs >= toEpochMs(lastInt.start)) lastInt.end = pTs;
+          } else if (!isPres && lastInt && !lastInt.end) {
+            lastInt.end = Math.max(toEpochMs(lastInt.start) || joinTs, toEpochMs(leaveTime) || nowTs);
+          }
+        }
+        // If tracking actively and participant is present with NO intervals yet, initialize from joinTs
+        if (currentSession.isTracking && !currentSession.isPaused && isPres && combinedCameraIntervals.length === 0) {
+          combinedCameraIntervals.push({ start: Math.max(joinTs, sessStartTs), end: null, state: isCamOn ? 'on' : 'off' });
+        }
+        // Force override interval synchronization: if manualCamOverride is active and last interval is 'off', flip to 'on'
+        if (currentSession.isTracking && !currentSession.isPaused && isPres && isManualCam && combinedCameraIntervals.length > 0) {
+          const lastInt = combinedCameraIntervals[combinedCameraIntervals.length - 1];
+          if (lastInt && lastInt.state === 'off' && !lastInt.end) {
+            lastInt.end = nowTs;
+            combinedCameraIntervals.push({ start: nowTs, end: null, state: 'on' });
+          }
         }
 
-        // Merge presenceIntervals safely
+        // Merge presenceIntervals safely AND propagate closed leaveTime updates!
         const combinedPresenceIntervals = [...(existing.presenceIntervals || [])];
         if (p.presenceIntervals && Array.isArray(p.presenceIntervals)) {
           p.presenceIntervals.forEach(newInt => {
             const newJoin = toEpochMs(newInt.joinTime) || 0;
-            if (!combinedPresenceIntervals.some(ex => Math.abs((toEpochMs(ex.joinTime) || 0) - newJoin) < 2000)) {
-              combinedPresenceIntervals.push(newInt);
+            if (!newJoin) return;
+            const match = combinedPresenceIntervals.find(ex => Math.abs((toEpochMs(ex.joinTime) || 0) - newJoin) < 2000);
+            if (match) {
+              if (newInt.leaveTime && !match.leaveTime) {
+                match.leaveTime = newInt.leaveTime;
+                match.durationMs = newInt.durationMs || Math.max(0, toEpochMs(newInt.leaveTime) - (toEpochMs(match.joinTime) || newJoin));
+              }
+            } else {
+              combinedPresenceIntervals.push({ ...newInt, joinTime: Math.max(newJoin, sessStartTs) });
             }
           });
+        }
+        // If participant left and last presence interval was still open, close it!
+        if (!isPres && combinedPresenceIntervals.length > 0) {
+          const lastPres = combinedPresenceIntervals[combinedPresenceIntervals.length - 1];
+          if (lastPres && !lastPres.leaveTime) {
+            lastPres.leaveTime = leaveTime;
+            lastPres.durationMs = Math.max(0, toEpochMs(leaveTime) - (toEpochMs(lastPres.joinTime) || joinTs));
+          }
         }
 
         // Merge joinLeaveHistory safely
@@ -697,17 +883,17 @@ app.post('/api/session/sync', (req, res) => {
           isLocal: isLocal,
           isHost: false,
           isExempt: false,
-          presenceIntervals: combinedPresenceIntervals.length > 0 ? combinedPresenceIntervals : (p.presenceIntervals || existing.presenceIntervals || []),
+          presenceIntervals: combinedPresenceIntervals.length > 0 ? combinedPresenceIntervals : [{ joinTime: joinTs, leaveTime: leaveTime, durationMs: 0 }],
           joinLeaveHistory: combinedJoinLeaveHistory.length > 0 ? combinedJoinLeaveHistory : (p.joinLeaveHistory || existing.joinLeaveHistory || []),
           cameraOffIntervals: combinedOffIntervals,
-          cameraIntervals: combinedCameraIntervals.length > 0 ? combinedCameraIntervals : (p.cameraIntervals || existing.cameraIntervals || []),
+          cameraIntervals: combinedCameraIntervals,
           currentStatus: isPres ? 'present' : 'left',
           cameraStatus: isCamOn ? 'on' : 'off',
           rawCameraStatus: isCamOn ? 'on' : 'off',
           manualCamOverride: isManualCam,
           leaveTime: leaveTime,
           videoDetectionMode: isCamOn ? (p.cameraStatus === 'on' ? (p.videoDetectionMode || 'webcam') : (existing.videoDetectionMode || 'webcam')) : 'off',
-          lastSeen: Math.max(toEpochMs(p.lastSeen) || Date.now(), toEpochMs(existing.lastSeen) || Date.now()),
+          lastSeen: Math.max(toEpochMs(p.lastSeen) || nowTs, toEpochMs(existing.lastSeen) || nowTs),
           rejoinCount: rejoinCount,
           rejoinedAt: rejoinedAt,
           firstSeen: joinTs,
@@ -717,14 +903,14 @@ app.post('/api/session/sync', (req, res) => {
           timeAdjustments: existing.timeAdjustments || p.timeAdjustments || []
         };
 
-        const totalInMeetMs = calculateTotalInMeetMs(mergedParticipantObj, currentSession.startedAt, Date.now());
-        const camOn = getParticipantNaturalCamOnMs(mergedParticipantObj, totalInMeetMs, Date.now());
-        const camOff = Math.max(0, totalInMeetMs - camOn);
+        const rawInMeetMs = calculateTotalInMeetMs(mergedParticipantObj, currentSession.startedAt, nowTs, currentSession);
+        const { camOn, camOff } = getParticipantNaturalCamStats(mergedParticipantObj, rawInMeetMs, nowTs, currentSession);
+        const totalInMeetMs = Math.max(rawInMeetMs, camOn + camOff);
         const validStudy = Math.max(0, camOn + existingAdj);
 
         currentSession.participants[stableKey] = {
           ...mergedParticipantObj,
-          totalPresentMs: totalInMeetMs,
+          totalPresentMs: camOn + camOff,
           cameraOnMs: camOn,
           cameraOffMs: camOff,
           validStudyMs: validStudy, // Net Study Time = Camera ON + manualAdjustmentMs
@@ -738,7 +924,7 @@ app.post('/api/session/sync', (req, res) => {
           studyDuration: validStudy,
           durationSeconds: Math.floor(validStudy / 1000),
           durationMinutes: Math.floor(validStudy / 60000),
-          cameraOffCurrentStart: (currentSession.isTracking && !currentSession.isPaused && !isCamOn && isPres) ? (p.cameraOffCurrentStart || existing.cameraOffCurrentStart || Date.now()) : null
+          cameraOffCurrentStart: (currentSession.isTracking && !currentSession.isPaused && !isCamOn && isPres) ? (p.cameraOffCurrentStart || existing.cameraOffCurrentStart || nowTs) : null
         };
       }
     }
@@ -754,13 +940,61 @@ app.post('/api/session/sync', (req, res) => {
   res.json({ success: true, timestamp: Date.now(), session: currentSession });
 });
 
+/**
+ * Applies a manual camera override cleanly, updating open intervals and recomputing stats.
+ */
+function applyManualCamOverride(p, isOverrideOn, now = Date.now()) {
+  if (!p) return;
+  p.manualCamOverride = isOverrideOn;
+  if (isOverrideOn) {
+    p.cameraStatus = 'on';
+    p.rawCameraStatus = 'on';
+    p.cameraOffCurrentStart = null;
+    p.consecutiveCamOffMs = 0;
+    if (currentSession.isTracking && !currentSession.isPaused && p.currentStatus === 'present') {
+      if (!p.cameraIntervals) p.cameraIntervals = [];
+      const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+      if (last && last.state === 'off' && !last.end) {
+        last.end = now;
+        p.cameraIntervals.push({ start: now, end: null, state: 'on' });
+      } else if (!last || last.end) {
+        p.cameraIntervals.push({ start: now, end: null, state: 'on' });
+      }
+    }
+  }
+  finalizeParticipant(p, currentSession, now);
+}
+
+/**
+ * Applies a non-compounding manual study-time delta cleanly without mutating cameraOnMs/cameraOffMs.
+ */
+function applyTimeAdjustmentToParticipant(p, deltaMs, reason, now = Date.now()) {
+  if (!p || !deltaMs) return;
+  const baseCamOn = p.cameraOnMs || 0;
+  p.manualAdjustmentMs = (p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0)) + deltaMs;
+  p.studyAdjustmentMs = p.manualAdjustmentMs;
+  p.validStudyMs = Math.max(0, baseCamOn + p.manualAdjustmentMs);
+  p.duration = p.validStudyMs;
+  p.studyDuration = p.validStudyMs;
+  p.durationSeconds = Math.floor(p.validStudyMs / 1000);
+  p.durationMinutes = Math.floor(p.validStudyMs / 60000);
+
+  if (!p.timeAdjustments) p.timeAdjustments = [];
+  p.timeAdjustments.push({
+    timestamp: now,
+    deltaMs,
+    deltaMinutes: parseFloat((deltaMs / 60000).toFixed(1)),
+    reason: reason || (deltaMs >= 0 ? 'Manual Add' : 'Manual Cut')
+  });
+}
+
 // Control actions: Start, Stop (Off), Pause, Resume, Reset
 app.post('/api/session/action', (req, res) => {
   const { action, payload } = req.body || {};
   const now = Date.now();
 
   if (action === 'start') {
-    // If payload requests fresh start, archive previous and clean
+    const isFreshStart = !!(payload && payload.resetFirst) || !toEpochMs(currentSession.startedAt);
     if (payload && payload.resetFirst) {
       archiveCurrentSession();
       currentSession.sessionId = 'session_' + now;
@@ -770,9 +1004,26 @@ app.post('/api/session/action', (req, res) => {
       currentSession.currentPauseStart = null;
       currentSession.pauseHistory = [];
       currentSession.participants = {};
-    } else {
-      if (!currentSession.startedAt) {
-        currentSession.startedAt = now;
+      currentSession.deletedParticipants = [];
+    } else if (!toEpochMs(currentSession.startedAt)) {
+      // Fresh start after a Reset / standby: start cleanly from 00:00:00 at exact start timestamp!
+      currentSession.startedAt = now;
+      currentSession.stoppedAt = null;
+      currentSession.totalPausedMs = 0;
+      currentSession.currentPauseStart = null;
+      currentSession.pauseHistory = [];
+    } else if (currentSession.stoppedAt) {
+      // Resuming a previously stopped session: exclude the OFF/stopped gap as a break so it NEVER counts as Cam OFF!
+      const stopTs = toEpochMs(currentSession.stoppedAt);
+      if (stopTs && now > stopTs) {
+        const stopGap = now - stopTs;
+        currentSession.totalPausedMs = (currentSession.totalPausedMs || 0) + stopGap;
+        if (!currentSession.pauseHistory) currentSession.pauseHistory = [];
+        currentSession.pauseHistory.push({
+          pausedAt: stopTs,
+          resumedAt: now,
+          durationMs: stopGap
+        });
       }
       currentSession.stoppedAt = null;
     }
@@ -783,15 +1034,58 @@ app.post('/api/session/action', (req, res) => {
     currentSession.lastResetAt = null;
     currentSession.lastUpdated = now;
 
-    // Reset participant camera tracking counters so they start cleanly with attendance
-    Object.values(currentSession.participants || {}).forEach(p => {
-      p.consecutiveCamOffMs = 0;
-      if (p.cameraStatus === 'off') {
-        p.cameraOffCurrentStart = now;
-      } else {
-        p.cameraOffCurrentStart = null;
-      }
-    });
+    // Reset or re-open participant intervals cleanly
+    if (isFreshStart) {
+      const freshParticipants = {};
+      Object.entries(currentSession.participants || {}).forEach(([k, p]) => {
+        if (!p || p.currentStatus === 'left') return; // Drop pre-start ghosts
+        const camState = (p.cameraStatus === 'on' || p.manualCamOverride === true) ? 'on' : 'off';
+        p.firstSeen = now;
+        p.joinTime = now;
+        p.leaveTime = null;
+        p.lastSeen = now;
+        p.rejoinCount = 0;
+        p.rejoinedAt = null;
+        p.presenceIntervals = [{ joinTime: now, leaveTime: null, durationMs: 0 }];
+        p.joinLeaveHistory = [{ event: 'joined', time: now, formatted: new Date(now).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }) }];
+        p.cameraIntervals = [{ start: now, end: null, state: camState }];
+        p.cameraOffIntervals = [];
+        p.cameraOffCurrentStart = camState === 'off' ? now : null;
+        p.consecutiveCamOffMs = 0;
+        p.cameraOnMs = 0;
+        p.cameraOffMs = 0;
+        p.validStudyMs = 0;
+        p.manualAdjustmentMs = 0;
+        p.studyAdjustmentMs = 0;
+        p.timeAdjustments = [];
+        p.totalPresentMs = 0;
+        p.totalInMeetMs = 0;
+        p.timeInCall = 0;
+        p.totalDuration = 0;
+        p.duration = 0;
+        p.studyDuration = 0;
+        p.durationSeconds = 0;
+        p.durationMinutes = 0;
+        freshParticipants[k] = p;
+      });
+      currentSession.participants = freshParticipants;
+    } else {
+      Object.values(currentSession.participants || {}).forEach(p => {
+        p.consecutiveCamOffMs = 0;
+        const camState = (p.cameraStatus === 'on' || p.manualCamOverride === true) ? 'on' : 'off';
+        if (p.currentStatus === 'present') {
+          if (!p.cameraIntervals) p.cameraIntervals = [];
+          const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+          if (!last || last.end) {
+            p.cameraIntervals.push({ start: now, end: null, state: camState });
+          }
+          p.cameraOffCurrentStart = camState === 'off' ? now : null;
+        } else {
+          p.cameraOffCurrentStart = null;
+        }
+        finalizeParticipant(p, currentSession, now);
+      });
+    }
 
     persistCurrentSession();
     broadcast({ type: 'ACTION_START', timestamp: now, session: currentSession });
@@ -808,10 +1102,16 @@ app.post('/api/session/action', (req, res) => {
     if (currentSession.currentPauseStart) {
       const pDur = Math.max(0, now - currentSession.currentPauseStart);
       currentSession.totalPausedMs = (currentSession.totalPausedMs || 0) + pDur;
+      if (!currentSession.pauseHistory) currentSession.pauseHistory = [];
+      currentSession.pauseHistory.push({
+        pausedAt: currentSession.currentPauseStart,
+        resumedAt: now,
+        durationMs: pDur
+      });
       currentSession.currentPauseStart = null;
     }
 
-    // Calculate final study duration and close any open intervals
+    // Calculate final study duration and close any open intervals while preserving manualAdjustmentMs!
     Object.values(currentSession.participants || {}).forEach(p => {
       if (p.cameraIntervals && p.cameraIntervals.length > 0) {
         const last = p.cameraIntervals[p.cameraIntervals.length - 1];
@@ -836,14 +1136,7 @@ app.post('/api/session/action', (req, res) => {
         }
         p.cameraOffCurrentStart = null;
       }
-      const totalIntervalsOff = (p.cameraOffIntervals || []).reduce((sum, int) => sum + (int.durationMs || 0), 0);
-      p.cameraOffMs = Math.max(p.cameraOffMs || 0, totalIntervalsOff);
-      p.validStudyMs = p.cameraOnMs || 0;
-      p.totalPresentMs = (p.cameraOnMs || 0) + (p.cameraOffMs || 0);
-      p.duration = p.validStudyMs;
-      p.studyDuration = p.validStudyMs;
-      p.durationSeconds = Math.floor(p.validStudyMs / 1000);
-      p.durationMinutes = Math.floor(p.validStudyMs / 60000);
+      finalizeParticipant(p, currentSession, now);
     });
 
     persistCurrentSession();
@@ -907,16 +1200,18 @@ app.post('/api/session/action', (req, res) => {
       currentSession.currentPauseStart = null;
     }
 
-    // Restart camera intervals for participants whose camera is ON, and cameraOffCurrentStart for OFF
+    // Restart camera intervals for participants whose camera is ON or OFF
     Object.values(currentSession.participants || {}).forEach(p => {
-      if (p.currentStatus === 'present' && (p.cameraStatus === 'on' || p.manualCamOverride === true)) {
+      if (p.currentStatus === 'present') {
+        const camState = (p.cameraStatus === 'on' || p.manualCamOverride === true) ? 'on' : 'off';
         if (!p.cameraIntervals) p.cameraIntervals = [];
         const last = p.cameraIntervals[p.cameraIntervals.length - 1];
         if (!last || last.end) {
-          p.cameraIntervals.push({ start: now, end: null, state: 'on' });
+          p.cameraIntervals.push({ start: now, end: null, state: camState });
         }
-      } else if (p.currentStatus === 'present' && p.cameraStatus === 'off') {
-        p.cameraOffCurrentStart = now;
+        p.cameraOffCurrentStart = camState === 'off' ? now : null;
+      } else {
+        p.cameraOffCurrentStart = null;
       }
       finalizeParticipant(p, currentSession, now);
     });
@@ -991,13 +1286,7 @@ app.post('/api/session/action', (req, res) => {
     if (participantId && currentSession.participants && currentSession.participants[participantId]) {
       const p = currentSession.participants[participantId];
       const isOverrideOn = (manualCamOverride === true || manualCamOverride === 'on');
-      p.manualCamOverride = isOverrideOn;
-      if (isOverrideOn) {
-        p.cameraStatus = 'on';
-        p.rawCameraStatus = 'on';
-        p.cameraOffCurrentStart = null;
-        p.consecutiveCamOffMs = 0;
-      }
+      applyManualCamOverride(p, isOverrideOn, now);
       persistCurrentSession();
       broadcast({ type: 'PARTICIPANT_OVERRIDE', participantId: p.id, manualCamOverride: isOverrideOn, participant: p, session: currentSession });
     }
@@ -1012,6 +1301,9 @@ app.post('/api/session/action', (req, res) => {
   }
 
   if (action === 'adjust_participant_time') {
+    if (!toEpochMs(currentSession.startedAt)) {
+      return res.status(400).json({ error: 'Start attendance first before adjusting study times.' });
+    }
     const { participantId, minutes, adjustmentMs, reason } = payload || {};
     let deltaMs = typeof adjustmentMs === 'number' ? adjustmentMs : (Math.round(parseFloat(minutes || 0) * 60 * 1000));
     let p = currentSession.participants?.[participantId];
@@ -1020,20 +1312,7 @@ app.post('/api/session/action', (req, res) => {
       if (fk) p = currentSession.participants[fk];
     }
     if (p && deltaMs !== 0) {
-      p.manualAdjustmentMs = (p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0)) + deltaMs;
-      p.studyAdjustmentMs = p.manualAdjustmentMs;
-      p.validStudyMs = Math.max(0, (p.cameraOnMs || 0) + p.manualAdjustmentMs);
-      p.duration = p.validStudyMs;
-      p.studyDuration = p.validStudyMs;
-      p.durationSeconds = Math.floor(p.validStudyMs / 1000);
-      p.durationMinutes = Math.floor(p.validStudyMs / 60000);
-      const tot = Math.max(p.totalPresentMs || 0, p.cameraOnMs + (p.cameraOffMs || 0));
-      p.totalPresentMs = tot;
-      p.totalDuration = tot;
-      p.timeInCall = Math.max(p.timeInCall || 0, tot);
-      p.totalInMeetMs = Math.max(p.totalInMeetMs || 0, tot);
-      if (!p.timeAdjustments) p.timeAdjustments = [];
-      p.timeAdjustments.push({ timestamp: Date.now(), deltaMs, reason: reason || (deltaMs >= 0 ? 'Action Add' : 'Action Cut') });
+      applyTimeAdjustmentToParticipant(p, deltaMs, reason || (deltaMs >= 0 ? 'Action Add' : 'Action Cut'), now);
       persistCurrentSession();
       broadcast({ type: 'PARTICIPANT_TIME_ADJUSTED', participantId: p.id, deltaMs, participant: p, session: currentSession });
     }
@@ -1041,24 +1320,14 @@ app.post('/api/session/action', (req, res) => {
   }
 
   if (action === 'adjust_all_time') {
+    if (!toEpochMs(currentSession.startedAt)) {
+      return res.status(400).json({ error: 'Start attendance first before adjusting study times.' });
+    }
     const { minutes, adjustmentMs, reason } = payload || {};
     let deltaMs = typeof adjustmentMs === 'number' ? adjustmentMs : (Math.round(parseFloat(minutes || 0) * 60 * 1000));
     if (currentSession.participants && deltaMs !== 0) {
       Object.values(currentSession.participants).forEach(p => {
-        p.manualAdjustmentMs = (p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0)) + deltaMs;
-        p.studyAdjustmentMs = p.manualAdjustmentMs;
-        p.validStudyMs = Math.max(0, (p.cameraOnMs || 0) + p.manualAdjustmentMs);
-        p.duration = p.validStudyMs;
-        p.studyDuration = p.validStudyMs;
-        p.durationSeconds = Math.floor(p.validStudyMs / 1000);
-        p.durationMinutes = Math.floor(p.validStudyMs / 60000);
-        const tot = Math.max(p.totalPresentMs || 0, p.cameraOnMs + (p.cameraOffMs || 0));
-        p.totalPresentMs = tot;
-        p.totalDuration = tot;
-        p.timeInCall = Math.max(p.timeInCall || 0, tot);
-        p.totalInMeetMs = Math.max(p.totalInMeetMs || 0, tot);
-        if (!p.timeAdjustments) p.timeAdjustments = [];
-        p.timeAdjustments.push({ timestamp: Date.now(), deltaMs, reason: reason || (deltaMs >= 0 ? 'Bulk Action Add' : 'Bulk Action Cut') });
+        applyTimeAdjustmentToParticipant(p, deltaMs, reason || (deltaMs >= 0 ? 'Bulk Action Add' : 'Bulk Action Cut'), now);
       });
       persistCurrentSession();
       broadcast({ type: 'SESSION_TIME_ADJUSTED_ALL', deltaMs, count: Object.keys(currentSession.participants).length, session: currentSession });
@@ -1160,16 +1429,11 @@ app.post(['/api/participant/override', '/api/participant-override'], (req, res) 
     return res.status(404).json({ error: 'Participant not found in current session' });
   }
 
+  const now = Date.now();
   const isOverrideOn = (manualCamOverride === true || manualCamOverride === 'on');
-  p.manualCamOverride = isOverrideOn;
-  if (isOverrideOn) {
-    p.cameraStatus = 'on';
-    p.rawCameraStatus = 'on';
-    p.cameraOffCurrentStart = null;
-    p.consecutiveCamOffMs = 0;
-  }
+  applyManualCamOverride(p, isOverrideOn, now);
 
-  currentSession.lastUpdated = Date.now();
+  currentSession.lastUpdated = now;
   persistCurrentSession();
 
   broadcast({
@@ -1188,6 +1452,9 @@ app.post(['/api/participant/override', '/api/participant-override'], (req, res) 
 app.post(['/api/participant/adjust-time', '/api/participant-adjust-time'], (req, res) => {
   const { participantId, minutes, adjustmentMs, reason } = req.body || {};
   if (!participantId) return res.status(400).json({ error: 'Missing participantId' });
+  if (!toEpochMs(currentSession.startedAt)) {
+    return res.status(400).json({ error: 'Start attendance first before adjusting study times.' });
+  }
 
   let deltaMs = 0;
   if (typeof adjustmentMs === 'number') {
@@ -1213,30 +1480,10 @@ app.post(['/api/participant/adjust-time', '/api/participant-adjust-time'], (req,
     return res.status(404).json({ error: 'Participant not found in current session' });
   }
 
-  p.manualAdjustmentMs = (p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0)) + deltaMs;
-  p.studyAdjustmentMs = p.manualAdjustmentMs;
-  p.validStudyMs = Math.max(0, (p.cameraOnMs || 0) + p.manualAdjustmentMs);
+  const now = Date.now();
+  applyTimeAdjustmentToParticipant(p, deltaMs, reason || (deltaMs >= 0 ? 'Manual Add' : 'Manual Cut'), now);
 
-  p.duration = p.validStudyMs;
-  p.studyDuration = p.validStudyMs;
-  p.durationSeconds = Math.floor(p.validStudyMs / 1000);
-  p.durationMinutes = Math.floor(p.validStudyMs / 60000);
-
-  const totalMeet = Math.max(p.totalPresentMs || 0, p.cameraOnMs + (p.cameraOffMs || 0));
-  p.totalPresentMs = totalMeet;
-  p.totalDuration = totalMeet;
-  p.timeInCall = Math.max(p.timeInCall || 0, totalMeet);
-  p.totalInMeetMs = Math.max(p.totalInMeetMs || 0, totalMeet);
-
-  if (!p.timeAdjustments) p.timeAdjustments = [];
-  p.timeAdjustments.push({
-    timestamp: Date.now(),
-    deltaMs: deltaMs,
-    deltaMinutes: parseFloat((deltaMs / 60000).toFixed(1)),
-    reason: reason || (deltaMs >= 0 ? 'Manual Add' : 'Manual Cut')
-  });
-
-  currentSession.lastUpdated = Date.now();
+  currentSession.lastUpdated = now;
   persistCurrentSession();
 
   broadcast({
@@ -1254,6 +1501,10 @@ app.post(['/api/participant/adjust-time', '/api/participant-adjust-time'], (req,
 // Bulk Study Time Adjustment Endpoint (Add or Cut time for ALL participants in ongoing attendance)
 app.post(['/api/session/adjust-all-time', '/api/session-adjust-all-time'], (req, res) => {
   const { minutes, adjustmentMs, reason } = req.body || {};
+  if (!toEpochMs(currentSession.startedAt)) {
+    return res.status(400).json({ error: 'Start attendance first before adjusting study times.' });
+  }
+
   let deltaMs = 0;
   if (typeof adjustmentMs === 'number') {
     deltaMs = adjustmentMs;
@@ -1269,32 +1520,12 @@ app.post(['/api/session/adjust-all-time', '/api/session-adjust-all-time'], (req,
     return res.status(400).json({ error: 'No participants in current session to adjust' });
   }
 
+  const now = Date.now();
   participants.forEach(p => {
-    p.manualAdjustmentMs = (p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0)) + deltaMs;
-    p.studyAdjustmentMs = p.manualAdjustmentMs;
-    p.validStudyMs = Math.max(0, (p.cameraOnMs || 0) + p.manualAdjustmentMs);
-
-    p.duration = p.validStudyMs;
-    p.studyDuration = p.validStudyMs;
-    p.durationSeconds = Math.floor(p.validStudyMs / 1000);
-    p.durationMinutes = Math.floor(p.validStudyMs / 60000);
-
-    const totalMeet = Math.max(p.totalPresentMs || 0, p.cameraOnMs + (p.cameraOffMs || 0));
-    p.totalPresentMs = totalMeet;
-    p.totalDuration = totalMeet;
-    p.timeInCall = Math.max(p.timeInCall || 0, totalMeet);
-    p.totalInMeetMs = Math.max(p.totalInMeetMs || 0, totalMeet);
-
-    if (!p.timeAdjustments) p.timeAdjustments = [];
-    p.timeAdjustments.push({
-      timestamp: Date.now(),
-      deltaMs: deltaMs,
-      deltaMinutes: parseFloat((deltaMs / 60000).toFixed(1)),
-      reason: reason || (deltaMs >= 0 ? 'Bulk Manual Add' : 'Bulk Manual Cut')
-    });
+    applyTimeAdjustmentToParticipant(p, deltaMs, reason || (deltaMs >= 0 ? 'Bulk Manual Add' : 'Bulk Manual Cut'), now);
   });
 
-  currentSession.lastUpdated = Date.now();
+  currentSession.lastUpdated = now;
   persistCurrentSession();
 
   broadcast({

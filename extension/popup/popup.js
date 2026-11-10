@@ -135,6 +135,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function dispatchSessionControl(tabMessage, action, payload = {}, onComplete = null) {
+    const fallbackFetch = () => {
+      fetch(`${currentServerUrl}/api/session/action`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, payload })
+      })
+        .then(() => {
+          pollSession();
+          if (typeof onComplete === 'function') onComplete();
+        })
+        .catch(() => {});
+    };
+
+    if (activeTabId) {
+      chrome.tabs.sendMessage(activeTabId, tabMessage, (resp) => {
+        if (chrome.runtime.lastError || !resp || resp.ok === false) {
+          fallbackFetch();
+          return;
+        }
+        pollSession();
+        if (typeof onComplete === 'function') onComplete();
+      });
+    } else {
+      fallbackFetch();
+    }
+  }
+
   // Start / Resume Attendance Action
   popBtnStart.addEventListener('click', () => {
     if (cachedSession && cachedSession.stoppedAt && cachedSession.startedAt) {
@@ -150,34 +178,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    if (activeTabId) {
-      chrome.tabs.sendMessage(activeTabId, { type: 'START_ATTENDANCE' }, () => {
-        const _clearErr = chrome.runtime.lastError;
-        pollSession();
-      });
-    }
-    fetch(`${currentServerUrl}/api/session/action`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'start' })
-    }).then(() => pollSession()).catch(() => {});
+    dispatchSessionControl({ type: 'START_ATTENDANCE', resetFirst: false }, 'start');
   });
 
   function triggerResetAndStart() {
-    if (activeTabId) {
-      chrome.tabs.sendMessage(activeTabId, { type: 'RESET_SESSION' }, () => {
-        const _clearErr = chrome.runtime.lastError;
-        chrome.tabs.sendMessage(activeTabId, { type: 'START_ATTENDANCE' }, () => {
-          const _err = chrome.runtime.lastError;
-          pollSession();
-        });
-      });
-    }
-    fetch(`${currentServerUrl}/api/session/action`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'start', payload: { resetFirst: true } })
-    }).then(() => pollSession()).catch(() => {});
+    dispatchSessionControl({ type: 'RESET_AND_START' }, 'start', { resetFirst: true });
   }
 
   // Reset Session to 00:00:00 Action
@@ -191,17 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
         popCamsOn.innerText = '0';
         popCamsOff.innerText = '0';
 
-        if (activeTabId) {
-          chrome.tabs.sendMessage(activeTabId, { type: 'RESET_SESSION' }, () => {
-            const _clearErr = chrome.runtime.lastError;
-            pollSession();
-          });
-        }
-        fetch(`${currentServerUrl}/api/session/action`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'reset' })
-        }).then(() => pollSession()).catch(() => {});
+        dispatchSessionControl({ type: 'RESET_SESSION' }, 'reset');
       }
     });
   }
@@ -209,39 +204,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Stop Attendance Action
   popBtnStop.addEventListener('click', () => {
     if (confirm('Turn OFF attendance tracking? Timers will freeze and all attendance data will remain visible on the dashboard.')) {
-      if (activeTabId) {
-        chrome.tabs.sendMessage(activeTabId, { type: 'STOP_ATTENDANCE' }, () => {
-          const _clearErr = chrome.runtime.lastError;
-          pollSession();
-        });
-      }
-      fetch(`${currentServerUrl}/api/session/action`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'stop' })
-      }).then(() => {
-        pollSession();
+      dispatchSessionControl({ type: 'STOP_ATTENDANCE' }, 'stop', {}, () => {
         setTimeout(() => {
           chrome.tabs.create({ url: `${currentServerUrl}/report?print=true` });
         }, 400);
-      }).catch(() => {});
+      });
     }
   });
 
   // Pause / Resume Action
   popBtnPause.addEventListener('click', () => {
     const isPaused = popStatusBadge.innerText.includes('PAUSED');
-    if (activeTabId) {
-      chrome.tabs.sendMessage(activeTabId, { type: 'TOGGLE_PAUSE' }, () => {
-        const _clearErr = chrome.runtime.lastError;
-        pollSession();
-      });
-    }
-    fetch(`${currentServerUrl}/api/session/action`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: isPaused ? 'resume' : 'pause' })
-    }).then(() => pollSession()).catch(() => {});
+    dispatchSessionControl({ type: 'TOGGLE_PAUSE' }, isPaused ? 'resume' : 'pause');
   });
 
   // Download Ranked PDF Report

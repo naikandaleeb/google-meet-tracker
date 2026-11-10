@@ -53,6 +53,8 @@
   let tickTimer = null;
   let shadowRoot = null;
   let isPanelOpen = true;
+  let syncGeneration = 0;
+  let controlActionInFlight = false;
 
   // Strict Name Blacklist: Filters out Google Meet buttons, tooltips, and action icons
   const UI_BLACKLIST = [
@@ -187,7 +189,11 @@
       'return to call', 'ask to join', 'jump to call', 'camera failed', 'poor connection',
       'message', 'messages', 'open the people panel', 'open the panel', 'open panel',
       'close panel', 'paired with',
-      'spam com', 'spam', 'admin', 'moderator', 'report spam', 'report abuse'
+      'spam com', 'spam', 'admin', 'moderator', 'report spam', 'report abuse',
+      'styles', 'framing', 'studio look', 'studio lighting', 'accessories', 'hair',
+      'costumes', 'characters', 'funny', 'stylised', 'nature', 'professional',
+      'blur and personal', 'cosy home', 'fantasy', 'calendar', 'new',
+      'call feature notifications and actions'
     ];
 
     for (const bad of BLACKLIST) {
@@ -919,7 +925,17 @@
 
   // ================= ATTENDANCE ACTIONS =================
   function handleStartButtonClick() {
-    startAttendance();
+    if (session.stoppedAt && session.startedAt) {
+      const activeMs = calculateActiveStudyMs(session, Date.now());
+      const startFresh = confirm(
+        `A previous finalized attendance session exists (${formatHms(activeMs)}).\n\n` +
+        `• Click OK to RESET TO 00:00:00 and start a FRESH marathon.\n` +
+        `• Click CANCEL to RESUME the previous session.`
+      );
+      startAttendance(startFresh);
+      return;
+    }
+    startAttendance(false);
   }
 
   function handleResetButtonClick() {
@@ -928,78 +944,142 @@
     }
   }
 
-  function startAttendance() {
+  function startAttendance(resetFirst = false) {
     const now = Date.now();
+    syncGeneration++;
+    controlActionInFlight = true;
     lastUserControlActionTime = now;
-    session.isTracking = true;
-    session.isPaused = false;
-    const isFresh = !session.startedAt;
-    if (isFresh) {
-      session.startedAt = now;
-      session.totalPausedMs = 0;
-      session.pauseHistory = [];
-    }
-    session.stoppedAt = null;
-    session.currentPauseStart = null;
-    lastTickTime = now;
 
-    // Synchronize participants: Only reset hours to 0 on a completely FRESH start, NEVER on a resume!
-    if (isFresh) {
-      Object.values(session.participants || {}).forEach(p => {
-        p.firstSeen = now;
-        p.lastSeen = now;
-        p.totalPresentMs = 0;
-        p.cameraOnMs = 0;
-        p.cameraOffMs = 0;
-        p.validStudyMs = 0;
-        p.consecutiveCamOffMs = 0;
-        p.cameraOffIntervals = [];
-        p.cameraIntervals = [{ start: now, end: null, state: p.cameraStatus }];
-        if (p.cameraStatus === 'off') {
-          p.cameraOffCurrentStart = now;
-        } else {
-          p.cameraOffCurrentStart = null;
+    if (resetFirst) {
+      session = {
+        sessionId: 'session_' + now,
+        meetingCode: extractMeetingCode(),
+        meetingTitle: 'Cockroach Library 12-Hour Study Marathon',
+        startedAt: now,
+        stoppedAt: null,
+        lastUpdated: now,
+        isTracking: true,
+        isPaused: false,
+        totalPausedMs: 0,
+        currentPauseStart: null,
+        pauseHistory: [],
+        targetDurationHours: config.targetHours || 12,
+        participants: {}
+      };
+      deletedParticipants.clear();
+    } else {
+      const isFresh = !session.startedAt;
+      session.isTracking = true;
+      session.isPaused = false;
+      if (isFresh) {
+        session.startedAt = now;
+        session.totalPausedMs = 0;
+        session.pauseHistory = [];
+        session.stoppedAt = null;
+        session.currentPauseStart = null;
+
+        // Prune pre-start ghosts and reset every present participant strictly to 00:00:00
+        const freshMap = {};
+        Object.entries(session.participants || {}).forEach(([k, p]) => {
+          if (!p || p.currentStatus === 'left') return;
+          p.firstSeen = now;
+          p.joinTime = now;
+          p.leaveTime = null;
+          p.lastSeen = now;
+          p.rejoinCount = 0;
+          p.rejoinedAt = null;
+          p.presenceIntervals = [{ joinTime: now, leaveTime: null, durationMs: 0 }];
+          p.joinLeaveHistory = [{ event: 'joined', time: now, formatted: formatTimeOnly(now) }];
+          p.totalPresentMs = 0;
+          p.totalInMeetMs = 0;
+          p.timeInCall = 0;
+          p.totalDuration = 0;
+          p.cameraOnMs = 0;
+          p.cameraOffMs = 0;
+          p.validStudyMs = 0;
+          p.manualAdjustmentMs = 0;
+          p.studyAdjustmentMs = 0;
+          p.timeAdjustments = [];
+          p.duration = 0;
+          p.studyDuration = 0;
+          p.durationSeconds = 0;
+          p.durationMinutes = 0;
+          p.consecutiveCamOffMs = 0;
+          p.offConfirmTicks = 0;
+          p.cameraOffIntervals = [];
+          p.cameraIntervals = [{ start: now, end: null, state: p.cameraStatus === 'on' ? 'on' : 'off' }];
+          p.cameraOffCurrentStart = p.cameraStatus === 'off' ? now : null;
+          freshMap[k] = p;
+        });
+        session.participants = freshMap;
+      } else {
+        // Resuming previously stopped session: re-open intervals for present members cleanly
+        if (session.stoppedAt && now > session.stoppedAt) {
+          const stopGap = now - session.stoppedAt;
+          session.totalPausedMs = (session.totalPausedMs || 0) + stopGap;
+          if (!session.pauseHistory) session.pauseHistory = [];
+          session.pauseHistory.push({ pausedAt: session.stoppedAt, resumedAt: now, durationMs: stopGap });
         }
-      });
+        session.stoppedAt = null;
+        session.currentPauseStart = null;
+        Object.values(session.participants || {}).forEach(p => {
+          p.offConfirmTicks = 0;
+          if (p.currentStatus === 'present') {
+            if (!p.cameraIntervals) p.cameraIntervals = [];
+            const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+            if (!last || last.end) {
+              p.cameraIntervals.push({ start: now, end: null, state: p.cameraStatus === 'on' ? 'on' : 'off' });
+            }
+            p.cameraOffCurrentStart = p.cameraStatus === 'off' ? now : null;
+          }
+        });
+      }
     }
 
+    lastTickTime = now;
     console.log('[Cockroach Tracker] ▶️ Attendance Started/Resumed! Study timer running.');
 
     renderControls();
     saveSession();
     updateHudUI();
 
+    const genAtCall = syncGeneration;
     chrome.runtime.sendMessage({
       type: 'SERVER_ACTION',
       serverUrl: getServerBaseUrl(),
-      action: 'start'
+      action: 'start',
+      payload: resetFirst ? { resetFirst: true } : {}
     }, (resp) => {
       const _err = chrome.runtime.lastError;
-      if (resp && resp.data && resp.data.session) {
-        adoptServerSession(resp.data.session, true);
+      if (genAtCall === syncGeneration) {
+        controlActionInFlight = false;
+        if (resp && resp.data && resp.data.session) {
+          adoptServerSession(resp.data.session, true);
+        }
       }
     });
   }
 
   function stopAttendance() {
     const now = Date.now();
+    syncGeneration++;
+    controlActionInFlight = true;
     lastUserControlActionTime = now;
-    session.isTracking = false;
-    session.isPaused = false;
-    session.stoppedAt = now;
-    session.currentPauseStart = null;
 
-    // If currently paused, close the pause
+    // If currently paused, close the pause cleanly before clearing paused state
     if (session.isPaused && session.currentPauseStart) {
-      const pauseDur = now - session.currentPauseStart;
+      const pauseDur = Math.max(0, now - session.currentPauseStart);
       session.totalPausedMs = (session.totalPausedMs || 0) + pauseDur;
-      session.isPaused = false;
-      session.currentPauseStart = null;
+      if (!session.pauseHistory) session.pauseHistory = [];
+      session.pauseHistory.push({ pausedAt: session.currentPauseStart, resumedAt: now, durationMs: pauseDur });
     }
 
+    session.isTracking = false;
+    session.isPaused = false;
+    session.currentPauseStart = null;
     session.stoppedAt = now;
 
-    // Close any open camera OFF intervals for participants whose camera was off
+    // Close any open intervals and preserve manualAdjustmentMs!
     Object.values(session.participants || {}).forEach(p => {
       if (p.cameraIntervals && p.cameraIntervals.length > 0) {
         const last = p.cameraIntervals[p.cameraIntervals.length - 1];
@@ -1020,13 +1100,12 @@
         }
         p.cameraOffCurrentStart = null;
       }
-      const totalOff = (p.cameraOffIntervals || []).reduce((sum, int) => sum + (int.durationMs || 0), 0);
-      p.cameraOffMs = Math.max(p.cameraOffMs || 0, totalOff);
-      p.validStudyMs = p.cameraOnMs || 0;
+      const adj = p.manualAdjustmentMs !== undefined ? p.manualAdjustmentMs : (p.studyAdjustmentMs || 0);
+      p.validStudyMs = Math.max(0, (p.cameraOnMs || 0) + adj);
       p.totalPresentMs = (p.cameraOnMs || 0) + (p.cameraOffMs || 0);
       p.totalDuration = p.totalPresentMs;
       p.duration = p.validStudyMs;
-      p.timeInCall = p.totalPresentMs;
+      p.timeInCall = p.totalInMeetMs || p.totalPresentMs;
       p.durationSeconds = Math.floor((p.validStudyMs || 0) / 1000);
       p.durationMinutes = Math.floor((p.validStudyMs || 0) / 60000);
       p.studyDuration = p.validStudyMs;
@@ -1038,7 +1117,7 @@
     saveSession();
     updateHudUI();
 
-    // Inform server immediately to stop & archive
+    const genAtCall = syncGeneration;
     chrome.runtime.sendMessage({
       type: 'SERVER_ACTION',
       serverUrl: getServerBaseUrl(),
@@ -1046,24 +1125,30 @@
       payload: { autoArchive: true, isExplicitAction: true }
     }, (resp) => {
       const _err = chrome.runtime.lastError;
-      if (resp && resp.data && resp.data.session) {
-        adoptServerSession(resp.data.session, true);
+      if (genAtCall === syncGeneration) {
+        controlActionInFlight = false;
+        if (resp && resp.data && resp.data.session) {
+          adoptServerSession(resp.data.session, true);
+        }
       }
     });
   }
 
   function resetSession(autoStart = false) {
     const now = Date.now();
+    syncGeneration++;
+    controlActionInFlight = true;
     lastUserControlActionTime = now;
     deletedParticipants.clear();
 
     const cleanSession = {
-      sessionId: 'session_' + now,
+      sessionId: 'session_' + (now + 1),
       meetingCode: extractMeetingCode(),
       meetingTitle: 'Cockroach Library 12-Hour Study Marathon',
       startedAt: autoStart ? now : null,
       stoppedAt: null,
       lastUpdated: now,
+      lastResetAt: now,
       isTracking: autoStart,
       isPaused: false,
       totalPausedMs: 0,
@@ -1080,7 +1165,7 @@
     updateHudUI();
     saveSession();
 
-    // Tell server to archive and reset
+    const genAtCall = syncGeneration;
     chrome.runtime.sendMessage({
       type: 'SERVER_ACTION',
       serverUrl: getServerBaseUrl(),
@@ -1088,18 +1173,20 @@
       payload: { meetingCode: session.meetingCode, isExplicitAction: true }
     }, (resp) => {
       const _ignored = chrome.runtime.lastError;
+      if (genAtCall !== syncGeneration) return;
+      controlActionInFlight = false;
       if (resp && resp.data && resp.data.session) {
         session.sessionId = resp.data.session.sessionId;
+        session.lastResetAt = resp.data.session.lastResetAt || now;
+        session.isTracking = false;
+        session.startedAt = null;
         session.participants = {};
         saveSession();
+        renderControls();
         updateHudUI();
       }
       if (autoStart) {
-        chrome.runtime.sendMessage({
-          type: 'SERVER_ACTION',
-          serverUrl: getServerBaseUrl(),
-          action: 'start'
-        }, () => { const _err = chrome.runtime.lastError; });
+        startAttendance(false);
       }
     });
 
@@ -1353,34 +1440,42 @@
   function isVideoActive(video) {
     if (!video) return false;
 
-    // Check visibility & physical layout dimensions
-    if (!isElementVisible(video)) return false;
-    if (video.offsetWidth < 28 || video.offsetHeight < 28) return false;
-
     // 1. WebRTC MediaStream track verification
+    let hasLiveEnabledTrack = false;
+    let hasUnmutedLiveTrack = false;
     if (video.srcObject && typeof video.srcObject.getVideoTracks === 'function') {
       const tracks = video.srcObject.getVideoTracks();
-      if (tracks && tracks.length > 0) {
-        // If all tracks are explicitly disabled or ended -> camera is OFF
-        const allInactive = tracks.every(t => !t.enabled || t.readyState === 'ended');
-        if (allInactive) return false;
+      if (!tracks || tracks.length === 0) return false;
 
-        // Must have at least one active, enabled live track
-        const hasLive = tracks.some(t => t.enabled && t.readyState === 'live');
-        if (!hasLive) return false;
-      }
+      const allInactive = tracks.every(t => !t.enabled || t.readyState === 'ended');
+      if (allInactive) return false;
+
+      hasLiveEnabledTrack = tracks.some(t => t.enabled && t.readyState === 'live');
+      if (!hasLiveEnabledTrack) return false;
+
+      hasUnmutedLiveTrack = tracks.some(t => t.enabled && t.readyState === 'live' && !t.muted);
     }
 
-    // 2. Playback state
-    if (video.paused && video.readyState < 3) return false;
+    // When the browser tab is hidden/backgrounded, Chrome throttles video rendering geometry/decoding
+    // even while WebRTC video tracks remain actively live and unmuted.
+    if (document.hidden && hasUnmutedLiveTrack) {
+      return true;
+    }
+
+    // Check visibility & physical layout dimensions
+    if (!isElementVisible(video)) return false;
+    if (video.offsetWidth < 24 || video.offsetHeight < 24) return false;
+
+    // 2. Playback state (allow brief buffering if track is actively live & unmuted)
+    if (video.paused && video.readyState < 2 && !hasUnmutedLiveTrack) return false;
 
     // 3. Frame resolution
     if (!video.videoWidth || !video.videoHeight || video.videoWidth < 20 || video.videoHeight < 20) {
       return false;
     }
 
-    // 4. Ready state
-    if (video.readyState < 2) return false;
+    // 4. Ready state (require >= 2, unless stream just negotiated with live unmuted track + valid dimensions)
+    if (video.readyState < 2 && !hasUnmutedLiveTrack) return false;
 
     return true;
   }
@@ -1390,12 +1485,17 @@
   let offscreenCtx = null;
 
   // Ultra-fast canvas frame analyzer:
-  // Detects if a video element is a FULL BLACK SCREEN (physically covered camera, black tape, closed hardware shutter, black OBS)
-  // Real webcams in dark rooms have light/monitor glow on face or surroundings (maxBrightness >= 25).
-  // A physically covered camera is completely pitch black (avgBrightness < 10 AND maxBrightness < 25).
+  // Detects if a visible video element is a FULL BLACK SCREEN (physically covered camera, black tape, closed shutter, black OBS)
+  // Real webcams in dim study rooms still show monitor light/variance; pitch-black covered lenses stay < 6 avg & < 18 max.
   function isFullBlackScreen(video) {
     if (!video || video.readyState < 2 || !video.videoWidth || !video.videoHeight) {
       return false;
+    }
+
+    // Chromium suspends/blackens offscreen canvas video draws in backgrounded/occluded tabs!
+    // Never trigger false black-screen cutoffs while tab is hidden.
+    if (document.hidden || !isElementVisible(video)) {
+      return video._ckLastBlackCheck ? video._ckLastBlackCheck.isBlack : false;
     }
 
     const now = Date.now();
@@ -1426,8 +1526,14 @@
       }
 
       const avgBrightness = sumBrightness / total;
-      // FULL BLACK SCREEN: Entire frame has almost zero light (avg < 10 AND max < 25)
-      const isBlack = (avgBrightness < 10 && maxBrightness < 25);
+      // Only treat strictly pitch-black covered frames as black screen (with 2-sample verification to ignore 1-frame decode hiccups)
+      const isBlackSample = (avgBrightness < 6 && maxBrightness < 18);
+      if (isBlackSample) {
+        video._ckBlackStreak = (video._ckBlackStreak || 0) + 1;
+      } else {
+        video._ckBlackStreak = 0;
+      }
+      const isBlack = video._ckBlackStreak >= 2;
 
       video._ckLastBlackCheck = { time: now, isBlack };
       return isBlack;
@@ -1442,18 +1548,17 @@
     // 1. Presentation tiles are NOT webcams
     if (isPresentationTile(tile)) return 'off';
 
-    // 2. Video element check
+    // 2. Video element check (only treat black screen as OFF when camera is truly pitch-black across multiple samples)
     const video = tile.querySelector('video');
     if (video && isVideoActive(video)) {
-      // If video is streaming a full black screen (tape/shutter/covered lens/black OBS) -> camera is OFF!
       if (isFullBlackScreen(video)) {
         return 'off';
       }
       return 'on';
     }
 
-    // 3. Explicit camera OFF indicators in Google Meet DOM
-    if (isCameraOffIndicated(tile)) return 'off';
+    // 3. Explicit camera OFF indicators or avatar in Google Meet DOM
+    if (isCameraOffIndicated(tile) || isTileShowingAvatar(tile)) return 'off';
 
     return 'off';
   }
@@ -1478,7 +1583,7 @@
       }
     }
 
-    // 2. Check bottom toolbar camera buttons
+    // 2. Check bottom toolbar camera toggle buttons
     const camButtons = Array.from(document.querySelectorAll(
       'button[aria-label*="camera" i], ' +
       'button[data-tooltip*="camera" i], ' +
@@ -1487,12 +1592,14 @@
       'button[aria-label*="कैमरा" i], ' +
       'button[data-tooltip*="कैमरा" i]'
     )).filter(btn => {
+      if (!isElementVisible(btn)) return false;
       const lbl = (btn.getAttribute('aria-label') || btn.getAttribute('data-tooltip') || '').toLowerCase();
-      return !lbl.includes('effect') && !lbl.includes('setting') && !lbl.includes('switch') && !lbl.includes('background');
+      return !lbl.includes('effect') && !lbl.includes('setting') && !lbl.includes('switch') &&
+             !lbl.includes('background') && !lbl.includes('layout') && !lbl.includes('caption') &&
+             !lbl.includes('trouble') && !lbl.includes('share') && !lbl.includes('present');
     });
 
     for (const btn of camButtons) {
-      // Check Material icon ligatures
       const text = (btn.innerText || btn.textContent || '').trim().toLowerCase();
       if (text.includes('videocam_off')) return 'off';
       if (text.includes('videocam')) return 'on';
@@ -1504,14 +1611,12 @@
       const label = (btn.getAttribute('aria-label') || '').toLowerCase();
       const tooltip = (btn.getAttribute('data-tooltip') || '').toLowerCase();
 
-      // "Turn off camera" means camera is ON right now!
       if (label.includes('turn off camera') || tooltip.includes('turn off camera') ||
           label.includes('turn off video') || tooltip.includes('turn off video') ||
           label.includes('कैमरा बंद') || tooltip.includes('कैमरा बंद') ||
           label.includes('desactivar cámara') || label.includes('désactiver la caméra')) {
         return 'on';
       }
-      // "Turn on camera" means camera is OFF right now!
       if (label.includes('turn on camera') || tooltip.includes('turn on camera') ||
           label.includes('turn on video') || tooltip.includes('turn on video') ||
           label.includes('कैमरा चालू') || tooltip.includes('कैमरा चालू') ||
@@ -1683,6 +1788,11 @@
     tiles.forEach(tile => {
       if (isPresentationTile(tile)) return;
 
+      const vidInTile = tile.querySelector('video');
+      if ((!isElementVisible(tile) || tile.offsetWidth < 30 || tile.offsetHeight < 30) && !(vidInTile && isVideoActive(vidInTile))) {
+        return;
+      }
+
       const name = extractTileParticipantName(tile);
       if (!name) return;
 
@@ -1738,19 +1848,37 @@
       }
     });
 
-    // 4. People Panel (Roster) - Strictly scoped to People container, never Chat!
-    const peopleContainers = document.querySelectorAll('div[aria-label*="People" i], div[aria-label*="लोग" i], aside, [data-tab-id="1"]');
+    // 4. People Panel (Roster) - Strictly scoped to People container, never Chat, Effects, Host Controls, or Settings!
+    const nonPeoplePanelSelector = [
+      '[aria-label*="Chat" i]',
+      '[aria-label*="संदेश" i]',
+      '.in-call-chat',
+      '[aria-live="polite"]',
+      '[aria-label*="Effect" i]',
+      '[aria-label*="Background" i]',
+      '[aria-label*="Visual" i]',
+      '[aria-label*="Activit" i]',
+      '[aria-label*="Setting" i]',
+      '[aria-label*="Host control" i]',
+      '[aria-label*="Meeting details" i]',
+      '[aria-label*="Caption" i]',
+      '[aria-label*="Poll" i]',
+      '[aria-label*="Q&A" i]',
+      '[aria-label*="Breakout" i]'
+    ].join(', ');
+
+    const peopleContainers = document.querySelectorAll('div[aria-label*="People" i], div[aria-label*="लोग" i], aside[aria-label*="People" i], aside[aria-label*="Participant" i], aside[aria-label*="लोग" i], [data-tab-id="1"]');
     const peopleListItems = [];
     if (peopleContainers.length > 0) {
       peopleContainers.forEach(c => {
-        if (!c.closest('[aria-label*="Chat" i], [aria-label*="संदेश" i], .in-call-chat, [aria-live="polite"]')) {
+        if (!c.matches(nonPeoplePanelSelector) && !c.closest(nonPeoplePanelSelector)) {
           c.querySelectorAll('div[role="listitem"]').forEach(item => peopleListItems.push(item));
         }
       });
     }
     if (peopleListItems.length === 0) {
       document.querySelectorAll('div[role="listitem"]').forEach(item => {
-        if (item.closest('[aria-label*="Chat" i], [aria-label*="संदेश" i], .in-call-chat, [aria-live="polite"]')) return;
+        if (item.closest(nonPeoplePanelSelector)) return;
         if (item.querySelector('button[aria-label*="action" i], button[aria-label*="pin" i], button[aria-label*="mute" i], [data-participant-id]')) {
           peopleListItems.push(item);
         }
@@ -1819,8 +1947,12 @@
       }
 
       let inheritedStatus = activeVideoStudents.has(participantKey) ? 'on' : 'off';
-      if (!activeVideoStudents.has(participantKey) && session.participants && session.participants[participantKey]) {
-        inheritedStatus = session.participants[participantKey].cameraStatus || 'off';
+      if (!activeVideoStudents.has(participantKey)) {
+        if (isCameraOffIndicated(item)) {
+          inheritedStatus = 'off';
+        } else if (session.participants && session.participants[participantKey]) {
+          inheritedStatus = session.participants[participantKey].cameraStatus || 'off';
+        }
       }
 
       detected.set(participantKey, {
@@ -1930,22 +2062,25 @@
     const activeDetected = scanParticipantsInMeeting();
 
     // ALWAYS MAINTAIN ALL DETECTED PARTICIPANTS IN session.participants
-    // This guarantees that all students in the room are continuously synced to localhost:4200!
+    // Wait until session.startedAt / Start Attendance before counting any durations!
     activeDetected.forEach((scanned, key) => {
       let p = session.participants[key];
-      const rawStatus = scanned.cameraStatus || scanned.rawCameraStatus || 'off';
+      const detectedStatus = scanned.cameraStatus || scanned.rawCameraStatus || 'off';
       const isNewParticipant = !p;
+      const isIdlePreStart = !session.startedAt && !session.isTracking && !session.stoppedAt;
 
       if (isNewParticipant) {
-        const isCamOn = (rawStatus === 'on');
+        const isCamOn = (detectedStatus === 'on');
         p = {
           id: key,
           name: scanned.name,
           isLocal: scanned.isLocal,
           isHost: false,
           isExempt: false,
+          manualCamOverride: false,
           currentStatus: 'present',
-          cameraStatus: rawStatus,
+          cameraStatus: detectedStatus,
+          rawCameraStatus: detectedStatus,
           pendingStatus: null,
           pendingTicks: 0,
           firstSeen: now,
@@ -1964,6 +2099,8 @@
           totalPresentMs: 0,
           cameraOnMs: 0,
           cameraOffMs: 0,
+          manualAdjustmentMs: 0,
+          studyAdjustmentMs: 0,
           validStudyMs: 0,
           totalDuration: 0,
           duration: 0,
@@ -1974,18 +2111,18 @@
           consecutiveCamOffMs: 0,
           cameraOffCurrentStart: (session.isTracking && !session.isPaused && !isCamOn) ? now : null,
           cameraOffIntervals: [],
-          cameraIntervals: session.isTracking ? [
-            { start: now, end: null, state: rawStatus }
+          cameraIntervals: (session.isTracking && !session.isPaused) ? [
+            { start: now, end: null, state: detectedStatus }
           ] : [],
           videoDetectionMode: scanned.videoDetectionMode || 'off'
         };
         session.participants[key] = p;
-        console.log(`[Cockroach Tracker] 👤 Late Joiner Initiated: [${p.name}] at ${formatTimeOnly(now)} (Camera: ${rawStatus.toUpperCase()})`);
+        console.log(`[Cockroach Tracker] 👤 Participant Registered: [${p.name}] at ${formatTimeOnly(now)} (Camera: ${detectedStatus.toUpperCase()})`);
       } else {
         p.name = scanned.name || p.name;
         p.isHost = false;
         p.isExempt = false;
-        
+
         // CHECK FOR REJOIN: Did this participant previously leave the call?
         if (p.currentStatus === 'left') {
           const awayDur = p.leaveTime ? Math.max(0, now - p.leaveTime) : 0;
@@ -2019,59 +2156,96 @@
         if (!p.joinTime) p.joinTime = p.firstSeen || now;
         if (!p.firstSeen) p.firstSeen = p.joinTime || now;
 
-        // IMMEDIATE ZERO-DELAY CAMERA TRANSITION: Every second matters!
-        if (rawStatus !== p.cameraStatus) {
-          p.cameraStatus = rawStatus;
-          p.pendingStatus = null;
-          p.pendingTicks = 0;
+        const effectiveStatus = p.manualCamOverride === true ? 'on' : detectedStatus;
+        p.rawCameraStatus = effectiveStatus;
+        p.videoDetectionMode = scanned.videoDetectionMode || p.videoDetectionMode || 'off';
 
-          // Close last interval
-          const lastInterval = p.cameraIntervals && p.cameraIntervals[p.cameraIntervals.length - 1];
-          if (lastInterval && !lastInterval.end) {
-            lastInterval.end = now;
-          }
-          if (!p.cameraIntervals) p.cameraIntervals = [];
-          p.cameraIntervals.push({ start: now, end: null, state: rawStatus });
-
-          // Transition: ON -> OFF
-          if (rawStatus === 'off') {
-            if (session.isTracking && !session.isPaused) {
-              p.cameraOffCurrentStart = now;
-            } else {
-              p.cameraOffCurrentStart = null;
-            }
-            p.consecutiveCamOffMs = 0;
-            console.log(`[Cockroach Tracker] 🔴 [${p.name}] Camera turned OFF at ${formatTimeOnly(now)}`);
-          }
-          // Transition: OFF -> ON
-          else if (rawStatus === 'on') {
-            if (session.isTracking && !session.isPaused && p.cameraOffCurrentStart) {
-              const offDur = Math.max(0, now - p.cameraOffCurrentStart);
-              if (offDur >= 1000) {
-                if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
-                p.cameraOffIntervals.push({
-                  start: p.cameraOffCurrentStart,
-                  end: now,
-                  durationMs: offDur,
-                  fromTime: formatTimeOnly(p.cameraOffCurrentStart),
-                  toTime: formatTimeOnly(now),
-                  durationFormatted: formatHms(offDur)
-                });
+        if (session.isTracking && !session.isPaused) {
+          // Debounce ON -> OFF by 3 ticks (3s) to filter transient WebRTC/DOM/background flickers,
+          // while switching OFF -> ON immediately so cam-on study time starts right away.
+          let acceptedTransition = false;
+          if (effectiveStatus !== p.cameraStatus) {
+            if (p.cameraStatus === 'on' && effectiveStatus === 'off') {
+              if (p.pendingStatus === 'off') {
+                p.pendingTicks = (p.pendingTicks || 0) + 1;
+              } else {
+                p.pendingStatus = 'off';
+                p.pendingTicks = 1;
               }
+              if (p.pendingTicks >= 3) {
+                acceptedTransition = true;
+              }
+            } else {
+              acceptedTransition = true;
             }
-            p.cameraOffCurrentStart = null;
-            p.consecutiveCamOffMs = 0;
-            console.log(`[Cockroach Tracker] 🟢 [${p.name}] Camera turned ON at ${formatTimeOnly(now)}`);
+          } else {
+            p.pendingStatus = null;
+            p.pendingTicks = 0;
+          }
+
+          if (acceptedTransition) {
+            p.cameraStatus = effectiveStatus;
+            p.pendingStatus = null;
+            p.pendingTicks = 0;
+
+            const lastInterval = p.cameraIntervals && p.cameraIntervals[p.cameraIntervals.length - 1];
+            if (lastInterval && !lastInterval.end) {
+              lastInterval.end = now;
+            }
+            if (!p.cameraIntervals) p.cameraIntervals = [];
+            p.cameraIntervals.push({ start: now, end: null, state: effectiveStatus });
+
+            if (effectiveStatus === 'off') {
+              p.cameraOffCurrentStart = now;
+              p.consecutiveCamOffMs = 0;
+              console.log(`[Cockroach Tracker] 🔴 [${p.name}] Camera turned OFF at ${formatTimeOnly(now)}`);
+            } else {
+              if (p.cameraOffCurrentStart) {
+                const offDur = Math.max(0, now - p.cameraOffCurrentStart);
+                if (offDur >= 1000) {
+                  if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
+                  p.cameraOffIntervals.push({
+                    start: p.cameraOffCurrentStart,
+                    end: now,
+                    durationMs: offDur,
+                    fromTime: formatTimeOnly(p.cameraOffCurrentStart),
+                    toTime: formatTimeOnly(now),
+                    durationFormatted: formatHms(offDur)
+                  });
+                }
+              }
+              p.cameraOffCurrentStart = null;
+              p.consecutiveCamOffMs = 0;
+              console.log(`[Cockroach Tracker] 🟢 [${p.name}] Camera turned ON at ${formatTimeOnly(now)}`);
+            }
+          } else if (!p.cameraIntervals || p.cameraIntervals.length === 0 || p.cameraIntervals[p.cameraIntervals.length - 1].end) {
+            // Ensure an active interval exists while actively tracking
+            if (!p.cameraIntervals) p.cameraIntervals = [];
+            p.cameraIntervals.push({ start: now, end: null, state: p.cameraStatus });
+          }
+        } else if (!session.stoppedAt) {
+          // Live HUD preview before Start Attendance or during Pause (without creating tracking intervals)
+          if (isIdlePreStart) {
+            p.cameraStatus = effectiveStatus;
+            p.pendingStatus = null;
+            p.pendingTicks = 0;
           }
         }
       }
 
-      // TIME ACCUMULATION FOR ALL ACTIVE PARTICIPANTS (INCLUDING LATE JOINERS ON THEIR VERY FIRST TICK!):
-      // Accumulate only while tracking is active and not paused!
+      // TIME ACCUMULATION FOR ALL ACTIVE PARTICIPANTS:
+      // Accumulate strictly while tracking is active and not paused!
+      const manualAdj = typeof p.manualAdjustmentMs === 'number'
+        ? p.manualAdjustmentMs
+        : (typeof p.studyAdjustmentMs === 'number' ? p.studyAdjustmentMs : 0);
+      p.manualAdjustmentMs = manualAdj;
+      p.studyAdjustmentMs = manualAdj;
+
       if (session.isTracking && !session.isPaused) {
         if (p.cameraStatus === 'on') {
           p.cameraOnMs = (p.cameraOnMs || 0) + deltaMs;
           p.consecutiveCamOffMs = 0;
+          p.cameraOffCurrentStart = null;
         } else {
           p.cameraOffMs = (p.cameraOffMs || 0) + deltaMs;
           p.consecutiveCamOffMs = (p.consecutiveCamOffMs || 0) + deltaMs;
@@ -2080,8 +2254,8 @@
           }
         }
 
-        // Strict Mathematical Invariants & Property Aliases:
-        p.validStudyMs = p.cameraOnMs;
+        // Preserve non-compounding manual/bulk time adjustment separately from cameraOnMs
+        p.validStudyMs = Math.max(0, (p.cameraOnMs || 0) + manualAdj);
         p.totalPresentMs = (p.cameraOnMs || 0) + (p.cameraOffMs || 0);
         p.totalDuration = p.totalPresentMs;
         p.duration = p.validStudyMs;
@@ -2091,39 +2265,59 @@
         p.studyDuration = p.validStudyMs;
       } else if (session.isTracking && session.isPaused) {
         // Attendance PAUSED: All counters stay completely FROZEN!
+        p.validStudyMs = Math.max(0, (p.cameraOnMs || 0) + manualAdj);
+        p.duration = p.validStudyMs;
+        p.studyDuration = p.validStudyMs;
       } else if (session.stoppedAt) {
         // Attendance FINALIZED (OFF): Keep all accumulated times FROZEN & INTACT!
         p.consecutiveCamOffMs = 0;
         p.cameraOffCurrentStart = null;
+        p.validStudyMs = Math.max(0, (p.cameraOnMs || 0) + manualAdj);
+        p.duration = p.validStudyMs;
+        p.studyDuration = p.validStudyMs;
       } else {
-        // Attendance OFF / Idle before Start Attendance:
-        if (!p.cameraOnMs && !p.cameraOffMs && !p.totalPresentMs) {
-          p.totalPresentMs = 0;
-          p.cameraOnMs = 0;
-          p.cameraOffMs = 0;
-          p.validStudyMs = 0;
-          p.totalDuration = 0;
-          p.duration = 0;
-          p.timeInCall = 0;
-        }
+        // Attendance OFF / Idle before Start Attendance or after Reset: force 00:00:00!
+        p.totalPresentMs = 0;
+        p.totalInMeetMs = 0;
+        p.cameraOnMs = 0;
+        p.cameraOffMs = 0;
+        p.manualAdjustmentMs = 0;
+        p.studyAdjustmentMs = 0;
+        p.validStudyMs = 0;
+        p.totalDuration = 0;
+        p.duration = 0;
+        p.timeInCall = 0;
+        p.durationSeconds = 0;
+        p.durationMinutes = 0;
+        p.studyDuration = 0;
         p.consecutiveCamOffMs = 0;
         p.cameraOffCurrentStart = null;
+        p.cameraOffIntervals = [];
+        p.cameraIntervals = [];
       }
 
-      p.totalInMeetMs = calculateTotalInMeetMs(p, now);
+      p.totalInMeetMs = isIdlePreStart ? 0 : calculateTotalInMeetMs(p, now);
       p.lastSeen = now;
     });
 
-    // Mark left participants
+    // Mark left participants (only once attendance has started and is not already finalized/stopped)
     let hasParticipantLeft = false;
+    const isIdlePreStartGlobal = !session.startedAt && !session.isTracking && !session.stoppedAt;
     Object.values(session.participants).forEach(p => {
       if (!activeDetected.has(p.id)) {
         if (now - (p.lastSeen || now) > 10000) {
-          if (p.currentStatus === 'present') {
+          if (isIdlePreStartGlobal) {
+            // Remove pre-start lobby/transient departures so fresh Start begins cleanly
+            delete session.participants[p.id];
+            return;
+          }
+          if (!session.stoppedAt && p.currentStatus === 'present') {
             const leftAt = p.lastSeen || now;
             p.currentStatus = 'left';
             p.cameraStatus = 'off';
             p.rawCameraStatus = 'off';
+            p.pendingStatus = null;
+            p.pendingTicks = 0;
             p.leaveTime = leftAt;
             hasParticipantLeft = true;
 
@@ -2149,7 +2343,7 @@
             if (lastInterval && !lastInterval.end) {
               lastInterval.end = leftAt;
             }
-            if (p.cameraOffCurrentStart) {
+            if (session.isTracking && !session.isPaused && p.cameraOffCurrentStart) {
               const dur = Math.max(0, leftAt - p.cameraOffCurrentStart);
               if (dur >= 1000) {
                 if (!p.cameraOffIntervals) p.cameraOffIntervals = [];
@@ -2162,16 +2356,17 @@
                   durationFormatted: formatHms(dur)
                 });
               }
-              p.cameraOffCurrentStart = null;
             }
+            p.cameraOffCurrentStart = null;
+            p.consecutiveCamOffMs = 0;
 
             console.log(`[Cockroach Tracker] 🚪 [${p.name}] LEFT Google Meet at ${formatTimeOnly(leftAt)} (Attendance FROZEN)`);
           }
         }
       }
 
-      // Always update exact total time spent in meet
-      p.totalInMeetMs = calculateTotalInMeetMs(p, now);
+      // Always update exact total time spent in meet (00:00:00 before Start Attendance)
+      p.totalInMeetMs = isIdlePreStartGlobal ? 0 : calculateTotalInMeetMs(p, now);
       p.timeInCall = p.totalInMeetMs;
     });
 
@@ -2189,6 +2384,12 @@
     chrome.storage.local.set({ [storageKey]: session });
   }
 
+  function getSessionIdTimestamp(id) {
+    if (!id || typeof id !== 'string') return 0;
+    const m = id.match(/^session_(\d+)/);
+    return m ? parseInt(m[1], 10) : 0;
+  }
+
   function adoptServerSession(serverSess, isActionResponse = false) {
     if (!serverSess) return;
 
@@ -2196,26 +2397,48 @@
       lastUserControlActionTime = 0;
     }
 
-    // IF SESSION ID CHANGED (e.g. Master Reset on server or session loaded):
-    // FULLY REPLACE local participants so old participants from previous marathon are completely cleared!
+    if (controlActionInFlight && !isActionResponse) {
+      return;
+    }
+
+    const isRecentLocalAction = (Date.now() - lastUserControlActionTime) < 4000;
+
+    // Monotonic session ID guard: never let an older session overwrite a newer Reset session
     if (serverSess.sessionId && serverSess.sessionId !== session.sessionId) {
+      if (!isActionResponse) {
+        const incomingTs = getSessionIdTimestamp(serverSess.sessionId);
+        const localTs = getSessionIdTimestamp(session.sessionId);
+        if (incomingTs > 0 && localTs > 0 && incomingTs < localTs) {
+          console.log(`[Cockroach Tracker] 🛡️ Rejected older server session ${serverSess.sessionId} (< ${session.sessionId})`);
+          return;
+        }
+        if (isRecentLocalAction) {
+          return;
+        }
+      }
+
       console.log(`[Cockroach Tracker] 🔄 Adopting new session ID from server: ${serverSess.sessionId}`);
       session.sessionId = serverSess.sessionId;
       session.meetingCode = serverSess.meetingCode || session.meetingCode;
-      session.startedAt = serverSess.startedAt;
-      session.stoppedAt = serverSess.stoppedAt;
+      session.startedAt = serverSess.startedAt || null;
+      session.stoppedAt = serverSess.stoppedAt || null;
+      session.lastResetAt = serverSess.lastResetAt || null;
       session.isTracking = !!serverSess.isTracking;
       session.isPaused = !!serverSess.isPaused;
       session.totalPausedMs = serverSess.totalPausedMs || 0;
-      session.currentPauseStart = serverSess.currentPauseStart;
+      session.currentPauseStart = serverSess.currentPauseStart || null;
       session.pauseHistory = serverSess.pauseHistory || [];
       session.targetDurationHours = serverSess.targetDurationHours || 12;
 
-      if (serverSess.participants && Object.keys(serverSess.participants).length > 0) {
+      const isIdleServer = !serverSess.startedAt && !serverSess.isTracking && !serverSess.stoppedAt;
+      if (isIdleServer) {
+        session.participants = serverSess.participants ? JSON.parse(JSON.stringify(serverSess.participants)) : {};
+      } else if (serverSess.participants && Object.keys(serverSess.participants).length > 0) {
         session.participants = JSON.parse(JSON.stringify(serverSess.participants));
       } else if (serverSess.lastResetAt) {
         session.participants = {};
       }
+      lastTickTime = Date.now();
       deletedParticipants.clear();
       renderControls();
       updateHudUI();
@@ -2239,7 +2462,9 @@
       }
     }
 
-    // Merge participants monotonically from server session so hours & attendance are never lost
+    const isIdleServer = !serverSess.startedAt && !serverSess.isTracking && !serverSess.stoppedAt;
+
+    // Merge participants cleanly while preserving manual adjustments and break-excluded stats
     if (serverSess.participants && typeof serverSess.participants === 'object') {
       if (!session.participants) session.participants = {};
       for (const [id, sp] of Object.entries(serverSess.participants)) {
@@ -2248,26 +2473,51 @@
         if (!localP) {
           session.participants[id] = { ...sp };
         } else {
+          const prevAdj = typeof localP.manualAdjustmentMs === 'number'
+            ? localP.manualAdjustmentMs
+            : (typeof localP.studyAdjustmentMs === 'number' ? localP.studyAdjustmentMs : 0);
+          const sAdj = typeof sp.manualAdjustmentMs === 'number'
+            ? sp.manualAdjustmentMs
+            : (typeof sp.studyAdjustmentMs === 'number' ? sp.studyAdjustmentMs : 0);
+          localP.manualAdjustmentMs = sAdj;
+          localP.studyAdjustmentMs = sAdj;
+
           const isCorrupt = (localP.cameraOnMs || 0) > 24 * 3600000 || (localP.validStudyMs || 0) > 24 * 3600000;
-          if (isCorrupt || (sp.manualAdjustmentMs !== undefined && sp.manualAdjustmentMs !== localP.manualAdjustmentMs) || (sp.studyAdjustmentMs !== undefined && sp.studyAdjustmentMs !== localP.studyAdjustmentMs)) {
-            localP.manualAdjustmentMs = sp.manualAdjustmentMs !== undefined ? sp.manualAdjustmentMs : sp.studyAdjustmentMs;
-            localP.studyAdjustmentMs = localP.manualAdjustmentMs;
-            localP.cameraOnMs = sp.cameraOnMs;
-            localP.validStudyMs = sp.validStudyMs;
-            localP.cameraOffMs = sp.cameraOffMs;
-            localP.totalPresentMs = sp.totalPresentMs;
+          if (isIdleServer) {
+            localP.cameraOnMs = 0;
+            localP.cameraOffMs = 0;
+            localP.validStudyMs = 0;
+            localP.totalPresentMs = 0;
+            localP.totalInMeetMs = 0;
+            localP.manualAdjustmentMs = 0;
+            localP.studyAdjustmentMs = 0;
+            localP.cameraIntervals = [];
+            localP.cameraOffIntervals = [];
+          } else if (isActionResponse || isCorrupt || sAdj !== prevAdj || !session.isTracking) {
+            localP.cameraOnMs = sp.cameraOnMs || 0;
+            localP.cameraOffMs = sp.cameraOffMs || 0;
+            localP.totalPresentMs = sp.totalPresentMs || ((sp.cameraOnMs || 0) + (sp.cameraOffMs || 0));
+            localP.validStudyMs = Math.max(0, (localP.cameraOnMs || 0) + sAdj);
           } else {
-            localP.cameraOnMs = Math.max(localP.cameraOnMs || 0, sp.cameraOnMs || 0);
-            localP.cameraOffMs = Math.max(localP.cameraOffMs || 0, sp.cameraOffMs || 0);
-            localP.validStudyMs = Math.max(localP.validStudyMs || 0, sp.validStudyMs || 0);
-            localP.totalPresentMs = Math.max(localP.totalPresentMs || 0, sp.totalPresentMs || 0);
+            const onGap = (sp.cameraOnMs || 0) - (localP.cameraOnMs || 0);
+            if (onGap > 0 || Math.abs(onGap) > 4000) {
+              localP.cameraOnMs = sp.cameraOnMs || 0;
+            }
+            if (sp.cameraOffMs !== undefined) {
+              localP.cameraOffMs = sp.cameraOffMs;
+            }
+            localP.validStudyMs = Math.max(0, (localP.cameraOnMs || 0) + sAdj);
+            localP.totalPresentMs = (localP.cameraOnMs || 0) + (localP.cameraOffMs || 0);
           }
+          localP.duration = localP.validStudyMs;
+          localP.studyDuration = localP.validStudyMs;
+
           localP.firstSeen = Math.min(toEpochMs(localP.firstSeen) || Date.now(), toEpochMs(sp.firstSeen) || Date.now());
           localP.joinTime = Math.min(toEpochMs(localP.joinTime) || Date.now(), toEpochMs(sp.joinTime) || Date.now());
-          if (sp.presenceIntervals && Array.isArray(sp.presenceIntervals) && (!localP.presenceIntervals || localP.presenceIntervals.length === 0)) {
+          if (!isIdleServer && sp.presenceIntervals && Array.isArray(sp.presenceIntervals) && (!localP.presenceIntervals || localP.presenceIntervals.length === 0)) {
             localP.presenceIntervals = sp.presenceIntervals;
           }
-          if (sp.cameraOffIntervals && Array.isArray(sp.cameraOffIntervals)) {
+          if (!isIdleServer && sp.cameraOffIntervals && Array.isArray(sp.cameraOffIntervals)) {
             if (!localP.cameraOffIntervals) localP.cameraOffIntervals = [];
             sp.cameraOffIntervals.forEach(newInt => {
               const newStart = toEpochMs(newInt.start) || 0;
@@ -2275,22 +2525,24 @@
                 localP.cameraOffIntervals.push(newInt);
               }
             });
-            const totOff = localP.cameraOffIntervals.reduce((s, i) => s + (i.durationMs || 0), 0);
-            localP.cameraOffMs = Math.max(localP.cameraOffMs || 0, totOff);
           }
           if (sp.manualCamOverride !== undefined) {
             localP.manualCamOverride = sp.manualCamOverride;
+            if (localP.manualCamOverride === true) {
+              localP.cameraStatus = 'on';
+              localP.rawCameraStatus = 'on';
+              localP.cameraOffCurrentStart = null;
+              localP.consecutiveCamOffMs = 0;
+            }
           }
         }
       }
     }
 
-    const isRecentLocalAction = (Date.now() - lastUserControlActionTime) < 4000;
-
     const controlChanged = session.sessionId !== serverSess.sessionId ||
                            (!isRecentLocalAction && (
-                             session.isTracking !== serverSess.isTracking ||
-                             session.isPaused !== serverSess.isPaused ||
+                             session.isTracking !== !!serverSess.isTracking ||
+                             session.isPaused !== !!serverSess.isPaused ||
                              session.startedAt !== serverSess.startedAt ||
                              session.stoppedAt !== serverSess.stoppedAt
                            ));
@@ -2298,6 +2550,9 @@
     session.sessionId = serverSess.sessionId || session.sessionId;
     session.meetingCode = serverSess.meetingCode || session.meetingCode;
     session.targetDurationHours = serverSess.targetDurationHours || 12;
+    if (serverSess.lastResetAt) {
+      session.lastResetAt = serverSess.lastResetAt;
+    }
 
     if (isActionResponse || !isRecentLocalAction) {
       session.isTracking = !!serverSess.isTracking;
@@ -2310,29 +2565,38 @@
     }
 
     if (controlChanged) {
-      if (session.isPaused) {
-        // Paused on server: close open camera intervals
-        const pauseTs = toEpochMs(session.currentPauseStart) || Date.now();
+      if (session.isPaused || !session.isTracking) {
+        const pauseTs = toEpochMs(session.currentPauseStart || session.stoppedAt) || Date.now();
         Object.values(session.participants || {}).forEach(p => {
           if (p.cameraIntervals && p.cameraIntervals.length > 0) {
             const last = p.cameraIntervals[p.cameraIntervals.length - 1];
             if (last && !last.end) last.end = pauseTs;
           }
+          p.cameraOffCurrentStart = null;
+          p.consecutiveCamOffMs = 0;
         });
       } else if (session.isTracking && !session.isPaused) {
-        // Resumed on server: re-open intervals for present ON participants
         const resumeTs = Date.now();
+        lastTickTime = resumeTs;
         Object.values(session.participants || {}).forEach(p => {
-          if (p.currentStatus === 'present' && p.cameraStatus === 'on') {
+          if (p.currentStatus === 'present') {
             if (!p.cameraIntervals) p.cameraIntervals = [];
             const last = p.cameraIntervals[p.cameraIntervals.length - 1];
+            const st = p.manualCamOverride ? 'on' : (p.cameraStatus || 'off');
             if (!last || last.end) {
-              p.cameraIntervals.push({ start: resumeTs, end: null, state: 'on' });
+              p.cameraIntervals.push({ start: resumeTs, end: null, state: st });
+            }
+            if (st === 'off' && !p.cameraOffCurrentStart) {
+              p.cameraOffCurrentStart = resumeTs;
             }
           }
         });
       }
       console.log(`[Cockroach Tracker] Master tracking state synced from server: isTracking=${session.isTracking}, isPaused=${session.isPaused}`);
+      renderControls();
+      updateHudUI();
+      saveSession();
+    } else if (isActionResponse) {
       renderControls();
       updateHudUI();
       saveSession();
@@ -2343,44 +2607,52 @@
     if (!event) return;
     console.log('[Cockroach Tracker] Server Event received:', event.type);
 
-    // Explicit action handling ALWAYS takes precedence
+    // Explicit action handling ALWAYS takes precedence and invalidates in-flight background syncs
     if (event.type === 'ACTION_STOP') {
+      syncGeneration++;
+      controlActionInFlight = false;
       lastUserControlActionTime = Date.now();
       session.isTracking = false;
       session.isPaused = false;
       session.stoppedAt = event.timestamp || (event.session && event.session.stoppedAt) || Date.now();
       session.currentPauseStart = null;
-      renderControls();
-      updateHudUI();
-      saveSession();
+      if (event.session) {
+        adoptServerSession(event.session, true);
+      } else {
+        renderControls();
+        updateHudUI();
+        saveSession();
+      }
+      return;
     } else if (event.type === 'ACTION_PAUSE') {
+      syncGeneration++;
       lastUserControlActionTime = Date.now();
       session.isPaused = true;
       session.currentPauseStart = event.timestamp || (event.session && event.session.currentPauseStart) || Date.now();
-      renderControls();
-      updateHudUI();
-      saveSession();
     } else if (event.type === 'ACTION_RESUME') {
+      syncGeneration++;
       lastUserControlActionTime = Date.now();
       session.isTracking = true;
       session.isPaused = false;
       session.stoppedAt = null;
       session.currentPauseStart = null;
       lastTickTime = Date.now();
-      renderControls();
-      updateHudUI();
-      saveSession();
     } else if (event.type === 'ACTION_START') {
+      syncGeneration++;
+      controlActionInFlight = false;
       lastUserControlActionTime = Date.now();
+      lastTickTime = Date.now();
+      if (event.session) {
+        adoptServerSession(event.session, true);
+        return;
+      }
       session.isTracking = true;
       session.isPaused = false;
       session.currentPauseStart = null;
       session.stoppedAt = null;
-      lastTickTime = Date.now();
-      renderControls();
-      updateHudUI();
-      saveSession();
     } else if (event.type === 'ACTION_RESET') {
+      syncGeneration++;
+      controlActionInFlight = false;
       lastUserControlActionTime = Date.now();
       session = {
         sessionId: event.session?.sessionId || ('session_' + Date.now()),
@@ -2389,6 +2661,7 @@
         startedAt: null,
         stoppedAt: null,
         lastUpdated: Date.now(),
+        lastResetAt: event.session?.lastResetAt || Date.now(),
         isTracking: false,
         isPaused: false,
         totalPausedMs: 0,
@@ -2397,6 +2670,7 @@
         targetDurationHours: config.targetHours || 12,
         participants: {}
       };
+      lastTickTime = Date.now();
       deletedParticipants.clear();
       renderControls();
       updateHudUI();
@@ -2417,16 +2691,27 @@
 
     if (event.session) {
       adoptServerSession(event.session, true);
+    } else {
+      renderControls();
+      updateHudUI();
+      saveSession();
     }
   }
 
   function syncSessionNow() {
+    if (controlActionInFlight) {
+      return;
+    }
+    const reqGen = syncGeneration;
     chrome.runtime.sendMessage({
       type: 'SYNC_TO_SERVER',
       serverUrl: getServerBaseUrl(),
       session: session
     }, (response) => {
       const _ignored = chrome.runtime.lastError;
+      if (reqGen !== syncGeneration || controlActionInFlight) {
+        return;
+      }
       if (!shadowRoot) return;
       const syncDot = shadowRoot.getElementById('cm-hud-sync-dot');
       if (syncDot) {
@@ -2594,8 +2879,7 @@
       mountHUD();
       renderControls();
       updateHudUI();
-      if (tickTimer) clearInterval(tickTimer);
-      tickTimer = setInterval(onTimerTick, 1000);
+      startTickEngine();
       if (syncTimer) clearInterval(syncTimer);
       syncTimer = setInterval(syncSessionNow, config.syncIntervalMs);
     }
@@ -2639,8 +2923,13 @@
       sendResponse({ ok: true, session });
       return true;
     }
+    if (req.type === 'RESET_AND_START') {
+      startAttendance(true);
+      sendResponse({ ok: true, isTracking: true, session });
+      return true;
+    }
     if (req.type === 'START_ATTENDANCE') {
-      startAttendance();
+      startAttendance(!!req.resetFirst);
       sendResponse({ ok: true, isTracking: true, session });
       return true;
     }

@@ -544,6 +544,40 @@
       </div>
     </div>
 
+    <!-- Bulk Time Adjustment Modal -->
+    <div class="modal-backdrop" id="bulk-adjust-modal" style="display: none;">
+      <div class="modal-card" style="max-width: 480px;">
+        <div class="modal-header">
+          <div>
+            <h3>⏱️ Bulk Adjust Study Time (All Students)</h3>
+            <span class="modal-sub" id="bulk-adjust-sub">Add or cut time from Net Valid Study Time once for every participant</span>
+          </div>
+          <button class="btn-close-modal" id="btn-close-bulk-modal">&times;</button>
+        </div>
+        <div class="modal-body" style="padding-top: 14px;">
+          <div style="display: flex; gap: 12px; margin-bottom: 14px;">
+            <div style="flex: 1;">
+              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 6px; font-weight: 600;">Hours</label>
+              <input type="number" id="bulk-adjust-hours" min="0" max="24" value="0" style="width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.18); background: rgba(0,0,0,0.35); color: #f8fafc; font-size: 15px; font-weight: 700;">
+            </div>
+            <div style="flex: 1;">
+              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 6px; font-weight: 600;">Minutes</label>
+              <input type="number" id="bulk-adjust-minutes" min="0" max="1440" value="0" style="width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.18); background: rgba(0,0,0,0.35); color: #f8fafc; font-size: 15px; font-weight: 700;">
+            </div>
+          </div>
+          <p id="bulk-adjust-preview" style="font-size: 12px; color: #94a3b8; margin-bottom: 16px;">Enter hours/minutes above, then click Add or Cut below (applies once, does NOT repeat).</p>
+          <div style="display: flex; gap: 10px;">
+            <button id="bulk-btn-add" style="flex: 1; padding: 10px 14px; border-radius: 8px; background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; font-weight: 700; font-size: 13px; cursor: pointer;">
+              ➕ Add Time to All
+            </button>
+            <button id="bulk-btn-cut" style="flex: 1; padding: 10px 14px; border-radius: 8px; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; font-weight: 700; font-size: 13px; cursor: pointer;">
+              ✂️ Cut Time from All
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Toast Notification -->
     <div class="toast-notification" id="toast-notify" style="display: none;"></div>
   </div>
