@@ -46,26 +46,27 @@ Designed with the **Pain / Akatsuki Dark Cyberpunk Aesthetic** (*Void Black `#09
 2. Go to `chrome://extensions` (or `edge://extensions` in Edge).
 3. Toggle on **"Developer mode"** in the top-right corner.
 4. Click **"Load unpacked"** (अनपैक किया गया लोड करें).
-5. Select this folder:
-   ```
-   C:\Users\Lenovo\Downloads\google meet tracker\extension
-   ```
+5. Select the **`extension`** folder inside your downloaded `google-meet-tracker` project directory (the folder containing `manifest.json`).
 6. The **🪳 Cockroach Library Tracker** extension will appear in your extensions list! Pin it to your browser toolbar.
 
 ---
 
 ### Step 2: Start the Dashboard Server (Port 4200)
 
-Double-click the starter script:
-- **Windows Batch File**: Double-click [`start-dashboard.bat`](start-dashboard.bat)
-- **Or via PowerShell**:
+Make sure **Node.js 18+** (`https://nodejs.org`) is installed, then use either option:
+- **Background 24/7 Mode (Recommended on Windows):** Double-click [`start-server.bat`](start-server.bat) — automatically installs `server/` dependencies on first run and starts the background daemon at `http://localhost:4200` (stays running even if terminals close; stop anytime with `stop-server.bat`).
+- **Interactive Window + Auto-Open Dashboard:** Double-click [`start-dashboard.bat`](start-dashboard.bat).
+- **Via Terminal (Windows / macOS / Linux):**
   ```powershell
-  cd "C:\Users\Lenovo\Downloads\google meet tracker\server"
+  cd server
+  npm install
   npm start
   ```
 
-Your dedicated dashboard will open immediately at:
+Your dedicated dashboard will run at:
 👉 **`http://localhost:4200`**
+
+*(Note: If you cloned or copied someone else's folder and want a fresh archive history, replace `server/data/sessions.json` with `[]` before starting.)*
 
 ---
 

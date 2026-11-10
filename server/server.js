@@ -156,6 +156,24 @@ function cleanParticipantName(raw, isLocal = false) {
   return s;
 }
 
+function isLocalParticipant(key, p) {
+  if (key === 'local_host' || (p && (p.isLocal || p.id === 'local_host'))) return true;
+  const n = p && p.name ? String(p.name).trim().toLowerCase() : '';
+  return n === 'you' || n === 'host' || n === 'host (you)';
+}
+
+function resolveDisplayName(rawName, isLocal, fallbackName = null) {
+  const cleaned = cleanParticipantName(rawName, isLocal);
+  if (isLocal) {
+    const isGeneric = !cleaned || /^(?:host(?:\s*\(you\))?|you)$/i.test(cleaned);
+    if (isGeneric && fallbackName && !/^(?:host(?:\s*\(you\))?|you)$/i.test(String(fallbackName).trim())) {
+      return String(fallbackName).trim();
+    }
+    return cleaned || fallbackName || 'Host (You)';
+  }
+  return cleaned;
+}
+
 // In-memory active session state
 let currentSession = {
   sessionId: 'session_' + Date.now(),
@@ -413,8 +431,9 @@ function cleanAllSessionParticipants(sess) {
   const cleaned = {};
   for (const [k, p] of Object.entries(sess.participants)) {
     if (!p) continue;
-    const isLocal = p.isLocal || k === 'local_host' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
-    const validName = isLocal ? 'Andaleeb Gull' : cleanParticipantName(p.name, false);
+    const isLocal = isLocalParticipant(k, p);
+    const prevLocalObj = isLocal ? cleaned['local_host'] : null;
+    const validName = resolveDisplayName(p.name, isLocal, prevLocalObj ? prevLocalObj.name : null);
     if (!validName) continue;
     if (!isStarted && p.currentStatus === 'left') continue; // Drop stale ghosts if session hasn't started
 
@@ -719,16 +738,22 @@ app.post('/api/session/sync', (req, res) => {
         }
       }
 
-      const isLocal = p.isLocal || mappedKey === 'local_host' ||
-                      (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
-      const validName = isLocal ? 'Andaleeb Gull' : cleanParticipantName(p.name, false);
+      const isLocal = isLocalParticipant(mappedKey, p);
+      const prevLocalHost = currentSession.participants && currentSession.participants['local_host'];
+      const validName = resolveDisplayName(p.name, isLocal, isLocal && prevLocalHost ? prevLocalHost.name : null);
       if (validName) {
         let stableKey = isLocal ? 'local_host' : ('p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_'));
         if (STABLE_KEY_ALIASES[stableKey]) stableKey = STABLE_KEY_ALIASES[stableKey];
-        if (stableKey === 'local_host' && currentSession.participants['p_andaleeb_gull']) {
-          delete currentSession.participants['p_andaleeb_gull'];
+        if (stableKey === 'local_host' && validName && !/^(?:host(?:\s*\(you\))?|you)$/i.test(validName)) {
+          const dupHostSlug = 'p_' + validName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+          if (currentSession.participants[dupHostSlug]) {
+            delete currentSession.participants[dupHostSlug];
+          }
         }
         const existing = currentSession.participants[stableKey] || {};
+        const resolvedName = (isLocal && /^(?:host(?:\s*\(you\))?|you)$/i.test(validName) && existing.name)
+          ? existing.name
+          : validName;
         const isPres = p.currentStatus ? (p.currentStatus === 'present') : (existing.currentStatus === 'present');
         const isManualCam = (p.manualCamOverride === true || existing.manualCamOverride === true);
         const isCamOn = isManualCam || (isPres && (p.cameraStatus === 'on' || (existing.cameraStatus === 'on' && p.cameraStatus !== 'off')));
@@ -743,7 +768,7 @@ app.post('/api/session/sync', (req, res) => {
           currentSession.participants[stableKey] = {
             ...existing,
             id: stableKey,
-            name: validName,
+            name: resolvedName,
             isLocal: isLocal,
             isHost: false,
             isExempt: false,
@@ -879,7 +904,7 @@ app.post('/api/session/sync', (req, res) => {
           ...existing,
           ...p,
           id: stableKey,
-          name: validName,
+          name: resolvedName,
           isLocal: isLocal,
           isHost: false,
           isExempt: false,
@@ -1599,8 +1624,8 @@ function buildCsvContent(sess) {
   participants.forEach(p => {
     const camOn = p.validStudyMs !== undefined ? p.validStudyMs : (p.cameraOnMs || 0);
     const formattedTime = formatHmsStr(camOn);
-    const isLocalHost = p.isLocal || p.id === 'local_host' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb')));
-    const cleanName = isLocalHost ? 'ANDALEEB GULL' : (p.name || 'UNKNOWN').trim().toUpperCase();
+    const fallbackName = (p.isLocal || p.id === 'local_host') ? 'HOST (YOU)' : 'UNKNOWN';
+    const cleanName = (p.name || fallbackName).trim().toUpperCase();
     const safeName = `"${cleanName.replace(/"/g, '""')}"`;
     rows.push([safeName, formattedTime]);
   });

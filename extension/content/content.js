@@ -73,15 +73,17 @@
   ];
 
   let lastUserControlActionTime = 0;
-  const knownHostNames = new Set(['host (you)', 'you', 'host', 'host (andaleeb gull)', 'andaleeb gull']);
+  let detectedHostName = '';
+  const knownHostNames = new Set(['host (you)', 'you', 'host']);
   const deletedParticipants = new Set();
 
   function isHostIdentifier(nameOrId) {
     if (!nameOrId) return false;
     const s = String(nameOrId).trim().toLowerCase();
-    if (s === 'local_host' || s === 'p_andaleeb_gull' || s === 'p_you' || s === 'p_host__you_') return true;
+    if (s === 'local_host' || s === 'p_you' || s === 'p_host' || s === 'p_host__you_') return true;
     for (const h of knownHostNames) {
-      if (s === h || s.includes(h) || h.includes(s)) return true;
+      const slug = 'p_' + h.replace(/[^a-z0-9]/g, '_');
+      if (s === h || s === slug || s === `host (${h})`) return true;
     }
     return false;
   }
@@ -1655,7 +1657,7 @@
     }
 
     // Clean session from bad keys and host duplicates immediately
-    const badKeys = ['p_message', 'p_open_the_people_panel', 'p_admin', 'p_spam_com', 'p_andaleeb_gull'];
+    const badKeys = ['p_message', 'p_open_the_people_panel', 'p_admin', 'p_spam_com'];
     badKeys.forEach(bk => {
       if (session.participants && session.participants[bk]) {
         delete session.participants[bk];
@@ -1672,13 +1674,13 @@
       }
     }
 
-    // 1. Local Host identification
+    // 1. Local Host auto-identification (works dynamically for whoever is signed into Google Meet)
     const localCamState = detectLocalCameraStatus();
-    let localName = 'Host (You)';
+    let localName = '';
     const selfNameEl = document.querySelector('[data-self-name]');
     if (selfNameEl) {
-      const sn = selfNameEl.getAttribute('data-self-name') || selfNameEl.innerText;
-      if (sn && sn.trim()) localName = sn.trim();
+      const sn = (selfNameEl.getAttribute('data-self-name') || selfNameEl.innerText || '').trim();
+      if (sn && !/^(?:you|host(?:\s*\(you\))?)$/i.test(sn)) localName = sn;
     }
     const accountEl = document.querySelector('a[aria-label*="Google Account" i], a[aria-label*="Google खाता" i], button[aria-label*="Google Account" i], button[aria-label*="Google खाता" i]');
     if (accountEl) {
@@ -1688,22 +1690,37 @@
         localName = m[1].trim();
       }
     }
-    // Also check for (You) in roster or DOM to find host real name
+    // Check People roster or self tile with "(You)" for display name
     const youEl = document.querySelector('div[role="listitem"][aria-label*="(You)" i], div[role="listitem"][aria-label*="(आप)" i], [data-participant-id][aria-label*="(You)" i]');
     if (youEl) {
       const ya = youEl.getAttribute('aria-label') || '';
       const yName = ya.split(',')[0].replace(/\s*\((?:You|आप)\)/i, '').trim();
-      if (yName && yName.length >= 2) localName = yName;
+      if (yName && yName.length >= 2 && !/^(?:you|host)$/i.test(yName)) localName = yName;
     }
 
-    const cleanHostName = sanitizeStudentName(localName, true) || 'Host (You)';
-    if (cleanHostName && cleanHostName !== 'Host (You)') {
-      knownHostNames.add(cleanHostName.toLowerCase());
+    const rawCleanHost = localName ? sanitizeStudentName(localName, true) : null;
+    const isRealHostName = rawCleanHost && !/^(?:host(?:\s*\(you\))?|you)$/i.test(rawCleanHost);
+    if (isRealHostName) {
+      detectedHostName = rawCleanHost;
+      knownHostNames.add(rawCleanHost.toLowerCase());
+    } else if (!detectedHostName && session.participants && session.participants.local_host && session.participants.local_host.name) {
+      const prevHost = session.participants.local_host.name.trim();
+      if (prevHost && !/^(?:host(?:\s*\(you\))?|you)$/i.test(prevHost)) {
+        detectedHostName = prevHost;
+        knownHostNames.add(prevHost.toLowerCase());
+      }
     }
 
-    const hostDisplayName = (cleanHostName && cleanHostName !== 'Host (You)')
-      ? (cleanHostName.toLowerCase().includes('andaleeb') ? 'Andaleeb Gull' : cleanHostName)
-      : 'Andaleeb Gull';
+    const cleanHostName = detectedHostName || 'Host (You)';
+    const hostDisplayName = cleanHostName;
+
+    // If local host was previously scanned as a duplicate p_* key before self-name loaded, remove duplicate
+    if (detectedHostName && session.participants) {
+      const hostSlug = 'p_' + detectedHostName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      if (session.participants[hostSlug]) {
+        delete session.participants[hostSlug];
+      }
+    }
 
     detected.set('local_host', {
       id: 'local_host',
@@ -1895,13 +1912,14 @@
       if (isYou) {
         const firstPart = itemAria.split(',')[0].replace(/\s*\((?:You|आप)\)/i, '').trim();
         const hn = sanitizeStudentName(firstPart) || sanitizeStudentName(item.innerText.split('\n')[0]);
-        if (hn && hn !== 'Host (You)') {
+        if (hn && !/^(?:host(?:\s*\(you\))?|you)$/i.test(hn)) {
+          detectedHostName = hn;
           knownHostNames.add(hn.toLowerCase());
           if (detected.has('local_host')) {
-            detected.get('local_host').name = hn.toLowerCase().includes('andaleeb') ? 'Andaleeb Gull' : hn;
+            detected.get('local_host').name = hn;
           }
         }
-        return; // Host is strictly exempt from student roster
+        return; // Local host already tracked via local_host
       }
 
       // Check canonical name element in People roster item first

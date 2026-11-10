@@ -283,8 +283,11 @@ function consolidateParticipantsForReport(rawList, session = {}) {
   rawList.forEach(p => {
     if (!p || !p.name) return;
     if (session.deletedParticipants && (session.deletedParticipants.includes(p.id) || (p.name && session.deletedParticipants.includes(p.name.toLowerCase())))) return;
-    const isLocal = p.isLocal || p.id === 'local_host' || (p.name && (p.name.toLowerCase().includes('host') || p.name.toLowerCase().includes('andaleeb gull')));
-    const validName = isLocal ? 'Andaleeb Gull' : cleanParticipantName(p.name, false);
+    const isLocal = !!(p.isLocal || p.id === 'local_host' || (p.name && /^(?:host(?:\s*\(you\))?|you)$/i.test(p.name.trim())));
+    const rawClean = cleanParticipantName(p.name, isLocal);
+    const validName = isLocal
+      ? ((rawClean && !/^(?:host(?:\s*\(you\))?|you)$/i.test(rawClean)) ? rawClean : 'Host (You)')
+      : rawClean;
     if (!validName) return;
 
     const STABLE_KEY_ALIASES = {
@@ -305,11 +308,15 @@ function consolidateParticipantsForReport(rawList, session = {}) {
       const isPres = (p.currentStatus === 'present' || existing.currentStatus === 'present');
       const joinTs = Math.min(toEpochMs(p.joinTime) || now, toEpochMs(existing.joinTime) || now, toEpochMs(p.firstSeen) || now, toEpochMs(existing.firstSeen) || now);
 
+      const resolvedReportName = (isLocal && /^(?:host(?:\s*\(you\))?|you)$/i.test(validName) && existing.name)
+        ? existing.name
+        : validName;
+
       map.set(stableKey, {
         ...existing,
         ...p,
         id: stableKey,
-        name: validName,
+        name: resolvedReportName,
         isLocal: isLocal,
         isHost: false,
         isExempt: false,
